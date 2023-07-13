@@ -26,6 +26,11 @@
     <%= form.password_field :token %>
   </div>
 
+    <div>
+    <%= form.label :branch, 'Branch (if other than main)' %>
+    <%= form.text_field :branch %>
+  </div>
+
   <div>
     <%= form.submit %>
   </div>
