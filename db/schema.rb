@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_12_150416) do
     t.string "git_url"
     t.string "branch"
     t.string "description"
-    t.datetime "last_pull"
+    t.datetime "last_pull_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
