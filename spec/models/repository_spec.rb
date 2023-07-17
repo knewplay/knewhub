@@ -34,9 +34,10 @@ RSpec.describe Repository, type: :model do
   end
 
   describe '#set_git_url' do
-    let(:repo) { described_class.create(owner: 'user', name: 'repo_name') }
+    let(:repo) { described_class.new(owner: 'user', name: 'repo_name') }
 
     it 'returns the git_url created using Repository owner and name' do
+      repo.save
       expect(repo.git_url).to eq('https://github.com/user/repo_name.git')
     end
 
