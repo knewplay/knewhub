@@ -10,8 +10,9 @@ class Webhooks::GithubController < ApplicationController
     when 'ping'
       flash.now[:notice] = 'Webhook successfully created.'
     when 'push'
-      repository = Repository.find_by(name: params[:repository][:name], owner: params[:repository][:owner][:name])
-      PullGithubRepoJob.perform_later(repository)
+      name = params[:repository][:name]
+      owner = params[:repository][:owner][:name]
+      PullGithubRepoJob.perform_async(name, owner)
     end
   end
 

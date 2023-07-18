@@ -1,5 +1,8 @@
-class PullGithubRepoJob < ApplicationJob
-  def perform(repository)
+class PullGithubRepoJob
+  include Sidekiq::Job
+
+  def perform(name, owner)
+    repository = Repository.find_by(name:, owner:)
     directory = Rails.root.join('repos', repository.owner, repository.name)
     if Dir.exist?(directory)
       Git.open(directory).pull
@@ -7,15 +10,10 @@ class PullGithubRepoJob < ApplicationJob
       Git.clone(repository.git_url, directory, options: { branch: repository.branch })
     end
     description = get_description(repository.owner, repository.name, repository.token)
-    update_repository(repository.id, description)
+    repository.update(last_pull_at: DateTime.current, description:)
   end
 
   private
-
-  def update_repository(repository_id, description)
-    repository = Repository.find(repository_id)
-    repository.update(last_pull_at: DateTime.current, description:)
-  end
 
   def get_description(owner, name, token)
     client = Octokit::Client.new(access_token: token)
