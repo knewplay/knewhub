@@ -33,3 +33,5 @@
 # Ignore cloned repositories
 /repos/*
 /config/credentials/test.key
+
+/config/credentials/development.key
