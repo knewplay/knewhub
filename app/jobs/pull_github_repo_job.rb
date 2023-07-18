@@ -18,11 +18,7 @@ class PullGithubRepoJob < ApplicationJob
   end
 
   def get_description(owner, name, token)
-    client = if token.blank?
-               Octokit::Client.new
-             else
-               Octokit::Client.new(access_token: token)
-             end
+    client = Octokit::Client.new(access_token: token)
     repo = client.repository("#{owner}/#{name}")
     repo.description
   end

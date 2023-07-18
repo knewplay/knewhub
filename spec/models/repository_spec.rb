@@ -22,9 +22,9 @@ RSpec.describe Repository, type: :model do
       expect(repo.valid?).to be false
     end
 
-    it 'returns true when given a valid owner and name' do
+    it 'returns false when given a valid owner and name, but no token' do
       repo = Repository.new(owner: 'owner', name: 'repo_name')
-      expect(repo.valid?).to be true
+      expect(repo.valid?).to be false
     end
 
     it 'returns true when given a valid owner, name and token' do
@@ -34,22 +34,15 @@ RSpec.describe Repository, type: :model do
   end
 
   describe '#set_git_url' do
-    let(:repo) { described_class.new(owner: 'user', name: 'repo_name') }
-
-    it 'returns the git_url created using Repository owner and name' do
-      repo.save
-      expect(repo.git_url).to eq('https://github.com/user/repo_name.git')
-    end
+    let(:repo) { described_class.create(owner: 'user', name: 'repo_name', token: 'ghp_abde12345') }
 
     it 'returns the git_url created using Repository owner, name and token' do
-      repo.token = 'ghp_abde12345'
-      repo.save
       expect(repo.git_url).to eq('https://ghp_abde12345@github.com/user/repo_name.git')
     end
   end
 
   describe '#set_branch' do
-    let(:repo) { described_class.new(owner: 'user', name: 'repo_name') }
+    let(:repo) { described_class.new(owner: 'user', name: 'repo_name', token: 'ghp_abde12345') }
 
     it 'branch is "main" if not specified' do
       repo.save

@@ -4,7 +4,7 @@ RSpec.describe PullGithubRepoJob, type: :job do
   include ActiveJob::TestHelper
 
   before(:all) do
-    @repo = Repository.create(owner: 'jp524', name: 'markdown-templates')
+    @repo = Repository.create(owner: 'jp524', name: 'markdown-templates', token: Rails.application.credentials.pat)
   end
 
   subject(:job) { described_class.perform_later(@repo) }
