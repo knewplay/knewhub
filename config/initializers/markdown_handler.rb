@@ -13,7 +13,7 @@ module MarkdownHandler
       escape_html: true
     }
 
-    "Redcarpet::Markdown.new(CustomRender, #{extensions}).render(begin;#{erb_source};end).html_safe"
+    "Redcarpet::Markdown.new(CustomRender, #{extensions}).render(begin;#{erb_source};end)"
   end
 end
 
