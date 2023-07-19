@@ -1,10 +1,10 @@
 class RepositoriesController < ApplicationController
   before_action :store_request_in_thread, only: [:show]
+  before_action :modify_view_path, only: %i[show main]
 
   def index; end
 
   def show
-    prepend_view_path "#{Rails.root}/repos"
     @file_path = "#{params[:owner]}/#{params[:name]}/#{params[:path]}"
     respond_to do |format|
       format.md { render @file_path, content_type: 'text/html' }
@@ -12,6 +12,12 @@ class RepositoriesController < ApplicationController
         send_file "#{Rails.root}/repos/#{@file_path}.#{request.format.to_sym}", type: request.format
       end
       format.all { render html: 'This file format cannot be rendered' }
+    end
+  end
+
+  def main
+    respond_to do |format|
+      format.all { render "#{params[:owner]}/#{params[:name]}/index", content_type: 'text/html' }
     end
   end
 
@@ -37,5 +43,9 @@ class RepositoriesController < ApplicationController
 
   def store_request_in_thread
     Thread.current[:request] = request
+  end
+
+  def modify_view_path
+    prepend_view_path "#{Rails.root}/repos"
   end
 end
