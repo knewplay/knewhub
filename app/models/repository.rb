@@ -8,7 +8,7 @@ class Repository < ApplicationRecord
             presence: true,
             format: { with: /\A[\.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }
   validates :token,
-            allow_blank: true,
+            presence: true,
             format: { with: /\A(github_pat|ghp)\w+\z/, message: 'must start with "github_pat" or "ghp"' }
   validates :branch,
             format: { with: /\A[\.\/\w-]{0,100}\z/, message: 'must follow GitHub branch name restrictions' }
@@ -16,11 +16,7 @@ class Repository < ApplicationRecord
   private
 
   def set_git_url
-    self.git_url = if token.blank?
-                     "https://github.com/#{owner}/#{name}.git"
-                   else
-                     "https://#{token}@github.com/#{owner}/#{name}.git"
-                   end
+    self.git_url = "https://#{token}@github.com/#{owner}/#{name}.git"
   end
 
   def set_branch
