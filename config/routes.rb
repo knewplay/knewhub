@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   resources :repositories, only: %i[index new create]
-  get 'books/:owner/:name/*path', to: 'repositories#show'
-  get 'books/:owner/:name', to: 'repositories#main'
   root 'repositories#index'
+
+  get 'collections/:owner/:name/pages/index', to: 'collections#index'
+  get 'collections/:owner/:name/pages/*path', to: 'collections#show'
 
   namespace :webhooks do
     resource :github, controller: :github, only: [:create]

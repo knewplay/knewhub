@@ -26,12 +26,12 @@ class CustomRender < Redcarpet::Render::HTML
     CODE
   end
 
+  # Route GET /collections/:owner/:name/pages/*path uses CollectionsController#show action
+  # The request route is modified to find where the corresponding file is stored
   def define_request_path
     request_path = Thread.current[:request].fullpath
     match_data = request_path.match(%r{(.+/)(.+)})
-    # Route GET /books uses RepositoriesController#show action
-    # This action has all its views prepended by 'repos'
-    match_data[1].gsub(%r{(/books/)}, '/repos/')
+    match_data[1].gsub(%r{(/collections/)}, '/repos/').gsub(%r{(/pages/)}, '/')
   end
 
   def define_file_path(relative_path)
