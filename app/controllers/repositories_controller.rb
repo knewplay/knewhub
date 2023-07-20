@@ -8,10 +8,8 @@ class RepositoriesController < ApplicationController
     @file_path = "#{params[:owner]}/#{params[:name]}/#{params[:path]}"
     respond_to do |format|
       format.html { render @file_path }
-      # Redirect is required for .md format in order to use application layout
-      format.md { redirect_to request.fullpath.delete_suffix('.md') }
       format.any(:png, :jpg, :jpeg) do
-        send_file "#{Rails.root}/repos/#{@file_path}.#{request.format.to_sym}", type: request.format
+        send_file "#{Rails.root}/repos/#{@file_path}.#{request.format.to_sym}"
       end
       format.all { render html: 'This file format cannot be rendered' }
     end
