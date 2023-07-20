@@ -205,6 +205,9 @@ GEM
       rspec-expectations (~> 3.12)
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
+    rspec-sidekiq (3.1.0)
+      rspec-core (~> 3.0, >= 3.0.0)
+      sidekiq (>= 2.4.0)
     rspec-support (3.12.1)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -272,6 +275,7 @@ DEPENDENCIES
   redcarpet
   redis (~> 4.0)
   rspec-rails
+  rspec-sidekiq
   selenium-webdriver
   sidekiq
   sprockets-rails
