@@ -8,7 +8,7 @@ class CollectionsController < ApplicationController
     RequestPath.store(request)
     respond_to do |format|
       format.html { render file_path }
-      format.any(:png, :jpg, :jpeg) do
+      format.any(:png, :jpg, :jpeg, :gif, :svg, :webp) do
         send_file "#{Rails.root}/repos/#{file_path}.#{request.format.to_sym}"
       end
       format.all { head :not_implemented }
