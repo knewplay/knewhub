@@ -1,11 +1,11 @@
 class CollectionsController < ApplicationController
-  before_action :store_request_in_thread, only: [:show]
   before_action :modify_view_path
 
   def show
     file_path = "#{params[:owner]}/#{params[:name]}/#{params[:path]}"
     return head :not_found unless file_exists?(file_path)
 
+    RequestPath.store(request)
     respond_to do |format|
       format.html { render file_path }
       format.any(:png, :jpg, :jpeg) do
@@ -23,10 +23,6 @@ class CollectionsController < ApplicationController
   end
 
   private
-
-  def store_request_in_thread
-    Thread.current[:request] = request
-  end
 
   def modify_view_path
     prepend_view_path "#{Rails.root}/repos"

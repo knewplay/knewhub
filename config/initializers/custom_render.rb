@@ -16,7 +16,7 @@ class CustomRender < Redcarpet::Render::HTML
   end
 
   def process_codefile(relative_path)
-    absolute_path = Rails.root.to_s + define_request_path + define_file_path(relative_path)
+    absolute_path = Rails.root.to_s + RequestPath.define_base_url + relative_path
     data = File.read(absolute_path)
     <<~CODE
       <pre class='code-block'>
@@ -24,18 +24,5 @@ class CustomRender < Redcarpet::Render::HTML
       <code>#{data}</code>
       </pre>
     CODE
-  end
-
-  # Route GET /collections/:owner/:name/pages/*path uses CollectionsController#show action
-  # The request route is modified to find where the corresponding file is stored
-  def define_request_path
-    request_path = Thread.current[:request].fullpath
-    match_data = request_path.match(%r{(.+/)(.+)})
-    match_data[1].gsub(%r{(/collections/)}, '/repos/').gsub(%r{(/pages/)}, '/')
-  end
-
-  def define_file_path(relative_path)
-    match_data = relative_path.match(%r{(./)(.+)})
-    match_data[2]
   end
 end
