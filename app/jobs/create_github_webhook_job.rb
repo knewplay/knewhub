@@ -1,11 +1,7 @@
 class CreateGithubWebhookJob
   include Sidekiq::Job
 
-  rescue_from(Octokit::UnprocessableEntity) do |exception|
-    p exception.message
-  end
-
-  def perform(token, owner, name)
+  def perform(owner, name, token)
     client = Octokit::Client.new(access_token: token)
     host_url = Rails.application.credentials.host_url
     webhook_secret = Rails.application.credentials.webhook_secret
@@ -16,5 +12,7 @@ class CreateGithubWebhookJob
       { url: "https://#{host_url}/webhooks/github", content_type: 'json', secret: webhook_secret },
       { events: ['push'], active: true }
     )
+  rescue Octokit::UnprocessableEntity => e
+    p e.message
   end
 end
