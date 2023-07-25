@@ -1,5 +1,6 @@
 class CollectionsController < ApplicationController
   before_action :modify_view_path
+  layout 'collections_page', only: [:show]
 
   def show
     file_path = "#{params[:owner]}/#{params[:name]}/#{params[:path]}"
@@ -7,7 +8,10 @@ class CollectionsController < ApplicationController
 
     RequestPath.store(request)
     respond_to do |format|
-      format.html { render file_path }
+      format.html do
+        @front_matter = extract_front_matter("#{Rails.root}/repos/#{file_path}.md")
+        render file_path
+      end
       format.any(:png, :jpg, :jpeg, :gif, :svg, :webp) do
         send_file "#{Rails.root}/repos/#{file_path}.#{request.format.to_sym}"
       end
@@ -31,5 +35,10 @@ class CollectionsController < ApplicationController
   def file_exists?(file_path)
     File.exist?("#{Rails.root}/repos/#{file_path}.md") \
     || File.exist?("#{Rails.root}/repos/#{file_path}.#{request.format.to_sym}")
+  end
+
+  def extract_front_matter(file_path)
+    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date])
+    FrontMatterParser::Parser.parse_file(file_path, loader:).front_matter
   end
 end
