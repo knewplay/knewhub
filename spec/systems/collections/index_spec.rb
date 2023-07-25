@@ -12,4 +12,10 @@ RSpec.describe 'index collection', type: :system do
 
     expect(page).to have_link(href: './chapter-1/chapter-1-article-1')
   end
+
+  scenario 'displays front matter' do
+    visit '/collections/jp524/markdown-templates/pages/index'
+    assert_selector 'h1', text: 'Course Name'
+    assert_selector 'p', text: 'Written by The Author on 2023-12-31'
+  end
 end
