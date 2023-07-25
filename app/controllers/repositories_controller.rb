@@ -8,7 +8,7 @@ class RepositoriesController < ApplicationController
   def create
     @repository = Repository.new(repository_params)
     if @repository.save
-      CreateGithubWebhookJob.perform_async(@repository.owner, @repository.name, @repository.token)
+      CreateGithubWebhookJob.perform_async(@repository.uuid, @repository.name, @repository.owner, @repository.token)
       redirect_to repositories_path, notice: 'Repository was successfully added.'
     else
       render :new, status: :unprocessable_entity

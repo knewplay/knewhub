@@ -1,23 +1,33 @@
 class PullGithubRepoJob
   include Sidekiq::Job
 
-  def perform(name, owner)
-    repository = Repository.find_by(name:, owner:)
+  def perform(uuid, webhook_name, webhook_owner, webhook_description)
+    repository = Repository.find_by!(uuid:)
+    if webhook_name != repository.name || webhook_owner != repository.owner
+      update_repository(repository, webhook_name, webhook_owner)
+    end
     directory = Rails.root.join('repos', repository.owner, repository.name)
+    pull_or_clone(repository, directory)
+    repository.update(last_pull_at: DateTime.current, description: webhook_description)
+  end
+
+  private
+
+  def pull_or_clone(repository, directory)
     if Dir.exist?(directory)
       Git.open(directory).pull
     else
       Git.clone(repository.git_url, directory, options: { branch: repository.branch })
     end
-    description = get_description(repository.owner, repository.name, repository.token)
-    repository.update(last_pull_at: DateTime.current, description:)
   end
 
-  private
-
-  def get_description(owner, name, token)
-    client = Octokit::Client.new(access_token: token)
-    repo = client.repository("#{owner}/#{name}")
-    repo.description
+  def update_repository(repository, webhook_name, webhook_owner)
+    old_directory = Rails.root.join('repos', repository.owner, repository.name)
+    FileUtils.remove_dir(old_directory)
+    repository.update(
+      name: webhook_name,
+      owner: webhook_owner,
+      git_url: "https://#{repository.token}@github.com/#{webhook_owner}/#{webhook_name}.git"
+    )
   end
 end
