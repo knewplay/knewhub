@@ -6,7 +6,7 @@ describe 'POST /webhooks/github' do
     data = 'zen=Responsive+is+better+than+fast.'
     signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, data)}"
 
-    post '/webhooks/github',
+    post "/webhooks/github/#{SecureRandom.uuid}",
          params: { 'zen': 'Responsive is better than fast.' },
          headers: {
            'X-GitHub-Event': 'ping',
@@ -21,7 +21,7 @@ describe 'POST /webhooks/github' do
     data = 'repository[name]=repo_name&repository[owner][name]=owner_name'
     signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, data)}"
 
-    post '/webhooks/github',
+    post "/webhooks/github/#{SecureRandom.uuid}",
          params: {
            'repository': {
              'name': 'repo_name',

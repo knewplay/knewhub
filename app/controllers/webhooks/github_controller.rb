@@ -10,9 +10,11 @@ class Webhooks::GithubController < ApplicationController
     when 'ping'
       flash.now[:notice] = 'Webhook successfully created.'
     when 'push'
+      uuid = params[:uuid]
       name = params[:repository][:name]
       owner = params[:repository][:owner][:name]
-      PullGithubRepoJob.perform_async(name, owner)
+      description = params[:repository][:description]
+      PullGithubRepoJob.perform_async(uuid, name, owner, description)
     end
   end
 

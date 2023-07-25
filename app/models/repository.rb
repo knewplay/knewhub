@@ -1,5 +1,5 @@
 class Repository < ApplicationRecord
-  before_create :set_git_url, :set_branch
+  before_create :set_git_url, :set_branch, :generate_uuid
 
   validates :owner,
             presence: true,
@@ -25,5 +25,9 @@ class Repository < ApplicationRecord
                   else
                     branch
                   end
+  end
+
+  def generate_uuid
+    self.uuid = SecureRandom.uuid
   end
 end
