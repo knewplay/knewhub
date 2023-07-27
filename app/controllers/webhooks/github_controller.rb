@@ -12,9 +12,17 @@ class Webhooks::GithubController < ApplicationController
     when 'push'
       uuid = params[:uuid]
       name = params[:repository][:name]
-      owner = params[:repository][:owner][:name]
+      owner_name = params[:repository][:owner][:name]
+      owner_id = params[:repository][:owner][:id]
       description = params[:repository][:description]
-      PullGithubRepoJob.perform_async(uuid, name, owner, description)
+
+      repository = Repository.find_by(uuid:)
+      if repository.author.github_uid != owner_id
+        flash.now[:notice] = "The ownership of repository #{name} has changed."\
+                             "Please login with GitHub as #{owner_name} and add repository to Knewhub."
+      else
+        PullGithubRepoJob.perform_async(uuid, name, owner_name, description)
+      end
     end
   end
 
