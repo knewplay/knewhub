@@ -6,7 +6,9 @@ module MarkdownHandler
   end
 
   def self.call(template, source)
-    erb_source = erb.call(template, source)
+    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date])
+    parsed = FrontMatterParser::Parser.new(:md, loader:).call(source)
+    erb_source = erb.call(template, parsed.content)
     extensions = {
       fenced_code_blocks: true,
       disable_indented_code_blocks: true,
