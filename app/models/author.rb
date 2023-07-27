@@ -1,4 +1,6 @@
 class Author < ApplicationRecord
+  has_many :repositories, dependent: :destroy
+
   validates :github_uid, presence: true, uniqueness: true
   validates :github_username, presence: true, uniqueness: true
 

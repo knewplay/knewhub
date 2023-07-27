@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_26_150309) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_26_192619) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -23,7 +23,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_26_150309) do
   end
 
   create_table "repositories", force: :cascade do |t|
-    t.string "owner"
     t.string "name"
     t.string "token"
     t.string "git_url"
@@ -33,6 +32,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_26_150309) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "uuid"
+    t.bigint "author_id"
+    t.index ["author_id"], name: "index_repositories_on_author_id"
   end
 
+  add_foreign_key "repositories", "authors"
 end

@@ -1,9 +1,8 @@
 class Repository < ApplicationRecord
+  belongs_to :author
+
   before_create :set_git_url, :set_branch, :generate_uuid
 
-  validates :owner,
-            presence: true,
-            format: { with: /\A[a-z\d-]{0,38}\z/, message: 'must follow GitHub username restrictions' }
   validates :name,
             presence: true,
             format: { with: /\A[\.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }
@@ -16,7 +15,7 @@ class Repository < ApplicationRecord
   private
 
   def set_git_url
-    self.git_url = "https://#{token}@github.com/#{owner}/#{name}.git"
+    self.git_url = "https://#{token}@github.com/#{author.github_username}/#{name}.git"
   end
 
   def set_branch
