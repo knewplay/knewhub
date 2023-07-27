@@ -1,12 +1,12 @@
-class PullGithubRepoJob
+class RespondWebhookPushJob
   include Sidekiq::Job
 
   def perform(uuid, webhook_name, webhook_owner, webhook_description)
-    repository = Repository.find_by!(uuid:)
-    if webhook_name != repository.name || webhook_owner != repository.owner
+    repository = Repository.find_by(uuid:)
+    if webhook_name != repository.name || webhook_owner != repository.author.github_username
       update_repository(repository, webhook_name, webhook_owner)
     end
-    directory = Rails.root.join('repos', repository.owner, repository.name)
+    directory = Rails.root.join('repos', repository.author.github_username, repository.name)
     pull_or_clone(repository, directory)
     repository.update(last_pull_at: DateTime.current, description: webhook_description)
   end
@@ -22,12 +22,12 @@ class PullGithubRepoJob
   end
 
   def update_repository(repository, webhook_name, webhook_owner)
-    old_directory = Rails.root.join('repos', repository.owner, repository.name)
-    FileUtils.remove_dir(old_directory)
+    old_directory = Rails.root.join('repos', repository.author.github_username, repository.name)
+    FileUtils.remove_dir(old_directory) if Dir.exist?(old_directory)
     repository.update(
       name: webhook_name,
-      owner: webhook_owner,
       git_url: "https://#{repository.token}@github.com/#{webhook_owner}/#{webhook_name}.git"
     )
+    repository.author.update(github_username: webhook_owner)
   end
 end

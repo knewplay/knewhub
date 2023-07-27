@@ -18,16 +18,22 @@ describe 'POST /webhooks/github' do
 
   scenario 'X-GitHub-Event: push' do
     secret = Rails.application.credentials.webhook_secret
-    data = 'repository[name]=repo_name&repository[owner][name]=owner_name'
+    data = 'repository[name]=repo_name&repository[owner][name]=owner_name&'\
+           'repository[owner][id]=12345&repository[description]=something'
     signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, data)}"
 
-    post "/webhooks/github/#{SecureRandom.uuid}",
+    author = Author.create(github_uid: '12345', github_username: 'owner_name')
+    repo = Repository.create(name: 'repo_name', token: 'ghp_abde12345', author:)
+
+    post "/webhooks/github/#{repo.uuid}",
          params: {
            'repository': {
              'name': 'repo_name',
              'owner': {
-               'name': 'owner_name'
-             }
+               'name': 'owner_name',
+               'id': '12345'
+             },
+             'description': 'something'
            }
          },
          headers: {
