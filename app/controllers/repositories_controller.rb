@@ -16,6 +16,7 @@ class RepositoriesController < ApplicationController
         @repository.author.github_username,
         @repository.token
       )
+      CloneGithubRepoJob.perform_async(@repository.id)
       redirect_to repositories_path, notice: 'Repository was successfully added.'
     else
       render :new, status: :unprocessable_entity

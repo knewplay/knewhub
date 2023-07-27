@@ -21,7 +21,7 @@ class Webhooks::GithubController < ApplicationController
         flash.now[:notice] = "The ownership of repository #{name} has changed."\
                              "Please login with GitHub as #{owner_name} and add repository to Knewhub."
       else
-        PullGithubRepoJob.perform_async(uuid, name, owner_name, description)
+        RespondWebhookPushJob.perform_async(uuid, name, owner_name, description)
       end
     end
   end

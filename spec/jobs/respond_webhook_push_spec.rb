@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PullGithubRepoJob, type: :job do
+RSpec.describe RespondWebhookPushJob, type: :job do
   before(:all) do
     Repository.delete_all
     Author.delete_all
@@ -9,8 +9,8 @@ RSpec.describe PullGithubRepoJob, type: :job do
   end
 
   it 'queues the job' do
-    PullGithubRepoJob.perform_async(@repo.uuid, @repo.name, @repo.author.github_username, @repo.description)
-    expect(PullGithubRepoJob).to have_enqueued_sidekiq_job(
+    RespondWebhookPushJob.perform_async(@repo.uuid, @repo.name, @repo.author.github_username, @repo.description)
+    expect(RespondWebhookPushJob).to have_enqueued_sidekiq_job(
       @repo.uuid,
       @repo.name,
       @repo.author.github_username,
@@ -23,7 +23,7 @@ RSpec.describe PullGithubRepoJob, type: :job do
       expect(@repo.description).to be_nil
       expect(@repo.last_pull_at).to be_nil
 
-      PullGithubRepoJob.perform_async(@repo.uuid, @repo.name, @repo.author.github_username, @repo.description)
+      RespondWebhookPushJob.perform_async(@repo.uuid, @repo.name, @repo.author.github_username, @repo.description)
       @repo.reload
 
       expect(@repo.last_pull_at).not_to be_nil
@@ -34,7 +34,7 @@ RSpec.describe PullGithubRepoJob, type: :job do
     Sidekiq::Testing.inline! do
       expect(@repo.last_pull_at).not_to be_nil
 
-      PullGithubRepoJob.perform_async(@repo.uuid, 'markdown-templates', @repo.author.github_username, 'The description')
+      RespondWebhookPushJob.perform_async(@repo.uuid, 'markdown-templates', @repo.author.github_username, 'The description')
       @repo.reload
 
       expect(@repo.last_pull_at).not_to be_nil

@@ -1,4 +1,4 @@
-class PullGithubRepoJob
+class RespondWebhookPushJob
   include Sidekiq::Job
 
   def perform(uuid, webhook_name, webhook_owner, webhook_description)
