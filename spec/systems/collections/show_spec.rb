@@ -4,7 +4,7 @@ RSpec.describe 'show collection', type: :system do
   scenario 'displays Markdown text in HTML' do
     visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
 
-    assert_selector 'h1', text: 'Non anser honore ornique'
+    assert_selector 'h2', text: 'Amplectitur atque mutabile'
   end
 
   scenario 'displays embedded images' do
@@ -17,5 +17,11 @@ RSpec.describe 'show collection', type: :system do
 
     assert_selector 'p', text: 'File: ./code-files/code-example.c'
     assert_selector 'code', text: "void main() {\n  hello world\n}"
+  end
+
+  scenario 'displays front matter' do
+    visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
+    assert_selector 'h1', text: 'Non anser honore ornique'
+    assert_selector 'p', text: 'Written by The Author on 2023-12-31'
   end
 end
