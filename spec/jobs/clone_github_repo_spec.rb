@@ -18,7 +18,9 @@ RSpec.describe CloneGithubRepoJob, type: :job do
       expect(@repo.description).to be_nil
       expect(@repo.last_pull_at).to be_nil
 
-      CloneGithubRepoJob.perform_async(@repo.id)
+      VCR.use_cassette('clone_github_repo') do
+        CloneGithubRepoJob.perform_async(@repo.id)
+      end
       @repo.reload
 
       expect(@repo.description).not_to be_nil
