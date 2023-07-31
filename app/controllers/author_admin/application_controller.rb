@@ -1,21 +1,19 @@
-# All Administrate controllers inherit from this
-# `Administrate::ApplicationController`, making it the ideal place to put
-# authentication logic or other before_actions.
-#
-# If you want to add pagination or other controller-level concerns,
-# you're free to overwrite the RESTful controller actions.
 module AuthorAdmin
   class ApplicationController < Administrate::ApplicationController
-    before_action :authenticate_admin
+    protect_from_forgery with: :exception
+    helper_method :current_author
+    before_action :require_author_authentication
 
-    def authenticate_admin
-      # TODO Add authentication logic here.
+    def require_author_authentication
+      redirect_to root_path, alert: 'Requires authentication' unless author_signed_in?
     end
 
-    # Override this value to specify the number of elements to display at a time
-    # on index pages. Defaults to 20.
-    # def records_per_page
-    #   params[:per_page] || 20
-    # end
+    def current_author
+      @current_author ||= Author.find(session[:author_id]) if session[:author_id]
+    end
+
+    def author_signed_in?
+      !!current_author
+    end
   end
 end
