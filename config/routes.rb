@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  scope module: 'author_admin', path: 'author', as: 'author_admin' do
+    resources :repositories
+
+    root 'repositories#index'
+  end
+
   resources :repositories, only: %i[index new create]
   root 'repositories#index'
 
