@@ -9,13 +9,12 @@ class RepositoryDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     id: Field::Number,
-    author: Field::BelongsTo,
     branch: Field::String,
     description: Field::String,
     git_url: Field::String,
     last_pull_at: Field::DateTime,
     name: Field::String,
-    token: Field::String,
+    token: Field::Password,
     uuid: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -28,39 +27,33 @@ class RepositoryDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     id
-    author
+    name
     branch
-    description
+    last_pull_at
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    id
-    author
+    name
     branch
     description
-    git_url
     last_pull_at
-    name
-    token
-    uuid
-    created_at
     updated_at
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = %i[
-    author
-    branch
-    description
-    git_url
-    last_pull_at
+  FORM_ATTRIBUTES_NEW = %i[
     name
+    branch
     token
-    uuid
+  ].freeze
+
+  FORM_ATTRIBUTES_EDIT = %i[
+    name
+    branch
   ].freeze
 
   # COLLECTION_FILTERS
