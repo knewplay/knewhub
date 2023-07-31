@@ -90,4 +90,6 @@ group :test do
   gem "selenium-webdriver"
   gem 'database_cleaner-active_record'
   gem 'rspec-sidekiq'
+  gem 'vcr'
+  gem 'webmock'
 end
