@@ -18,16 +18,10 @@ module AuthorAdmin
 
     # The result of this lookup will be available as `requested_resource`
 
-    # Override this if you have certain roles that require a subset
-    # this will be used to set the records shown on the `index` action.
-    #
-    # def scoped_resource
-    #   if current_user.super_admin?
-    #     resource_class
-    #   else
-    #     resource_class.with_less_stuff
-    #   end
-    # end
+    # For `index` action, only show repositories belonging to the author currently authentified
+    def scoped_resource
+      @repositories = current_author.repositories if current_author
+    end
 
     # Override `resource_params` if you want to transform the submitted
     # data before it's persisted. For example, the following would turn all
