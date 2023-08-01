@@ -50,6 +50,11 @@ module AuthorAdmin
       end
     end
 
+    def rebuild
+      PullGithubRepoJob.perform_async(params[:id])
+      redirect_to author_admin_repository_path(params[:id])
+    end
+
     # For `index` action, only show repositories belonging to the author currently authentified
     def scoped_resource
       @repositories = current_author.repositories if current_author
