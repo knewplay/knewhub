@@ -1,7 +1,8 @@
 class Repository < ApplicationRecord
   belongs_to :author
 
-  before_create :set_git_url, :set_branch, :generate_uuid
+  before_create :set_branch, :generate_uuid
+  before_save :set_git_url
 
   validates :name,
             presence: true,
