@@ -14,6 +14,7 @@ class RepositoryDashboard < Administrate::BaseDashboard
     git_url: Field::String,
     last_pull_at: Field::DateTime,
     name: Field::String,
+    title: Field::String,
     token: Field::Password,
     uuid: Field::String,
     created_at: Field::DateTime,
@@ -28,6 +29,7 @@ class RepositoryDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = %i[
     id
     name
+    title
     branch
     last_pull_at
   ].freeze
@@ -36,6 +38,7 @@ class RepositoryDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
     name
+    title
     branch
     description
     last_pull_at
@@ -47,12 +50,14 @@ class RepositoryDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES_NEW = %i[
     name
+    title
     branch
     token
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
     name
+    title
     branch
   ].freeze
 

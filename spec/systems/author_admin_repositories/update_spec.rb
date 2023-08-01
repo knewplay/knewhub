@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'update repository as an author', type: :system do
   before(:all) do
     author = Author.create(github_uid: '123545', github_username: 'some_user')
-    @repo = Repository.create(name: 'repo_name', token: 'ghp_abde12345', author:)
+    @repo = Repository.create(name: 'repo_name', token: 'ghp_abde12345', author:, title: 'Test Repo')
   end
 
   scenario 'change name of repository' do
