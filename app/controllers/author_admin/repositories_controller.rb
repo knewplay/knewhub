@@ -1,17 +1,36 @@
 module AuthorAdmin
   class RepositoriesController < AuthorAdmin::ApplicationController
     # Override `create` action to add association to `current_author`
+    # and to call background jobs
     def create
       params[:repository][:author_id] = current_author.id
-      super
-      # Call Jobs to create webhhook and clone the repo
+      resource = new_resource(resource_params)
+      authorize_resource(resource)
+
+      if resource.save
+        CreateGithubWebhookJob.perform_async(
+          resource.uuid,
+          resource.name,
+          resource.author.github_username,
+          resource.token
+        )
+        CloneGithubRepoJob.perform_async(resource.id)
+        redirect_to(
+          after_resource_created_path(resource),
+          notice: translate_with_resource('create.success')
+        )
+      else
+        render :new, locals: {
+          page: Administrate::Page::Form.new(dashboard, resource)
+        }, status: :unprocessable_entity
+      end
     end
 
     def update
       super
       # Call Job to pull the repo
     end
-    
+
     # For `index` action, only show repositories belonging to the author currently authentified
     def scoped_resource
       @repositories = current_author.repositories if current_author
