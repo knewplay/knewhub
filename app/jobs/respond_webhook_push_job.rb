@@ -17,7 +17,7 @@ class RespondWebhookPushJob
     if Dir.exist?(directory)
       Git.open(directory).pull
     else
-      Git.clone(repository.git_url, directory, options: { branch: repository.branch })
+      Git.clone(repository.git_url, directory, branch: repository.branch)
     end
   end
 
