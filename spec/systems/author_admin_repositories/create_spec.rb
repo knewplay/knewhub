@@ -24,6 +24,7 @@ RSpec.describe 'create repository as an author', type: :system do
     click_on 'New repository'
 
     fill_in('Name', with: 'name')
+    fill_in('Title', with: 'Test Repo')
     fill_in('Token', with: 'ghp_abde12345')
     click_on 'Create Repository'
 
@@ -41,6 +42,7 @@ RSpec.describe 'create repository as an author', type: :system do
     click_on 'New repository'
 
     fill_in('Name', with: 'name')
+    fill_in('Title', with: 'Test Repo')
     fill_in('Token', with: 'ghp_abde12345')
     fill_in('Branch', with: 'some_branch')
     click_on 'Create Repository'

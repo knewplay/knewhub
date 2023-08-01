@@ -5,7 +5,7 @@ RSpec.describe CloneGithubRepoJob, type: :job do
     Repository.delete_all
     Author.delete_all
     author = Author.create(github_uid: '85654561', github_username: 'jp524')
-    @repo = Repository.create(name: 'test-repo', token: Rails.application.credentials.pat, author:)
+    @repo = Repository.create(name: 'test-repo', token: Rails.application.credentials.pat, author:, title: 'Test Repo')
   end
 
   it 'queues the job' do

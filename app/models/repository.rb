@@ -12,6 +12,7 @@ class Repository < ApplicationRecord
             format: { with: /\A(github_pat|ghp)\w+\z/, message: 'must start with "github_pat" or "ghp"' }
   validates :branch,
             format: { with: /\A[\.\/\w-]{0,100}\z/, message: 'must follow GitHub branch name restrictions' }
+  validates :title, presence: true
 
   private
 
