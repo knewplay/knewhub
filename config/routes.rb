@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  namespace :system_admin do
+    resources :authors
+    resources :repositories
+
+    root to: 'authors#index'
+  end
+
   root 'static_pages#index'
 
   scope module: 'author_admin', path: 'author', as: 'author_admin' do
