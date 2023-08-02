@@ -67,6 +67,9 @@ gem 'front_matter_parser'
 gem 'omniauth-github'
 gem 'omniauth-rails_csrf_protection'
 
+# Authentication using WebAuthn standard
+gem 'webauthn'
+
 # Build admin dashboards
 gem 'administrate'
 
