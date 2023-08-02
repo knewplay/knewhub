@@ -9,6 +9,16 @@ class Author < ApplicationRecord
     data = access_token.info
     github_username = data['nickname']
 
-    Author.find_or_create_by(github_username:, github_uid:)
+    author = Author.find_by(github_uid:)
+    author ||= Author.create(github_uid:, github_username:)
+
+    if author.github_username != github_username
+      author.repositories.each do |repository|
+        RepositoryDirectory.update_author(repository.id, github_username)
+      end
+      author.update(github_username:)
+    end
+
+    author
   end
 end
