@@ -2,11 +2,11 @@ Rails.application.routes.draw do
   root 'static_pages#index'
 
   scope module: 'author_admin', path: 'author', as: 'author_admin' do
-    resources :repositories do
-      post 'rebuild', on: :member
-    end
+    resources :repositories
     root 'repositories#index'
   end
+
+  resources :repositories, only: [:update]
 
   post '/webhooks/github/:uuid', to: 'webhooks/github#create'
 
