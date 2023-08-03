@@ -6,6 +6,12 @@ Rails.application.routes.draw do
     root to: 'authors#index'
   end
 
+  resources :administrators, only: %i[new create]
+
+  namespace :sessions do
+    resource :administrator, only: %i[new create destroy]
+  end
+
   root 'static_pages#index'
 
   scope module: 'author_admin', path: 'author', as: 'author_admin' do
