@@ -78,6 +78,7 @@ GEM
       selectize-rails (~> 0.6)
     android_key_attestation (0.3.0)
     awrence (1.2.1)
+    bcrypt (3.1.19)
     bindata (2.4.15)
     bindex (0.8.1)
     bootsnap (1.16.0)
@@ -356,6 +357,7 @@ PLATFORMS
 
 DEPENDENCIES
   administrate
+  bcrypt (~> 3.1.7)
   bootsnap
   capybara
   database_cleaner-active_record
