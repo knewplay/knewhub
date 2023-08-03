@@ -32,4 +32,11 @@ RSpec.describe 'Administrator', type: :system do
     expect(page).to have_content('Sign up failed.')
     expect(Administrator.count).to eq(before_count)
   end
+
+  scenario 'access to sign up page fails when an administrator already exists' do
+    Administrator.create(name: 'admin', password: 'password')
+
+    visit new_administrator_path
+    expect(page).to have_content('Invalid action.')
+  end
 end
