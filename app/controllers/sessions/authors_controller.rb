@@ -1,4 +1,4 @@
-class Auth::GithubController < ApplicationController
+class Sessions::AuthorsController < ApplicationController
   def create
     @author = Author.from_omniauth(request.env['omniauth.auth'])
     if @author.persisted?

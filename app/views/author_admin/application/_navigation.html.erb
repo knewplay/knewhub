@@ -10,7 +10,7 @@ as defined by the routes in the `admin/` namespace
 <nav class="navigation">
   <h3>Author: <%= current_author.github_username %></h3>
   <br />
-  <%= link_to 'Sign out', github_logout_path, method: :delete, data: { turbo: false }, class: "button button--nav"  %>
+  <%= link_to 'Sign out', sessions_author_path, method: :delete, data: { turbo: false }, class: "button button--nav"  %>
   <br />
   <%= link_to(t("administrate.navigation.back_to_app"), root_url, class: "button button--alt button--nav") if defined?(root_url) %>
 

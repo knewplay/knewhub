@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe 'Logout from GitHub auth session', type: :system do
-  scenario 'valid credentials' do
+RSpec.describe 'Author', type: :system do
+  scenario 'sign out' do
     visit root_path
 
     click_on 'Login with GitHub'
