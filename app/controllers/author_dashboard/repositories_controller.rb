@@ -1,5 +1,5 @@
-module AuthorAdmin
-  class RepositoriesController < AuthorAdmin::ApplicationController
+module AuthorDashboard
+  class RepositoriesController < AuthorDashboard::ApplicationController
     # Override `create` action to add association to `current_author`
     # and to call background jobs
     def create
@@ -48,11 +48,6 @@ module AuthorAdmin
           page: Administrate::Page::Form.new(dashboard, requested_resource)
         }, status: :unprocessable_entity
       end
-    end
-
-    def rebuild
-      PullGithubRepoJob.perform_async(params[:id])
-      redirect_to author_admin_repository_path(params[:id])
     end
 
     # For `index` action, only show repositories belonging to the author currently authentified

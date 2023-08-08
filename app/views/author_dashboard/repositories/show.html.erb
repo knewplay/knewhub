@@ -26,8 +26,8 @@ as well as a link to its edit page.
   <div>
     <%= link_to(
       "Rebuild",
-      rebuild_author_admin_repository_path,
-      method: :post,
+      repository_path,
+      method: :patch,
       class: "button")
     %>
 

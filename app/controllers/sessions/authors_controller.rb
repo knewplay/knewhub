@@ -1,10 +1,11 @@
+
 class Sessions::AuthorsController < ApplicationController
   def create
     @author = Author.from_omniauth(request.env['omniauth.auth'])
     if @author.persisted?
       session[:author_id] = @author.id
       session[:administrator_id] = nil if session[:administrator_id]
-      redirect_to author_admin_root_path
+      redirect_to author_dashboard_root_path
     else
       redirect_to root_url, alert: 'Failure'
     end

@@ -13,12 +13,12 @@ Rails.application.routes.draw do
   get 'auth/github/callback', to: 'sessions/authors#create'
 
   # Author dashboard
-  scope module: 'author_admin', path: 'author', as: 'author_admin' do
-    resources :repositories do
-      post 'rebuild', on: :member
-    end
+  scope module: 'author_dashboard', path: 'author', as: 'author_dashboard' do
+    resources :repositories
     root 'repositories#index'
   end
+
+  resources :repositories, only: [:update]
 
   # Administrator dashboard
   namespace :system_admin do
