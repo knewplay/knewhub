@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'static_pages#index'
 
-  scope module: 'author_admin', path: 'author', as: 'author_admin' do
+  scope module: 'author_dashboard', path: 'author', as: 'author_dashboard' do
     resources :repositories
     root 'repositories#index'
   end
