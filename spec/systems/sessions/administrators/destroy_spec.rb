@@ -14,7 +14,7 @@ RSpec.describe 'Administrator', type: :system do
 
     click_on 'Sign In'
 
-    expect(page).to have_current_path(system_admin_root_path)
+    expect(page).to have_current_path(system_dashboards_root_path)
     click_on 'Sign out'
 
     expect(page).to have_current_path(root_path)

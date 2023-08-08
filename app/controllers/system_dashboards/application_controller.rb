@@ -4,7 +4,7 @@
 #
 # If you want to add pagination or other controller-level concerns,
 # you're free to overwrite the RESTful controller actions.
-module SystemAdmin
+module SystemDashboards
   class ApplicationController < Administrate::ApplicationController
     include AdministratorAuthentication
     before_action :require_administrator_authentication

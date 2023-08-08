@@ -14,7 +14,7 @@ RSpec.describe 'Administrator', type: :system do
 
     click_on 'Sign In'
 
-    have_current_path(system_admin_root_path, only_path: true)
+    have_current_path(system_dashboards_root_path, only_path: true)
     expect(page).to have_content('Admin: admin')
     expect(page).to have_link('Sign out')
   end

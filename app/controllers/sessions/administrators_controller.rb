@@ -7,7 +7,7 @@ class Sessions::AdministratorsController < ApplicationController
     if administrator&.authenticate(params[:password])
       session[:administrator_id] = administrator.id
       session[:author_id] = nil if session[:author_id]
-      redirect_to system_admin_root_path
+      redirect_to system_dashboards_root_path
     else
       redirect_to root_path, alert: 'Sign in failed. Please verify your username and password.'
     end

@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   resources :repositories, only: [:update]
 
   # Administrator dashboard
-  namespace :system_admin do
+  namespace :system_dashboards do
     resources :authors
     resources :repositories
 
