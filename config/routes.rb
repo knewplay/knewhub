@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
-  resources :repositories, only: %i[index new create]
-  root 'repositories#index'
+  root 'static_pages#index'
+
+  scope module: 'author_dashboard', path: 'author', as: 'author_dashboard' do
+    resources :repositories
+    root 'repositories#index'
+  end
+
+  resources :repositories, only: [:update]
 
   post '/webhooks/github/:uuid', to: 'webhooks/github#create'
 

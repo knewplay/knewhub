@@ -22,8 +22,8 @@ RSpec.describe Repository, type: :model do
       expect(repo.valid?).to be false
     end
 
-    it 'returns true when given a valid name and token, and associated author' do
-      repo = Repository.new(name: 'repo_name', token: 'ghp_abde12345')
+    it 'returns true when given a valid name, token and title, and associated author' do
+      repo = Repository.new(name: 'repo_name', token: 'ghp_abde12345', title: 'Test Repo')
       author = Author.create(github_uid: '12345', github_username: 'user')
       repo.author = author
       repo.save
@@ -34,7 +34,7 @@ RSpec.describe Repository, type: :model do
   describe '#set_git_url' do
     before do
       author = Author.create(github_uid: '12345', github_username: 'user')
-      @repo = described_class.create(name: 'repo_name', token: 'ghp_abde12345', author:)
+      @repo = described_class.create(name: 'repo_name', token: 'ghp_abde12345', author:, title: 'Test Repo')
     end
 
     it 'returns the git_url created using Repository owner, name and token' do
@@ -45,7 +45,7 @@ RSpec.describe Repository, type: :model do
   describe '#set_branch' do
     before do
       author = Author.create(github_uid: '12345', github_username: 'user')
-      @repo = described_class.new(name: 'repo_name', token: 'ghp_abde12345', author:)
+      @repo = described_class.new(name: 'repo_name', token: 'ghp_abde12345', author:, title: 'Test Repo')
     end
 
     it 'branch is "main" if not specified' do
@@ -63,7 +63,7 @@ RSpec.describe Repository, type: :model do
   describe '#generate_uuid' do
     before do
       author = Author.create(github_uid: '12345', github_username: 'user')
-      @repo = described_class.create(name: 'repo_name', token: 'ghp_abde12345', author:)
+      @repo = described_class.create(name: 'repo_name', token: 'ghp_abde12345', author:, title: 'Test Repo')
     end
 
     it 'generates a uuid when a record is created' do

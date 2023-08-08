@@ -1,7 +1,8 @@
 class Repository < ApplicationRecord
   belongs_to :author
 
-  before_create :set_git_url, :set_branch, :generate_uuid
+  before_create :set_branch, :generate_uuid
+  before_save :set_git_url
 
   validates :name,
             presence: true,
@@ -11,6 +12,7 @@ class Repository < ApplicationRecord
             format: { with: /\A(github_pat|ghp)\w+\z/, message: 'must start with "github_pat" or "ghp"' }
   validates :branch,
             format: { with: /\A[\.\/\w-]{0,100}\z/, message: 'must follow GitHub branch name restrictions' }
+  validates :title, presence: true
 
   private
 

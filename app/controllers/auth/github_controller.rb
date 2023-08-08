@@ -3,7 +3,7 @@ class Auth::GithubController < ApplicationController
     @author = Author.from_omniauth(request.env['omniauth.auth'])
     if @author.persisted?
       session[:author_id] = @author.id
-      redirect_to root_url, notice: "Logged in as #{@author.github_username}"
+      redirect_to author_dashboard_root_path
     else
       redirect_to root_url, alert: 'Failure'
     end

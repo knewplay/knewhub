@@ -3,7 +3,11 @@ require 'rails_helper'
 RSpec.describe CreateGithubWebhookJob, type: :job do
   before(:all) do
     author = Author.create(github_uid: '85654561', github_username: 'jp524')
-    @repo = Repository.create(name: 'markdown-templates', token: Rails.application.credentials.pat, author:)
+    @repo = Repository.create(
+      name: 'markdown-templates',
+      token: Rails.application.credentials.pat,
+      author:,
+      title: 'Markdown Templates')
   end
 
   it 'queues the job' do
