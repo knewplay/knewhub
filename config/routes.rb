@@ -12,6 +12,12 @@ Rails.application.routes.draw do
   end
   get 'auth/github/callback', to: 'sessions/authors#create'
 
+  namespace :webauthn do
+    resources :credentials, only: %i[new create destroy] do
+      post :options, on: :collection, as: 'options_for'
+    end
+  end
+
   # Author dashboard
   scope module: 'author_dashboards', path: 'author', as: 'author_dashboards' do
     resources :repositories

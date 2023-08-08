@@ -1,5 +1,5 @@
-class WebauthCredential < ApplicationRecord
-  belongs_to :user
+class WebauthnCredential < ApplicationRecord
+  belongs_to :administrator
 
   validates :external_id, presence: true, uniqueness: true
   validates :public_key, presence: true
