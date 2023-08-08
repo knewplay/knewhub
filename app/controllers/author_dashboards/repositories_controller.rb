@@ -1,5 +1,5 @@
-module AuthorDashboard
-  class RepositoriesController < AuthorDashboard::ApplicationController
+module AuthorDashboards
+  class RepositoriesController < AuthorDashboards::ApplicationController
     # Override `create` action to add association to `current_author`
     # and to call background jobs
     def create

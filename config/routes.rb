@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get 'auth/github/callback', to: 'sessions/authors#create'
 
   # Author dashboard
-  scope module: 'author_dashboard', path: 'author', as: 'author_dashboard' do
+  scope module: 'author_dashboards', path: 'author', as: 'author_dashboards' do
     resources :repositories
     root 'repositories#index'
   end
