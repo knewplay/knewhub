@@ -6,7 +6,9 @@ module AdministratorAuthentication
     helper_method :current_administrator
 
     def require_administrator_authentication
-      redirect_to root_path, alert: 'Requires authentication' unless administrator_signed_in?
+      return if administrator_signed_in?
+
+      redirect_to new_sessions_administrator_path, alert: 'Please sign in as an administrator.'
     end
 
     def current_administrator

@@ -6,7 +6,7 @@ module AuthorAuthentication
     helper_method :current_author
 
     def require_author_authentication
-      redirect_to root_path, alert: 'Requires authentication' unless author_signed_in?
+      redirect_to root_path, alert: 'Please sign in with GitHub.' unless author_signed_in?
     end
 
     def current_author
