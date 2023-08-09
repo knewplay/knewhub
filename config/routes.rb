@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get 'auth/github/callback', to: 'sessions/authors#create'
 
   namespace :webauthn do
-    resources :credentials, only: %i[new create destroy] do
+    resources :credentials, only: %i[index create destroy] do
       post :options, on: :collection, as: 'options_for'
     end
   end

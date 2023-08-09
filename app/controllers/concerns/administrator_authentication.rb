@@ -14,7 +14,7 @@ module AdministratorAuthentication
     def require_multi_factor_authentication
       return unless current_administrator.webauthn_credentials == []
 
-      redirect_to new_webauthn_credential_path
+      redirect_to webauthn_credentials_path
     end
 
     def current_administrator
