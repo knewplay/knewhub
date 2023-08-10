@@ -22,7 +22,7 @@ class AdministratorsController < ApplicationController
   end
 
   def verify_allow_create
-    redirect_to root_path, alert: 'Invalid action.' unless empty_table
+    redirect_to root_path, alert: 'Invalid action.' unless empty_table || current_administrator.permissions == 'admin'
   end
 
   def empty_table
