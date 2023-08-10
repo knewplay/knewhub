@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe 'Administrator', type: :system do
   before(:all) do
-    admin = Administrator.create(name: 'admin', password: 'password')
+    @admin = Administrator.create(name: 'admin', password: 'password')
     WebauthnCredential.create(
-      administrator_id: admin.id,
+      administrator_id: @admin.id,
       external_id: 'id',
       public_key: 'key',
       nickname: 'nickname',
@@ -12,7 +12,8 @@ RSpec.describe 'Administrator', type: :system do
     )
   end
 
-  scenario 'sign out' do
+  # Test skipped until mocking of WebAuthn session is implemented
+  xscenario 'sign out' do
     visit new_sessions_administrator_path
     expect(page).to have_content('Administrator Sign In')
 

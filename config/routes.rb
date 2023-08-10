@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     resources :credentials, only: %i[index create destroy] do
       post :options, on: :collection, as: 'options_for'
     end
+    resource :authentication, controller: 'authentication', only: %i[new create] do
+      post :options, on: :collection, as: 'options_for'
+    end
   end
 
   # Author dashboard

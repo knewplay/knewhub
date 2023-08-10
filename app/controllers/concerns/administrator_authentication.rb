@@ -12,7 +12,7 @@ module AdministratorAuthentication
     end
 
     def require_multi_factor_authentication
-      return unless current_administrator.webauthn_credentials == []
+      return if current_administrator.multi_factor_enabled?
 
       redirect_to webauthn_credentials_path
     end

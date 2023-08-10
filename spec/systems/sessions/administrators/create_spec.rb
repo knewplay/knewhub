@@ -1,29 +1,52 @@
 require 'rails_helper'
+require 'webauthn/fake_client'
 
 RSpec.describe 'Administrator', type: :system do
   before(:all) do
-    admin = Administrator.create(name: 'admin', password: 'password')
-    WebauthnCredential.create(
-      administrator_id: admin.id,
-      external_id: 'id',
-      public_key: 'key',
-      nickname: 'nickname',
-      sign_count: 1
-    )
+    @admin = Administrator.create(name: 'admin', password: 'password')
   end
 
-  scenario 'sign in' do
-    visit new_sessions_administrator_path
-    expect(page).to have_content('Administrator Sign In')
+  context 'sign in without multi-factor authentication' do
+    scenario 'redirects to set up MFA' do
+      visit new_sessions_administrator_path
+      expect(page).to have_content('Administrator Sign In')
 
-    fill_in('Name', with: 'admin')
-    fill_in('Password', with: 'password')
+      fill_in('Name', with: 'admin')
+      fill_in('Password', with: 'password')
 
-    click_on 'Sign In'
+      click_on 'Sign In'
 
-    have_current_path(system_dashboards_root_path, only_path: true)
-    expect(page).to have_content('Admin: admin')
-    expect(page).to have_link('Sign out')
+      expect(page).to have_current_path(webauthn_credentials_path)
+      expect(page).to have_content('Multi-Factor Authentication')
+      expect(page).to have_button('Add')
+    end
+  end
+
+  context 'sign in with multi-factor authentication' do
+    before do
+      @admin.update(webauthn_id: WebAuthn.generate_user_id)
+      fake_client = WebAuthn::FakeClient.new('http://localhost:3030')
+      public_key_credential = WebAuthn::Credential.from_create(fake_client.create)
+      @admin.webauthn_credentials.create(
+        nickname: 'SecurityKeyNickname',
+        external_id: public_key_credential.id,
+        public_key: public_key_credential.public_key,
+        sign_count: '1000'
+      )
+      @admin.webauthn_credentials.take
+    end
+
+    scenario 'asks for MFA' do
+      visit new_sessions_administrator_path
+      expect(page).to have_content('Administrator Sign In')
+
+      fill_in('Name', with: 'admin')
+      fill_in('Password', with: 'password')
+
+      click_on 'Sign In'
+
+      expect(page).to have_button('Authenticate')
+    end
   end
 
   scenario 'sign in fails with wrong username' do
