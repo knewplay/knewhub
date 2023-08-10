@@ -1,11 +1,4 @@
-<%#
-# Navigation
-
-This partial is used to display the navigation in Administrate.
-By default, the navigation contains navigation links
-for all resources in the admin dashboard,
-as defined by the routes in the `admin/` namespace
-%>
+<%# Override default view to add information about current author and sign out buttons %>
 
 <nav class="navigation">
   <h3>Author: <%= current_author.github_username %></h3>

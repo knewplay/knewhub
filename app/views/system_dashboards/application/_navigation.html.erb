@@ -1,18 +1,11 @@
-<%#
-# Navigation
-
-This partial is used to display the navigation in Administrate.
-By default, the navigation contains navigation links
-for all resources in the admin dashboard,
-as defined by the routes in the `admin/` namespace
-%>
+<%# Override default view to add information about current administrator, sign out button and edit MFA credentials button %>
 
 <nav class="navigation">
   <h3>Admin: <%= current_administrator.name %></h3>
   <br />
   <%= link_to 'Sign out', sessions_administrator_path, method: :delete, data: { turbo: false }, class: "button button--nav"  %>
   <br />
-  <%= link_to 'Edit MFA Credentials', webauthn_credentials_path, class: "button button--alt button--nav" %>
+  <%= link_to 'Edit MFA credentials', webauthn_credentials_path, class: "button button--alt button--nav" %>
   <br />
   
   <%= link_to(t("administrate.navigation.back_to_app"), root_url, class: "button button--alt button--nav") if defined?(root_url) %>
