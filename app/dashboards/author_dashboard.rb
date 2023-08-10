@@ -32,7 +32,6 @@ class AuthorDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = %i[
     github_uid
     github_username
-    repositories
   ].freeze
 
   # Filters that can be used while searching via the search field of the dashboard.

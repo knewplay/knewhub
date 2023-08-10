@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   # Administrator dashboard
   namespace :system_dashboards do
     resources :authors
-    resources :repositories
+    resources :repositories, except: %i[new create]
 
     root to: 'authors#index'
   end
