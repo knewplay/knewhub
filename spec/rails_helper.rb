@@ -62,6 +62,14 @@ RSpec.configure do |config|
   config.append_after(:each) do
     DatabaseCleaner.clean
   end
+
+  config.before(:all) do
+    DatabaseCleaner.start
+  end
+
+  config.append_after(:all) do
+    DatabaseCleaner.clean
+  end
   # ------
 
   config.infer_spec_type_from_file_location!
