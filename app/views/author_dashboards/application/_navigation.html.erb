@@ -7,8 +7,6 @@
   <br />
   <%= link_to 'Edit name', edit_author_dashboards_author_path(current_author.id), class: "button button--alt button--nav"  %>
   <br />
-  <%= link_to 'Edit name', edit_author_dashboards_author_path(current_author.id), class: "button button--alt button--nav"  %>
-  <br />
   <%= link_to(t("administrate.navigation.back_to_app"), root_url, class: "button button--alt button--nav") if defined?(root_url) %>
 
   <% Administrate::Namespace.new(namespace).resources_with_index_route.each do |resource| %>
