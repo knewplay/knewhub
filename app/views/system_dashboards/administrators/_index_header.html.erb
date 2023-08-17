@@ -1,0 +1,24 @@
+<%# Override default view to add button to add new administrator %>
+
+<% content_for(:title) do %>
+  <%= display_resource_name(page.resource_name) %>
+<% end %>
+
+<header class="main-content__header">
+  <h1 class="main-content__page-title" id="page-title">
+    <%= content_for(:title) %>
+  </h1>
+
+  <% if show_search_bar %>
+    <%= render(
+      "search",
+      search_term: search_term,
+      resource_name: display_resource_name(page.resource_name)
+    ) %>
+  <% end %>
+
+  <div>
+<%= link_to "New administrator", new_administrator_path, class: "button" %>
+
+  </div>
+</header>
