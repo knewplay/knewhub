@@ -1,8 +1,14 @@
 class Author < ApplicationRecord
   has_many :repositories, dependent: :destroy
 
+  before_create :set_name
+
   validates :github_uid, presence: true, uniqueness: true
   validates :github_username, presence: true, uniqueness: true
+  validates :name,
+            format: { with: /\A[a-zA-Z0-9-]{0,39}\z/, message: 'can only contain alphanumeric characters and dashes' },
+            length: { maximum: 39 },
+            on: :update
 
   def self.from_omniauth(access_token)
     github_uid = access_token.uid
@@ -20,5 +26,11 @@ class Author < ApplicationRecord
     end
 
     author
+  end
+
+  private
+
+  def set_name
+    self.name = github_username
   end
 end
