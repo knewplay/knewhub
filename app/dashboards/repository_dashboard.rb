@@ -3,6 +3,7 @@ require 'administrate/base_dashboard'
 class RepositoryDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
+    author: Field::BelongsTo,
     branch: Field::String,
     description: Field::String,
     git_url: Field::String,
@@ -17,6 +18,7 @@ class RepositoryDashboard < Administrate::BaseDashboard
 
   # Attributes that will be displayed on the model's index page.
   COLLECTION_ATTRIBUTES = %i[
+    author
     id
     name
     title
@@ -26,6 +28,7 @@ class RepositoryDashboard < Administrate::BaseDashboard
 
   # Attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
+    author
     name
     title
     branch

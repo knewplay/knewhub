@@ -15,6 +15,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_16_124805) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
+  create_table "administrators", force: :cascade do |t|
+    t.string "name"
+    t.string "password_digest"
+    t.string "permissions", default: "admin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "webauthn_id"
+  end
+
   create_table "authors", force: :cascade do |t|
     t.string "github_uid"
     t.string "github_username"
@@ -38,5 +47,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_16_124805) do
     t.index ["author_id"], name: "index_repositories_on_author_id"
   end
 
+  create_table "webauthn_credentials", force: :cascade do |t|
+    t.bigint "administrator_id"
+    t.string "external_id"
+    t.string "public_key"
+    t.string "nickname"
+    t.bigint "sign_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["administrator_id"], name: "index_webauthn_credentials_on_administrator_id"
+    t.index ["external_id"], name: "index_webauthn_credentials_on_external_id", unique: true
+  end
+
   add_foreign_key "repositories", "authors"
+  add_foreign_key "webauthn_credentials", "administrators"
 end

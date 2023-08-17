@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe 'Sign in with GitHub', type: :system do
-  scenario 'valid credentials' do
+RSpec.describe 'Author', type: :system do
+  scenario 'sign in' do
     visit root_path
     expect(page).to have_no_button('Sign out')
 

@@ -1,7 +1,7 @@
 <nav>
   <% if current_author %>
     <%= current_author.github_username %>
-    <%= button_to 'Sign out', github_logout_path, method: :delete, data: { turbo: false } %>
+    <%= button_to 'Sign out', sessions_author_path, method: :delete, data: { turbo: false } %>
   <% else %>
     <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
   <% end %>
