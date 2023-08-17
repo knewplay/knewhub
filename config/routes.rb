@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   # Author dashboard
   scope module: 'author_dashboards', path: 'author', as: 'author_dashboards' do
     resources :repositories
+    resources :authors, only: %i[edit update]
     root 'repositories#index'
   end
 

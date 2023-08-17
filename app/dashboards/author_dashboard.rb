@@ -5,6 +5,7 @@ class AuthorDashboard < Administrate::BaseDashboard
     id: Field::Number,
     github_uid: Field::String,
     github_username: Field::String,
+    name: Field::String,
     repositories: Field::HasMany,
     created_at: Field::DateTime,
     updated_at: Field::DateTime
@@ -30,8 +31,7 @@ class AuthorDashboard < Administrate::BaseDashboard
 
   # Attributes that will be displayed on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    github_uid
-    github_username
+    name
   ].freeze
 
   # Filters that can be used while searching via the search field of the dashboard.
