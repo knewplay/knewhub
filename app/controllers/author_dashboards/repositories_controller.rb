@@ -12,12 +12,7 @@ module AuthorDashboards
       authorize_resource(resource)
 
       if resource.save
-        CreateGithubWebhookJob.perform_async(
-          resource.uuid,
-          resource.name,
-          resource.author.github_username,
-          resource.token
-        )
+        CreateGithubWebhookJob.perform_async(resource.id)
         CloneGithubRepoJob.perform_async(resource.id)
         redirect_to(
           after_resource_created_path(resource),
