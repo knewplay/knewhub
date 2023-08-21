@@ -30,6 +30,18 @@ module AuthorDashboards
       end
     end
 
+    # Override `destroy` action to delete local repository
+    def destroy
+      directory = Rails.root.join('repos', current_author.github_username, requested_resource.name)
+      if requested_resource.destroy
+        flash[:notice] = translate_with_resource('destroy.success')
+        FileUtils.remove_dir(directory) if Dir.exist?(directory)
+      else
+        flash[:error] = requested_resource.errors.full_messages.join('<br/>')
+      end
+      redirect_to after_resource_destroyed_path(requested_resource)
+    end
+
     # For `index` action, only show repositories belonging to the author currently authentified
     def scoped_resource
       @repositories = current_author.repositories if current_author

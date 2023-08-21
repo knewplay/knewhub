@@ -1,28 +1,12 @@
 require 'rails_helper'
-require 'support/omniauth'
 
 RSpec.describe 'Update repository as an author', type: :system do
+  before(:each) do
+    @repo = create(:repository)
+  end
+
   scenario 'to change name' do
-    # Creation of repository done here instead of using a factory
-    # because of interaction with mock auth
-    before_count = Repository.count
-
-    visit root_path
-    click_on 'Login with GitHub'
-    expect(page).to have_content('Repositories')
-
-    click_on 'New repository'
-
-    fill_in('Name', with: 'repo_name')
-    fill_in('Title', with: 'Test Repo')
-    fill_in('Token', with: 'ghp_abcde12345')
-    click_on 'Create Repository'
-
-    expect(Repository.count).to eq(before_count + 1)
-    @repo = Repository.last
-    # Creation of repository over
-
-    expect(@repo.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
+    page.set_rack_session(author_id: @repo.author.id)
 
     visit author_dashboards_repository_path(@repo.id)
     expect(page).to have_content('repo_name')
@@ -41,26 +25,7 @@ RSpec.describe 'Update repository as an author', type: :system do
   end
 
   scenario 'to change branch' do
-    # Creation of repository done here instead of using a factory
-    # because of interaction with mock auth
-    before_count = Repository.count
-
-    visit root_path
-    click_on 'Login with GitHub'
-    expect(page).to have_content('Repositories')
-
-    click_on 'New repository'
-
-    fill_in('Name', with: 'repo_name')
-    fill_in('Title', with: 'Test Repo')
-    fill_in('Token', with: 'ghp_abcde12345')
-    click_on 'Create Repository'
-
-    expect(Repository.count).to eq(before_count + 1)
-    @repo = Repository.last
-    # Creation of repository over
-
-    expect(@repo.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
+    page.set_rack_session(author_id: @repo.author.id)
 
     visit author_dashboards_repository_path(@repo.id)
     expect(page).to have_content('main')
