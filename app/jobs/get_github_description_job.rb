@@ -6,7 +6,7 @@ class GetGithubDescriptionJob
     client = Octokit::Client.new(access_token: repository.token)
     response = client.repository("#{repository.author.github_username}/#{repository.name}")
     repository.update(description: response.description)
-  rescue Octokit::UnprocessableEntity => e
-    Rails.logger.error "Failed to get description for repository ##{repository.id}. Message: #{e.message}"
+  rescue Octokit::Unauthorized, Octokit::UnprocessableEntity => e
+    Rails.logger.error "Failed to get description for repository ##{repository.name}. Message: #{e.message}"
   end
 end

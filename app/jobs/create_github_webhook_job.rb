@@ -13,7 +13,7 @@ class CreateGithubWebhookJob
       { url: "https://#{host_url}/webhooks/github/#{repository.uuid}", content_type: 'json', secret: webhook_secret },
       { events: ['push'], active: true }
     )
-  rescue Octokit::UnprocessableEntity => e
-    Rails.logger.error "Failed to create GitHub webhook for repository ##{repository.id}. Message: #{e.message}"
+  rescue Octokit::Unauthorized, Octokit::UnprocessableEntity => e
+    Rails.logger.error "Failed to create GitHub webhook for repository ##{repository.name}. Message: #{e.message}"
   end
 end
