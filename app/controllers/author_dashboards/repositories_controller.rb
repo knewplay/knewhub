@@ -49,6 +49,10 @@ module AuthorDashboards
             .transform_values { |v| read_param_value(v) }
     end
 
+    def after_resource_created_path(_requested_resource)
+      author_dashboards_repositories_path
+    end
+
     # See https://administrate-demo.herokuapp.com/customizing_controller_actions
     # for more information
   end
