@@ -13,6 +13,6 @@ class CreateGithubWebhookJob
       { events: ['push'], active: true }
     )
   rescue Octokit::UnprocessableEntity => e
-    p e.message
+    Rails.logger.error "Failed to create GitHub webhook for repository ##{repository.id}. Message: #{e.message}"
   end
 end
