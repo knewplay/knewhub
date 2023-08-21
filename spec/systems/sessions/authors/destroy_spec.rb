@@ -1,14 +1,15 @@
 require 'rails_helper'
+require 'support/omniauth'
 
-RSpec.describe 'Author', type: :system do
-  scenario 'sign out' do
+RSpec.describe 'Logout from GitHub auth session', type: :system do
+  scenario 'started with valid credentials' do
     visit root_path
 
     click_on 'Login with GitHub'
-    expect(page).to have_content('some_user')
+    expect(page).to have_content('user')
 
     click_on 'Sign out'
-    expect(page).not_to have_content('some_user')
+    expect(page).not_to have_content('user')
     expect(page).to have_button('Login with GitHub')
   end
 end

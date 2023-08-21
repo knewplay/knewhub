@@ -12,17 +12,11 @@ RSpec.describe 'Administrator', type: :system do
     )
   end
 
-  # Test skipped until mocking of WebAuthn session is implemented
-  xscenario 'sign out' do
-    visit new_sessions_administrator_path
-    expect(page).to have_content('Administrator Sign In')
+  scenario 'sign out' do
+    page.set_rack_session(administrator_id: @admin.id)
 
-    fill_in('Name', with: 'admin')
-    fill_in('Password', with: 'password')
-
-    click_on 'Sign In'
-
-    expect(page).to have_current_path(system_dashboards_root_path)
+    visit system_dashboards_root_path
+    expect(page).to have_content("Admin: #{@admin.name}")
     click_on 'Sign out'
 
     expect(page).to have_current_path(root_path)

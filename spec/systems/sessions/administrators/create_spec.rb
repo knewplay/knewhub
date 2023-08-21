@@ -3,7 +3,7 @@ require 'webauthn/fake_client'
 
 RSpec.describe 'Administrator', type: :system do
   before(:all) do
-    @admin = Administrator.create(name: 'admin', password: 'password')
+    @admin = create(:administrator)
   end
 
   context 'sign in without multi-factor authentication' do

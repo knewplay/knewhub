@@ -2,10 +2,12 @@ require 'rails_helper'
 
 RSpec.describe RespondWebhookPushJob, type: :job do
   before(:all) do
-    Repository.delete_all
-    Author.delete_all
-    author = Author.create(github_uid: '85654561', github_username: 'jp524')
-    @repo = Repository.create(name: 'test-repo', token: Rails.application.credentials.pat, author:, title: 'Test Repo')
+    @repo = create(:repository, :real)
+    Sidekiq::Testing.inline! do
+      VCR.use_cassette('clone_github_repo') do
+        CloneGithubRepoJob.perform_async(@repo.id)
+      end
+    end
   end
 
   it 'queues the job' do
@@ -18,28 +20,39 @@ RSpec.describe RespondWebhookPushJob, type: :job do
     )
   end
 
-  it 'executes perform when webhook_name == name && webhook_owner == repository.author.github_username' do
-    Sidekiq::Testing.inline! do
-      expect(@repo.description).to be_nil
-      expect(@repo.last_pull_at).to be_nil
+  context 'executes perform' do
+    it 'when webhook_name == name && webhook_owner == repository.author.github_username' do
+      Sidekiq::Testing.inline! do
+        expect(@repo.description).to be_nil
+        expect(@repo.last_pull_at).to be_nil
 
-      RespondWebhookPushJob.perform_async(@repo.uuid, @repo.name, @repo.author.github_username, @repo.description)
-      @repo.reload
+        RespondWebhookPushJob.perform_async(@repo.uuid, @repo.name, @repo.author.github_username, @repo.description)
+        @repo.reload
 
-      expect(@repo.last_pull_at).not_to be_nil
+        expect(@repo.last_pull_at).not_to be_nil
+      end
+    end
+
+    it 'when webhook_name != name && webhook_owner == repository.author.github_username' do
+      Sidekiq::Testing.inline! do
+        expect(@repo.last_pull_at).not_to be_nil
+
+        RespondWebhookPushJob.perform_async(
+          @repo.uuid, 'markdown-templates',
+          @repo.author.github_username,
+          'The description has changed'
+        )
+        @repo.reload
+
+        expect(@repo.last_pull_at).not_to be_nil
+        expect(@repo.name).to eq('markdown-templates')
+        expect(@repo.description).to eq('The description has changed')
+      end
     end
   end
 
-  it 'executes perform when webhook_name != name && webhook_owner == repository.author.github_username' do
-    Sidekiq::Testing.inline! do
-      expect(@repo.last_pull_at).not_to be_nil
-
-      RespondWebhookPushJob.perform_async(@repo.uuid, 'markdown-templates', @repo.author.github_username, 'The description')
-      @repo.reload
-
-      expect(@repo.last_pull_at).not_to be_nil
-      expect(@repo.name).to eq('markdown-templates')
-      expect(@repo.description).to eq('The description')
-    end
+  after(:all) do
+    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    FileUtils.remove_dir(directory)
   end
 end

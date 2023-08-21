@@ -2,10 +2,7 @@ require 'rails_helper'
 
 RSpec.describe CloneGithubRepoJob, type: :job do
   before(:all) do
-    Repository.delete_all
-    Author.delete_all
-    author = Author.create(github_uid: '85654561', github_username: 'jp524')
-    @repo = Repository.create(name: 'test-repo', token: Rails.application.credentials.pat, author:, title: 'Test Repo')
+    @repo = create(:repository, :real)
   end
 
   it 'queues the job' do
@@ -26,5 +23,10 @@ RSpec.describe CloneGithubRepoJob, type: :job do
       expect(@repo.description).not_to be_nil
       expect(@repo.last_pull_at).not_to be_nil
     end
+  end
+
+  after(:all) do
+    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    FileUtils.remove_dir(directory)
   end
 end

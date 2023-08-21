@@ -2,10 +2,12 @@ require 'rails_helper'
 
 RSpec.describe PullGithubRepoJob, type: :job do
   before(:all) do
-    Repository.delete_all
-    Author.delete_all
-    author = Author.create(github_uid: '85654561', github_username: 'jp524')
-    @repo = Repository.create(name: 'test-repo', token: Rails.application.credentials.pat, author:, title: 'Test Repo')
+    @repo = create(:repository, :real)
+    Sidekiq::Testing.inline! do
+      VCR.use_cassette('clone_github_repo') do
+        CloneGithubRepoJob.perform_async(@repo.id)
+      end
+    end
   end
 
   it 'queues the job' do
@@ -20,9 +22,14 @@ RSpec.describe PullGithubRepoJob, type: :job do
       VCR.use_cassette('pull_github_repo') do
         PullGithubRepoJob.perform_async(@repo.id)
       end
-      @repo.reload
 
+      @repo.reload
       expect(@repo.last_pull_at).not_to eq(last_pull_at)
     end
+  end
+
+  after(:all) do
+    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    FileUtils.remove_dir(directory)
   end
 end

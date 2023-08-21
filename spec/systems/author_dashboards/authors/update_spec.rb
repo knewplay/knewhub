@@ -1,13 +1,12 @@
 require 'rails_helper'
+require 'support/omniauth'
 
-RSpec.describe 'update name as an author', type: :system do
-  before(:all) do
-    @author = Author.create(github_uid: '123545', github_username: 'some-user')
-  end
-
+RSpec.describe 'Update name as an author', type: :system do
   scenario 'succeeds when given a valid name' do
     visit root_path
-    click_button 'Login with GitHub'
+    click_on 'Login with GitHub'
+    @author = Author.last
+    # Author created upon calling the mock auth with 'Login with GitHub'
 
     expect(page).to have_content("Author: #{@author.github_username}")
     click_on 'Edit name'
@@ -22,7 +21,8 @@ RSpec.describe 'update name as an author', type: :system do
 
   scenario 'fails when given an invalid name' do
     visit root_path
-    click_button 'Login with GitHub'
+    click_on 'Login with GitHub'
+    @author = Author.last
 
     expect(page).to have_content("Author: #{@author.github_username}")
     click_on 'Edit name'
