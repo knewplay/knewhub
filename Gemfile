@@ -99,4 +99,5 @@ group :test do
   gem 'rspec-sidekiq'
   gem 'vcr'
   gem 'webmock'
+  gem 'rack_session_access'
 end
