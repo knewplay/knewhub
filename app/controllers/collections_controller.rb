@@ -42,7 +42,7 @@ class CollectionsController < ApplicationController
     author_id = Author.find_by(github_username: owner).id
     repository = Repository.find_by(author_id:, name:)
 
-    repository&.hidden ? false : true
+    repository.hidden == false
   end
 
   def extract_front_matter(file_path)
