@@ -46,4 +46,7 @@
           ><%= render_field attribute, page: page %></dd>
     <% end %>
   </dl>
+  <% if page.resource.last_pull_at == nil %>
+    <p>Cannot pull this repository from GitHub. Please delete this repository and verify name and token before adding a new one.</p>
+  <%end %>
 </section>

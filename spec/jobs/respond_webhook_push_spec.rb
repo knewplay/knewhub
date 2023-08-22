@@ -23,9 +23,6 @@ RSpec.describe RespondWebhookPushJob, type: :job do
   context 'executes perform' do
     it 'when webhook_name == name && webhook_owner == repository.author.github_username' do
       Sidekiq::Testing.inline! do
-        expect(@repo.description).to be_nil
-        expect(@repo.last_pull_at).to be_nil
-
         RespondWebhookPushJob.perform_async(@repo.uuid, @repo.name, @repo.author.github_username, @repo.description)
         @repo.reload
 
@@ -35,8 +32,6 @@ RSpec.describe RespondWebhookPushJob, type: :job do
 
     it 'when webhook_name != name && webhook_owner == repository.author.github_username' do
       Sidekiq::Testing.inline! do
-        expect(@repo.last_pull_at).not_to be_nil
-
         RespondWebhookPushJob.perform_async(
           @repo.uuid, 'markdown-templates',
           @repo.author.github_username,

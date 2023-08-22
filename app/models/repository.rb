@@ -6,6 +6,7 @@ class Repository < ApplicationRecord
 
   validates :name,
             presence: true,
+            uniqueness: true,
             format: { with: /\A[\.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }
   validates :token,
             presence: true,

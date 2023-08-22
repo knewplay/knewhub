@@ -19,6 +19,8 @@ class RespondWebhookPushJob
     else
       Git.clone(repository.git_url, directory, branch: repository.branch)
     end
+  rescue Git::FailedError => e
+    Rails.logger.error "Failed to clone or pull repository ##{repository.name}. Message: #{e.message}"
   end
 
   def update_repository(repository, webhook_name, webhook_owner)

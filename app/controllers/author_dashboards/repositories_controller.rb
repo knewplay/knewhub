@@ -12,12 +12,7 @@ module AuthorDashboards
       authorize_resource(resource)
 
       if resource.save
-        CreateGithubWebhookJob.perform_async(
-          resource.uuid,
-          resource.name,
-          resource.author.github_username,
-          resource.token
-        )
+        CreateGithubWebhookJob.perform_async(resource.id)
         CloneGithubRepoJob.perform_async(resource.id)
         redirect_to(
           after_resource_created_path(resource),
@@ -30,6 +25,18 @@ module AuthorDashboards
       end
     end
 
+    # Override `destroy` action to delete local repository
+    def destroy
+      directory = Rails.root.join('repos', current_author.github_username, requested_resource.name)
+      if requested_resource.destroy
+        flash[:notice] = translate_with_resource('destroy.success')
+        FileUtils.remove_dir(directory) if Dir.exist?(directory)
+      else
+        flash[:error] = requested_resource.errors.full_messages.join('<br/>')
+      end
+      redirect_to after_resource_destroyed_path(requested_resource)
+    end
+
     # For `index` action, only show repositories belonging to the author currently authentified
     def scoped_resource
       @repositories = current_author.repositories if current_author
@@ -40,6 +47,10 @@ module AuthorDashboards
       params.require(resource_class.model_name.param_key)
             .permit(dashboard.permitted_attributes(action_name) << :author_id)
             .transform_values { |v| read_param_value(v) }
+    end
+
+    def after_resource_created_path(_requested_resource)
+      author_dashboards_repositories_path
     end
 
     # See https://administrate-demo.herokuapp.com/customizing_controller_actions
