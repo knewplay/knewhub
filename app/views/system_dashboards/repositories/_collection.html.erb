@@ -2,6 +2,7 @@
 Override default partial used in `index` view to:
   * view a repository as a reader when clicking on the repository name cell
   * display the branch name in a monospace font (Courier)
+  * truncate title to maximum 6 words
 %>
 
 
@@ -60,6 +61,8 @@ Override default partial used in `index` view to:
                  >
                 <%= render_field attribute %>
               </a>
+            <% elsif attribute.name == 'title' %> 
+              <%= attribute.data.truncate_words(6) %>
             <% else %>
               <%= render_field attribute %>
             <% end -%>
