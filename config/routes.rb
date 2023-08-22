@@ -28,7 +28,9 @@ Rails.application.routes.draw do
     root 'repositories#index'
   end
 
-  resources :repositories, only: [:update]
+  resources :repositories, only: [:update] do
+    patch :toggle_hidden_status, on: :member
+  end
 
   # Administrator dashboard
   namespace :system_dashboards do

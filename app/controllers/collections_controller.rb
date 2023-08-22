@@ -4,7 +4,7 @@ class CollectionsController < ApplicationController
 
   def show
     file_path = "#{params[:owner]}/#{params[:name]}/#{params[:path]}"
-    return head :not_found unless file_exists?(file_path)
+    return head :not_found unless file_exists?(file_path) && repository_visible?(params[:owner], params[:name])
 
     RequestPath.store(request)
     respond_to do |format|
@@ -21,7 +21,7 @@ class CollectionsController < ApplicationController
 
   def index
     file_path = "#{params[:owner]}/#{params[:name]}/index"
-    return head :not_found unless file_exists?(file_path)
+    return head :not_found unless file_exists?(file_path) && repository_visible?(params[:owner], params[:name])
 
     @front_matter = extract_front_matter(file_path)
     render file_path
@@ -36,6 +36,13 @@ class CollectionsController < ApplicationController
   def file_exists?(file_path)
     File.exist?("#{Rails.root}/repos/#{file_path}.md") \
     || File.exist?("#{Rails.root}/repos/#{file_path}.#{request.format.to_sym}")
+  end
+
+  def repository_visible?(owner, name)
+    author_id = Author.find_by(github_username: owner).id
+    repository = Repository.find_by(author_id:, name:)
+
+    repository&.hidden ? false : true
   end
 
   def extract_front_matter(file_path)
