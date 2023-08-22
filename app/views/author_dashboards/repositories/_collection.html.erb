@@ -1,8 +1,4 @@
-<%#
-Override default partial used in `index` view to:
-  * view a repository as a reader when clicking on the repository name cell
-  * display the branch name in a monospace font (Courier)
-%>
+<%# Override default partial used in `index` view to display the branch name in a monospace font (Courier) %>
 
 
 <table aria-labelledby="<%= table_title %>">
@@ -51,12 +47,12 @@ Override default partial used in `index` view to:
           >
         <% collection_presenter.attributes_for(resource).each do |attribute| %>
           <td class="cell-data cell-data--<%= attribute.html_class %>"
-              style="<%= "font-family: Courier" if attribute.name == 'branch' %>"
-              >
-            <% if attribute.name == 'name' -%>
-              <a href="<%= "/collections/#{resource.author.github_username}/#{resource.name}/pages/index" %>"
-                 target="_blank"
+            style="<%= "font-family: Courier" if attribute.name == 'branch' %>"
+            >
+            <% if accessible_action?(resource, :show) -%>
+              <a href="<%= polymorphic_path([namespace, resource]) -%>"
                  tabindex="-1"
+                 class="action-show"
                  >
                 <%= render_field attribute %>
               </a>
