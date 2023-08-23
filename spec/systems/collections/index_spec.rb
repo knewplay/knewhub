@@ -11,22 +11,36 @@ RSpec.describe 'Collections #index', type: :system do
     end
   end
 
-  scenario 'displays Markdown text in HTML' do
-    visit '/collections/jp524/markdown-templates/pages/index'
+  context 'repository is set to hidden = false' do
+    scenario 'displays Markdown text in HTML' do
+      visit '/collections/jp524/markdown-templates/pages/index'
 
-    assert_selector 'h1', text: 'Course Name'
+      assert_selector 'h1', text: 'Course Name'
+    end
+
+    scenario 'displays links to other pages' do
+      visit '/collections/jp524/markdown-templates/pages/index'
+
+      expect(page).to have_link(href: './chapter-1/chapter-1-article-1')
+    end
+
+    scenario 'displays front matter' do
+      visit '/collections/jp524/markdown-templates/pages/index'
+      assert_selector 'h1', text: 'Course Name'
+      assert_selector 'p', text: 'Written by The Author on 2023-12-31'
+    end
   end
 
-  scenario 'displays links to other pages' do
-    visit '/collections/jp524/markdown-templates/pages/index'
+  context 'repository is set to hidden = true' do
+    before do
+      @repo.update(hidden: true)
+    end
 
-    expect(page).to have_link(href: './chapter-1/chapter-1-article-1')
-  end
+    scenario 'displays an error page' do
+      visit '/collections/jp524/markdown-templates/pages/index'
 
-  scenario 'displays front matter' do
-    visit '/collections/jp524/markdown-templates/pages/index'
-    assert_selector 'h1', text: 'Course Name'
-    assert_selector 'p', text: 'Written by The Author on 2023-12-31'
+      expect(page).to have_content("The page you were looking for doesn't exist.")
+    end
   end
 
   after(:all) do
