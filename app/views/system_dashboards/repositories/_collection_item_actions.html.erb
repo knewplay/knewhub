@@ -9,8 +9,8 @@
 </td>
 
 <td>
-  <%= link_to(resource.hidden ? 'Unhide' : 'Hide',
-    toggle_hidden_status_repository_path(resource),
+  <%= link_to(resource.banned ? 'Revoke ban' : 'Ban',
+    toggle_banned_status_repository_path(resource),
     class: "text-color-red",
     method: :patch)
   %>

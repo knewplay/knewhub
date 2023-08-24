@@ -10,9 +10,9 @@ class RepositoriesController < ApplicationController
     end
   end
 
-  def toggle_hidden_status
+  def toggle_banned_status
     @repository = Repository.find(params[:id])
-    @repository.toggle!(:hidden)
+    @repository.toggle!(:banned)
     if current_administrator
       redirect_to system_dashboards_repositories_path
     elsif current_author

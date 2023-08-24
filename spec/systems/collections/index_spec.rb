@@ -11,7 +11,7 @@ RSpec.describe 'Collections #index', type: :system do
     end
   end
 
-  context 'repository is set to hidden = false' do
+  context 'repository is set to banned = false' do
     scenario 'displays Markdown text in HTML' do
       visit '/collections/jp524/markdown-templates/pages/index'
 
@@ -31,9 +31,9 @@ RSpec.describe 'Collections #index', type: :system do
     end
   end
 
-  context 'repository is set to hidden = true' do
+  context 'repository is set to banned = true' do
     before do
-      @repo.update(hidden: true)
+      @repo.update(banned: true)
     end
 
     scenario 'displays an error page' do

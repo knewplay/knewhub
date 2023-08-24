@@ -44,7 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_22_180842) do
     t.uuid "uuid"
     t.bigint "author_id"
     t.string "title"
-    t.boolean "hidden", default: false
+    t.boolean "banned", default: false
     t.index ["author_id"], name: "index_repositories_on_author_id"
   end
 

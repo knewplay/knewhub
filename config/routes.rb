@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   end
 
   resources :repositories, only: [:update] do
-    patch :toggle_hidden_status, on: :member
+    patch :toggle_banned_status, on: :member
   end
 
   # Administrator dashboard
