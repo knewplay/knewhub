@@ -10,7 +10,7 @@ class Sessions::AdministratorsController < ApplicationController
         redirect_to new_webauthn_authentication_path
       else
         session[:administrator_id] = administrator.id
-        redirect_to system_dashboards_root_path
+        redirect_to dashboard_root_path
       end
       session[:author_id] = nil if session[:author_id]
     else

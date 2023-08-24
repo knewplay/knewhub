@@ -15,7 +15,7 @@ RSpec.describe 'Administrator', type: :system do
   scenario 'sign out' do
     page.set_rack_session(administrator_id: @admin.id)
 
-    visit system_dashboards_root_path
+    visit dashboard_root_path
     expect(page).to have_content("Admin: #{@admin.name}")
     click_on 'Sign out'
 
