@@ -14,20 +14,13 @@ class AuthorDashboard < Administrate::BaseDashboard
   # Attributes that will be displayed on the model's index page.
   COLLECTION_ATTRIBUTES = %i[
     id
-    github_uid
-    github_username
-    repositories
-  ].freeze
-
-  # Attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = %i[
-    id
-    github_uid
-    github_username
-    repositories
+    name
     created_at
     updated_at
   ].freeze
+
+  # Attributes that will be displayed on the model's show page.
+  SHOW_PAGE_ATTRIBUTES = %i[].freeze
 
   # Attributes that will be displayed on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
@@ -40,7 +33,7 @@ class AuthorDashboard < Administrate::BaseDashboard
   # Overwrite this method to customize how authors are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(author)
-  #   "Author ##{author.id}"
-  # end
+  def display_resource(author)
+    author.name
+  end
 end
