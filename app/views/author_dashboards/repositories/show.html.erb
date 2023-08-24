@@ -1,4 +1,4 @@
-<%# Override default view to add `View` and `Rebuild` buttons %>
+<%# Override default view to add `Rebuild` button %>
 
 
 <% content_for(:title) { t("administrate.actions.show_resource", name: page.page_title) } %>
@@ -9,11 +9,6 @@
   </h1>
 
   <div>
-    <%= link_to('View',
-      "/collections/#{page.resource.author.github_username}/#{page.resource.name}/pages/index",
-      target: :_blank,
-      class: "button") %>
-
     <%= link_to(
       "Rebuild",
       repository_path,
