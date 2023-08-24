@@ -4,7 +4,7 @@ class RepositoriesController < ApplicationController
   def update
     PullGithubRepoJob.perform_async(params[:id])
     if current_administrator
-      redirect_to edit_system_dashboards_repository_path(params[:id])
+      redirect_to system_dashboards_repositories_path
     elsif current_author
       redirect_to author_dashboards_repository_path(params[:id])
     end
@@ -14,7 +14,7 @@ class RepositoriesController < ApplicationController
     @repository = Repository.find(params[:id])
     @repository.toggle!(:hidden)
     if current_administrator
-      redirect_to edit_system_dashboards_repository_path(@repository)
+      redirect_to system_dashboards_repositories_path
     elsif current_author
       redirect_to author_dashboards_repository_path(@repository)
     end

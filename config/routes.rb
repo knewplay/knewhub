@@ -35,8 +35,8 @@ Rails.application.routes.draw do
   # Administrator dashboard
   namespace :system_dashboards do
     resources :authors
-    resources :repositories, only: %i[index edit update]
-    resources :administrators, only: %i[index]
+    resources :repositories, only: [:index]
+    resources :administrators, only: [:index]
     root to: 'authors#index'
   end
 
