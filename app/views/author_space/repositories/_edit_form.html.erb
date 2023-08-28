@@ -1,0 +1,27 @@
+<%= form_with(model: repository, url: author_repository_path(repository)) do |form| %>
+  <% if repository.errors.any? %>
+    <p style="color: red">
+      <%= repository.errors.full_messages.join %>
+    </p>
+  <% end %>
+
+  <div>
+    <%= form.label :name, 'Name' %>
+    <%= form.text_field :name, required: true %>
+  </div>
+  
+  <div>
+    <%= form.label :title, 'Title' %>
+    <%= form.text_field :title, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :branch, 'Branch' %>
+    <%= form.text_field :branch, required: true %>
+  </div>
+
+  <br />
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,8 @@
+<h1>
+  <%= "Edit Repository ##{@repository.id}" %>
+</h1> 
+
+<%= render 'edit_form', repository: @repository %>
+
+<br />
+<%= link_to 'Back to repositories', author_repositories_path %>

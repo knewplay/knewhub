@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   resource :author, only: %i[show edit update]
 
   scope module: 'author_space', path: 'author', as: 'author' do
-    resources :repositories, only: [:index]
+    resources :repositories, only: %i[index edit update]
   end
 
   # Administrator dashboard
