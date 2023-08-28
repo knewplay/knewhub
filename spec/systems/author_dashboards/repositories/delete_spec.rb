@@ -7,7 +7,7 @@ RSpec.describe 'Delete repository as an author', type: :system do
     FileUtils.mkdir_p(@directory)
   end
 
-  scenario 'removes the record' do
+  xscenario 'removes the record' do
     before_count = Repository.all.count
     page.set_rack_session(author_id: @repo.author.id)
 
@@ -22,7 +22,7 @@ RSpec.describe 'Delete repository as an author', type: :system do
     expect(Repository.all.count).to eq(before_count - 1)
   end
 
-  scenario 'removes the local directory' do
+  xscenario 'removes the local directory' do
     page.set_rack_session(author_id: @repo.author.id)
 
     visit author_dashboards_repository_path(@repo.id)

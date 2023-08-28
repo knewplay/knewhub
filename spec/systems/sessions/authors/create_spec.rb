@@ -8,6 +8,6 @@ RSpec.describe 'Sign in with GitHub', type: :system do
 
     click_on 'Login with GitHub'
     expect(page).to have_content('user')
-    expect(page).to have_link('Sign out')
+    expect(page).to have_button('Sign out')
   end
 end

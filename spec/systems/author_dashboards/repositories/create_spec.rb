@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/omniauth'
 
 RSpec.describe 'Create repository as an author', type: :system do
-  scenario 'with an empty name' do
+  xscenario 'with an empty name' do
     visit root_path
     click_on 'Login with GitHub'
     expect(page).to have_content('Repositories')
@@ -17,7 +17,7 @@ RSpec.describe 'Create repository as an author', type: :system do
     expect(Repository.count).to eq(before_count)
   end
 
-  scenario 'with a valid name and token, but no branch' do
+  xscenario 'with a valid name and token, but no branch' do
     visit root_path
     click_button 'Login with GitHub'
     expect(page).to have_content('Repositories')
@@ -35,7 +35,7 @@ RSpec.describe 'Create repository as an author', type: :system do
     expect(Repository.last.branch).to eq('main')
   end
 
-  scenario 'with a valid name, token and branch' do
+  xscenario 'with a valid name, token and branch' do
     visit root_path
     click_on 'Login with GitHub'
     expect(page).to have_content('Repositories')

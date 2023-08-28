@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/omniauth'
 
 RSpec.describe 'Update name as an author', type: :system do
-  scenario 'succeeds when given a valid name' do
+  xscenario 'succeeds when given a valid name' do
     visit root_path
     click_on 'Login with GitHub'
     @author = Author.last
@@ -19,7 +19,7 @@ RSpec.describe 'Update name as an author', type: :system do
     expect(page).to have_content('a-new-name')
   end
 
-  scenario 'fails when given an invalid name' do
+  xscenario 'fails when given an invalid name' do
     visit root_path
     click_on 'Login with GitHub'
     @author = Author.last

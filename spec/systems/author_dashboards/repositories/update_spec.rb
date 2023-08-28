@@ -5,7 +5,7 @@ RSpec.describe 'Update repository as an author', type: :system do
     @repo = create(:repository)
   end
 
-  scenario 'to change name' do
+  xscenario 'to change name' do
     page.set_rack_session(author_id: @repo.author.id)
 
     visit author_dashboards_repository_path(@repo.id)
@@ -24,7 +24,7 @@ RSpec.describe 'Update repository as an author', type: :system do
     expect(@repo.git_url).to eq('https://ghp_abcde12345@github.com/user/a_new_name.git')
   end
 
-  scenario 'to change branch' do
+  xscenario 'to change branch' do
     page.set_rack_session(author_id: @repo.author.id)
 
     visit author_dashboards_repository_path(@repo.id)

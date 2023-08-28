@@ -21,16 +21,8 @@ Rails.application.routes.draw do
     end
   end
 
-  # Author dashboard
-  scope module: 'author_dashboards', path: 'author', as: 'author_dashboards' do
-    resources :repositories
-    resources :authors, only: %i[edit update]
-    root 'repositories#index'
-  end
-
-  resources :repositories, only: [:update] do
-    patch :toggle_banned_status, on: :member
-  end
+  # Author space
+  resource :author, only: [:show]
 
   # Administrator dashboard
   namespace :dashboard do
@@ -38,6 +30,10 @@ Rails.application.routes.draw do
     resources :repositories, only: [:index]
     resources :administrators, only: [:index]
     root to: 'authors#index'
+  end
+
+  resources :repositories, only: [:update] do
+    patch :toggle_banned_status, on: :member
   end
 
   # Webhooks
