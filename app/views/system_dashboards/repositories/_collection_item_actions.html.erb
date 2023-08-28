@@ -1,0 +1,35 @@
+<%# Override default view to add `Rebuild` and `Hide` buttons %>
+
+<td>
+  <%= link_to(
+    "Rebuild",
+    repository_path(resource),
+    method: :patch)
+  %>
+</td>
+
+<td>
+  <%= link_to(resource.banned ? 'Revoke ban' : 'Ban',
+    toggle_banned_status_repository_path(resource),
+    class: "text-color-red",
+    method: :patch)
+  %>
+</td>
+  
+<% if existing_action?(collection_presenter.resource_name, :edit) %>
+  <td><%= link_to(
+    t("administrate.actions.edit"),
+    [:edit, namespace, resource],
+    class: "action-edit",
+  ) if accessible_action?(resource, :edit) %></td>
+<% end %>
+
+<% if existing_action?(collection_presenter.resource_name, :destroy) %>
+  <td><%= link_to(
+    t("administrate.actions.destroy"),
+    [namespace, resource],
+    class: "text-color-red",
+    method: :delete,
+    data: { confirm: t("administrate.actions.confirm") }
+  ) if accessible_action?(resource, :destroy) %></td>
+<% end %>

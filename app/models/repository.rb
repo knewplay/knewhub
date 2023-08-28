@@ -14,6 +14,7 @@ class Repository < ApplicationRecord
   validates :branch,
             format: { with: /\A[\.\/\w-]{0,100}\z/, message: 'must follow GitHub branch name restrictions' }
   validates :title, presence: true
+  attribute :banned, :boolean, default: false
 
   private
 

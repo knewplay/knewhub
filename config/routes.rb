@@ -28,13 +28,15 @@ Rails.application.routes.draw do
     root 'repositories#index'
   end
 
-  resources :repositories, only: [:update]
+  resources :repositories, only: [:update] do
+    patch :toggle_banned_status, on: :member
+  end
 
   # Administrator dashboard
   namespace :system_dashboards do
     resources :authors, only: %i[index edit update]
-    resources :repositories, except: %i[new create]
-    resources :administrators, only: %i[index]
+    resources :repositories, only: [:index]
+    resources :administrators, only: [:index]
     root to: 'authors#index'
   end
 
