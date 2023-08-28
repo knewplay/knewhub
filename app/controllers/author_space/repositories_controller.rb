@@ -1,7 +1,7 @@
 module AuthorSpace
   class RepositoriesController < ApplicationController
     before_action :require_author_authentication
-    before_action :set_repository, only: %i[edit update]
+    before_action :set_repository, only: %i[edit update destroy]
 
     def index
       @repositories = current_author.repositories.order('id ASC')
@@ -40,6 +40,13 @@ module AuthorSpace
       else
         render :edit, status: :unprocessable_entity
       end
+    end
+
+    def destroy
+      directory = Rails.root.join('repos', @repository.author.github_username, @repository.name)
+      @repository.destroy
+      FileUtils.remove_dir(directory) if Dir.exist?(directory)
+      redirect_to author_repositories_path, notice: 'Repository was successfully deleted.'
     end
 
     private
