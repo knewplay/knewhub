@@ -14,6 +14,8 @@ module AuthorSpace
     def create
       @repository = current_author.repositories.build(repository_params)
       if @repository.save
+        CreateGithubWebhookJob.perform_async(@repository.id)
+        CloneGithubRepoJob.perform_async(@repository.id)
         redirect_to author_repositories_path, notice: 'Repository was successfully created.'
       else
         render :new, status: :unprocessable_entity
