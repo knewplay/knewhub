@@ -1,9 +1,5 @@
 <%= form_with model: author do |form| %>
-  <% if author.errors.any? %>
-    <p style="color: red">
-      <%= author.errors.full_messages.join %>
-    </p>
-  <% end %>
+  <%= render 'layouts/form_errors', resource: author if author.errors.any? %>
 
   <div>
     <%= form.label :name, 'Name' %>

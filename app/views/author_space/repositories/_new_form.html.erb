@@ -1,9 +1,5 @@
 <%= form_with(model: repository, url: '/author/repositories') do |form| %>
-  <% if repository.errors.any? %>
-    <p style="color: red">
-      <%= repository.errors.full_messages.join('. ') %>
-    </p>
-  <% end %>
+  <%= render 'layouts/form_errors', resource: repository if repository.errors.any? %>
 
   <div>
     <%= form.label :name, 'Name' %>
