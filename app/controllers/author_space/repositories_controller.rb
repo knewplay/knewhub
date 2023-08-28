@@ -7,6 +7,19 @@ module AuthorSpace
       @repositories = current_author.repositories.order('id ASC')
     end
 
+    def new
+      @repository = current_author.repositories.build
+    end
+
+    def create
+      @repository = current_author.repositories.build(repository_params)
+      if @repository.save
+        redirect_to author_repositories_path, notice: 'Repository was successfully created.'
+      else
+        render :new, status: :unprocessable_entity
+      end
+    end
+
     def edit
       render file: "#{Rails.root}/public/404.html", layout: false, status: :not_found if @repository.nil?
     end
@@ -36,7 +49,7 @@ module AuthorSpace
     end
 
     def repository_params
-      params.require(:repository).permit(:name, :title, :branch)
+      params.require(:repository).permit(:name, :title, :branch, :token)
     end
   end
 end
