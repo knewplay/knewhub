@@ -24,6 +24,10 @@ Rails.application.routes.draw do
   # Author space
   resource :author, only: %i[show edit update]
 
+  scope module: 'author_space', path: 'author', as: 'author' do
+    resources :repositories, only: [:index]
+  end
+
   # Administrator dashboard
   namespace :dashboard do
     resources :authors, only: %i[index edit update]

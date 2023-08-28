@@ -1,0 +1,11 @@
+<h1><%= "#{current_author.name}'s Repositories"%></h1>
+
+<ul>
+  <% @repositories.each do |repository| %>
+    <li>
+    <%= repository.id %>
+    <%= repository.name %>
+    <%= link_to 'Edit', edit_author_repository_path(repository.id) %>
+    </li>
+  <% end %>
+</ul>

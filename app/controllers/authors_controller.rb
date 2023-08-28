@@ -1,5 +1,4 @@
 class AuthorsController < ApplicationController
-  include AuthorAuthentication
   before_action :require_author_authentication, :set_author
 
   def show; end
