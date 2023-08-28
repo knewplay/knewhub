@@ -1,0 +1,17 @@
+<%= form_with model: author do |form| %>
+  <% if author.errors.any? %>
+    <p style="color: red">
+      <%= author.errors.full_messages.join %>
+    </p>
+  <% end %>
+
+  <div>
+    <%= form.label :name, 'Name' %>
+    <%= form.text_field :name %>
+  </div>
+  
+  <br />
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

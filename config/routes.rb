@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   end
 
   # Author space
-  resource :author, only: [:show]
+  resource :author, only: %i[show edit update]
 
   # Administrator dashboard
   namespace :dashboard do
