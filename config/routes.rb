@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   get 'collections/:owner/:name/pages/*path', to: 'collections#show'
 
   # Sign up and sessions
-  devise_for :users
+  devise_for :users, controllers: {
+    confirmations: 'users/confirmations'
+  }
 
   resources :administrators, only: %i[new create]
   namespace :sessions do
