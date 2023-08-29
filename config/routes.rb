@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get 'collections/:owner/:name/pages/*path', to: 'collections#show'
 
   # Sign up and sessions
+  devise_for :users
+
   resources :administrators, only: %i[new create]
   namespace :sessions do
     resource :administrator, only: %i[new create destroy]
