@@ -1,8 +1,9 @@
 <nav>
-  <% if current_author %>
-    <%= current_author.github_username %>
-    <%= button_to 'Sign out', sessions_author_path, method: :delete, data: { turbo: false } %>
+  <%= link_to 'KNEWHUB', root_path %>
+
+  <% if current_user %>
+    <%= button_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo: false } %>
   <% else %>
-    <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
+    <%= link_to 'Login', new_user_session_path %>
   <% end %>
 </nav>

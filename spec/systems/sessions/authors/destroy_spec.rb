@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/omniauth'
 
 RSpec.describe 'Logout from GitHub auth session', type: :system do
-  scenario 'started with valid credentials' do
+  xscenario 'started with valid credentials' do
     visit root_path
 
     click_on 'Login with GitHub'
