@@ -70,6 +70,9 @@ gem 'omniauth-rails_csrf_protection'
 # Authentication using WebAuthn standard
 gem 'webauthn'
 
+# Authentication for users
+gem 'devise'
+
 # Build admin dashboards
 gem 'administrate'
 
