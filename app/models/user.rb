@@ -4,6 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable
 
+  def remember_me
+    super.nil? ? true : super
+  end
+
   protected
 
   def password_required?
