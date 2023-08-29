@@ -4,7 +4,7 @@ class Sessions::AuthorsController < ApplicationController
     if @author.persisted?
       session[:author_id] = @author.id
       session[:administrator_id] = nil if session[:administrator_id]
-      redirect_to author_dashboards_root_path
+      redirect_to author_path
     else
       redirect_to root_url, alert: 'Failure'
     end

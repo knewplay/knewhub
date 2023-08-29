@@ -31,7 +31,7 @@ class Webauthn::AuthenticationController < ApplicationController
       session[:webauthn_administrator_id] = nil
 
       # Pass `redirect URL` to Stimulus controller. Rails `redirect_to` does not work
-      render json: { redirect: system_dashboards_root_path }, status: :ok
+      render json: { redirect: dashboard_root_path }, status: :ok
     rescue WebAuthn::Error => e
       render json: "Verification failed: #{e.message}", status: :unprocessable_entity
     end
