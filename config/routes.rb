@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   # User space
   namespace :settings do
     resource :account, only: [:show]
+    root to: 'accounts#show'
   end
 
   # Author space

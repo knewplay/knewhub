@@ -1,9 +1,14 @@
-<nav>
+<nav style="display: flex; justify-content: space-between;">
+  <br />
+
   <%= link_to 'KNEWHUB', root_path %>
 
-  <% if current_user %>
-    <%= button_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo: false } %>
-  <% else %>
-    <%= link_to 'Login', new_user_session_path %>
-  <% end %>
+  <div class="nav--links" style="display: flex; gap: 10px;">
+    <% if current_user %>
+      <%= link_to 'Settings', settings_root_path %>
+      <%= button_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo: false } %>
+    <% else %>
+      <%= link_to 'Login', new_user_session_path %>
+    <% end %>
+  </div>
 </nav>
