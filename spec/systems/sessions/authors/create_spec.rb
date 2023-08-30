@@ -1,13 +1,25 @@
 require 'rails_helper'
 require 'support/omniauth'
 
-RSpec.describe 'Sign in with GitHub', type: :system do
-  xscenario 'with valid credentials' do
-    visit root_path
-    expect(page).to have_no_button('Sign out')
+RSpec.describe 'Sessions::Authors#create', type: :system do
+  context 'when logged in as a user' do
+    let(:author) { create(:author) }
 
-    click_on 'Login with GitHub'
-    expect(page).to have_content('user')
-    expect(page).to have_button('Sign out')
+    scenario 'can log in as an author' do
+      sign_in author.user
+      visit settings_root_path
+
+      click_on 'Login with GitHub'
+      expect(page).to have_content("Logged in as #{author.name}")
+    end
+  end
+
+  context 'when not logged in as a user' do
+    scenario 'cannot access log in as an author page' do
+      visit settings_root_path
+
+      expect(page).to have_current_path(new_user_session_path)
+      expect(page).to have_content('You need to sign in or sign up before continuing.')
+    end
   end
 end

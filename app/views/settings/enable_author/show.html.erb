@@ -1,0 +1,13 @@
+<%= render 'settings/shared/header' %>
+
+<div class="container" style="display: flex; gap: 10px;">
+  <%= render 'settings/shared/sidebar' %>
+
+  <div class="main">
+    <h3>Share your knowledge by becoming an author on KNEWHUB.</h3>
+    <p>You will be able to share content from your GitHub repositories after clicking the link below.</p>
+
+    <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
+  </div>
+</div>
+

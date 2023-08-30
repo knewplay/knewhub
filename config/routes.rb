@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   # Sign up and sessions
   devise_for :users, controllers: {
     confirmations: 'users/confirmations',
-    registrations: 'users/registrations'
+    registrations: 'users/registrations',
+    sessions: 'users/sessions'
   }
 
   resources :administrators, only: %i[new create]
@@ -29,6 +30,7 @@ Rails.application.routes.draw do
   # User space
   namespace :settings do
     resource :account, only: [:show]
+    resource :enable_author, controller: :enable_author, only: [:show]
     root to: 'accounts#show'
   end
 

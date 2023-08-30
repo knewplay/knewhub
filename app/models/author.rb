@@ -1,5 +1,5 @@
 class Author < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :repositories, dependent: :destroy
 
   before_create :set_name
