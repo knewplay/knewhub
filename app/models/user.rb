@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_one :author, dependent: :destroy
+
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

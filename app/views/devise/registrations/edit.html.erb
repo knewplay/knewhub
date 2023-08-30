@@ -41,7 +41,8 @@
 
   <h3>Cancel my account</h3>
 
-  <div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+  <p> If you are an author, this will also delete your author profile and any repositories you may have.</p>
+  <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %>
 
   <%= link_to "Back", :back %>
 <% end %>
