@@ -6,7 +6,8 @@ Rails.application.routes.draw do
 
   # Sign up and sessions
   devise_for :users, controllers: {
-    confirmations: 'users/confirmations'
+    confirmations: 'users/confirmations',
+    registrations: 'users/registrations'
   }
 
   resources :administrators, only: %i[new create]
@@ -23,6 +24,11 @@ Rails.application.routes.draw do
     resource :authentication, controller: 'authentication', only: %i[new create] do
       post :options, on: :collection, as: 'options_for'
     end
+  end
+
+  # User space
+  namespace :settings do
+    resource :account, only: [:show]
   end
 
   # Author space
