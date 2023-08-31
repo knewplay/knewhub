@@ -13,9 +13,8 @@
         <%= link_to 'Enable', settings_enable_author_path %>
       <% else %>
         <% if current_author %>
-          <div><%= link_to 'View profile', settings_author_path %></div>
-          <div><%= link_to 'Edit profile', edit_settings_author_path %></div>
-          <div><%= link_to 'View repositories', settings_author_repositories_path %></div>
+          <div><%= link_to 'Profile', edit_settings_author_path %></div>
+          <div><%= link_to 'Repositories', settings_author_repositories_path %></div>
           <p>Logged in as <%= current_author.name %><p>
         <% else %>
           <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>

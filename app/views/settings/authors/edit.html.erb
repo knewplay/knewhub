@@ -1,6 +1,5 @@
-<h1>Edit Author</h1>
+<h1>Author Profile</h1>
+
+<p>GitHub username: <%= @author.github_username %></p>
 
 <%= render 'form', author: @author %>
-
-<br />
-<%= link_to 'Back to profile', settings_author_path %>

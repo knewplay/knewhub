@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   namespace :settings do
     resource :account, only: [:show]
     resource :enable_author, controller: :enable_author, only: [:show]
-    resource :author, only: %i[show edit update]
+    resource :author, only: %i[edit update]
     scope module: 'authors', path: 'author', as: 'author' do
       resources :repositories, except: [:show]
     end
