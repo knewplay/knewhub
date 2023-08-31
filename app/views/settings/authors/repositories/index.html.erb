@@ -24,11 +24,11 @@
           <%= link_to('View',
               "/collections/#{repository.author.github_username}/#{repository.name}/pages/index",
               target: :_blank) %>
-          <%= link_to 'Edit', edit_author_repository_path(repository.id)%>
+          <%= link_to 'Edit', edit_settings_author_repository_path(repository.id)%>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to 'New repository', new_author_repository_path %>
+<%= link_to 'New repository', new_settings_author_repository_path %>

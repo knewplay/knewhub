@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe 'AuthorSpace::Repositories#create', type: :system do
+RSpec.describe 'Settings::AuthorSpace::Repositories#create', type: :system do
   let(:author) { create(:author) }
 
   context 'when given valid name and token, but no branch' do 
     scenario 'creates the repository' do
       page.set_rack_session(author_id: author.id)
-      visit new_author_repository_path
+      visit new_settings_author_repository_path
       expect(page).to have_content('New Repository')
 
       fill_in('Name', with: 'repo_name')
@@ -24,7 +24,7 @@ RSpec.describe 'AuthorSpace::Repositories#create', type: :system do
   context 'when given valid name, token and branch' do
     scenario 'creates the repository' do
       page.set_rack_session(author_id: author.id)
-      visit new_author_repository_path
+      visit new_settings_author_repository_path
       expect(page).to have_content('New Repository')
 
       fill_in('Name', with: 'repo_name')
@@ -43,7 +43,7 @@ RSpec.describe 'AuthorSpace::Repositories#create', type: :system do
   context 'when given invalid input' do
     scenario 'fails to create the repository' do
       page.set_rack_session(author_id: author.id)
-      visit new_author_repository_path
+      visit new_settings_author_repository_path
       expect(page).to have_content('New Repository')
 
       fill_in('Name', with: 'repo_name')

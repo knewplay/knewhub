@@ -4,7 +4,7 @@
 
 <%= button_to 'Rebuilt Repository', repository_path(@repository), method: :patch %>
 <%= button_to 'Delete Repository',
-               author_repository_path(@repository),
+               settings_author_repository_path(@repository),
                method: :delete,
                form: { data: { turbo_confirm: 'Are you sure?' } } %>
 <br />
@@ -12,4 +12,4 @@
 <%= render 'edit_form', repository: @repository %>
 
 <br />
-<%= link_to 'Back to repositories', author_repositories_path %>
+<%= link_to 'Back to repositories', settings_author_repositories_path %>

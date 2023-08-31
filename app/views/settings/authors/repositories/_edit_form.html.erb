@@ -1,4 +1,4 @@
-<%= form_with(model: repository, url: author_repository_path(repository)) do |form| %>
+<%= form_with(model: repository, url: settings_author_repository_path(repository)) do |form| %>
   <%= render 'layouts/form_errors', resource: repository if repository.errors.any? %>
 
   <div>

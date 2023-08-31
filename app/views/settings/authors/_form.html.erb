@@ -1,4 +1,4 @@
-<%= form_with model: author do |form| %>
+<%= form_with(model: [:settings, author]) do |form| %>
   <%= render 'layouts/form_errors', resource: author if author.errors.any? %>
 
   <div>

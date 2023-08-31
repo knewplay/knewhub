@@ -7,7 +7,7 @@ class RepositoriesController < ApplicationController
     if current_administrator
       redirect_to dashboard_repositories_path
     elsif current_author
-      redirect_to author_repositories_path
+      redirect_to settings_author_repositories_path
     end
   end
 

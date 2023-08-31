@@ -27,18 +27,16 @@ Rails.application.routes.draw do
     end
   end
 
-  # User space
+  # User and Author settings
   namespace :settings do
     resource :account, only: [:show]
     resource :enable_author, controller: :enable_author, only: [:show]
+    resource :author, only: %i[show edit update]
+    scope module: 'authors', path: 'author', as: 'author' do
+      resources :repositories, except: [:show]
+    end
+
     root to: 'accounts#show'
-  end
-
-  # Author space
-  resource :author, only: %i[show edit update]
-
-  scope module: 'author_space', path: 'author', as: 'author' do
-    resources :repositories, except: [:show]
   end
 
   # Administrator dashboard

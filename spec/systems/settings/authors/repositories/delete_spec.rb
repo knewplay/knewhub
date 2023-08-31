@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'AuthorSpace::Repositories#destroy', type: :system do
+RSpec.describe 'Settings::AuthorSpace::Repositories#destroy', type: :system do
   before(:each) do
     @repo = create(:repository)
     @directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
@@ -11,7 +11,7 @@ RSpec.describe 'AuthorSpace::Repositories#destroy', type: :system do
     before_count = Repository.all.count
     page.set_rack_session(author_id: @repo.author.id)
 
-    visit edit_author_repository_path(@repo.id)
+    visit edit_settings_author_repository_path(@repo.id)
 
     accept_alert do
       click_button 'Delete Repository'
@@ -24,7 +24,7 @@ RSpec.describe 'AuthorSpace::Repositories#destroy', type: :system do
   scenario 'removes the local directory' do
     page.set_rack_session(author_id: @repo.author.id)
 
-    visit edit_author_repository_path(@repo.id)
+    visit edit_settings_author_repository_path(@repo.id)
 
     accept_alert do
       click_button 'Delete Repository'

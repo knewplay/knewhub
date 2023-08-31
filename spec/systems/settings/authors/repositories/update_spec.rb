@@ -8,7 +8,7 @@ RSpec.describe 'AuthorSpace::Repositories #update', type: :system do
     scenario 'updates the name' do
       page.set_rack_session(author_id: author.id)
 
-      visit edit_author_repository_path(repo.id)
+      visit edit_settings_author_repository_path(repo.id)
       expect(page).to have_content("Edit Repository ##{repo.id}")
 
       fill_in('Name', with: 'a_new_name')
@@ -24,7 +24,7 @@ RSpec.describe 'AuthorSpace::Repositories #update', type: :system do
     scenario 'updates the branch' do
       page.set_rack_session(author_id: author.id)
 
-      visit edit_author_repository_path(repo.id)
+      visit edit_settings_author_repository_path(repo.id)
       expect(page).to have_content("Edit Repository ##{repo.id}")
 
       fill_in('Branch', with: 'other_branch')
@@ -41,7 +41,7 @@ RSpec.describe 'AuthorSpace::Repositories #update', type: :system do
     scenario 'fails to update' do
       page.set_rack_session(author_id: author.id)
 
-      visit edit_author_repository_path(repo.id)
+      visit edit_settings_author_repository_path(repo.id)
       expect(page).to have_content("Edit Repository ##{repo.id}")
 
       fill_in('Branch', with: 'invalid!branch')
