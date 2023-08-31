@@ -7,6 +7,7 @@ RSpec.describe 'AuthorSpace::Repositories #index', type: :system do
 
   context 'when signed in as an author' do
     scenario "displays author's repositories" do
+      sign_in author.user
       page.set_rack_session(author_id: author.id)
 
       visit settings_author_repositories_path
@@ -15,6 +16,7 @@ RSpec.describe 'AuthorSpace::Repositories #index', type: :system do
     end
 
     scenario 'does not display repositories by other authors' do
+      sign_in author.user
       page.set_rack_session(author_id: author.id)
 
       visit settings_author_repositories_path

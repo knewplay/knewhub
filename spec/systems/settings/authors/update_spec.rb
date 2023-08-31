@@ -5,6 +5,7 @@ RSpec.describe 'Author#update', type: :system do
 
   context 'when given a valid name' do
     scenario 'updates successfully' do
+      sign_in author.user
       page.set_rack_session(author_id: author.id)
       visit edit_settings_author_path
 
@@ -19,6 +20,7 @@ RSpec.describe 'Author#update', type: :system do
 
   context 'when given an invalid name' do
     scenario 'fails to update' do
+      sign_in author.user
       page.set_rack_session(author_id: author.id)
       visit edit_settings_author_path
 

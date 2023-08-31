@@ -1,5 +1,7 @@
 module Settings
   class EnableAuthorController < ApplicationController
+    layout 'settings'
+
     before_action :authenticate_user!, :user_is_not_an_author
 
     def show; end

@@ -5,6 +5,7 @@ RSpec.describe 'Settings::Author#show', type: :system do
 
   context 'when signed in as an author' do
     scenario 'displays information about current author' do
+      sign_in author.user
       page.set_rack_session(author_id: author.id)
 
       visit settings_author_path

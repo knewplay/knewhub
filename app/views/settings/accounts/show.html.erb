@@ -1,9 +1,1 @@
-<%= render 'settings/shared/header' %>
-
-<div class="container" style="display: flex; gap: 10px;">
-  <%= render 'settings/shared/sidebar' %>
-
-  <div class="main">
-    <%= turbo_frame_tag id='edit_user_registration', src: edit_user_registration_path %>
-  </div>
-</div>
+<%= turbo_frame_tag id='edit_user_registration', src: edit_user_registration_path %>

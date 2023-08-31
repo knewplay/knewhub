@@ -1,6 +1,8 @@
 module Settings
   module Authors
     class RepositoriesController < ApplicationController
+      layout 'settings'
+
       before_action :require_author_authentication
       before_action :set_repository, only: %i[edit update destroy]
 

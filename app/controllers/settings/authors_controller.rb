@@ -1,5 +1,7 @@
 module Settings
   class AuthorsController < ApplicationController
+    layout 'settings'
+ 
     before_action :require_author_authentication, :set_author
 
     def show; end

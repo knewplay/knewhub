@@ -9,6 +9,7 @@ RSpec.describe 'Settings::AuthorSpace::Repositories#destroy', type: :system do
 
   scenario 'removes the record' do
     before_count = Repository.all.count
+    sign_in @repo.author.user
     page.set_rack_session(author_id: @repo.author.id)
 
     visit edit_settings_author_repository_path(@repo.id)
@@ -22,6 +23,7 @@ RSpec.describe 'Settings::AuthorSpace::Repositories#destroy', type: :system do
   end
 
   scenario 'removes the local directory' do
+    sign_in @repo.author.user
     page.set_rack_session(author_id: @repo.author.id)
 
     visit edit_settings_author_repository_path(@repo.id)

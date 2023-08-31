@@ -6,6 +6,7 @@ RSpec.describe 'AuthorSpace::Repositories #update', type: :system do
 
   context 'when given valid input' do
     scenario 'updates the name' do
+      sign_in author.user
       page.set_rack_session(author_id: author.id)
 
       visit edit_settings_author_repository_path(repo.id)
@@ -22,6 +23,7 @@ RSpec.describe 'AuthorSpace::Repositories #update', type: :system do
     end
 
     scenario 'updates the branch' do
+      sign_in author.user
       page.set_rack_session(author_id: author.id)
 
       visit edit_settings_author_repository_path(repo.id)
@@ -39,6 +41,7 @@ RSpec.describe 'AuthorSpace::Repositories #update', type: :system do
 
   context 'when given invalid input' do
     scenario 'fails to update' do
+      sign_in author.user
       page.set_rack_session(author_id: author.id)
 
       visit edit_settings_author_repository_path(repo.id)
