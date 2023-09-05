@@ -12,6 +12,7 @@ require 'vcr'
 require 'support/vcr'
 require 'rack_session_access/capybara'
 require 'devise'
+require 'active_support/testing/time_helpers'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -41,6 +42,8 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :system
+
+  config.include ActiveSupport::Testing::TimeHelpers
 
   # DatabaseCleaner config to work with Capybara
   config.use_transactional_fixtures = true

@@ -1,6 +1,28 @@
 class Build < ApplicationRecord
   belongs_to :repository
-  has_many :logs, dependent: :destroy
+  has_many :logs, dependent: :destroy, after_add: :verify_complete
 
   validates :status, presence: true
+  validates :action, presence: true
+
+  # [Build.action, Build.logs.count]
+  COMPLETE_MATRIX = {
+    create: 4,
+    update: 2,
+    rebuild: 2,
+    webhook_ping: 1,
+    webhook_push: 3
+  }.freeze
+
+  def verify_complete
+    max_log_count = COMPLETE_MATRIX[action.to_sym]
+    return unless no_failures? && logs.count == max_log_count
+
+    self.status = 'Complete'
+    self.completed_at = DateTime.current
+  end
+
+  def no_failures?
+    logs.none? { |log| log.failure == true }
+  end
 end

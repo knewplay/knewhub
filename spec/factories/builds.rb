@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :build do
-    status { 'Created' }
+    status { 'In progress' }
+    action { 'create' }
     association :repository
   end
 end
