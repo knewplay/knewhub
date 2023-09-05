@@ -17,8 +17,10 @@ module Settings
       def create
         @repository = current_author.repositories.build(repository_params)
         if @repository.save
-          CreateGithubWebhookJob.perform_async(@repository.id)
-          CloneGithubRepoJob.perform_async(@repository.id)
+          build = Build.create(repository: @repository, status: 'In progress')
+          build.logs.create(content: 'Repository created in database')
+          CreateGithubWebhookJob.perform_async(@repository.id, build.id)
+          CloneGithubRepoJob.perform_async(@repository.id, build.id)
           redirect_to settings_author_repositories_path, notice: 'Repository was successfully created.'
         else
           render :new, status: :unprocessable_entity
@@ -34,12 +36,13 @@ module Settings
         former_branch = @repository.branch
 
         if @repository.update(repository_params)
+          build = Build.create(repository: @repository, status: 'In progress')
           if former_name != @repository.name || former_branch != @repository.branch
             old_directory = Rails.root.join('repos', @repository.author.github_username, former_name)
             FileUtils.remove_dir(old_directory) if Dir.exist?(old_directory)
-            CloneGithubRepoJob.perform_async(@repository.id)
+            CloneGithubRepoJob.perform_async(@repository.id, build.id)
           else
-            PullGithubRepoJob.perform_async(@repository.id)
+            PullGithubRepoJob.perform_async(@repository.id, build.id)
           end
           redirect_to settings_author_repositories_path, notice: 'Repository was successfully updated.'
         else

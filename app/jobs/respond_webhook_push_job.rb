@@ -1,31 +1,32 @@
 class RespondWebhookPushJob
   include Sidekiq::Job
 
-  def perform(uuid, webhook_name, webhook_owner, webhook_description)
+  def perform(build_id, uuid, webhook_name, webhook_owner, webhook_description)
     repository = Repository.find_by(uuid:)
+    build = Build.find(build_id)
     if webhook_name != repository.name || webhook_owner != repository.author.github_username
-      update_repository(repository, webhook_name, webhook_owner)
+      update_repository(repository, build, webhook_name, webhook_owner)
     end
     directory = Rails.root.join('repos', repository.author.github_username, repository.name)
-    pull_or_clone(repository, directory)
+    pull_or_clone(repository, directory, build)
     repository.update(last_pull_at: DateTime.current, description: webhook_description)
   end
 
   private
 
-  def pull_or_clone(repository, directory)
+  def pull_or_clone(repository, directory, build)
     if Dir.exist?(directory)
       Git.open(directory).pull
-      repository.logs.create(content: 'Repository successfully cloned.')
+      build.logs.create(content: 'Repository successfully cloned.')
     else
       Git.clone(repository.git_url, directory, branch: repository.branch)
-      repository.logs.create(content: 'Repository successfully pulled.')
+      build.logs.create(content: 'Repository successfully pulled.')
     end
   rescue Git::FailedError => e
     Rails.logger.error "Failed to clone or pull repository ##{repository.name}. Message: #{e.message}"
   end
 
-  def update_repository(repository, webhook_name, webhook_owner)
+  def update_repository(repository, build, webhook_name, webhook_owner)
     old_directory = Rails.root.join('repos', repository.author.github_username, repository.name)
     FileUtils.remove_dir(old_directory) if Dir.exist?(old_directory)
     repository.update(
@@ -33,6 +34,6 @@ class RespondWebhookPushJob
       git_url: "https://#{repository.token}@github.com/#{webhook_owner}/#{webhook_name}.git"
     )
     repository.author.update(github_username: webhook_owner)
-    repository.logs.create(content: 'Repository name or owner sucessfully updated.')
+    build.logs.create(content: 'Repository name or owner successfully updated.')
   end
 end
