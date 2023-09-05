@@ -8,8 +8,9 @@ class Webhooks::GithubController < ApplicationController
 
     case request.headers['X-GitHub-Event']
     when 'ping'
-      flash.now[:notice] = 'Webhook successfully created.'
+      repository.logs.create(content: "GitHub webhook 'ping' received.")
     when 'push'
+      repository.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
       uuid = params[:uuid]
       name = params[:repository][:name]
       owner_name = params[:repository][:owner][:name]

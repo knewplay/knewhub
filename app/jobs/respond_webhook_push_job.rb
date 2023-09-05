@@ -16,8 +16,10 @@ class RespondWebhookPushJob
   def pull_or_clone(repository, directory)
     if Dir.exist?(directory)
       Git.open(directory).pull
+      repository.logs.create(content: 'Repository successfully cloned.')
     else
       Git.clone(repository.git_url, directory, branch: repository.branch)
+      repository.logs.create(content: 'Repository successfully pulled.')
     end
   rescue Git::FailedError => e
     Rails.logger.error "Failed to clone or pull repository ##{repository.name}. Message: #{e.message}"
@@ -31,5 +33,6 @@ class RespondWebhookPushJob
       git_url: "https://#{repository.token}@github.com/#{webhook_owner}/#{webhook_name}.git"
     )
     repository.author.update(github_username: webhook_owner)
+    repository.logs.create(content: 'Repository name or owner sucessfully updated.')
   end
 end
