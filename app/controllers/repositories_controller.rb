@@ -4,7 +4,7 @@ class RepositoriesController < ApplicationController
   before_action :set_repository
 
   def update
-    build = Build.create(repository: @repository, status: 'In progress')
+    build = Build.create(repository: @repository, status: 'In progress', action: 'rebuild')
     PullGithubRepoJob.perform_async(@repository.id, build.id)
     if current_administrator
       redirect_to dashboard_repositories_path, notice: 'Repository was successfully rebuilt.'

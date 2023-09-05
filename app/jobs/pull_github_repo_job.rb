@@ -11,6 +11,9 @@ class PullGithubRepoJob
 
     GetGithubDescriptionJob.perform_async(repository_id, build_id)
   rescue Git::FailedError => e
-    build.logs.create(content: "Failed to pull repository ##{repository.id}. Message: #{e.message}")
+    build.logs.create(
+      content: "Failed to pull repository ##{repository.id}. Message: #{e.message}",
+      failure: true
+    )
   end
 end

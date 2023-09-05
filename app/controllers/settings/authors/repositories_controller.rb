@@ -17,7 +17,7 @@ module Settings
       def create
         @repository = current_author.repositories.build(repository_params)
         if @repository.save
-          build = Build.create(repository: @repository, status: 'In progress')
+          build = Build.create(repository: @repository, status: 'In progress', action: 'create')
           build.logs.create(content: 'Repository created in database')
           CreateGithubWebhookJob.perform_async(@repository.id, build.id)
           CloneGithubRepoJob.perform_async(@repository.id, build.id)
@@ -36,7 +36,7 @@ module Settings
         former_branch = @repository.branch
 
         if @repository.update(repository_params)
-          build = Build.create(repository: @repository, status: 'In progress')
+          build = Build.create(repository: @repository, status: 'In progress', action: 'update')
           if former_name != @repository.name || former_branch != @repository.branch
             old_directory = Rails.root.join('repos', @repository.author.github_username, former_name)
             FileUtils.remove_dir(old_directory) if Dir.exist?(old_directory)

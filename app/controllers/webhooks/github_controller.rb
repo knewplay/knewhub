@@ -8,11 +8,10 @@ class Webhooks::GithubController < ApplicationController
 
     case request.headers['X-GitHub-Event']
     when 'ping'
-      build = Build.create(repository: @repository, status: 'In progress')
+      build = Build.create(repository: @repository, status: 'In progress', action: 'webhook_ping')
       build.logs.create(content: "GitHub webhook 'ping' received.")
-      build.update(status: 'Done', completed_at: DateTime.current)
     when 'push'
-      build = Build.create(repository: @repository, status: 'In progress')
+      build = Build.create(repository: @repository, status: 'In progress', action: 'webhook_push')
       build.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
       uuid = params[:uuid]
       name = params[:repository][:name]

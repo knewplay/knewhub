@@ -6,6 +6,8 @@ class RespondWebhookPushJob
     build = Build.find(build_id)
     if webhook_name != repository.name || webhook_owner != repository.author.github_username
       update_repository(repository, build, webhook_name, webhook_owner)
+    else
+      build.logs.create(content: 'No change to repository name or owner.')
     end
     directory = Rails.root.join('repos', repository.author.github_username, repository.name)
     pull_or_clone(repository, directory, build)
