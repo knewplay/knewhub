@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_30_145256) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_05_134035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -32,6 +32,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_145256) do
     t.string "name"
     t.bigint "user_id"
     t.index ["user_id"], name: "index_authors_on_user_id", unique: true
+  end
+
+  create_table "builds", force: :cascade do |t|
+    t.bigint "repository_id"
+    t.datetime "completed_at"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id"], name: "index_builds_on_repository_id"
+  end
+
+  create_table "logs", force: :cascade do |t|
+    t.bigint "build_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["build_id"], name: "index_logs_on_build_id"
   end
 
   create_table "repositories", force: :cascade do |t|
@@ -80,6 +97,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_145256) do
   end
 
   add_foreign_key "authors", "users"
+  add_foreign_key "builds", "repositories"
+  add_foreign_key "logs", "builds"
   add_foreign_key "repositories", "authors"
   add_foreign_key "webauthn_credentials", "administrators"
 end

@@ -1,5 +1,6 @@
 class Repository < ApplicationRecord
   belongs_to :author
+  has_many :builds, dependent: :destroy
 
   before_create :set_branch, :generate_uuid
   before_save :set_git_url
