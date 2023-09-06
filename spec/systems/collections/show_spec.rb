@@ -4,9 +4,10 @@ RSpec.describe 'Collections #show', type: :system do
   before(:all) do
     # Clone the GitHub repo containing the required files
     @repo = create(:repository, :real, name: 'markdown-templates')
+    build = create(:build, repository: @repo)
     Sidekiq::Testing.inline! do
       VCR.use_cassette('clone_github_repo_for_collections') do
-        CloneGithubRepoJob.perform_async(@repo.id)
+        CloneGithubRepoJob.perform_async(@repo.id, build.id)
       end
     end
   end

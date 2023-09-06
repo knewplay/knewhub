@@ -5,12 +5,12 @@ http_interactions:
     uri: https://api.github.com/repos/jp524/test-repo/hooks
     body:
       encoding: UTF-8
-      string: '{"name":"web","config":{"url":"https://bf6f-207-61-7-7.ngrok-free.app/webhooks/github/609ee2c9-8c09-4941-99d8-e5e6ba249ae9","content_type":"json","secret":"<SECRET>"},"events":["push"],"active":true}'
+      string: '{"name":"web","config":{"url":"https://bf6f-207-61-7-7.ngrok-free.app/webhooks/github/5ff9f391-a52a-460f-90c1-750c63a806e8","content_type":"json","secret":"<SECRET>"},"events":["push"],"active":true}'
     headers:
       Accept:
       - application/vnd.github.v3+json
       User-Agent:
-      - Octokit Ruby Gem 5.6.1
+      - Octokit Ruby Gem 7.0.0
       Content-Type:
       - application/json
       Authorization:
@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Wed, 16 Aug 2023 18:38:18 GMT
+      - Wed, 06 Sep 2023 13:08:16 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -36,15 +36,15 @@ http_interactions:
       - Accept, Authorization, Cookie, X-GitHub-OTP
       - Accept-Encoding, Accept, X-Requested-With
       Etag:
-      - '"0c335b457c63e2817212df270619903455bb206f646395fc2fb726755eda4d66"'
+      - '"593e745e4fc969179fa037952e487f612ff0d7df1d7a4cae846d2dbfd2384561"'
       X-Oauth-Scopes:
       - admin:repo_hook, repo
       X-Accepted-Oauth-Scopes:
       - admin:repo_hook, repo, write:repo_hook
       Github-Authentication-Token-Expiration:
-      - 2023-09-07 13:14:36 UTC
+      - 2023-11-04 13:22:43 UTC
       Location:
-      - https://api.github.com/repos/jp524/test-repo/hooks/429117318
+      - https://api.github.com/repos/jp524/test-repo/hooks/432275383
       X-Github-Media-Type:
       - github.v3; format=json
       X-Github-Api-Version-Selected:
@@ -54,7 +54,7 @@ http_interactions:
       X-Ratelimit-Remaining:
       - '4999'
       X-Ratelimit-Reset:
-      - '1692214698'
+      - '1694009296'
       X-Ratelimit-Used:
       - '1'
       X-Ratelimit-Resource:
@@ -79,9 +79,82 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - CFF6:4F8F:406F534:82ABB70:64DD1799
+      - C208:865F:16B2C79:2E53618:64F879C0
     body:
       encoding: UTF-8
-      string: '{"type":"Repository","id":429117318,"name":"web","active":true,"events":["push"],"config":{"content_type":"json","insecure_ssl":"0","secret":"********","url":"https://bf6f-207-61-7-7.ngrok-free.app/webhooks/github/609ee2c9-8c09-4941-99d8-e5e6ba249ae9"},"updated_at":"2023-08-16T18:38:18Z","created_at":"2023-08-16T18:38:18Z","url":"https://api.github.com/repos/jp524/test-repo/hooks/429117318","test_url":"https://api.github.com/repos/jp524/test-repo/hooks/429117318/test","ping_url":"https://api.github.com/repos/jp524/test-repo/hooks/429117318/pings","deliveries_url":"https://api.github.com/repos/jp524/test-repo/hooks/429117318/deliveries","last_response":{"code":null,"status":"unused","message":null}}'
-  recorded_at: Wed, 16 Aug 2023 18:38:18 GMT
+      string: '{"type":"Repository","id":432275383,"name":"web","active":true,"events":["push"],"config":{"content_type":"json","insecure_ssl":"0","secret":"********","url":"https://bf6f-207-61-7-7.ngrok-free.app/webhooks/github/5ff9f391-a52a-460f-90c1-750c63a806e8"},"updated_at":"2023-09-06T13:08:16Z","created_at":"2023-09-06T13:08:16Z","url":"https://api.github.com/repos/jp524/test-repo/hooks/432275383","test_url":"https://api.github.com/repos/jp524/test-repo/hooks/432275383/test","ping_url":"https://api.github.com/repos/jp524/test-repo/hooks/432275383/pings","deliveries_url":"https://api.github.com/repos/jp524/test-repo/hooks/432275383/deliveries","last_response":{"code":null,"status":"unused","message":null}}'
+  recorded_at: Wed, 06 Sep 2023 13:08:16 GMT
+- request:
+    method: post
+    uri: https://api.github.com/repos/jp524/test-repo/hooks/432275383/tests
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 7.0.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token <TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 06 Sep 2023 13:08:16 GMT
+      X-Oauth-Scopes:
+      - admin:repo_hook, repo
+      X-Accepted-Oauth-Scopes:
+      - admin:repo_hook, repo, write:repo_hook
+      Github-Authentication-Token-Expiration:
+      - 2023-11-04 13:22:43 UTC
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4998'
+      X-Ratelimit-Reset:
+      - '1694009296'
+      X-Ratelimit-Used:
+      - '2'
+      X-Ratelimit-Resource:
+      - core
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Vary:
+      - Accept-Encoding, Accept, X-Requested-With
+      X-Github-Request-Id:
+      - C209:3228:216A5B5:43C3857:64F879C0
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 06 Sep 2023 13:08:17 GMT
 recorded_with: VCR 6.2.0

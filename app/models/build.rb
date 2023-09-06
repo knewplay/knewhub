@@ -5,7 +5,7 @@ class Build < ApplicationRecord
   validates :status, presence: true
   validates :action, presence: true
 
-  # [Build.action, Build.logs.count]
+  # { action: logs.count }
   COMPLETE_MATRIX = {
     create: 4,
     update: 2,
@@ -14,7 +14,9 @@ class Build < ApplicationRecord
     webhook_push: 3
   }.freeze
 
-  def verify_complete
+  # `latest_log` is passed as an argument when using the `after_add` callback
+  # But it is not required
+  def verify_complete(_latest_log = nil)
     max_log_count = COMPLETE_MATRIX[action.to_sym]
     return unless no_failures? && logs.count == max_log_count
 

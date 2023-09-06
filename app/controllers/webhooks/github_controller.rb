@@ -8,18 +8,21 @@ class Webhooks::GithubController < ApplicationController
 
     case request.headers['X-GitHub-Event']
     when 'ping'
-      build = Build.create(repository: @repository, status: 'In progress', action: 'webhook_ping')
+      repository = Repository.find_by(uuid: params[:uuid])
+      build = Build.create(repository:, status: 'In progress', action: 'webhook_ping')
       build.logs.create(content: "GitHub webhook 'ping' received.")
     when 'push'
-      build = Build.create(repository: @repository, status: 'In progress', action: 'webhook_push')
-      build.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
       uuid = params[:uuid]
+      repository = Repository.find_by(uuid:)
+
+      build = Build.create(repository:, status: 'In progress', action: 'webhook_push')
+      build.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
+
       name = params[:repository][:name]
       owner_name = params[:repository][:owner][:name]
       owner_id = params[:repository][:owner][:id]
       description = params[:repository][:description]
 
-      repository = Repository.find_by(uuid:)
       if repository.author.github_uid != owner_id
         flash.now[:notice] = "The ownership of repository #{name} has changed."\
                              "Please login with GitHub as #{owner_name} and add repository to Knewhub."
