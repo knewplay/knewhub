@@ -20,8 +20,7 @@ class Build < ApplicationRecord
     max_log_count = COMPLETE_MATRIX[action.to_sym]
     return unless no_failures? && logs.count == max_log_count
 
-    self.status = 'Complete'
-    self.completed_at = DateTime.current
+    update(status: 'Complete', completed_at: DateTime.current)
   end
 
   def no_failures?
