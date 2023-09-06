@@ -9,7 +9,8 @@ class CreateGithubWebhookJob
     webhook_secret = Rails.application.credentials.webhook_secret
 
     response = create_hook(repository, client, host_url, webhook_secret)
-    test_hook(client, repository, build, response.id)
+    build.logs.create(content: 'GitHub webhook successfully created. Now testing...')
+    TestGithubWebhookJob.perform_in(10.seconds, repository_id, build_id, response.id)
   rescue Octokit::Unauthorized, Octokit::UnprocessableEntity => e
     build.logs.create(
       content: "Failed to create GitHub webhook for repository ##{repository.id}. Message: #{e.message}",
@@ -24,17 +25,5 @@ class CreateGithubWebhookJob
       { url: "https://#{host_url}/webhooks/github/#{repository.uuid}", content_type: 'json', secret: webhook_secret },
       { events: ['push'], active: true }
     )
-  end
-
-  def test_hook(client, repository, build, hook_id)
-    response = client.test_hook("#{repository.author.github_username}/#{repository.name}", hook_id)
-    if response == true
-      build.logs.create(content: 'GitHub webhook successfully created.')
-    else
-      build.logs.create(
-        content: "Failed to create GitHub webhook for repository ##{repository.id}. Message: #{response.message}",
-        failure: true
-      )
-    end
   end
 end

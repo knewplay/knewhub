@@ -7,7 +7,7 @@ class Build < ApplicationRecord
 
   # { action: logs.count }
   COMPLETE_MATRIX = {
-    create: 4,
+    create: 5,
     update: 2,
     rebuild: 2,
     webhook_ping: 1,
