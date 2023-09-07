@@ -6,15 +6,14 @@ class Webhooks::GithubController < ApplicationController
   def create
     head :ok
 
+    uuid = params[:uuid]
+    repository = Repository.find_by!(uuid:)
+
     case request.headers['X-GitHub-Event']
     when 'ping'
-      repository = Repository.find_by(uuid: params[:uuid])
       build = Build.create(repository:, status: 'In progress', action: 'webhook_ping')
       build.logs.create(content: "GitHub webhook 'ping' received.")
     when 'push'
-      uuid = params[:uuid]
-      repository = Repository.find_by(uuid:)
-
       build = Build.create(repository:, status: 'In progress', action: 'webhook_push')
       build.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
 

@@ -32,6 +32,6 @@ class Repository < ApplicationRecord
   end
 
   def generate_uuid
-    self.uuid = SecureRandom.uuid
+    self.uuid = SecureRandom.uuid if uuid.nil?
   end
 end

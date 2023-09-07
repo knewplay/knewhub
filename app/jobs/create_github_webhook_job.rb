@@ -9,7 +9,8 @@ class CreateGithubWebhookJob
     webhook_secret = Rails.application.credentials.webhook_secret
 
     response = create_hook(repository, client, host_url, webhook_secret)
-    build.logs.create(content: 'GitHub webhook successfully created. Now testing...')
+    hook_id = response.id
+    build.logs.create(content: "GitHub webhook successfully created. Hook ID: #{hook_id}. Now testing...")
     TestGithubWebhookJob.perform_in(10.seconds, repository_id, build_id, response.id)
   rescue Octokit::Unauthorized, Octokit::UnprocessableEntity => e
     build.logs.create(
