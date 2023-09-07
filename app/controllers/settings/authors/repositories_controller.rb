@@ -18,7 +18,6 @@ module Settings
         @repository = current_author.repositories.build(repository_params)
         if @repository.save
           build = Build.create(repository: @repository, status: 'In progress', action: 'create')
-          build.logs.create(content: 'Repository created in database')
           CreateGithubWebhookJob.perform_async(@repository.id, build.id)
           CloneGithubRepoJob.perform_async(@repository.id, build.id)
           redirect_to settings_author_repositories_path, notice: 'Repository was successfully created.'
