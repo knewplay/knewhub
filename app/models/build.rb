@@ -26,4 +26,12 @@ class Build < ApplicationRecord
   def no_failures?
     logs.none? { |log| log.failure == true }
   end
+
+  def repository_name
+    repository.name
+  end
+
+  def repository_author
+    repository.author.name
+  end
 end
