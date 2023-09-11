@@ -18,11 +18,13 @@ class RespondWebhookPushJob
 
   def pull_or_clone(repository, directory, build)
     if Dir.exist?(directory)
-      Git.open(directory).pull
-      build.logs.create(content: 'Repository successfully cloned.')
+      response = Git.open(directory).pull
+      build.logs.create(content: 'Repository successfully pulled.')
+      CreateRepoIndexJob.perform_async(repository.id, build.id) unless response == 'Already up to date'
     else
       Git.clone(repository.git_url, directory, branch: repository.branch)
-      build.logs.create(content: 'Repository successfully pulled.')
+      build.logs.create(content: 'Repository successfully cloned.')
+      CreateRepoIndexJob.perform_async(repository.id, build.id)
     end
   rescue Git::FailedError => e
     Rails.logger.error "Failed to clone or pull repository ##{repository.name}. Message: #{e.message}"

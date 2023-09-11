@@ -110,6 +110,10 @@ RSpec.describe 'Settings::AuthorSpace::Repositories#create', type: :system do
       expect(@build.logs.fourth.content).to eq('Repository description successfully updated from GitHub.')
     end
 
+    scenario 'creates the fifth log' do
+      expect(@build.logs.fifth.content).to eq('index.md file successfully generated.')
+    end
+
     scenario "sets Build status to 'Complete'" do
       @build.reload
       expect(@build.status).to eq('Complete')

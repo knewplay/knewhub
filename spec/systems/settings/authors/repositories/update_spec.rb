@@ -81,6 +81,10 @@ RSpec.describe 'AuthorSpace::Repositories#update', type: :system do
         expect(@update_build.logs.second.content).to eq('Repository description successfully updated from GitHub.')
       end
 
+      scenario 'creates the third log' do
+        expect(@update_build.logs.third.content).to eq('index.md file exists for this repository.')
+      end
+
       scenario "sets Build status to 'Complete'" do
         @update_build.reload
         expect(@update_build.status).to eq('Complete')

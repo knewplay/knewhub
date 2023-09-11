@@ -43,6 +43,10 @@ RSpec.describe 'Repositories#update', type: :system do
         expect(@rebuild_build.logs.second.content).to eq('Repository description successfully updated from GitHub.')
       end
 
+      scenario 'creates the third log' do
+        expect(@rebuild_build.logs.third.content).to eq('index.md file exists for this repository.')
+      end
+
       scenario "sets Build status to 'Complete'" do
         @rebuild_build.reload
         expect(@rebuild_build.status).to eq('Complete')

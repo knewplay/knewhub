@@ -7,11 +7,11 @@ class Build < ApplicationRecord
 
   # { action: logs.count }
   COMPLETE_MATRIX = {
-    create: 4,
-    update: 2,
-    rebuild: 2,
+    create: 5,
+    update: 3,
+    rebuild: 3,
     webhook_ping: 1,
-    webhook_push: 3
+    webhook_push: 4
   }.freeze
 
   # `latest_log` is passed as an argument when using the `after_add` callback

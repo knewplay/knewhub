@@ -49,7 +49,7 @@ describe Webhooks::GithubController do
     end
 
     context "with a 'X-GitHub-Event: push' event" do
-      let(:repo) { create(:repository, :real) }
+      let(:repo) { create(:repository, :real, last_pull_at: DateTime.current) }
       let(:secret) { Rails.application.credentials.webhook_secret }
       let(:data) {
         'repository[name]=test-repo&repository[owner][name]=jp524&'\
@@ -114,7 +114,11 @@ describe Webhooks::GithubController do
           end
 
           scenario 'with third log' do
-            expect(build.logs.third.content).to eq('Repository successfully cloned.')
+            expect(build.logs.third.content).to eq('Repository successfully pulled.')
+          end
+
+          scenario 'with fourth log' do
+            expect(build.logs.fourth.content).to eq('index.md successfully generated.')
           end
 
           scenario "with status 'Complete'" do

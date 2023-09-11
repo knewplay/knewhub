@@ -54,7 +54,7 @@ RSpec.describe Build, type: :model do
 
     context 'when a build has no failed logs and reached the max log count' do
       before do
-        create_list(:log, 2, build:)
+        create_list(:log, 3, build:)
       end
 
       it 'updates the status' do
@@ -70,7 +70,7 @@ RSpec.describe Build, type: :model do
 
     context 'when a build has some failed logs and reached the max log count' do
       before do
-        create(:log, build:)
+        create_list(:log, 2, build:)
         create(:log, failure: true, build:)
       end
 

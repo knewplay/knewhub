@@ -69,7 +69,9 @@ RSpec.describe CreateRepoIndexJob, type: :job do
   end
 
   after(:all) do
-    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    parent_directory = Rails.root.join('repos', @repo.author.github_username)
+    directory = parent_directory.join(@repo.name)
     FileUtils.remove_dir(directory)
+    FileUtils.remove_dir(parent_directory)
   end
 end

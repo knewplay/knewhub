@@ -10,6 +10,7 @@ class CloneGithubRepoJob
     build.logs.create(content: 'Repository successfully cloned.')
 
     GetGithubDescriptionJob.perform_async(repository_id, build_id)
+    CreateRepoIndexJob.perform_async(repository_id, build_id)
   rescue Git::FailedError => e
     build.logs.create(content: "Failed to clone repository ##{repository.id}. Message: #{e.message}", failure: true)
   end
