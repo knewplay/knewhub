@@ -40,7 +40,7 @@ class CreateRepoIndexJob
   def generate_front_matter(repository)
     <<~CONTENT
       ---
-      title: #{repository.name.titleize}
+      title: #{repository.title.titleize}
       date: #{repository.last_pull_at.to_date}
       author: #{repository.author.name}
       ---
