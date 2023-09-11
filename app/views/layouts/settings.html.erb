@@ -1,0 +1,31 @@
+<% content_for :settings_layout do %>
+  <header>
+    <%= current_user.email %>
+  </header>
+
+  <div class="container" style="display: flex; gap: 10px;">
+    <div class="sidebar">
+      <%= link_to 'Account', settings_account_path %>
+      <p>___________<p>
+      <h4>Author</h4>
+
+      <% if current_user.author.nil? %>
+        <%= link_to 'Enable', settings_enable_author_path %>
+      <% else %>
+        <% if current_author %>
+          <div><%= link_to 'Profile', edit_settings_author_path %></div>
+          <div><%= link_to 'Repositories', settings_author_repositories_path %></div>
+          <p>Logged in as <%= current_author.name %><p>
+        <% else %>
+          <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="main-content">
+      <%= yield %>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: 'layouts/application' %>

@@ -5,6 +5,12 @@ Rails.application.routes.draw do
   get 'collections/:owner/:name/pages/*path', to: 'collections#show'
 
   # Sign up and sessions
+  devise_for :users, controllers: {
+    confirmations: 'users/confirmations',
+    registrations: 'users/registrations',
+    sessions: 'users/sessions'
+  }
+
   resources :administrators, only: %i[new create]
   namespace :sessions do
     resource :administrator, only: %i[new create destroy]
@@ -21,11 +27,16 @@ Rails.application.routes.draw do
     end
   end
 
-  # Author space
-  resource :author, only: %i[show edit update]
+  # User and Author settings
+  namespace :settings do
+    resource :account, only: [:show]
+    resource :enable_author, controller: :enable_author, only: [:show]
+    resource :author, only: %i[edit update]
+    scope module: 'authors', path: 'author', as: 'author' do
+      resources :repositories, except: [:show]
+    end
 
-  scope module: 'author_space', path: 'author', as: 'author' do
-    resources :repositories, except: [:show]
+    root to: 'accounts#show'
   end
 
   # Administrator dashboard

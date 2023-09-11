@@ -1,15 +1,19 @@
 require 'rails_helper'
 require 'support/omniauth'
 
-RSpec.describe 'Logout from GitHub auth session', type: :system do
-  scenario 'started with valid credentials' do
-    visit root_path
+RSpec.describe 'Sessions::Authors#destroy', type: :system do
+  context 'when logging out as a user' do
+    let(:author) { create(:author) }
 
-    click_on 'Login with GitHub'
-    expect(page).to have_content('user')
+    scenario 'it also logs out as an author' do
+      page.set_rack_session(author_id: author.id)
+      sign_in author.user
 
-    click_on 'Sign out'
-    expect(page).not_to have_content('user')
-    expect(page).to have_button('Login with GitHub')
+      visit root_path
+      click_on 'Logout'
+
+      visit settings_author_repositories_path
+      expect(page).to have_content('Please sign in with GitHub.')
+    end
   end
 end

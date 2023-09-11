@@ -11,6 +11,7 @@ require 'database_cleaner/active_record'
 require 'vcr'
 require 'support/vcr'
 require 'rack_session_access/capybara'
+require 'devise'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -36,6 +37,10 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
+
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
+  config.include Devise::Test::IntegrationHelpers, type: :system
 
   # DatabaseCleaner config to work with Capybara
   config.use_transactional_fixtures = true

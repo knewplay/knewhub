@@ -1,0 +1,34 @@
+<h1><%= "#{current_author.name}'s Repositories"%></h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Title</th>
+      <th>Branch</th>
+      <th>Last Pull At</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @repositories.each do |repository| %>
+      <tr>
+        <td><%= repository.id %></td>
+        <td><%= repository.name %></td>
+        <td><%= repository.title %></td>
+        <td><%= repository.branch %></td>
+        <td><%= repository.last_pull_at %></td>
+        <td>
+          <%= link_to('View',
+              "/collections/#{repository.author.github_username}/#{repository.name}/pages/index",
+              target: :_blank) %>
+          <%= link_to 'Edit', edit_settings_author_repository_path(repository.id)%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New repository', new_settings_author_repository_path %>

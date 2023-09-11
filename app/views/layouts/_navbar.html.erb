@@ -1,8 +1,14 @@
-<nav>
-  <% if current_author %>
-    <%= current_author.github_username %>
-    <%= button_to 'Sign out', sessions_author_path, method: :delete, data: { turbo: false } %>
-  <% else %>
-    <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
-  <% end %>
+<nav style="display: flex; justify-content: space-between;">
+  <br />
+
+  <%= link_to 'KNEWHUB', root_path %>
+
+  <div class="nav--links" style="display: flex; gap: 10px;">
+    <% if current_user %>
+      <%= link_to 'Settings', settings_root_path %>
+      <%= button_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo: false } %>
+    <% else %>
+      <%= link_to 'Login', new_user_session_path %>
+    <% end %>
+  </div>
 </nav>

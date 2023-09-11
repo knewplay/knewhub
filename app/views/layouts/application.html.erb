@@ -13,6 +13,8 @@
   <body>
     <%= render 'layouts/navbar' %>
     <%= render "layouts/flash" %>
-    <%= yield %>
+    <div class="main">
+     <%= content_for?(:settings_layout) ? yield(:settings_layout) : yield %>
+    </div>
   </body>
 </html>
