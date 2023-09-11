@@ -1,17 +1,15 @@
 class CreateRepoIndexJob
   include Sidekiq::Job
 
-  def perform(repository_id)
+  def perform(repository_id, build_id)
     repository, directory = RepositoryDirectory.define(repository_id)
-    return if index_file_exists?(directory)
-
-    markdown_files_location = list_markdown_file_location(directory)
-    links = generate_links(markdown_files_location)
-    front_matter = generate_front_matter(repository)
-    content = "#{front_matter}\n#{links}"
-
-    filepath = File.join(directory, 'index.md')
-    File.open(filepath, 'w') { |f| f.write(content) }
+    build = Build.find(build_id)
+    if index_file_exists?(directory)
+      build.logs.create(content: 'index.md file exists for this repository.')
+    else
+      generate_index_file(directory, repository)
+      build.logs.create(content: 'index.md file successfully generated.')
+    end
   end
 
   def index_file_exists?(directory)
@@ -47,10 +45,13 @@ class CreateRepoIndexJob
     CONTENT
   end
 
-  # ---
-  # title: Course Name
-  # date: 2023-12-31
-  # author: The Author
-  # keywords: [one, two]
-  # ---
+  def generate_index_file(directory, repository)
+    markdown_files_location = list_markdown_file_location(directory)
+    links = generate_links(markdown_files_location)
+    front_matter = generate_front_matter(repository)
+    content = "#{front_matter}\n#{links}"
+
+    filepath = File.join(directory, 'index.md')
+    File.open(filepath, 'w') { |f| f.write(content) }
+  end
 end
