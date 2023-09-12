@@ -19,7 +19,7 @@ module AdministratorAuthentication
 
     def current_administrator
       validate_session
-      @current_administrator ||= Administrator.find(session[:administrator_id])
+      @current_administrator ||= Administrator.find(session[:administrator_id]) if session[:administrator_id]
     end
 
     def administrator_signed_in?
