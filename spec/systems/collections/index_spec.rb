@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Collections #index', type: :system do
+RSpec.describe 'Collections#index', type: :system do
   before(:all) do
     # Clone the GitHub repo containing the required files
     @repo = create(:repository, :real, name: 'markdown-templates')
@@ -16,7 +16,7 @@ RSpec.describe 'Collections #index', type: :system do
     scenario 'displays Markdown text in HTML' do
       visit '/collections/jp524/markdown-templates/pages/index'
 
-      assert_selector 'h1', text: 'Course Name'
+      assert_selector 'h2', text: 'Course Name'
     end
 
     scenario 'displays links to other pages' do
@@ -27,7 +27,7 @@ RSpec.describe 'Collections #index', type: :system do
 
     scenario 'displays front matter' do
       visit '/collections/jp524/markdown-templates/pages/index'
-      assert_selector 'h1', text: 'Course Name'
+      assert_selector 'h2', text: 'Course Name'
       assert_selector 'p', text: 'Written by The Author on 2023-12-31'
     end
   end
