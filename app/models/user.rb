@@ -2,14 +2,9 @@ class User < ApplicationRecord
   has_one :author, dependent: :destroy
 
   # Include default devise modules. Others available are:
-  # :lockable, :timeoutable, :trackable and :omniauthable
+  # :lockable, :rememberable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable
-
-  # Override method to set remember_me == true by default
-  def remember_me
-    super.nil? ? true : super
-  end
+         :recoverable, :timeoutable, :validatable, :confirmable
 
   protected
 

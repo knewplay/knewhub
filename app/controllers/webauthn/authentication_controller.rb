@@ -28,6 +28,7 @@ class Webauthn::AuthenticationController < ApplicationController
 
       credential.update!(sign_count: webauthn_credential.sign_count)
       session[:administrator_id] = session[:webauthn_administrator_id]
+      session[:administrator_expires_at] = Time.now + 1.hour
       session[:webauthn_administrator_id] = nil
 
       # Pass `redirect URL` to Stimulus controller. Rails `redirect_to` does not work
