@@ -1,5 +1,7 @@
-<%= turbo_frame_tag id='edit_user_registration' do%>
-  <h2>Edit Account</h2>
+<% content_for(:html_title) { 'Edit user account' } %>
+
+<%= turbo_frame_tag id='edit_user_registration' do %>
+  <h2>Edit account</h2>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
