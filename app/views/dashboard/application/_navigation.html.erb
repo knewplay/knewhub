@@ -3,8 +3,8 @@
 <nav class="navigation">
   <h3>Admin: <%= current_administrator.name %></h3>
   <br />
-  <%= link_to 'Sign out', sessions_administrator_path, method: :delete, data: { turbo: false }, class: "button button--nav"  %>
-  <br />
+  <%= button_to 'Sign out', sessions_administrator_path, method: :delete, data: { turbo: false }, class: "button button--nav"  %>
+
   <%= link_to 'Edit MFA credentials', webauthn_credentials_path, class: "button button--alt button--nav" %>
   <br />
   
