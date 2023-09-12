@@ -3,11 +3,12 @@ require 'rails_helper'
 RSpec.describe CloneGithubRepoJob, type: :job do
   before(:all) do
     @repo = create(:repository, :real)
+    @build = create(:build, repository: @repo)
   end
 
   it 'queues the job' do
-    CloneGithubRepoJob.perform_async(@repo.id)
-    expect(CloneGithubRepoJob).to have_enqueued_sidekiq_job(@repo.id)
+    CloneGithubRepoJob.perform_async(@repo.id, @build.id)
+    expect(CloneGithubRepoJob).to have_enqueued_sidekiq_job(@repo.id, @build.id)
   end
 
   it 'executes perform' do
@@ -16,7 +17,7 @@ RSpec.describe CloneGithubRepoJob, type: :job do
       expect(@repo.last_pull_at).to be_nil
 
       VCR.use_cassette('clone_github_repo') do
-        CloneGithubRepoJob.perform_async(@repo.id)
+        CloneGithubRepoJob.perform_async(@repo.id, @build.id)
       end
       @repo.reload
 

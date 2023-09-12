@@ -1,23 +1,28 @@
 class RepositoriesController < ApplicationController
   before_action :require_author_or_admin_authentication, only: [:update]
   before_action :require_administrator_authentication, only: [:toggle_banned_status]
+  before_action :set_repository
 
   def update
-    PullGithubRepoJob.perform_async(params[:id])
+    build = Build.create(repository: @repository, status: 'In progress', action: 'rebuild')
+    PullGithubRepoJob.perform_async(@repository.id, build.id)
     if current_administrator
-      redirect_to dashboard_repositories_path
+      redirect_to dashboard_repositories_path, notice: 'Repository was successfully rebuilt.'
     elsif current_author
-      redirect_to settings_author_repositories_path
+      redirect_to settings_author_repositories_path, notice: 'Repository was successfully rebuilt.'
     end
   end
 
   def toggle_banned_status
-    @repository = Repository.find(params[:id])
     @repository.toggle!(:banned)
     redirect_to dashboard_repositories_path
   end
 
   private
+
+  def set_repository
+    @repository = Repository.find_by(id: params[:id])
+  end
 
   def require_author_or_admin_authentication
     repository = Repository.find(params[:id])

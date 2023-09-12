@@ -3,16 +3,17 @@ require 'rails_helper'
 RSpec.describe PullGithubRepoJob, type: :job do
   before(:all) do
     @repo = create(:repository, :real)
+    @build = create(:build, repository: @repo)
     Sidekiq::Testing.inline! do
       VCR.use_cassette('clone_github_repo') do
-        CloneGithubRepoJob.perform_async(@repo.id)
+        CloneGithubRepoJob.perform_async(@repo.id, @build.id)
       end
     end
   end
 
   it 'queues the job' do
-    PullGithubRepoJob.perform_async(@repo.id)
-    expect(PullGithubRepoJob).to have_enqueued_sidekiq_job(@repo.id)
+    PullGithubRepoJob.perform_async(@repo.id, @build.id)
+    expect(PullGithubRepoJob).to have_enqueued_sidekiq_job(@repo.id, @build.id)
   end
 
   it 'executes perform' do
@@ -20,7 +21,7 @@ RSpec.describe PullGithubRepoJob, type: :job do
       last_pull_at = @repo.last_pull_at
 
       VCR.use_cassette('pull_github_repo') do
-        PullGithubRepoJob.perform_async(@repo.id)
+        PullGithubRepoJob.perform_async(@repo.id, @build.id)
       end
 
       @repo.reload

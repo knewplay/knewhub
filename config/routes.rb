@@ -44,6 +44,7 @@ Rails.application.routes.draw do
     resources :authors, only: %i[index edit update]
     resources :repositories, only: [:index]
     resources :administrators, only: [:index]
+    resources :builds, only: %i[index show]
     root to: 'authors#index'
   end
 

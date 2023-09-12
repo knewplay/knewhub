@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Settings::AuthorSpace::Repositories#destroy', type: :system do
-  before(:each) do
+  before(:all) do
     @repo = create(:repository)
     @directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
     FileUtils.mkdir_p(@directory)
@@ -35,4 +35,9 @@ RSpec.describe 'Settings::AuthorSpace::Repositories#destroy', type: :system do
     sleep(1)
     expect(Dir.exist?(@directory)).to be(false)
   end
-end
+
+  after(:all) do
+    parent_directory = Rails.root.join('repos', @repo.author.github_username)
+    FileUtils.remove_dir(parent_directory)
+  end
+end 
