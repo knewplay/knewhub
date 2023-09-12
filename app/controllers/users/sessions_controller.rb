@@ -1,7 +1,10 @@
 class Users::SessionsController < Devise::SessionsController
   def create
     super
-    session[:administrator_id] = nil if session[:administrator_id]
+    if session[:administrator_id]
+      session[:administrator_id] = nil
+      session[:administrator_expires_at] = nil
+    end
   end
 
   def destroy

@@ -10,6 +10,7 @@ class Sessions::AdministratorsController < ApplicationController
         redirect_to new_webauthn_authentication_path
       else
         session[:administrator_id] = administrator.id
+        session[:administrator_expires_at] = Time.now + 1.hour
         redirect_to dashboard_root_path
       end
       session[:author_id] = nil if session[:author_id]
@@ -20,6 +21,7 @@ class Sessions::AdministratorsController < ApplicationController
 
   def destroy
     session[:administrator_id] = nil
+    session[:administrator_expires_at] = nil
     redirect_to root_path
   end
 end

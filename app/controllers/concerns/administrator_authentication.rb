@@ -18,11 +18,18 @@ module AdministratorAuthentication
     end
 
     def current_administrator
-      @current_administrator ||= Administrator.find(session[:administrator_id]) if session[:administrator_id]
+      validate_session
+      @current_administrator ||= Administrator.find(session[:administrator_id])
     end
 
     def administrator_signed_in?
       !!current_administrator
+    end
+
+    def validate_session
+      return if session[:administrator_expires_at].nil?
+
+      session[:administrator_id] = nil if session[:administrator_expires_at] < Time.now
     end
   end
 end
