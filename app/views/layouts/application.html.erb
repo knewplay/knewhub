@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Knewhub</title>
+    <title>
+      <%= content_for?(:html_title) ? yield(:html_title) : 'Knewhub' %>
+    </title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -14,7 +16,13 @@
     <%= render 'layouts/navbar' %>
     <%= render "layouts/flash" %>
     <div class="main">
-     <%= content_for?(:settings_layout) ? yield(:settings_layout) : yield %>
+      <% if content_for?(:settings_layout) %>
+        <%= yield(:settings_layout) %>
+      <% elsif content_for(:collections_layout) %>
+        <%= yield(:collections_layout) %>
+      <% else %>
+        <%= yield %>
+      <% end %>
     </div>
   </body>
 </html>

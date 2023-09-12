@@ -1,0 +1,9 @@
+<% content_for(:html_title) { "#{@front_matter['title']} - Knewhub" } %>
+
+<% content_for :collections_layout do %>
+  <h1><%= @front_matter['title'] %></h1>
+  <p>Written by <%= @front_matter['author'] %> on <%= @front_matter['date'] %></p>
+  <%= yield %>
+<% end %>
+
+<%= render template: 'layouts/application' %>
