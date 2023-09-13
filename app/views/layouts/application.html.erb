@@ -21,8 +21,8 @@
   </head>
 
   <body>
-    <%= render 'layouts/navbar' %>
-    <%= render "layouts/flash" %>
+    <%= render 'shared/navbar' %>
+    <%= render "shared/flash" %>
     <div class="main">
       <% if content_for?(:settings_layout) %>
         <%= yield(:settings_layout) %>

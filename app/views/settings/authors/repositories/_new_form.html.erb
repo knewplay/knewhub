@@ -1,5 +1,5 @@
 <%= form_with(model: [:settings, :author, repository]) do |form| %>
-  <%= render 'layouts/form_errors', resource: repository if repository.errors.any? %>
+  <%= render 'shared/form_errors', resource: repository if repository.errors.any? %>
 
   <div>
     <%= form.label :name, 'Name' %>
