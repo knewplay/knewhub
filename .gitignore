@@ -29,9 +29,12 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/config/credentials/test.key
+/config/credentials/development.key
 
 # Ignore cloned repositories
 /repos/*
-/config/credentials/test.key
 
-/config/credentials/development.key
+# Ignore built assets
+/app/assets/builds/*
+!/app/assets/builds/.keep
