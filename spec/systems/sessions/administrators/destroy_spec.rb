@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Administrator', type: :system do
+RSpec.describe 'Sessions::Administrators#destroy', type: :system do
   before(:all) do
     @admin = Administrator.create(name: 'admin', password: 'password')
     WebauthnCredential.create(

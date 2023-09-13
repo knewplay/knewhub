@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Collections #show', type: :system do
+RSpec.describe 'Collections#show', type: :system do
   before(:all) do
     # Clone the GitHub repo containing the required files
     @repo = create(:repository, :real, name: 'markdown-templates')
@@ -11,6 +11,7 @@ RSpec.describe 'Collections #show', type: :system do
       end
     end
   end
+
   context 'repository is set to banned = false' do
     scenario 'displays Markdown text in HTML' do
       visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
@@ -32,7 +33,7 @@ RSpec.describe 'Collections #show', type: :system do
 
     scenario 'displays front matter' do
       visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
-      assert_selector 'h1', text: 'Non anser honore ornique'
+      assert_selector 'h2', text: 'Non anser honore ornique'
       assert_selector 'p', text: 'Written by The Author on 2023-12-31'
     end
   end

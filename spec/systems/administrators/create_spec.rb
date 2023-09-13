@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Administrator', type: :system do
+RSpec.describe 'Administrator#create', type: :system do
   scenario 'sign up with valid credentials' do
     before_count = Administrator.count
 

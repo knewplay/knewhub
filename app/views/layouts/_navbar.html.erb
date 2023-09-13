@@ -1,7 +1,7 @@
 <nav style="display: flex; justify-content: space-between;">
   <br />
 
-  <%= link_to 'KNEWHUB', root_path %>
+  <%= link_to image_tag(asset_path('logo.png'), style: 'height:40px; width:auto;' ), root_path %>
 
   <div class="nav--links" style="display: flex; gap: 10px;">
     <% if current_user %>

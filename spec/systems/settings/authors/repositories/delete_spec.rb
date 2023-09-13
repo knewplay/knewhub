@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Settings::AuthorSpace::Repositories#destroy', type: :system do
+RSpec.describe 'Settings::Authors::Repositories#destroy', type: :system do
   before(:all) do
     @repo = create(:repository)
     @directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'AuthorSpace::Repositories#update', type: :system do
+RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
   let(:repo) { create(:repository) }
   let(:author) { repo.author }
 

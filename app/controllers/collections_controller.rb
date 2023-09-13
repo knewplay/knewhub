@@ -1,6 +1,6 @@
 class CollectionsController < ApplicationController
   before_action :modify_view_path
-  layout 'collections_page'
+  layout 'collections'
 
   def show
     file_path = "#{params[:owner]}/#{params[:name]}/#{params[:path]}"

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'AuthorSpace::Repositories #index', type: :system do
+RSpec.describe 'Settings::Authors::Repositories#index', type: :system do
   let(:repo) { create(:repository) }
   let(:author) { repo.author }
   let(:repo_from_other_author) { create(:repository, :real) }

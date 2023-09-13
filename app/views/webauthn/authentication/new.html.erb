@@ -1,3 +1,5 @@
+<% content_for(:html_title) { 'Multi-factor authentication - Administrator sign in' } %>
+
 <h3>Use a multi-factor authentication method to sign in as <%= @administrator.name %></h1>
 
 <%= form_with(url: options_for_webauthn_authentication_path,

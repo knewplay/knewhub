@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Settings::AuthorSpace::Repositories#create', type: :system do
+RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
   context 'without using the Build process' do
     let(:author) { create(:author) }
 
@@ -9,7 +9,7 @@ RSpec.describe 'Settings::AuthorSpace::Repositories#create', type: :system do
         sign_in author.user
         page.set_rack_session(author_id: author.id)
         visit new_settings_author_repository_path
-        expect(page).to have_content('New Repository')
+        expect(page).to have_content('New repository')
 
         fill_in('Name', with: 'repo_name')
         fill_in('Title', with: 'Test Repo')
@@ -28,7 +28,7 @@ RSpec.describe 'Settings::AuthorSpace::Repositories#create', type: :system do
         sign_in author.user
         page.set_rack_session(author_id: author.id)
         visit new_settings_author_repository_path
-        expect(page).to have_content('New Repository')
+        expect(page).to have_content('New repository')
 
         fill_in('Name', with: 'repo_name')
         fill_in('Title', with: 'Test Repo')
@@ -48,7 +48,7 @@ RSpec.describe 'Settings::AuthorSpace::Repositories#create', type: :system do
         sign_in author.user
         page.set_rack_session(author_id: author.id)
         visit new_settings_author_repository_path
-        expect(page).to have_content('New Repository')
+        expect(page).to have_content('New repository')
 
         fill_in('Name', with: 'repo_name')
         fill_in('Title', with: 'Test Repo')
@@ -67,7 +67,6 @@ RSpec.describe 'Settings::AuthorSpace::Repositories#create', type: :system do
       page.set_rack_session(author_id: author.id)
 
       visit new_settings_author_repository_path
-      expect(page).to have_content('New Repository')
 
       fill_in('Name', with: 'test-repo')
       fill_in('Title', with: 'Test Repo')

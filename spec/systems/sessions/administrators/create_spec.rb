@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'webauthn/fake_client'
 
-RSpec.describe 'Administrator', type: :system do
+RSpec.describe 'Sessions::Administrators#create', type: :system do
   before(:all) do
     @admin = create(:administrator)
   end
@@ -9,7 +9,7 @@ RSpec.describe 'Administrator', type: :system do
   context 'sign in without multi-factor authentication' do
     scenario 'redirects to set up MFA' do
       visit new_sessions_administrator_path
-      expect(page).to have_content('Administrator Sign In')
+      expect(page).to have_content('Administrator sign in')
 
       fill_in('Name', with: 'admin')
       fill_in('Password', with: 'password')
@@ -17,7 +17,7 @@ RSpec.describe 'Administrator', type: :system do
       click_on 'Sign In'
 
       expect(page).to have_current_path(webauthn_credentials_path)
-      expect(page).to have_content('Multi-Factor Authentication')
+      expect(page).to have_content('Edit multi-factor authentication')
       expect(page).to have_button('Add')
     end
   end
@@ -38,7 +38,7 @@ RSpec.describe 'Administrator', type: :system do
 
     scenario 'asks for MFA' do
       visit new_sessions_administrator_path
-      expect(page).to have_content('Administrator Sign In')
+      expect(page).to have_content('Administrator sign in')
 
       fill_in('Name', with: 'admin')
       fill_in('Password', with: 'password')

@@ -1,4 +1,6 @@
-<h1><%= "#{current_author.name}'s Repositories"%></h1>
+<% content_for(:html_title) { 'Repositories - Settings' } %>
+
+<h1><%= "#{current_author.name}'s Repositories" %></h1>
 
 <table>
   <thead>

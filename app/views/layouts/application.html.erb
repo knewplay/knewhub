@@ -1,20 +1,36 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Knewhub</title>
+    <title>
+      <%= content_for?(:html_title) ? "#{yield(:html_title)} - Knewhub" : 'Knewhub' %>
+    </title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
   </head>
 
   <body>
     <%= render 'layouts/navbar' %>
     <%= render "layouts/flash" %>
     <div class="main">
-     <%= content_for?(:settings_layout) ? yield(:settings_layout) : yield %>
+      <% if content_for?(:settings_layout) %>
+        <%= yield(:settings_layout) %>
+      <% elsif content_for(:collections_layout) %>
+        <%= yield(:collections_layout) %>
+      <% else %>
+        <%= yield %>
+      <% end %>
     </div>
   </body>
 </html>

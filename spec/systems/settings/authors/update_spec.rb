@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Author#update', type: :system do
+RSpec.describe 'Settings::Author#update', type: :system do
   let(:author) { create(:author) }
 
   context 'when signed in as an author' do
@@ -28,7 +28,7 @@ RSpec.describe 'Author#update', type: :system do
       page.set_rack_session(author_id: author.id)
       visit edit_settings_author_path
 
-      expect(page).to have_content('Author Profile')
+      expect(page).to have_content('Author profile')
       fill_in('Name', with: 'a-new-name')
       click_on 'Update Author'
 
@@ -43,7 +43,7 @@ RSpec.describe 'Author#update', type: :system do
       page.set_rack_session(author_id: author.id)
       visit edit_settings_author_path
 
-      expect(page).to have_content('Author Profile')
+      expect(page).to have_content('Author profile')
       fill_in('Name', with: 'invalid_name')
       click_on 'Update Author'
 
