@@ -2,21 +2,23 @@
 
 <h2>New Administrator</h2>
 
-<%= form_with model: @administrator do |f| %>
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name, required: true, autofocus: true %>
-  </div>
+<div class="form-block">
+  <%= form_with model: @administrator do |f| %>
+    <div>
+      <%= f.label :name %>
+      <%= f.text_field :name, required: true, autofocus: true %>
+    </div>
 
-  <div>
-    <%= f.label :password %>
-    <%= f.password_field :password, required: true %>
-  </div>
+    <div>
+      <%= f.label :password %>
+      <%= f.password_field :password, required: true %>
+    </div>
 
-  <div>
-    <%= f.label :password_confirmation %>
-    <%= f.password_field :password_confirmation, required: true %>
-  </div>
+    <div>
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation, required: true %>
+    </div>
 
-  <%= f.submit "Sign Up" %>
-<% end %>
+    <%= f.submit "Sign Up" %>
+  <% end %>
+</div>

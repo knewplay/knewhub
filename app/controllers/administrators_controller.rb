@@ -9,9 +9,9 @@ class AdministratorsController < ApplicationController
     @administrator = Administrator.new(administrator_params)
 
     if @administrator.save
-      redirect_to root_path, notice: 'Signed up successfully.'
+      redirect_to root_path, notice: 'Administrator account successfully created.'
     else
-      redirect_to root_path, alert: 'Sign up failed.'
+      redirect_to root_path, alert: 'Creation of administrator account failed.'
     end
   end
 

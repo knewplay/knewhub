@@ -13,7 +13,7 @@ RSpec.describe 'Administrator#create', type: :system do
 
     click_on 'Sign Up'
 
-    expect(page).to have_content('Signed up successfully.')
+    expect(page).to have_content('Administrator account successfully created.')
     expect(Administrator.count).to eq(before_count + 1)
   end
 
@@ -29,7 +29,7 @@ RSpec.describe 'Administrator#create', type: :system do
 
     click_on 'Sign Up'
 
-    expect(page).to have_content('Sign up failed.')
+    expect(page).to have_content('Creation of administrator account failed.')
     expect(Administrator.count).to eq(before_count)
   end
 

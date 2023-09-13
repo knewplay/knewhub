@@ -14,7 +14,8 @@ module AdministratorAuthentication
     def require_multi_factor_authentication
       return if current_administrator.multi_factor_enabled?
 
-      redirect_to webauthn_credentials_path
+      redirect_to webauthn_credentials_path,
+                  alert: 'A multi-factor authentication method must be added before proceeding to the dashboard.'
     end
 
     def current_administrator
