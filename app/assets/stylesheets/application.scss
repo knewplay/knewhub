@@ -1,1 +1,4 @@
-@use "milligram";
+@import "milligram";
+
+@import "layout/Main";
+@import "components/Nav";

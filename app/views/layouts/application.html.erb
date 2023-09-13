@@ -22,8 +22,8 @@
 
   <body>
     <%= render 'shared/navbar' %>
-    <%= render "shared/flash" %>
     <div class="main">
+      <%= render 'shared/flash' %>
       <% if content_for?(:settings_layout) %>
         <%= yield(:settings_layout) %>
       <% elsif content_for(:collections_layout) %>

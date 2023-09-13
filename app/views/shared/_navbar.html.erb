@@ -1,9 +1,9 @@
-<nav style="display: flex; justify-content: space-between;">
+<nav class="nav"> 
   <br />
 
-  <%= link_to image_tag(asset_path('logo.png'), style: 'height:40px; width:auto;' ), root_path %>
+  <%= link_to image_tag(asset_path('logo.png'), align: 'middle', class: 'nav__logo' ), root_path %>
 
-  <div class="nav--links" style="display: flex; gap: 10px;">
+  <div class="nav__right">
     <% if current_user %>
       <%= link_to 'Settings', settings_root_path %>
       <%= button_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo: false } %>
