@@ -1,0 +1,31 @@
+// sidebar
+
+.sidebar
+  &__section
+    &__header
+      margin-bottom: .6rem
+      font-size: 1.4rem
+      font-weight: bold
+      color: $color-quinary
+
+  & li
+    list-style: none
+    pointer-events: none
+    padding: .4rem
+
+    &:hover
+      background-color: $color-quaternary
+      border-radius: .4rem
+
+    & a
+      display: inline-block
+      width: 100%
+      pointer-events: auto
+
+  & hr
+    margin: 1.2rem 0
+  
+  // Reset spacing set in Milligram/Spacing
+  & ul,
+  li
+    margin-bottom: 0

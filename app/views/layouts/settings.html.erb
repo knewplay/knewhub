@@ -1,29 +1,40 @@
 <% content_for :settings_layout do %>
-  <header>
-    <%= current_user.email %>
-  </header>
+  <div class="settings">
+    <div class="settings__grid">
+      <header class="settings__header">
+        User: <%= current_user.email %>
+      </header>
 
-  <div class="container" style="display: flex; gap: 10px;">
-    <div class="sidebar">
-      <%= link_to 'Account', settings_account_path %>
-      <p>___________<p>
-      <h4>Author</h4>
+      <nav class="settings__sidebar sidebar">
+        <div class="sidebar__section">
+          <ul>
+            <li class="settings__sidebar__list-item"><%= link_to 'Account', settings_account_path %></li>
+          </ul>
+        </div>
 
-      <% if current_user.author.nil? %>
-        <%= link_to 'Enable', settings_enable_author_path %>
-      <% else %>
-        <% if current_author %>
-          <div><%= link_to 'Profile', edit_settings_author_path %></div>
-          <div><%= link_to 'Repositories', settings_author_repositories_path %></div>
-          <p>Logged in as <%= current_author.name %><p>
-        <% else %>
-          <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
-        <% end %>
-      <% end %>
-    </div>
+        <hr/>
 
-    <div class="main-content">
-      <%= yield %>
+        <div class="sidebar__section">
+          <h6 class="sidebar__section__header">Author</h6>
+          <ul>
+            <% if current_user.author.nil? %>
+              <li><%= link_to 'Enable', settings_enable_author_path %></li>
+            <% else %>
+              <% if current_author %>
+                <li>Logged in as <%= current_author.name %></li>
+                <li><%= link_to 'Profile', edit_settings_author_path %></li>
+                <li><%= link_to 'Repositories', settings_author_repositories_path %></li>
+              <% else %>
+                <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="settings__main-content">
+        <%= yield %>
+      </div>
     </div>
   </div>
 <% end %>
