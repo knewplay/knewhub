@@ -11,7 +11,7 @@ class CustomRender < Redcarpet::Render::HTML
     if (t = text.match(/(\[codefile )(.+)(\])/))
       process_codefile(t[2])
     else
-      text
+      "<p>#{text}</p>"
     end
   end
 
