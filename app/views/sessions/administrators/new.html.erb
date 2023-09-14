@@ -6,12 +6,12 @@
   <%= form_with url: sessions_administrator_path do |f| %>
     <div>
       <%= f.label :name %>
-      <%= f.text_field :name, required: true, autofocus: true %>
+      <%= f.text_field :name, required: true, autofocus: true, autocomplete: "username" %>
     </div>
 
     <div>
       <%= f.label :password %>
-      <%= f.password_field :password, required: true %>
+      <%= f.password_field :password, required: true, autocomplete: "current-password" %>
     </div>
 
 

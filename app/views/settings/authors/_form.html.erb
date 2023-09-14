@@ -2,8 +2,8 @@
   <%= render 'shared/form_errors', resource: author if author.errors.any? %>
 
   <div>
-    <%= form.label :name, 'Name' %>
-    <%= form.text_field :name %>
+    <%= form.label :name, 'Name'%>
+    <%= form.text_field :name, required: true %>
   </div>
   
   <div>
