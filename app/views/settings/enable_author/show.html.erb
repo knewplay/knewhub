@@ -1,6 +1,8 @@
 <% content_for(:html_title) { 'Become an author - Settings' } %>
 
-<h3>Share your knowledge by becoming an author on KNEWHUB.</h3>
-<p>You will be able to share content from your GitHub repositories after clicking the link below.</p>
-
-<%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
+<div class="form-block">
+  <h3>Share your knowledge by becoming an author on KNEWHUB.</h3>
+  <p>You will be able to share content from your GitHub repositories after clicking the link below.</p>
+  
+  <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
+</div>
