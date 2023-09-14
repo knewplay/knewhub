@@ -23,15 +23,17 @@
 
   <body>
     <%= render 'shared/navbar' %>
-    <div class="main">
-      <%= render 'shared/flash' %>
-      <% if content_for?(:settings_layout) %>
-        <%= yield(:settings_layout) %>
-      <% elsif content_for(:collections_layout) %>
-        <%= yield(:collections_layout) %>
-      <% else %>
-        <%= yield %>
-      <% end %>
-    </div>
+    <main>
+      <div class="container">
+        <%= render 'shared/flash' %>
+        <% if content_for?(:settings_layout) %>
+          <%= yield(:settings_layout) %>
+        <% elsif content_for(:collections_layout) %>
+          <%= yield(:collections_layout) %>
+        <% else %>
+          <%= yield %>
+        <% end %>
+      </div>
+    </main>
   </body>
 </html>

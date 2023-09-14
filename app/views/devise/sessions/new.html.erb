@@ -1,6 +1,6 @@
-<div class="new-user-session">
-  <% content_for(:html_title) { 'User sign in' } %>
+<% content_for(:html_title) { 'User sign in' } %>
 
+<div class="new-user-session">
   <div class="form-block new-user-session__form-block">
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="field">
