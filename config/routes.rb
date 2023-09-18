@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get 'collections/:owner/:name/pages/index', to: 'collections#index'
   get 'collections/:owner/:name/pages/*path', to: 'collections#show'
 
-  # Sign up and sessions
+  # Account creation and sessions
   devise_for :users, controllers: {
     confirmations: 'users/confirmations',
     registrations: 'users/registrations',
