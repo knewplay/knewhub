@@ -1,3 +1,7 @@
-<h1>HOME</h1>
-
-<%= link_to 'Dashboard', dashboard_root_path %>
+<div class="home">
+  <%= image_tag(asset_path('poster.jpg'), alt: 'KNEWPLAY poster with a VEX robot', class: 'home__poster') %>
+  
+  <footer>
+    <p>Built by <%= link_to 'KNEWPLAY', 'https://github.com/knewplay' %> - 2023</p>
+  </footer>
+</div>
