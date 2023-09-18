@@ -29,7 +29,7 @@ RSpec.describe 'Settings::Authors::Repositories#index', type: :system do
       visit settings_author_repositories_path
 
       expect(page).to have_current_path(root_path)
-      expect(page).to have_content('Please sign in with GitHub.')
+      expect(page).to have_content('Please log in with GitHub.')
     end
   end
 end

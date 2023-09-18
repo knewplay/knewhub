@@ -13,7 +13,7 @@ RSpec.describe 'Sessions::Authors#destroy', type: :system do
       click_on 'Logout'
 
       visit settings_author_repositories_path
-      expect(page).to have_content('Please sign in with GitHub.')
+      expect(page).to have_content('Please log in with GitHub.')
     end
   end
 end

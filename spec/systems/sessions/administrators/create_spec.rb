@@ -6,15 +6,15 @@ RSpec.describe 'Sessions::Administrators#create', type: :system do
     @admin = create(:administrator)
   end
 
-  context 'sign in without multi-factor authentication' do
+  context 'login without multi-factor authentication' do
     scenario 'redirects to set up MFA' do
       visit new_sessions_administrator_path
-      expect(page).to have_content('Administrator sign in')
+      expect(page).to have_content('Administrator login')
 
       fill_in('Name', with: 'admin')
       fill_in('Password', with: 'password')
 
-      click_on 'Sign In'
+      click_on 'Log in'
 
       expect(page).to have_current_path(webauthn_credentials_path)
       expect(page).to have_content('Edit multi-factor authentication')
@@ -22,7 +22,7 @@ RSpec.describe 'Sessions::Administrators#create', type: :system do
     end
   end
 
-  context 'sign in with multi-factor authentication' do
+  context 'login with multi-factor authentication' do
     before do
       @admin.update(webauthn_id: WebAuthn.generate_user_id)
       fake_client = WebAuthn::FakeClient.new('http://localhost:3030')
@@ -38,36 +38,36 @@ RSpec.describe 'Sessions::Administrators#create', type: :system do
 
     scenario 'asks for MFA' do
       visit new_sessions_administrator_path
-      expect(page).to have_content('Administrator sign in')
+      expect(page).to have_content('Administrator login')
 
       fill_in('Name', with: 'admin')
       fill_in('Password', with: 'password')
 
-      click_on 'Sign In'
+      click_on 'Log in'
 
       expect(page).to have_button('Authenticate')
     end
   end
 
-  scenario 'sign in fails with wrong username' do
+  scenario 'login fails with wrong username' do
     visit new_sessions_administrator_path
 
     fill_in('Name', with: 'other')
     fill_in('Password', with: 'password')
 
-    click_on 'Sign In'
+    click_on 'Log in'
 
-    expect(page).to have_content('Sign in failed. Please verify your username and password.')
+    expect(page).to have_content('Login failed. Please verify your username and password.')
   end
 
-  scenario 'sign in fails with wrong password' do
+  scenario 'login fails with wrong password' do
     visit new_sessions_administrator_path
 
     fill_in('Name', with: 'admin')
     fill_in('Password', with: 'password-typo')
 
-    click_on 'Sign In'
+    click_on 'Log in'
 
-    expect(page).to have_content('Sign in failed. Please verify your username and password.')
+    expect(page).to have_content('Login failed. Please verify your username and password.')
   end
 end

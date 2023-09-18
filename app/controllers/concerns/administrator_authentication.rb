@@ -8,7 +8,7 @@ module AdministratorAuthentication
     def require_administrator_authentication
       return if administrator_signed_in?
 
-      redirect_to new_sessions_administrator_path, alert: 'Please sign in as an administrator.'
+      redirect_to new_sessions_administrator_path, alert: 'Please log in as an administrator.'
     end
 
     def require_multi_factor_authentication

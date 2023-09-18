@@ -19,7 +19,7 @@ RSpec.describe 'Sessions::Authors#create', type: :system do
       visit settings_root_path
 
       expect(page).to have_current_path(new_user_session_path)
-      expect(page).to have_content('You need to sign in or sign up before continuing.')
+      expect(page).to have_content('You need to log in or sign up before continuing.')
     end
   end
 end
