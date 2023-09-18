@@ -4,19 +4,19 @@
 
 <div class="form-block">
   <%= form_with model: @administrator do |f| %>
-    <div>
-      <%= f.label :name %>
+    <div class="form-field">
       <%= f.text_field :name, required: true, autofocus: true %>
+      <%= f.label :name %>
     </div>
 
-    <div>
-      <%= f.label :password %>
+    <div class="form-field">
       <%= f.password_field :password, required: true %>
+      <%= f.label :password %>
     </div>
 
-    <div>
-      <%= f.label :password_confirmation %>
+    <div class="form-field">
       <%= f.password_field :password_confirmation, required: true %>
+      <%= f.label :password_confirmation %>
     </div>
 
     <%= f.submit "Create account" %>

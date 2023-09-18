@@ -6,9 +6,9 @@
   <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
-    <div class="field">
-      <%= f.label :email %><br />
+    <div class="form-field">
       <%= f.email_field :email, autofocus: true, autocomplete: "email", required: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+      <%= f.label :email %><br />
     </div>
 
     <div class="actions">

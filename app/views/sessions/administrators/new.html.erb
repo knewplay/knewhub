@@ -4,16 +4,15 @@
 
 <div class="form-block">
   <%= form_with url: sessions_administrator_path do |f| %>
-    <div>
-      <%= f.label :name %>
+    <div class="form-field">
       <%= f.text_field :name, required: true, autofocus: true, autocomplete: "username" %>
+      <%= f.label :name %>
     </div>
 
-    <div>
-      <%= f.label :password %>
+    <div class="form-field">
       <%= f.password_field :password, required: true, autocomplete: "current-password" %>
+      <%= f.label :password %>
     </div>
-
 
     <%= f.submit "Log in" %>
   <% end %>

@@ -1,12 +1,10 @@
 <%= form_with(model: [:settings, author]) do |form| %>
   <%= render 'shared/form_errors', resource: author if author.errors.any? %>
 
-  <div>
-    <%= form.label :name, 'Name'%>
+  <div class="form-field">
     <%= form.text_field :name, required: true %>
+    <%= form.label :name, 'Name'%>
   </div>
-  
-  <div>
-    <%= form.submit %>
-  </div>
+
+  <%= form.submit %>
 <% end %>

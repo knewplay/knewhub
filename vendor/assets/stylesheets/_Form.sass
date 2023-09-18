@@ -2,6 +2,17 @@
 // Form
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
+// Default modified to have labels move up as input is entered by the user
+
+.form-field
+  display: flex
+  flex-direction: column
+  position: relative
+  padding-top: 1.5rem
+
+  & + .form-field
+    margin-top: 1rem
+
 input[type='color'],
 input[type='date'],
 input[type='datetime'],
@@ -20,17 +31,29 @@ textarea,
 select
   -webkit-appearance: none // sass-lint:disable-line no-vendor-prefixes
   background-color: transparent
-  border: .1rem solid $color-quaternary
-  border-radius: .4rem
+  border: 0
+  z-index: 1
+  border-bottom: 2px solid $color-quaternary
   box-shadow: none
   box-sizing: inherit // Forced to replace inherit values of the normalize.css
   height: 3.8rem
-  padding: .6rem 1.0rem .7rem // This vertically centers text on FF, ignored by Webkit
+  padding: .25rem 0
   width: 100%
+  font-size: 100%
 
-  &:focus
-    border-color: $color-primary
+  &:focus, &:valid
     outline: 0
+    border-bottom-color: $color-primary
+    & + label
+      color: $color-primary
+      transform: translateY(-1.5rem)
+
+  &:user-invalid
+    outline: 0
+    border-bottom-color: $color-alert
+    & + label
+      color: $color-alert
+      transform: translateY(-1.5rem)
 
 select
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 8" width="30"><path fill="%23' + str-slice(inspect($color-quaternary), 2) + '" d="M0,0l6,8l6-8"/></svg>') center right no-repeat
@@ -48,10 +71,10 @@ textarea
 
 label,
 legend
-  display: block
-  font-size: 1.6rem
-  font-weight: 700
-  margin-bottom: .5rem
+  color: $color-quinary
+  position: absolute
+  top: 1.5rem
+  transition: .25s ease
 
 fieldset
   border-width: 0
