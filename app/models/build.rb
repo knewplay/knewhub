@@ -17,7 +17,6 @@ class Build < ApplicationRecord
   # `latest_log` is passed as an argument when using the `after_add` callback
   # But it is not required
   def verify_complete(_latest_log = nil)
-    max_log_count = COMPLETE_MATRIX[action.to_sym]
     return unless no_failures? && logs.count == max_log_count
 
     update(status: 'Complete', completed_at: DateTime.current)
@@ -37,5 +36,9 @@ class Build < ApplicationRecord
 
   def repository_author
     repository.author.name
+  end
+
+  def max_log_count
+    COMPLETE_MATRIX[action.to_sym]
   end
 end
