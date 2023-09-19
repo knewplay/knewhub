@@ -10,7 +10,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       page.set_rack_session(author_id: author.id)
 
       visit edit_settings_author_repository_path(repo.id)
-      expect(page).to have_content("Edit Repository ##{repo.id}")
+      expect(page).to have_content('Edit Repository')
 
       fill_in('Name', with: 'a_new_name')
       click_on 'Update Repository'
@@ -27,7 +27,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       page.set_rack_session(author_id: author.id)
 
       visit edit_settings_author_repository_path(repo.id)
-      expect(page).to have_content("Edit Repository ##{repo.id}")
+      expect(page).to have_content('Edit Repository')
 
       fill_in('Branch', with: 'other_branch')
       click_on 'Update Repository'
@@ -104,7 +104,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       page.set_rack_session(author_id: author.id)
 
       visit edit_settings_author_repository_path(repo.id)
-      expect(page).to have_content("Edit Repository ##{repo.id}")
+      expect(page).to have_content('Edit Repository')
 
       fill_in('Branch', with: 'invalid!branch')
       click_on 'Update Repository'

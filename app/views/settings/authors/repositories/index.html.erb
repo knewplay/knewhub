@@ -10,21 +10,26 @@
           <div class="index-repositories__card__line">
             ID: <%= repository.id %>
           </div>
+
           <div class="index-repositories__card__line">
             Name: <%= repository.name %>
           </div>
+
           <div class="index-repositories__card__line">
             Title: <%= repository.title %>
           </div>
+
           <div class="index-repositories__card__line">
             Branch:
             <span class="index-repositories__card__branch"><%= repository.branch %></span>
           </div>
+
           <div class="index-repositories__card__line">
             Last pull at:
             <span class="index-repositories__card__last-pull-at"><%= repository.last_pull_at %></span>
           </div>
         </div>
+        
         <div class="index-repositories__card__actions">
           <%= link_to 'View',
                       "/collections/#{repository.author.github_username}/#{repository.name}/pages/index",

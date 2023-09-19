@@ -1,20 +1,19 @@
-<% content_for(:html_title) { "Edit Repository ##{@repository.id} - Settings" } %>
+<% content_for(:html_title) { "Edit Repository - Settings" } %>
 
 <div class="edit-repository form-block">
-  <h1><%= "Edit Repository ##{@repository.id}" %></h1>
-  
-  <div class="edit-repository__actions">
-    <%= button_to 'Rebuild Repository', repository_path(@repository), method: :patch %>
+  <div class="edit-repository__header">
+    <h1><%= "Edit Repository" %></h1>
+   
     <%= button_to 'Delete Repository',
-                   settings_author_repository_path(@repository),
-                   method: :delete,
-                   form: { data: { turbo_confirm: 'Are you sure?' } } %>
+                    settings_author_repository_path(@repository),
+                    method: :delete,
+                    form: { data: { turbo_confirm: 'Are you sure?' } },
+                    class: 'edit-author-repository__button' %>
   </div>
-  
-  <hr />
   
   <%= render 'edit_form', repository: @repository %>
   
   <br />
+  <%= button_to 'Rebuild repository (pull from GitHub)', repository_path(@repository), method: :patch, class: 'link' %>
   <%= link_to 'Back to repositories', settings_author_repositories_path %>
 </div>
