@@ -30,7 +30,7 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
       page.set_rack_session(author_id: author.id)
 
       visit settings_author_repository_builds_path(build.id)
-      expect(page).to have_content("In progress (1/#{build.max_log_count})")
+      expect(page).to have_content("In progress (steps: 1/#{build.max_log_count})")
     end
   end
 

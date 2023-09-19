@@ -10,8 +10,7 @@
         <p>
           Status:
           <%= build_status_icon(build) %>
-          <%= "#{build.status}" %>
-          <%= "(#{log_tally(build)})" if build.status == 'In progress' %>
+          <%= "#{build.status} (steps: #{log_tally(build)})" %>
         </p>
         <p>Created at: <%= build.created_at %></p>
         <p>Completed at: <%= build.completed_at %></p>

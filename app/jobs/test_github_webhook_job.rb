@@ -11,8 +11,7 @@ class TestGithubWebhookJob
       build.logs.create(content: 'GitHub webhook successfully tested.')
     else
       build.logs.create(
-        content: "Test of GitHub webhook failed for repository ##{repository.id}. "\
-                 "Message: #{response.last_response.message}",
+        content: "Test of GitHub webhook failed. Message: #{response.last_response.message}",
         failure: true
       )
     end

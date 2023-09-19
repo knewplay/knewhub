@@ -27,7 +27,7 @@ class RespondWebhookPushJob
       CreateRepoIndexJob.perform_async(repository.id, build.id)
     end
   rescue Git::FailedError => e
-    Rails.logger.error "Failed to clone or pull repository ##{repository.name}. Message: #{e.message}"
+    Rails.logger.error "Failed to clone or pull repository. Message: #{e.message}"
   end
 
   def update_repository(repository, build, webhook_name, webhook_owner)
