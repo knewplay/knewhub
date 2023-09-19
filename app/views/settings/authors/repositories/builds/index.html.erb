@@ -8,7 +8,9 @@
       <div class="index-builds__text">
         <p>Action: <%= build.action %></p>
         <p>
-          Status: <%= "#{build.status}" %>
+          Status:
+          <%= build_status_icon(build) %>
+          <%= "#{build.status}" %>
           <%= "(#{log_tally(build)})" if build.status == 'In progress' %>
         </p>
         <p>Created at: <%= build.created_at %></p>

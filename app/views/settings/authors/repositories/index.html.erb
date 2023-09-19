@@ -25,7 +25,10 @@
           </div>
           
           <div class="index-repositories__card__line">
-            Last build: <%= build_information(repository.builds.last) %>
+            Last build: 
+            <%= build_status_icon(repository.builds.last) %>
+            <span class="sr-only"><%= repository.builds.last&.status %></span>
+            <%= build_information(repository.builds.last) %>
           </div>
         </div>
         

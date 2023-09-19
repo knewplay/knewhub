@@ -14,7 +14,7 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
       visit settings_author_repository_builds_path(build.id)
       expect(page).to have_content("Repository '#{repo.title}'")
       expect(page).to have_content("Action: #{build.action}")
-      expect(page).to have_content("Status: #{build.status}")
+      expect(page).to have_content(build.status)
     end
 
     scenario 'displays logs content' do
@@ -30,7 +30,7 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
       page.set_rack_session(author_id: author.id)
 
       visit settings_author_repository_builds_path(build.id)
-      expect(page).to have_content("Status: In progress (1/#{build.max_log_count})")
+      expect(page).to have_content("In progress (1/#{build.max_log_count})")
     end
   end
 
