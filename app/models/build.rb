@@ -1,6 +1,6 @@
 class Build < ApplicationRecord
   belongs_to :repository
-  has_many :logs, dependent: :destroy, after_add: :verify_complete
+  has_many :logs, dependent: :destroy, after_add: %i[verify_complete verify_failed]
 
   validates :status, presence: true
   validates :action, presence: true
@@ -25,6 +25,10 @@ class Build < ApplicationRecord
 
   def no_failures?
     logs.none? { |log| log.failure == true }
+  end
+
+  def verify_failed(_latest_log = nil)
+    update(status: 'Failed', completed_at: DateTime.current) if logs.any? { |log| log.failure == true }
   end
 
   def repository_name
