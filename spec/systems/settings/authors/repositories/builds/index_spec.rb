@@ -11,7 +11,7 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
       sign_in author.user
       page.set_rack_session(author_id: author.id)
 
-      visit settings_author_repository_builds_path(build.id)
+      visit settings_author_repository_builds_path(repo.id)
       expect(page).to have_content("Repository '#{repo.title}'")
       expect(page).to have_content("Action: #{build.action}")
       expect(page).to have_content(build.status)
@@ -21,7 +21,7 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
       sign_in author.user
       page.set_rack_session(author_id: author.id)
 
-      visit settings_author_repository_builds_path(build.id)
+      visit settings_author_repository_builds_path(repo.id)
       expect(page).to have_content(log.content)
     end
 
@@ -29,14 +29,14 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
       sign_in author.user
       page.set_rack_session(author_id: author.id)
 
-      visit settings_author_repository_builds_path(build.id)
+      visit settings_author_repository_builds_path(repo.id)
       expect(page).to have_content("In progress (steps: 1/#{build.max_log_count})")
     end
   end
 
   context 'when not logged in as an author' do
     scenario 'redirects to root path' do
-      visit settings_author_repository_builds_path(build.id)
+      visit settings_author_repository_builds_path(repo.id)
 
       expect(page).to have_current_path(root_path)
       expect(page).to have_content('Please log in with GitHub.')
