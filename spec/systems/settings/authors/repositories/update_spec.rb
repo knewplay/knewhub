@@ -15,7 +15,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       fill_in('Name', with: 'a_new_name')
       click_on 'Update Repository'
 
-      expect(page).to have_content('Repository was successfully updated.')
+      expect(page).to have_content('Repository update process was initiated.')
       expect(page).to have_content('a_new_name')
 
       repo.reload
@@ -32,7 +32,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       fill_in('Branch', with: 'other_branch')
       click_on 'Update Repository'
 
-      expect(page).to have_content('Repository was successfully updated.')
+      expect(page).to have_content('Repository update process was initiated.')
 
       repo.reload
       expect(repo.branch).to eq('other_branch')

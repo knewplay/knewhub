@@ -20,7 +20,8 @@ module Settings
           build = Build.create(repository: @repository, status: 'In progress', action: 'create')
           CreateGithubWebhookJob.perform_async(@repository.id, build.id)
           CloneGithubRepoJob.perform_async(@repository.id, build.id)
-          redirect_to settings_author_repositories_path, notice: 'Repository was successfully created.'
+          redirect_to settings_author_repositories_path,
+                      notice: 'Repository creation process was initiated. Check Builds for progress and details.'
         else
           render :new, status: :unprocessable_entity
         end
@@ -43,7 +44,8 @@ module Settings
           else
             PullGithubRepoJob.perform_async(@repository.id, build.id)
           end
-          redirect_to settings_author_repositories_path, notice: 'Repository was successfully updated.'
+          redirect_to settings_author_repositories_path,
+                      notice: 'Repository update process was initiated. Check Builds for progress and details.'
         else
           render :edit, status: :unprocessable_entity
         end
