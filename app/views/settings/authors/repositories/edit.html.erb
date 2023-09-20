@@ -1,9 +1,9 @@
 <% content_for(:html_title) { "Edit Repository ##{@repository.id} - Settings" } %>
 
-<div class="edit-author-repository form-block">
+<div class="edit-repository form-block">
   <h1><%= "Edit Repository ##{@repository.id}" %></h1>
   
-  <div class="edit-author-repository__actions">
+  <div class="edit-repository__actions">
     <%= button_to 'Rebuild Repository', repository_path(@repository), method: :patch %>
     <%= button_to 'Delete Repository',
                    settings_author_repository_path(@repository),
