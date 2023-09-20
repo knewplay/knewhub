@@ -5,6 +5,14 @@ class Build < ApplicationRecord
   validates :status, presence: true
   validates :action, presence: true
 
+  def repository_name
+    repository.name
+  end
+
+  def repository_author
+    repository.author.name
+  end
+
   # { action: logs.count }
   COMPLETE_MATRIX = {
     create: 5,
@@ -28,14 +36,6 @@ class Build < ApplicationRecord
 
   def verify_failed(_latest_log = nil)
     update(status: 'Failed', completed_at: DateTime.current) if logs.any? { |log| log.failure == true }
-  end
-
-  def repository_name
-    repository.name
-  end
-
-  def repository_author
-    repository.author.name
   end
 
   def max_log_count

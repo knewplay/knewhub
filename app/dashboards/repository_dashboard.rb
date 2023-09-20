@@ -13,7 +13,9 @@ class RepositoryDashboard < Administrate::BaseDashboard
     token: Field::Password,
     uuid: Field::String,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime
+    updated_at: Field::DateTime,
+    last_build_created_at: Field::DateTime,
+    last_build_status: Field::String
   }.freeze
 
   # Attributes that will be displayed on the model's index page.
@@ -23,34 +25,18 @@ class RepositoryDashboard < Administrate::BaseDashboard
     name
     title
     branch
-    last_pull_at
+    last_build_created_at
+    last_build_status
   ].freeze
 
   # Attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = %i[
-    author
-    name
-    title
-    branch
-    description
-    last_pull_at
-    updated_at
-  ].freeze
+  SHOW_PAGE_ATTRIBUTES = %i[].freeze
 
   # Attributes that will be displayed on the model's form new page.
-  FORM_ATTRIBUTES_NEW = %i[
-    name
-    title
-    branch
-    token
-  ].freeze
+  FORM_ATTRIBUTES_NEW = %i[].freeze
 
   # Attributes that will be displayed on the model's form edit page.
-  FORM_ATTRIBUTES_EDIT = %i[
-    name
-    title
-    branch
-  ].freeze
+  FORM_ATTRIBUTES_EDIT = %i[].freeze
 
   # Filters that can be used while searching via the search field of the dashboard.
   COLLECTION_FILTERS = {}.freeze
