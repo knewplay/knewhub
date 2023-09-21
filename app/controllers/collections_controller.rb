@@ -49,7 +49,7 @@ class CollectionsController < ApplicationController
   end
 
   def render_not_found
-    render 'errors/not_found', layout: 'application', status: :not_found
+    render 'errors/not_found', layout: 'errors', status: :not_found
   end
 
   def extract_front_matter(file_path)
