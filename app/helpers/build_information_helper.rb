@@ -11,14 +11,18 @@ module BuildInformationHelper
     "#{build.logs.count}/#{build.max_log_count}"
   end
 
-  def build_status_icon(build, options = {})
+  def build_status_icon(build)
     return if build.nil?
 
-    options[:title] = build.status
-    options[:'aria-hidden'] = true
-    options[:class] = 'icon'
-    path = "icons/builds/#{build.status.parameterize(separator: '_')}.png"
+    attributes = "aria-hidden='true' title='#{build.status}"
 
-    image_tag(asset_path(path), options)
+    case build.status
+    when 'Complete'
+      "<i class='fa-regular fa-circle-check' style='color: #4ea832;' #{attributes}'></i>".html_safe
+    when 'Failed'
+      "<i class='fa-regular fa-circle-xmark' style='color: #c23434;' #{attributes}'></i>".html_safe
+    when 'In progress'
+      "<i class='fa-solid fa-spinner fa-spin' #{attributes}'></i>".html_safe
+    end
   end
 end
