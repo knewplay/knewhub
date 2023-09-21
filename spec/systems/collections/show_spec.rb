@@ -33,8 +33,8 @@ RSpec.describe 'Collections#show', type: :system do
 
     scenario 'displays front matter' do
       visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
-      assert_selector 'h2', text: 'Non anser honore ornique'
-      assert_selector 'p', text: 'Written by The Author on 2023-12-31'
+      expect(page).to have_content('Non anser honore ornique')
+      expect(page).to have_content('Written by The Author on 2023-12-31')
     end
   end
 

@@ -1,9 +1,13 @@
 <% content_for(:html_title) { @front_matter['title'] } %>
 
 <% content_for :collections_layout do %>
-  <h2><%= @front_matter['title'] %></h2>
-  <p>Written by <%= @front_matter['author'] %> on <%= @front_matter['date'] %></p>
-  <%= yield %>
+  <div class="collections">
+    <h1><%= @front_matter['title'] %></h1>
+    <h5>Written by <%= @front_matter['author'] %> on <%= @front_matter['date'] %></h5>
+
+    <hr />
+    <%= yield %>
+  </div>
 <% end %>
 
 <%= render template: 'layouts/application' %>

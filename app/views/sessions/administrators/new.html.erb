@@ -1,18 +1,19 @@
-<% content_for(:html_title) { 'Administrator sign in' } %>
+<% content_for(:html_title) { 'Administrator login' } %>
 
-<h2>Administrator sign in</h2>
+<h2>Administrator login</h2>
 
-<%= form_with url: sessions_administrator_path do |f| %>
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name, required: true, autofocus: true %>
-  </div>
+<div class="form-block">
+  <%= form_with url: sessions_administrator_path do |f| %>
+    <div class="form-field">
+      <%= f.text_field :name, required: true, autofocus: true, autocomplete: "username" %>
+      <%= f.label :name %>
+    </div>
 
-  <div>
-    <%= f.label :password %>
-    <%= f.password_field :password, required: true %>
-  </div>
+    <div class="form-field">
+      <%= f.password_field :password, required: true, autocomplete: "current-password" %>
+      <%= f.label :password %>
+    </div>
 
-
-  <%= f.submit "Sign In" %>
-<% end %>
+    <%= f.submit "Log in" %>
+  <% end %>
+</div>

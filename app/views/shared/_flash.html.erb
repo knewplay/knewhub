@@ -1,0 +1,7 @@
+<div class="flash">
+  <% flash.each do |flash_type, message| %>
+    <div class="flash__message flash--<%= flash_type %>" aria-live="polite">
+      <%= message %>
+    </div>
+  <% end %>
+</div>

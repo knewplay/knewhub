@@ -1,23 +1,20 @@
 <%= form_with(model: repository, url: settings_author_repository_path(repository)) do |form| %>
-  <%= render 'layouts/form_errors', resource: repository if repository.errors.any? %>
+  <%= render 'shared/form_errors', resource: repository if repository.errors.any? %>
 
-  <div>
-    <%= form.label :name, 'Name' %>
+  <div class="form-field">
     <%= form.text_field :name, required: true %>
+    <%= form.label :name, 'Name' %>
   </div>
   
-  <div>
-    <%= form.label :title, 'Title' %>
+  <div class="form-field">
     <%= form.text_field :title, required: true %>
+    <%= form.label :title, 'Title' %>
   </div>
 
-  <div>
-    <%= form.label :branch, 'Branch' %>
+  <div class="form-field">
     <%= form.text_field :branch, required: true %>
+    <%= form.label :branch, 'Branch' %>
   </div>
 
-  <br />
-  <div>
-    <%= form.submit %>
-  </div>
+  <%= form.submit %>
 <% end %>

@@ -16,7 +16,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         fill_in('Token', with: 'ghp_abcde12345')
         click_on 'Create Repository'
 
-        expect(page).to have_content('Repository was successfully created.')
+        expect(page).to have_content('Repository creation process was initiated.')
         expect(Repository.last.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
         expect(Repository.last.token).to eq('ghp_abcde12345')
         expect(Repository.last.branch).to eq('main')
@@ -36,7 +36,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         fill_in('Branch', with: 'some_branch')
         click_on 'Create Repository'
 
-        expect(page).to have_content('Repository was successfully created.')
+        expect(page).to have_content('Repository creation process was initiated.')
         expect(Repository.last.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
         expect(Repository.last.token).to eq('ghp_abcde12345')
         expect(Repository.last.branch).to eq('some_branch')

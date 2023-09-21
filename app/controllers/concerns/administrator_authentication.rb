@@ -8,13 +8,14 @@ module AdministratorAuthentication
     def require_administrator_authentication
       return if administrator_signed_in?
 
-      redirect_to new_sessions_administrator_path, alert: 'Please sign in as an administrator.'
+      redirect_to new_sessions_administrator_path, alert: 'Please log in as an administrator.'
     end
 
     def require_multi_factor_authentication
       return if current_administrator.multi_factor_enabled?
 
-      redirect_to webauthn_credentials_path
+      redirect_to webauthn_credentials_path,
+                  alert: 'A multi-factor authentication method must be added before proceeding to the dashboard.'
     end
 
     def current_administrator

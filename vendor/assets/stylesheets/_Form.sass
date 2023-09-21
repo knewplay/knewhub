@@ -1,0 +1,90 @@
+
+// Form
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
+
+// Default modified to have labels move up as input is entered by the user
+
+.form-field
+  display: flex
+  flex-direction: column
+  position: relative
+  padding-top: 1.5rem
+
+  & + .form-field
+    margin-top: 1rem
+
+input[type='color'],
+input[type='date'],
+input[type='datetime'],
+input[type='datetime-local'],
+input[type='email'],
+input[type='month'],
+input[type='number'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='text'],
+input[type='url'],
+input[type='week'],
+input:not([type]),
+textarea,
+select
+  -webkit-appearance: none // sass-lint:disable-line no-vendor-prefixes
+  background-color: transparent
+  border: 0
+  z-index: 1
+  border-bottom: 2px solid $color-quaternary
+  box-shadow: none
+  box-sizing: inherit // Forced to replace inherit values of the normalize.css
+  height: 3.8rem
+  padding: .25rem 0
+  width: 100%
+  font-size: 100%
+
+  &:focus, &:valid
+    outline: 0
+    border-bottom-color: $color-primary
+    & + label
+      color: $color-primary
+      transform: translateY(-1.5rem)
+
+  &:user-invalid
+    outline: 0
+    border-bottom-color: $color-alert
+    & + label
+      color: $color-alert
+      transform: translateY(-1.5rem)
+
+select
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 8" width="30"><path fill="%23' + str-slice(inspect($color-quaternary), 2) + '" d="M0,0l6,8l6-8"/></svg>') center right no-repeat
+  padding-right: 3.0rem
+
+  &:focus
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 8" width="30"><path fill="%23' + str-slice(inspect($color-primary), 2) + '" d="M0,0l6,8l6-8"/></svg>')
+
+  &[multiple]
+    background: none
+    height: auto
+
+textarea
+  min-height: 6.5rem
+
+label,
+legend
+  color: $color-quinary
+  position: absolute
+  top: 1.5rem
+  transition: .25s ease
+
+fieldset
+  border-width: 0
+  padding: 0
+
+input[type='checkbox'],
+input[type='radio']
+  display: inline
+
+.label-inline
+  display: inline-block
+  font-weight: normal
+  margin-left: .5rem

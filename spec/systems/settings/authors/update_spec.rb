@@ -18,7 +18,7 @@ RSpec.describe 'Settings::Author#update', type: :system do
       visit edit_settings_author_path
 
       expect(page).to have_current_path(root_path)
-      expect(page).to have_content('Please sign in with GitHub.')
+      expect(page).to have_content('Please log in with GitHub.')
     end
   end
 

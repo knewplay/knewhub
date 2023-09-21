@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get 'collections/:owner/:name/pages/index', to: 'collections#index'
   get 'collections/:owner/:name/pages/*path', to: 'collections#show'
 
-  # Sign up and sessions
+  # Account creation and sessions
   devise_for :users, controllers: {
     confirmations: 'users/confirmations',
     registrations: 'users/registrations',
@@ -33,7 +33,9 @@ Rails.application.routes.draw do
     resource :enable_author, controller: :enable_author, only: [:show]
     resource :author, only: %i[edit update]
     scope module: 'authors', path: 'author', as: 'author' do
-      resources :repositories, except: [:show]
+      resources :repositories, except: [:show] do
+        resources :builds, only: [:index], controller: 'repositories/builds'
+      end
     end
 
     root to: 'accounts#show'

@@ -1,36 +1,48 @@
 <% content_for(:html_title) { 'Repositories - Settings' } %>
 
-<h1><%= "#{current_author.name}'s Repositories" %></h1>
+<div class="index-repositories form-block">
+  <h2><%= "#{current_author.name}'s Repositories" %></h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Title</th>
-      <th>Branch</th>
-      <th>Last Pull At</th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
+  <div class="index-repositories__grid">
     <% @repositories.each do |repository| %>
-      <tr>
-        <td><%= repository.id %></td>
-        <td><%= repository.name %></td>
-        <td><%= repository.title %></td>
-        <td><%= repository.branch %></td>
-        <td><%= repository.last_pull_at %></td>
-        <td>
-          <%= link_to('View',
-              "/collections/#{repository.author.github_username}/#{repository.name}/pages/index",
-              target: :_blank) %>
-          <%= link_to 'Edit', edit_settings_author_repository_path(repository.id)%>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <div class="index-repositories__card">
+        <div class="index-repositories__card__text">
+          <div class="index-repositories__card__line">
+            ID: <%= repository.id %>
+          </div>
 
-<%= link_to 'New repository', new_settings_author_repository_path %>
+          <div class="index-repositories__card__line">
+            Name: <%= repository.name %>
+          </div>
+
+          <div class="index-repositories__card__line">
+            Title: <%= repository.title %>
+          </div>
+
+          <div class="index-repositories__card__line">
+            Branch:
+            <span class="index-repositories__card__branch"><%= repository.branch %></span>
+          </div>
+          
+          <div class="index-repositories__card__line">
+            Last build: 
+            <%= build_status_icon(repository.builds.last) %>
+            <span class="sr-only"><%= repository.builds.last&.status %></span>
+            <%= build_information(repository.builds.last) %>
+          </div>
+        </div>
+        
+        <div class="index-repositories__card__actions">
+          <%= link_to 'View',
+                      "/collections/#{repository.author.github_username}/#{repository.name}/pages/index",
+                      target: :_blank,
+                      class: 'button button-small button-tertiary' %>
+          <%= link_to 'Edit', edit_settings_author_repository_path(repository.id), class: 'button button-small' %>
+          <%= link_to 'Show builds', settings_author_repository_builds_path(repository.id), class: 'button button-small' %>
+        </div>
+      </div>
+    <% end %>     
+  </div>
+
+  <%= link_to 'New repository', new_settings_author_repository_path, class: 'button' %>
+</div>

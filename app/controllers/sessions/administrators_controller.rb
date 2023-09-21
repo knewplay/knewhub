@@ -15,7 +15,7 @@ class Sessions::AdministratorsController < ApplicationController
       end
       session[:author_id] = nil if session[:author_id]
     else
-      redirect_to root_path, alert: 'Sign in failed. Please verify your username and password.'
+      redirect_to root_path, alert: 'Login failed. Please verify your username and password.'
     end
   end
 

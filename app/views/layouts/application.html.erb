@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>
       <%= content_for?(:html_title) ? "#{yield(:html_title)} - Knewhub" : 'Knewhub' %>
@@ -10,6 +10,7 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree&family=Istok+Web">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -21,16 +22,18 @@
   </head>
 
   <body>
-    <%= render 'layouts/navbar' %>
-    <%= render "layouts/flash" %>
-    <div class="main">
-      <% if content_for?(:settings_layout) %>
-        <%= yield(:settings_layout) %>
-      <% elsif content_for(:collections_layout) %>
-        <%= yield(:collections_layout) %>
-      <% else %>
-        <%= yield %>
-      <% end %>
-    </div>
+    <%= render 'shared/navbar' %>
+    <main>
+      <div class="container">
+        <%= render 'shared/flash' %>
+        <% if content_for?(:settings_layout) %>
+          <%= yield(:settings_layout) %>
+        <% elsif content_for(:collections_layout) %>
+          <%= yield(:collections_layout) %>
+        <% else %>
+          <%= yield %>
+        <% end %>
+      </div>
+    </main>
   </body>
 </html>

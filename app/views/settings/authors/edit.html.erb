@@ -1,7 +1,9 @@
 <% content_for(:html_title) { 'Author profile - Settings' } %>
 
-<h2>Author profile</h2>
+<div class="form-block">
+  <h2>Author profile</h2>
 
-<p>GitHub username: <%= @author.github_username %></p>
+  <p>GitHub username: <%= @author.github_username %></p>
 
-<%= render 'form', author: @author %>
+  <%= render 'form', author: @author %>
+</div>

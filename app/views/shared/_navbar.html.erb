@@ -1,0 +1,16 @@
+<nav class="nav"> 
+  <br />
+
+  <%= link_to image_tag(asset_path('logo.png'), align: 'middle', alt: 'Knewhub Home Page', class: 'nav__logo' ), root_path %>
+
+  <div class="nav__right">
+    <% if current_user %>
+      <%= link_to 'Settings', settings_root_path %>
+      <%= button_to 'Logout', destroy_user_session_path, method: :delete, data: { turbo: false } %>
+    <% elsif current_administrator %>
+      <%= button_to 'Sign out', sessions_administrator_path, method: :delete, data: { turbo: false } %>
+    <% else %>
+      <%= link_to 'Login', new_user_session_path %>
+    <% end %>
+  </div>
+</nav>

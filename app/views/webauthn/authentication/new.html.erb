@@ -1,14 +1,16 @@
-<% content_for(:html_title) { 'Multi-factor authentication - Administrator sign in' } %>
+<% content_for(:html_title) { 'Multi-factor authentication - Administrator login' } %>
 
-<h3>Use a multi-factor authentication method to sign in as <%= @administrator.name %></h1>
+<div class="form-block">
+  <p>Use a multi-factor authentication method to complete the login process.</p>
 
-<%= form_with(url: options_for_webauthn_authentication_path,
-              data: {
-                remote: true,
-                turbo: false,
-                controller: "webauthn--authenticate",
-                "webauthn--authenticate-callback-value": webauthn_authentication_url,
-                action: "ajax:success->webauthn--authenticate#auth ajax:error->webauthn--authenticate#error"}) do |f| %>
+  <%= form_with(url: options_for_webauthn_authentication_path,
+                data: {
+                  remote: true,
+                  turbo: false,
+                  controller: "webauthn--authenticate",
+                  "webauthn--authenticate-callback-value": webauthn_authentication_url,
+                  action: "ajax:success->webauthn--authenticate#auth ajax:error->webauthn--authenticate#error"}) do |f| %>
 
-    <%= f.button "Authenticate" %>
-<% end %>
+      <%= f.button "Authenticate" %>
+  <% end %>
+</div>

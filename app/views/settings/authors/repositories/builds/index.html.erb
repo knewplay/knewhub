@@ -1,0 +1,46 @@
+<% content_for(:html_title) { 'Builds - Repository - Settings' } %>
+
+<div class="index-builds">
+  <h2><%= "Builds - Repository '#{@repository.title}'" %></h2>
+  
+  <% @builds.each do |build| %>
+    <div class="index-builds__card form-block">
+      <div class="index-builds__text">
+        <p>Action: <%= build.action %></p>
+        <p>
+          Status:
+          <%= build_status_icon(build) %>
+          <%= "#{build.status} (steps: #{log_tally(build)})" %>
+        </p>
+        <p>Created at: <%= build.created_at %></p>
+        <p>Completed at: <%= build.completed_at %></p>
+      </div>
+
+      <hr/>
+        <div class="index-builds__logs">
+          <h4>Logs</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Number</th>
+                <th>Content</th>
+                <th>Failure</th>
+              </tr>
+            </thead>
+  
+            <tbody>
+              <% build.logs.each_with_index do |log, i| %>
+                <tr class="index-builds__logs__<%= 'failure' if log.failure %>">
+                  <td><%= i + 1 %></td>
+                  <td><%= log.content %></td>
+                  <td><%= log.failure %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+    </div>
+  <% end %>
+  
+  <%= link_to 'Back to repositories', settings_author_repositories_path %>
+</div>

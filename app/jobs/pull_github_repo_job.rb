@@ -11,9 +11,9 @@ class PullGithubRepoJob
 
     GetGithubDescriptionJob.perform_async(repository_id, build_id)
     CreateRepoIndexJob.perform_async(repository_id, build_id) unless response == 'Already up to date'
-  rescue Git::FailedError => e
+  rescue Git::FailedError, ArgumentError => e
     build.logs.create(
-      content: "Failed to pull repository ##{repository.id}. Message: #{e.message}",
+      content: "Failed to pull repository. Message: #{e.message}",
       failure: true
     )
   end

@@ -1,13 +1,10 @@
 <%= form_with(model: [:settings, author]) do |form| %>
-  <%= render 'layouts/form_errors', resource: author if author.errors.any? %>
+  <%= render 'shared/form_errors', resource: author if author.errors.any? %>
 
-  <div>
-    <%= form.label :name, 'Name' %>
-    <%= form.text_field :name %>
+  <div class="form-field">
+    <%= form.text_field :name, required: true %>
+    <%= form.label :name, 'Name'%>
   </div>
-  
-  <br />
-  <div>
-    <%= form.submit %>
-  </div>
+
+  <%= form.submit %>
 <% end %>
