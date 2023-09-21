@@ -33,7 +33,9 @@ Rails.application.routes.draw do
     resource :enable_author, controller: :enable_author, only: [:show]
     resource :author, only: %i[edit update]
     scope module: 'authors', path: 'author', as: 'author' do
-      resources :repositories, except: [:show]
+      resources :repositories, except: [:show] do
+        resources :builds, only: [:index], controller: 'repositories/builds'
+      end
     end
 
     root to: 'accounts#show'

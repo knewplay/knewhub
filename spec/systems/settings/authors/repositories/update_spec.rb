@@ -5,37 +5,39 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
   let(:author) { repo.author }
 
   context 'when given valid input' do
-    scenario 'updates the name' do
-      sign_in author.user
-      page.set_rack_session(author_id: author.id)
+    context 'without the Build process' do
+      scenario 'updates the name' do
+        sign_in author.user
+        page.set_rack_session(author_id: author.id)
 
-      visit edit_settings_author_repository_path(repo.id)
-      expect(page).to have_content("Edit Repository ##{repo.id}")
+        visit edit_settings_author_repository_path(repo.id)
+        expect(page).to have_content('Edit Repository')
 
-      fill_in('Name', with: 'a_new_name')
-      click_on 'Update Repository'
+        fill_in('Name', with: 'a_new_name')
+        click_on 'Update Repository'
 
-      expect(page).to have_content('Repository was successfully updated.')
-      expect(page).to have_content('a_new_name')
+        expect(page).to have_content('Repository update process was initiated.')
+        expect(page).to have_content('a_new_name')
 
-      repo.reload
-      expect(repo.git_url).to eq('https://ghp_abcde12345@github.com/user/a_new_name.git')
-    end
+        repo.reload
+        expect(repo.git_url).to eq('https://ghp_abcde12345@github.com/user/a_new_name.git')
+      end
 
-    scenario 'updates the branch' do
-      sign_in author.user
-      page.set_rack_session(author_id: author.id)
+      scenario 'updates the branch' do
+        sign_in author.user
+        page.set_rack_session(author_id: author.id)
 
-      visit edit_settings_author_repository_path(repo.id)
-      expect(page).to have_content("Edit Repository ##{repo.id}")
+        visit edit_settings_author_repository_path(repo.id)
+        expect(page).to have_content('Edit Repository')
 
-      fill_in('Branch', with: 'other_branch')
-      click_on 'Update Repository'
+        fill_in('Branch', with: 'other_branch')
+        click_on 'Update Repository'
 
-      expect(page).to have_content('Repository was successfully updated.')
+        expect(page).to have_content('Repository update process was initiated.')
 
-      repo.reload
-      expect(repo.branch).to eq('other_branch')
+        repo.reload
+        expect(repo.branch).to eq('other_branch')
+      end
     end
 
     context 'updating the name and title using the Build process' do
@@ -49,7 +51,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
           end
         end
 
-        # Updates repository with a new mame and title
+        # Updates repository with a new name and title
         author = @repo.author
         sign_in author.user
         page.set_rack_session(author_id: author.id)
@@ -104,7 +106,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       page.set_rack_session(author_id: author.id)
 
       visit edit_settings_author_repository_path(repo.id)
-      expect(page).to have_content("Edit Repository ##{repo.id}")
+      expect(page).to have_content('Edit Repository')
 
       fill_in('Branch', with: 'invalid!branch')
       click_on 'Update Repository'

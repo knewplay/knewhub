@@ -18,7 +18,7 @@ RSpec.describe 'Repositories#update', type: :system do
       page.set_rack_session(author_id: author.id)
 
       visit edit_settings_author_repository_path(@repo.id)
-      click_on 'Rebuild Repository'
+      click_on 'Rebuild repository (pull from GitHub)'
 
       sleep(1)
       @rebuild_build = @repo.builds.last

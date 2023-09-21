@@ -1,8 +1,8 @@
-<%# Override default view to add `Rebuild` and `Hide` buttons %>
+<%# Override default view to add `Rebuild` and `Ban` buttons %>
 
 <td>
   <%= link_to(
-    "Rebuild",
+    "Rebuild (pull from GitHub)",
     repository_path(resource),
     method: :patch)
   %>

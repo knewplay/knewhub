@@ -10,27 +10,35 @@
           <div class="index-repositories__card__line">
             ID: <%= repository.id %>
           </div>
+
           <div class="index-repositories__card__line">
             Name: <%= repository.name %>
           </div>
+
           <div class="index-repositories__card__line">
             Title: <%= repository.title %>
           </div>
+
           <div class="index-repositories__card__line">
             Branch:
             <span class="index-repositories__card__branch"><%= repository.branch %></span>
           </div>
+          
           <div class="index-repositories__card__line">
-            Last pull at:
-            <span class="index-repositories__card__last-pull-at"><%= repository.last_pull_at %></span>
+            Last build: 
+            <%= build_status_icon(repository.builds.last) %>
+            <span class="sr-only"><%= repository.builds.last&.status %></span>
+            <%= build_information(repository.builds.last) %>
           </div>
         </div>
+        
         <div class="index-repositories__card__actions">
           <%= link_to 'View',
                       "/collections/#{repository.author.github_username}/#{repository.name}/pages/index",
                       target: :_blank,
                       class: 'button button-small button-tertiary' %>
           <%= link_to 'Edit', edit_settings_author_repository_path(repository.id), class: 'button button-small' %>
+          <%= link_to 'Show builds', settings_author_repository_builds_path(repository.id), class: 'button button-small' %>
         </div>
       </div>
     <% end %>     

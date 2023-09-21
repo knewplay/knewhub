@@ -17,6 +17,14 @@ class Repository < ApplicationRecord
   validates :title, presence: true
   attribute :banned, :boolean, default: false
 
+  def last_build_created_at
+    builds.last&.created_at
+  end
+
+  def last_build_status
+    builds.last&.status
+  end
+
   private
 
   def set_git_url
