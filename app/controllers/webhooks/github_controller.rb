@@ -16,7 +16,7 @@ class Webhooks::GithubController < ApplicationController
 
       name = params[:repository][:name]
       owner_name = params[:repository][:owner][:name]
-      owner_id = params[:repository][:owner][:id]
+      owner_id = params[:repository][:owner][:id].to_s
       description = params[:repository][:description]
 
       if repository.author.github_uid != owner_id

@@ -10,24 +10,26 @@ class RespondWebhookPushJob
       build.logs.create(content: 'No change to repository name or owner.')
     end
     directory = Rails.root.join('repos', repository.author.github_username, repository.name)
-    pull_or_clone(repository, directory, build)
+    Dir.exist?(directory) ? pull(repository, directory, build) : clone(repository, directory, build)
     repository.update(last_pull_at: DateTime.current, description: webhook_description)
   end
 
   private
 
-  def pull_or_clone(repository, directory, build)
-    if Dir.exist?(directory)
-      response = Git.open(directory).pull
-      build.logs.create(content: 'Repository successfully pulled.')
-      CreateRepoIndexJob.perform_async(repository.id, build.id) unless response == 'Already up to date'
-    else
-      Git.clone(repository.git_url, directory, branch: repository.branch)
-      build.logs.create(content: 'Repository successfully cloned.')
-      CreateRepoIndexJob.perform_async(repository.id, build.id)
-    end
+  def pull(repository, directory, build)
+    response = Git.open(directory).pull
+    build.logs.create(content: 'Repository successfully pulled.')
+    CreateRepoIndexJob.perform_async(repository.id, build.id) unless response == 'Already up to date'
+  rescue Git::FailedError, ArgumentError => e
+    build.logs.create(content: "Failed to pull repository. Message: #{e.message}", failure: true)
+  end
+
+  def clone(repository, directory, build)
+    Git.clone(repository.git_url, directory, branch: repository.branch)
+    build.logs.create(content: 'Repository successfully cloned.')
+    CreateRepoIndexJob.perform_async(repository.id, build.id)
   rescue Git::FailedError => e
-    Rails.logger.error "Failed to clone or pull repository. Message: #{e.message}"
+    build.logs.create(content: "Failed to clone repository. Message: #{e.message}", failure: true)
   end
 
   def update_repository(repository, build, webhook_name, webhook_owner)
