@@ -8,7 +8,7 @@ module BuildInformationHelper
   def log_tally(build)
     return if build.nil?
 
-    "#{build.logs.count}/#{build.max_log_count}"
+    "#{build.current_step}/#{build.max_step}"
   end
 
   def build_status_icon(build)

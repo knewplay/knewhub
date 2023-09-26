@@ -7,7 +7,7 @@ class RespondWebhookPushJob
     if webhook_name != repository.name || webhook_owner != repository.author.github_username
       update_repository(repository, build, webhook_name, webhook_owner)
     else
-      build.logs.create(content: 'No change to repository name or owner.')
+      build.logs.create(content: 'No change to repository name or owner.', step: 2)
     end
     directory = Rails.root.join('repos', repository.author.github_username, repository.name)
     Dir.exist?(directory) ? pull(repository, directory, build) : clone(repository, directory, build)
@@ -18,18 +18,22 @@ class RespondWebhookPushJob
 
   def pull(repository, directory, build)
     response = Git.open(directory).pull
-    build.logs.create(content: 'Repository successfully pulled.')
-    CreateRepoIndexJob.perform_async(repository.id, build.id) unless response == 'Already up to date'
+    build.logs.create(content: 'Repository successfully pulled.', step: 3)
+    if response == 'Already up to date'
+      build.logs.create(content: 'index.md file exists for this repository.', step: 4)
+    else
+      CreateRepoIndexJob.perform_async(repository.id, build.id)
+    end
   rescue Git::FailedError, ArgumentError => e
-    build.logs.create(content: "Failed to pull repository. Message: #{e.message}", failure: true)
+    build.logs.create(content: "Failed to pull repository. Message: #{e.message}", failure: true, step: 3)
   end
 
   def clone(repository, directory, build)
     Git.clone(repository.git_url, directory, branch: repository.branch)
-    build.logs.create(content: 'Repository successfully cloned.')
+    build.logs.create(content: 'Repository successfully cloned.', step: 3)
     CreateRepoIndexJob.perform_async(repository.id, build.id)
   rescue Git::FailedError => e
-    build.logs.create(content: "Failed to clone repository. Message: #{e.message}", failure: true)
+    build.logs.create(content: "Failed to clone repository. Message: #{e.message}", failure: true, step: 3)
   end
 
   def update_repository(repository, build, webhook_name, webhook_owner)
@@ -40,6 +44,6 @@ class RespondWebhookPushJob
       git_url: "https://#{repository.token}@github.com/#{webhook_owner}/#{webhook_name}.git"
     )
     repository.author.update(github_username: webhook_owner)
-    build.logs.create(content: 'Repository name or owner successfully updated.')
+    build.logs.create(content: 'Repository name or owner successfully updated.', step: 2)
   end
 end

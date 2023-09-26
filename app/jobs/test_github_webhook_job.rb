@@ -8,11 +8,12 @@ class TestGithubWebhookJob
 
     response = client.hook("#{repository.author.github_username}/#{repository.name}", hook_id)
     if response.last_response.code == 200
-      build.logs.create(content: 'GitHub webhook successfully tested.')
+      build.logs.create(content: 'GitHub webhook successfully tested.', step: 2)
     else
       build.logs.create(
         content: "Test of GitHub webhook failed. Message: #{response.last_response.message}",
-        failure: true
+        failure: true,
+        step: 2
       )
     end
   end

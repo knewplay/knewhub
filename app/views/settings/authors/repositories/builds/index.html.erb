@@ -29,9 +29,9 @@
             </thead>
   
             <tbody>
-              <% build.logs.each_with_index do |log, i| %>
+              <% build.logs.each do |log, i| %>
                 <tr class="index-builds__logs__<%= 'failure' if log.failure %>">
-                  <td><%= i + 1 %></td>
+                  <td><%= log.step %></td>
                   <td><%= log.content %></td>
                   <td><%= log.failure %></td>
                 </tr>

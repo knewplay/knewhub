@@ -13,8 +13,18 @@ class Build < ApplicationRecord
     repository.author.name
   end
 
-  # { action: logs.count }
-  COMPLETE_MATRIX = {
+  def current_step
+    log_at_max_step = logs.order('step DESC').first
+    log_at_max_step&.step
+  end
+
+  def max_step
+    MAX_LOG_STEPS[action.to_sym]
+  end
+
+  private
+
+  MAX_LOG_STEPS = {
     create: 5,
     update: 3,
     rebuild: 3,
@@ -24,20 +34,20 @@ class Build < ApplicationRecord
   # `latest_log` is passed as an argument when using the `after_add` callback
   # But it is not required
   def verify_complete(_latest_log = nil)
-    return unless no_failures? && logs.count == max_log_count
+    return unless no_failures? && max_steps_reached?
 
     update(status: 'Complete', completed_at: DateTime.current)
-  end
-
-  def no_failures?
-    logs.none? { |log| log.failure == true }
   end
 
   def verify_failed(_latest_log = nil)
     update(status: 'Failed', completed_at: DateTime.current) if logs.any? { |log| log.failure == true }
   end
 
-  def max_log_count
-    COMPLETE_MATRIX[action.to_sym]
+  def max_steps_reached?
+    current_step == max_step
+  end
+
+  def no_failures?
+    logs.none? { |log| log.failure == true }
   end
 end
