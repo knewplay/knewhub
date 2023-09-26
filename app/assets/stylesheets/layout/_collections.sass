@@ -4,3 +4,10 @@
   background-color: $color-initial
   padding: 2rem 4rem
   border-radius: 1rem
+
+  & a
+    color: $color-tertiary
+
+  & li > p:first-child
+    // Ensures li::marker is in the same line as the first paragraph
+    display: inline 
