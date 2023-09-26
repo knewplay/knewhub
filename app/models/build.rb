@@ -18,7 +18,6 @@ class Build < ApplicationRecord
     create: 5,
     update: 3,
     rebuild: 3,
-    webhook_ping: 1,
     webhook_push: 4
   }.freeze
 

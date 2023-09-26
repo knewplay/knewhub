@@ -2,52 +2,6 @@ require 'rails_helper'
 
 describe Webhooks::GithubController do
   describe 'POST #create' do
-    context "with a 'X-GitHub-Event: ping' event" do
-      let(:repo) { create(:repository) }
-      let(:secret) { Rails.application.credentials.webhook_secret }
-      let(:data) { 'zen=Responsive+is+better+than+fast.' }
-      let(:signature) { "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, data)}" }
-
-      context 'when a valid request is received' do
-        before do
-          post "/webhooks/github/#{repo.uuid}",
-               params: { 'zen': 'Responsive is better than fast.' },
-               headers: { 'X-GitHub-Event': 'ping', 'X-Hub-Signature-256': signature }
-        end
-
-        scenario 'returns status 200' do
-          expect(response.status).to eq(200)
-        end
-
-        scenario "creates a associated Build with the status 'Complete'" do
-          expect(repo.builds.first.status).to eq('Complete')
-        end
-
-        scenario 'creates an associated Log with content' do
-          expect(repo.builds.first.logs.first.content).to eq("GitHub webhook 'ping' received.")
-        end
-      end
-
-      context 'when an invalid request is received' do
-        before do
-          post "/webhooks/github/#{repo.uuid}",
-               params: { 'zen': 'Another message that will fail signature validation' },
-               headers: {
-                 'X-GitHub-Event': 'ping',
-                 'X-Hub-Signature-256': signature
-               }
-        end
-
-        scenario 'returns status 400' do
-          expect(response.status).to eq(400)
-        end
-
-        scenario 'does not create an associated Build' do
-          expect(repo.builds.first).to be_nil
-        end
-      end
-    end
-
     context "with a 'X-GitHub-Event: push' event" do
       before(:all) do
         # Creates and clones a repository
