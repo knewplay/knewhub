@@ -4,6 +4,20 @@ class CustomRender < Redcarpet::Render::HTML
     process_custom_tags(text.strip)
   end
 
+  def header(text, header_level)
+    if @options[:with_toc_data]
+      id = text.parameterize(separator: '-')
+      <<~HEADER
+        <h#{header_level} id=#{id}>
+          <a href="##{id}" class="collections__anchor-link">#{text}</a>
+          <i class="fa-solid fa-link" aria-hidden="true"></i>
+        </h#{header_level}>\n
+      HEADER
+    else
+      "<h#{header_level}>#{text}</h#{header_level}>\n"
+    end
+  end
+
   private
 
   def process_custom_tags(text)

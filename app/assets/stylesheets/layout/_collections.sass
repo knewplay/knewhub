@@ -5,7 +5,17 @@
   padding: 2rem 4rem
   border-radius: 1rem
 
-  & a
+  &__anchor-link
+    color: $color-secondary
+
+    &:hover + svg
+      display: inline
+  
+  svg
+    display: none
+    width: 1.4rem
+
+  & a:not(&__anchor-link)
     color: $color-tertiary
 
   & li > p:first-child
