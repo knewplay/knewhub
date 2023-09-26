@@ -15,6 +15,11 @@
     <% end %>
 
     <%= yield %>
+
+    <hr />
+    <%= link_to 'View book',
+                index_path(request.path),
+                class: 'button' %>
   </div>
 <% end %>
 
