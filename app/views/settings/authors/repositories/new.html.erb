@@ -5,6 +5,13 @@
   
   <%= render 'new_form', repository: @repository %>
   
-  <br />
+  <div>
+    <p>A GitHub personal access token must be provided for us to access content of repositories and set up webhooks to be notified of changes</p>
+    <ul>
+      <li>For a classic token, select scopes <b>repo</b> and <b>admin: repo_hook</b></li>
+      <li>For a fine-grained token, select repository permissions <b>contents (read-only)</b> and <b>webhooks (read and write)</b></li>
+    </ul>
+  </div>
+
   <%= link_to 'Back to repositories', settings_author_repositories_path %>
 </div>
