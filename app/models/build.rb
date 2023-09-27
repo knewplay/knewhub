@@ -14,8 +14,9 @@ class Build < ApplicationRecord
   end
 
   def current_step
-    log_at_max_step = logs.order('step DESC').first
-    log_at_max_step&.step
+    unique_logs = logs.select(:step).distinct
+    # Background jobs can create duplicates of a log or can result in logs being created out of order
+    unique_logs.count
   end
 
   def max_step
