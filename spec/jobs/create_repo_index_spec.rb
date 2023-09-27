@@ -64,7 +64,7 @@ RSpec.describe CreateRepoIndexJob, type: :job do
 
     it 'creates a new file with links to other pages' do
       expect(@file_data).to include('* [Article One](./article_one)')
-      expect(@file_data).to include('* [Folder/Article Two](./folder/article_two)')
+      expect(@file_data).to include('* [Folder/Article Two](./Folder/article_two)')
     end
   end
 

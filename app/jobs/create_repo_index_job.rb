@@ -30,17 +30,17 @@ class CreateRepoIndexJob
     File.exist?("#{directory}/index.md")
   end
 
-  # Returns array in the following format: [ "folder/filename", "folder/second%20folder/file_name" ]
+  # Returns array in the following format: [ "folder/filename", "folder/Second%20Folder/file_name" ]
   def list_markdown_file_location(directory)
     paths_array = Dir.glob("#{directory}/**/*.md")
     paths_array.map! do |path|
-      path.remove("#{directory}/", '.md').downcase
+      path.remove("#{directory}/", '.md')
     end
   end
 
   # Returns string in the following format:
   # "* [Folder/Filename](./folder/filename)
-  #  * [Folder/Second Folder/File Name](.folder/second%20folder/file_name)"
+  #  * [Folder/Second Folder/File Name](.folder/Second%20Folder/file_name)"
   def generate_links(markdown_files_location, content = '')
     markdown_files_location.map do |file_location|
       filename = file_location.titleize
