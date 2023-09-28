@@ -9,8 +9,8 @@ class CustomRender < Redcarpet::Render::HTML
       id = text.parameterize(separator: '-')
       <<~HEADER
         <h#{header_level} id=#{id}>
-          <a href="##{id}" class="collections__anchor-link">#{text}</a>
-          <i class="fa-solid fa-link" aria-hidden="true"></i>
+        <a href="##{id}" class="collections__anchor-link">#{text}</a>
+        <i class="fa-solid fa-link" aria-hidden="true"></i>
         </h#{header_level}>\n
       HEADER
     else
@@ -21,9 +21,10 @@ class CustomRender < Redcarpet::Render::HTML
   private
 
   def process_custom_tags(text)
-    # [codefile <relative_path>]
-    if (t = text.match(/(\[codefile )(.+)(\])/))
+    if (t = text.match(/(\[codefile )(.+)(\])/)) # [codefile <relative_path>]
       process_codefile(t[2])
+    elsif (t = text.match(%r{(\[details )(.+)(\])(.+)(\[/details\])})) # [details Hint]content[/details]
+      process_details(t[2], t[4])
     else
       "<p>#{text}</p>"
     end
@@ -38,5 +39,13 @@ class CustomRender < Redcarpet::Render::HTML
       <code>#{data}</code>
       </pre>
     CODE
+  end
+
+  def process_details(title, content)
+    <<~DETAIL
+      <details>
+      <summary>#{title}</summary>#{content}
+      </details>
+    DETAIL
   end
 end
