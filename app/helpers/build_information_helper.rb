@@ -2,7 +2,7 @@ module BuildInformationHelper
   def build_information(build)
     return if build.nil?
 
-    "'#{build.action}' | #{build.completed_at}"
+    "'#{build.action}' | #{local_time(build.completed_at)}"
   end
 
   def log_tally(build)

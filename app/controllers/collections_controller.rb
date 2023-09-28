@@ -1,5 +1,4 @@
 class CollectionsController < ApplicationController
-  before_action :modify_view_path
   layout 'collections'
 
   def show
@@ -10,6 +9,7 @@ class CollectionsController < ApplicationController
     respond_to do |format|
       format.html do
         @front_matter = extract_front_matter(file_path)
+        prepend_view_path "#{Rails.root}/repos"
         render file_path
       end
       format.any(:png, :jpg, :jpeg, :gif, :svg, :webp) do
@@ -24,14 +24,11 @@ class CollectionsController < ApplicationController
     render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
 
     @front_matter = extract_front_matter(file_path)
+    prepend_view_path "#{Rails.root}/repos"
     render file_path
   end
 
   private
-
-  def modify_view_path
-    prepend_view_path "#{Rails.root}/repos"
-  end
 
   def file_exists?(file_path)
     File.exist?("#{Rails.root}/repos/#{file_path}.md") \
@@ -52,7 +49,7 @@ class CollectionsController < ApplicationController
   end
 
   def render_not_found
-    render file: "#{Rails.root}/public/404.html", layout: false, status: :not_found
+    render 'errors/not_found', layout: 'errors', status: :not_found
   end
 
   def extract_front_matter(file_path)

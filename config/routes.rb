@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   root 'static_pages#index'
   get 'collections/:owner/:name/pages/index', to: 'collections#index'
   get 'collections/:owner/:name/pages/*path', to: 'collections#show'
+  get '/404', to: 'errors#not_found'
+  get '/500', to: 'errors#internal_server_error'
 
   # Account creation and sessions
   devise_for :users, controllers: {
