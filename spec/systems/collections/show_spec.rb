@@ -14,6 +14,10 @@ RSpec.describe 'Collections#show', type: :system do
   end
 
   context 'repository is set to banned = false' do
+    before do
+      sign_in @repo.author.user
+    end
+
     scenario 'displays Markdown text in HTML' do
       visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
 
@@ -66,6 +70,7 @@ RSpec.describe 'Collections#show', type: :system do
   context 'repository is set to banned = true' do
     before do
       @repo.update(banned: true)
+      sign_in @repo.author.user
     end
 
     scenario 'displays an error page' do

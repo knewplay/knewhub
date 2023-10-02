@@ -1,5 +1,5 @@
 class CollectionsController < ApplicationController
-  before_action :modify_view_path
+  before_action :modify_view_path, :require_user_or_admin_authentication
   layout 'collections'
 
   def show
@@ -29,6 +29,11 @@ class CollectionsController < ApplicationController
   end
 
   private
+  def require_user_or_admin_authentication
+    return if administrator_signed_in? || user_signed_in?
+
+    redirect_to root_path, alert: 'Please log in to continue.'
+  end
 
   def modify_view_path
     prepend_view_path "#{Rails.root}/repos"
