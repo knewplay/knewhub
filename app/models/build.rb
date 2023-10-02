@@ -26,10 +26,10 @@ class Build < ApplicationRecord
   private
 
   MAX_LOG_STEPS = {
-    create: 5,
-    update: 3,
-    rebuild: 3,
-    webhook_push: 4
+    create: 6,
+    update: 4,
+    rebuild: 4,
+    webhook_push: 5
   }.freeze
 
   # `latest_log` is passed as an argument when using the `after_add` callback

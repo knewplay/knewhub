@@ -19,8 +19,9 @@ class RespondWebhookPushJob
   def pull(repository, directory, build)
     response = Git.open(directory).pull
     build.logs.create(content: 'Repository successfully pulled.', step: 3)
+    ParseQuestionsJob.perform_async(repository.id, build.id)
     if response == 'Already up to date'
-      build.logs.create(content: 'index.md file exists for this repository.', step: 4)
+      build.logs.create(content: 'index.md file exists for this repository.', step: 5)
     else
       CreateRepoIndexJob.perform_async(repository.id, build.id)
     end
@@ -31,6 +32,7 @@ class RespondWebhookPushJob
   def clone(repository, directory, build)
     Git.clone(repository.git_url, directory, branch: repository.branch)
     build.logs.create(content: 'Repository successfully cloned.', step: 3)
+    ParseQuestionsJob.perform_async(repository.id, build.id)
     CreateRepoIndexJob.perform_async(repository.id, build.id)
   rescue Git::FailedError => e
     build.logs.create(content: "Failed to clone repository. Message: #{e.message}", failure: true, step: 3)

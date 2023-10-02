@@ -70,7 +70,11 @@ describe Webhooks::GithubController do
           end
 
           scenario 'with fourth log' do
-            expect(@build.logs.fourth.content).to eq('index.md file exists for this repository.')
+            expect(@build.logs.fourth.content).to eq('Questions successfully parsed.')
+          end
+
+          scenario 'with fifth log' do
+            expect(@build.logs.fifth.content).to eq('index.md file exists for this repository.')
           end
 
           scenario "with status 'Complete'" do

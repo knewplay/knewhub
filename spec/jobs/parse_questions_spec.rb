@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe ParseQuestionsJob, type: :job do
   before(:all) do
     @repo = create(:repository, last_pull_at: DateTime.current)
+    @build = create(:build, repository: @repo)
     directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
     folder_directory = directory.join('Folder')
     FileUtils.mkdir_p(folder_directory)
@@ -42,14 +43,14 @@ RSpec.describe ParseQuestionsJob, type: :job do
   end
 
   it 'queues the job' do
-    ParseQuestionsJob.perform_async(@repo.id)
-    expect(ParseQuestionsJob).to have_enqueued_sidekiq_job(@repo.id)
+    ParseQuestionsJob.perform_async(@repo.id, @build.id)
+    expect(ParseQuestionsJob).to have_enqueued_sidekiq_job(@repo.id, @build.id)
   end
 
   context 'when executing the job' do
     before(:all) do
       Sidekiq::Testing.inline! do
-        ParseQuestionsJob.perform_async(@repo.id)
+        ParseQuestionsJob.perform_async(@repo.id, @build.id)
       end
     end
 

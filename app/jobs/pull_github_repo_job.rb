@@ -11,8 +11,9 @@ class PullGithubRepoJob
     build.logs.create(content: 'Repository successfully pulled.', step:)
 
     GetGithubDescriptionJob.perform_async(repository_id, build_id)
+    ParseQuestionsJob.perform_async(repository.id, build.id)
     if response == 'Already up to date'
-      build.logs.create(content: 'index.md file exists for this repository.', step: step + 1)
+      build.logs.create(content: 'index.md file exists for this repository.', step: 4)
     else
       CreateRepoIndexJob.perform_async(repository.id, build.id)
     end
