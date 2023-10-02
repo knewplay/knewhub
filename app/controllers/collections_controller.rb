@@ -10,7 +10,7 @@ class CollectionsController < ApplicationController
     respond_to do |format|
       format.html do
         @front_matter = extract_front_matter(file_path)
-        parse_questions if @front_matter['questions']
+        @questions = Question.where(repository: @repository, page_path: params[:path])
         render file_path
       end
       format.any(:png, :jpg, :jpeg, :gif, :svg, :webp) do
@@ -60,12 +60,5 @@ class CollectionsController < ApplicationController
     file = "#{Rails.root}/repos/#{file_path}.md"
     loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date])
     FrontMatterParser::Parser.parse_file(file, loader:).front_matter
-  end
-
-  def parse_questions
-    questions = @front_matter['questions']
-    questions.each do |tag, body|
-      Question.find_or_create_by(repository: @repository, tag:, body:, page_path: params[:path])
-    end
   end
 end

@@ -17,15 +17,15 @@
     <%= yield %>
 
 
-    <% if @front_matter['questions'] %>
+    <% if @questions && @questions.any? %>
       <h2 id="questions">
         <a href="#questions" class="collections__anchor-link">Questions</a>
         <i class="fa-solid fa-link" aria-hidden="true"></i>
       </h2>
 
       <ul>
-      <% @front_matter['questions'].each do |question| %>
-        <li id="<%= question[0] %>"><%= question[1] %></li>
+      <% @questions.each do |question| %>
+        <li id="<%= question.tag %>"><%= question.body %></li>
       <% end %>
       </ul>
     <% end %>
