@@ -16,6 +16,20 @@
 
     <%= yield %>
 
+
+    <% if @front_matter['questions'] %>
+      <h2 id="questions">
+        <a href="#questions" class="collections__anchor-link">Questions</a>
+        <i class="fa-solid fa-link" aria-hidden="true"></i>
+      </h2>
+
+      <ul>
+      <% @front_matter['questions'].each do |question| %>
+        <li id="<%= question[0] %>"><%= question[1] %></li>
+      <% end %>
+      </ul>
+    <% end %>
+
     <hr />
     <%= link_to 'View book',
                 index_path(request.path),
