@@ -10,6 +10,7 @@ class GetGithubDescriptionJob
     repository.update(description: response.description)
 
     build.logs.create(content: 'Repository description successfully updated from GitHub.', step:)
+    build.finished_getting_repo_description
   rescue Octokit::Unauthorized, Octokit::UnprocessableEntity => e
     build.logs.create(
       content: "Failed to get description from GitHub. Message: #{e.message}",

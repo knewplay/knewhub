@@ -11,6 +11,7 @@ class ParseQuestionsJob
       parse_questions(repository, absolute_path, page_name)
     end
     build.logs.create(content: 'Questions successfully parsed.', step:)
+    build.finished_parsing_questions
   end
 
   private

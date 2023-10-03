@@ -5,7 +5,7 @@ module Settings
         before_action :require_author_authentication, :set_repository
 
         def index
-          @builds = @repository.builds
+          @builds = @repository.builds.order(created_at: :desc)
         end
 
         private

@@ -12,6 +12,7 @@ class CreateRepoIndexJob
       generate_index_file(directory, repository)
       build.logs.create(content: 'index.md file successfully generated.', step:)
     end
+    build.finished_creating_repo_index
   end
 
   private

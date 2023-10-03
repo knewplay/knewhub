@@ -5,7 +5,7 @@ class RepositoriesController < ApplicationController
 
   def update
     build = Build.create(repository: @repository, status: 'In progress', action: 'rebuild')
-    PullGithubRepoJob.perform_async(@repository.id, build.id)
+    build.rebuild_repo
     notice_msg = 'Repository rebuild process was initiated. Check Builds for progress and details.'
     if current_administrator
       redirect_to dashboard_repositories_path, notice: notice_msg
