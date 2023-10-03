@@ -2,11 +2,38 @@
 
 <% content_for :collections_layout do %>
   <div class="collections">
-    <h1><%= @front_matter['title'] %></h1>
-    <h5>Written by <%= @front_matter['author'] %> on <%= @front_matter['date'] %></h5>
+    <% if @front_matter['title'] && @front_matter['date'] %>
+      <h1><%= @front_matter['title'] %></h1>
+      <h5>
+        Written by <%= @front_matter['author'] %> on <%= @front_matter['date'] %>.
+        <% if @front_matter['illustrator'] %>
+          Illustrated by <%= @front_matter['illustrator'] %>
+        <% end %>
+      </h5>
 
     <hr />
+    <% end %>
+
     <%= yield %>
+
+
+    <% if @questions && @questions.any? %>
+      <h2 id="questions">
+        <a href="#questions" class="collections__anchor-link">Questions</a>
+        <i class="fa-solid fa-link" aria-hidden="true"></i>
+      </h2>
+
+      <ol>
+      <% @questions.each do |question| %>
+        <li id="<%= question.tag %>"><%= simple_format(question.body) %></li>
+      <% end %>
+      </ol>
+    <% end %>
+
+    <hr />
+    <%= link_to 'View book',
+                index_path(request.path),
+                class: 'button' %>
   </div>
 <% end %>
 

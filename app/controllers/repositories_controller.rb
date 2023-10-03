@@ -29,6 +29,6 @@ class RepositoriesController < ApplicationController
     repository = Repository.find(params[:id])
     return if administrator_signed_in? || current_author.id == repository.author_id
 
-    redirect_to root_path, alert: 'Please sign as author or administrator'
+    redirect_to root_path, alert: 'Please log in as an author or administrator.'
   end
 end

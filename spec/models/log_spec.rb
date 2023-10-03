@@ -14,7 +14,12 @@ RSpec.describe Log, type: :model do
       expect(subject).to_not be_valid
     end
 
-    it 'returns true when content is set and when associated with a Build' do
+    it 'returns false when step is nil' do
+      subject.step = nil
+      expect(subject).to_not be_valid
+    end
+
+    it 'returns true when content and step are set and when associated with a Build' do
       expect(subject).to be_valid
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_11_185221) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_02_145653) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -50,7 +50,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_185221) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "failure", default: false
+    t.integer "step"
     t.index ["build_id"], name: "index_logs_on_build_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.bigint "repository_id"
+    t.string "tag"
+    t.string "page_path"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id"], name: "index_questions_on_repository_id"
   end
 
   create_table "repositories", force: :cascade do |t|
@@ -100,6 +111,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_185221) do
   add_foreign_key "authors", "users"
   add_foreign_key "builds", "repositories"
   add_foreign_key "logs", "builds"
+  add_foreign_key "questions", "repositories"
   add_foreign_key "repositories", "authors"
   add_foreign_key "webauthn_credentials", "administrators"
 end

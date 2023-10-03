@@ -10,12 +10,13 @@ class CreateGithubWebhookJob
 
     response = create_hook(repository, client, host_url, webhook_secret)
     hook_id = response.id
-    build.logs.create(content: "GitHub webhook successfully created. Hook ID: #{hook_id}. Now testing...")
+    build.logs.create(content: "GitHub webhook successfully created. Hook ID: #{hook_id}. Now testing...", step: 1)
     TestGithubWebhookJob.perform_in(10.seconds, repository_id, build_id, response.id)
   rescue Octokit::Unauthorized, Octokit::UnprocessableEntity => e
     build.logs.create(
       content: "Failed to create GitHub webhook. Message: #{e.message}",
-      failure: true
+      failure: true,
+      step: 1
     )
   end
 

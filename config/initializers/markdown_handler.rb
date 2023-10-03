@@ -11,11 +11,15 @@ module MarkdownHandler
     erb_source = erb.call(template, parsed.content)
     extensions = {
       fenced_code_blocks: true,
-      disable_indented_code_blocks: true,
-      escape_html: true
+      disable_indented_code_blocks: true
     }
 
-    "Redcarpet::Markdown.new(CustomRender, #{extensions}).render(begin;#{erb_source};end)"
+    render_options = {
+      escape_html: true,
+      with_toc_data: true
+    }
+
+    "Redcarpet::Markdown.new(CustomRender.new(#{render_options}), #{extensions}).render(begin;#{erb_source};end)"
   end
 end
 

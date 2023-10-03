@@ -1,9 +1,9 @@
-<%# Override default view to add information about current administrator, sign out button and edit MFA credentials button %>
+<%# Override default view to add information about current administrator, logout button and edit MFA credentials button %>
 
 <nav class="navigation">
   <h3>Admin: <%= current_administrator.name %></h3>
   <br />
-  <%= button_to 'Sign out', sessions_administrator_path, method: :delete, data: { turbo: false }, class: "button button--nav"  %>
+  <%= button_to 'Logout', sessions_administrator_path, method: :delete, data: { turbo: false }, class: "button button--nav"  %>
 
   <%= link_to 'Edit MFA credentials', webauthn_credentials_path, class: "button button--alt button--nav" %>
   <br />

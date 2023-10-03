@@ -12,12 +12,12 @@ RSpec.describe 'Sessions::Administrators#destroy', type: :system do
     )
   end
 
-  scenario 'sign out' do
+  scenario 'logout' do
     page.set_rack_session(administrator_id: @admin.id)
 
     visit dashboard_root_path
     expect(page).to have_content("Admin: #{@admin.name}")
-    click_on 'Sign out'
+    click_on 'Logout'
 
     expect(page).to have_current_path(root_path)
   end

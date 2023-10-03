@@ -8,13 +8,14 @@ class LogDashboard < Administrate::BaseDashboard
       truncate: 150
     ),
     failure: Field::Boolean,
+    step: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime
   }.freeze
 
   # Attributes that will be displayed on the model's index page.
   COLLECTION_ATTRIBUTES = %i[
-    id
+    step
     content
     failure
   ].freeze

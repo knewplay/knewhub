@@ -1,4 +1,5 @@
 class CollectionsController < ApplicationController
+  before_action :require_user_or_admin_authentication
   layout 'collections'
 
   def show
@@ -9,6 +10,7 @@ class CollectionsController < ApplicationController
     respond_to do |format|
       format.html do
         @front_matter = extract_front_matter(file_path)
+        @questions = Question.where(repository: @repository, page_path: params[:path])
         prepend_view_path "#{Rails.root}/repos"
         render file_path
       end
@@ -29,6 +31,11 @@ class CollectionsController < ApplicationController
   end
 
   private
+  def require_user_or_admin_authentication
+    return if administrator_signed_in? || user_signed_in?
+
+    redirect_to root_path, alert: 'Please log in to continue.'
+  end
 
   def file_exists?(file_path)
     File.exist?("#{Rails.root}/repos/#{file_path}.md") \
@@ -37,9 +44,9 @@ class CollectionsController < ApplicationController
 
   def repository_visible?(owner, name)
     author_id = Author.find_by(github_username: owner).id
-    repository = Repository.find_by(author_id:, name:)
+    @repository = Repository.find_by(author_id:, name:)
 
-    repository.banned == false
+    @repository.banned == false
   end
 
   def valid_render?(file_path, owner, name)
