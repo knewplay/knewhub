@@ -1,0 +1,5 @@
+<%# Date show partial for Administrate dashboard %>
+
+<% if field.data %>
+  <%= field.data.in_time_zone(cookies[:timezone] || 'UTC').strftime('%b %d, %Y') %>
+<% end %>

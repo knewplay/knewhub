@@ -12,8 +12,8 @@
           <%= build_status_icon(build) %>
           <%= "#{build.status} (steps: #{log_tally(build)})" %>
         </p>
-        <p>Created at: <%= build.created_at %></p>
-        <p>Completed at: <%= build.completed_at %></p>
+        <p>Created at: <%= local_time(build.created_at) %></p>
+        <p>Completed at: <%= local_time(build.completed_at) %></p>
       </div>
 
       <hr/>

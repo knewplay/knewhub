@@ -77,4 +77,7 @@ Rails.application.configure do
 
   # Add ngrok host used to receive webhooks
   config.hosts << Rails.application.credentials.host_url
+
+  # View custom error pages
+  config.consider_all_requests_local = false
 end

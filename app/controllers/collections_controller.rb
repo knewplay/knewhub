@@ -1,5 +1,5 @@
 class CollectionsController < ApplicationController
-  before_action :modify_view_path, :require_user_or_admin_authentication
+  before_action :require_user_or_admin_authentication
   layout 'collections'
 
   def show
@@ -11,6 +11,7 @@ class CollectionsController < ApplicationController
       format.html do
         @front_matter = extract_front_matter(file_path)
         @questions = Question.where(repository: @repository, page_path: params[:path])
+        prepend_view_path "#{Rails.root}/repos"
         render file_path
       end
       format.any(:png, :jpg, :jpeg, :gif, :svg, :webp) do
@@ -25,6 +26,7 @@ class CollectionsController < ApplicationController
     render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
 
     @front_matter = extract_front_matter(file_path)
+    prepend_view_path "#{Rails.root}/repos"
     render file_path
   end
 
@@ -33,10 +35,6 @@ class CollectionsController < ApplicationController
     return if administrator_signed_in? || user_signed_in?
 
     redirect_to root_path, alert: 'Please log in to continue.'
-  end
-
-  def modify_view_path
-    prepend_view_path "#{Rails.root}/repos"
   end
 
   def file_exists?(file_path)
@@ -58,7 +56,7 @@ class CollectionsController < ApplicationController
   end
 
   def render_not_found
-    render file: "#{Rails.root}/public/404.html", layout: false, status: :not_found
+    render 'errors/not_found', layout: 'errors', status: :not_found
   end
 
   def extract_front_matter(file_path)

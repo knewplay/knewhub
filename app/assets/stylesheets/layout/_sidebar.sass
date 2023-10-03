@@ -6,21 +6,28 @@
       margin-bottom: .6rem
       font-size: 1.4rem
       font-weight: bold
-      color: $color-quinary
+      color: $color-primary
+      padding: 0 1rem
 
   & li
     list-style: none
     pointer-events: none
-    padding: .4rem
 
     &:hover
-      background-color: $color-quaternary
+      background-color: $color-background-darker
       border-radius: .4rem
 
     & a
+      color: $color-secondary
+      padding: .4rem 1rem
       display: inline-block
       width: 100%
       pointer-events: auto
+
+  &__current
+    font-weight: bold
+    background-color: $color-background-darker
+    border-radius: .4rem
 
   & hr
     margin: 1.2rem 0

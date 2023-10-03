@@ -76,7 +76,7 @@ RSpec.describe 'Collections#show', type: :system do
     scenario 'displays an error page' do
       visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
 
-      expect(page).to have_content("The page you were looking for doesn't exist.")
+      expect(page).to have_content('404')
     end
   end
 

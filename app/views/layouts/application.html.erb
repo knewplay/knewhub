@@ -30,6 +30,8 @@
           <%= yield(:settings_layout) %>
         <% elsif content_for(:collections_layout) %>
           <%= yield(:collections_layout) %>
+        <% elsif content_for(:errors_layout) %>
+          <%= yield(:errors_layout) %>
         <% else %>
           <%= yield %>
         <% end %>
