@@ -23,11 +23,11 @@
         <i class="fa-solid fa-link" aria-hidden="true"></i>
       </h2>
 
-      <ul>
+      <ol>
       <% @questions.each do |question| %>
         <li id="<%= question.tag %>"><%= simple_format(question.body) %></li>
       <% end %>
-      </ul>
+      </ol>
     <% end %>
 
     <hr />
