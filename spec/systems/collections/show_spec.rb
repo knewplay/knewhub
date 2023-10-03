@@ -9,10 +9,15 @@ RSpec.describe 'Collections#show', type: :system do
       VCR.use_cassette('clone_github_repo_for_collections') do
         CloneGithubRepoJob.perform_async(@repo.id, build.id)
       end
+      ParseQuestionsJob.perform_async(@repo.id, build.id)
     end
   end
 
   context 'repository is set to banned = false' do
+    before do
+      sign_in @repo.author.user
+    end
+
     scenario 'displays Markdown text in HTML' do
       visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
 
@@ -36,11 +41,36 @@ RSpec.describe 'Collections#show', type: :system do
       expect(page).to have_content('Non anser honore ornique')
       expect(page).to have_content('Written by The Author on 2023-12-31')
     end
+
+    context 'when page has questions in front-matter' do
+      scenario 'displays the questions associated with an article' do
+        visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
+
+        expect(page).to have_content('First question in article one?')
+        expect(page).to have_content('Second question in article one?')
+      end
+
+      scenario 'does not display questions associated with other articles' do
+        visit '/collections/jp524/markdown-templates/pages/chapter-1/chapter-1-article-1'
+
+        expect(page).to_not have_content('First question in article two?')
+        expect(page).to_not have_content('Second question in article two?')
+      end
+    end
+
+    context 'when page does not have questions in front-matter' do
+      scenario 'does not show the Questions header' do
+        visit '/collections/jp524/markdown-templates/pages/chapter-2/chapter-2-article-1'
+
+        expect(page).to_not have_content('Questions')
+      end
+    end
   end
 
   context 'repository is set to banned = true' do
     before do
       @repo.update(banned: true)
+      sign_in @repo.author.user
     end
 
     scenario 'displays an error page' do

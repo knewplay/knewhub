@@ -16,6 +16,20 @@
 
     <%= yield %>
 
+
+    <% if @questions && @questions.any? %>
+      <h2 id="questions">
+        <a href="#questions" class="collections__anchor-link">Questions</a>
+        <i class="fa-solid fa-link" aria-hidden="true"></i>
+      </h2>
+
+      <ol>
+      <% @questions.each do |question| %>
+        <li id="<%= question.tag %>"><%= simple_format(question.body) %></li>
+      <% end %>
+      </ol>
+    <% end %>
+
     <hr />
     <%= link_to 'View book',
                 index_path(request.path),

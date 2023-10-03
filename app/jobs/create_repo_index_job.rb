@@ -5,6 +5,7 @@ class CreateRepoIndexJob
     repository, directory = RepositoryDirectory.define(repository_id)
     build = Build.find(build_id)
     step = step_for_action(build.action)
+
     if index_file_exists?(directory)
       build.logs.create(content: 'index.md file exists for this repository.', step:)
     else
@@ -13,16 +14,18 @@ class CreateRepoIndexJob
     end
   end
 
+  private
+
   def step_for_action(action)
     case action
     when 'create'
-      5
+      6
     when 'webhook_push'
-      4
+      5
     when 'update'
-      3
+      4
     when 'rebuild'
-      3
+      4
     end
   end
 
