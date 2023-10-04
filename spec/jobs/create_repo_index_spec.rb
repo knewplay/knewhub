@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe CreateRepoIndexJob, type: :job do
   before(:all) do
     @repo = create(:repository, last_pull_at: DateTime.current)
-    @build = create(:build, repository: @repo)
+    @build = create(:build, repository: @repo, aasm_state: :creating_repo_index)
     directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
     folder_directory = directory.join('Folder')
     FileUtils.mkdir_p(folder_directory)
