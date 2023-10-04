@@ -26,7 +26,7 @@ class Webhooks::GithubController < ApplicationController
         MSG
         build.logs.create(content:, failure: true, step: 2)
       else
-        RespondWebhookPushJob.perform_async(build.id, uuid, name, owner_name, description)
+        build.receive_webhook_push(uuid, name, owner_name, description)
       end
     end
   end

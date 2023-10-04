@@ -29,6 +29,7 @@ class Build < ApplicationRecord
     state :initiated, initial: true
     state :creating_webhook,
           :testing_webhook,
+          :receiving_webhook,
           :cloning_repo,
           :pulling_repo,
           :getting_repo_description,
@@ -44,20 +45,24 @@ class Build < ApplicationRecord
       transitions from: :creating_webhook, to: :testing_webhook
     end
 
+    event :receive_webhook, after_commit: :schedule_receive_webhook do
+      transitions from: :initiated, to: :receiving_webhook
+    end
+
     event :clone_repo, after_commit: :schedule_clone_repo do
-      transitions from: :initiated, to: :cloning_repo
+      transitions from: %i[initiated receiving_webhook], to: :cloning_repo
     end
 
     event :pull_repo, after_commit: :schedule_pull_repo do
-      transitions from: :initiated, to: :pulling_repo
+      transitions from: %i[initiated receiving_webhook], to: :pulling_repo
     end
 
     event :get_repo_description, after_commit: :schedule_get_repo_description do
-      transitions from: :pulling_repo, to: :getting_repo_description
+      transitions from: %i[cloning_repo pulling_repo], to: :getting_repo_description
     end
 
     event :parse_questions, after_commit: :schedule_parse_questions do
-      transitions from: :getting_repo_description, to: :parsing_questions
+      transitions from: %i[cloning_repo pulling_repo getting_repo_description], to: :parsing_questions
     end
 
     event :create_repo_index, after_commit: :schedule_create_repo_index do
@@ -72,6 +77,10 @@ class Build < ApplicationRecord
   # AASM: initiate event
   def create_repo
     create_webhook!
+  end
+
+  def receive_webhook_push(uuid, name, owner_name, description)
+    receive_webhook!(uuid, name, owner_name, description)
   end
 
   def rebuild_repo
@@ -94,6 +103,10 @@ class Build < ApplicationRecord
 
   def schedule_test_webhook
     TestGithubWebhook.perform_async(repository.id, id)
+  end
+
+  def schedule_receive_webhook(uuid, name, owner_name, description)
+    RespondWebhookPushJob.perform_async(id, uuid, name, owner_name, description)
   end
 
   def schedule_clone_repo
@@ -125,12 +138,29 @@ class Build < ApplicationRecord
     clone_repo!
   end
 
+  def finished_receiving_webhook(git_action)
+    case git_action
+    when 'clone'
+      clone_repo!
+    when 'pull'
+      pull_repo!
+    end
+  end
+
   def finished_cloning_repo
-    get_repo_description!
+    if action == 'webhook_push'
+      parse_questions!
+    else
+      get_repo_description!
+    end
   end
 
   def finished_pulling_repo
-    get_repo_description!
+    if action == 'webhook_push'
+      parse_questions!
+    else
+      get_repo_description!
+    end
   end
 
   def finished_getting_repo_description
