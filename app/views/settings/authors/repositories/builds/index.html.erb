@@ -10,7 +10,7 @@
         <p>
           Status:
           <%= build_status_icon(build) %>
-          <%= "#{build.status} (steps: #{log_tally(build)})" %>
+          <%= build.status %>
         </p>
         <p>Created at: <%= local_time(build.created_at) %></p>
         <p>Completed at: <%= local_time(build.completed_at) %></p>
@@ -22,7 +22,6 @@
           <table>
             <thead>
               <tr>
-                <th>Number</th>
                 <th>Content</th>
                 <th>Failure</th>
               </tr>
@@ -31,7 +30,6 @@
             <tbody>
               <% build.logs.each do |log, i| %>
                 <tr class="index-builds__logs__<%= 'failure' if log.failure %>">
-                  <td><%= log.step %></td>
                   <td><%= log.content %></td>
                   <td><%= log.failure %></td>
                 </tr>

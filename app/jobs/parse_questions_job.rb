@@ -4,30 +4,16 @@ class ParseQuestionsJob
   def perform(repository_id, build_id)
     repository, directory = RepositoryDirectory.define(repository_id)
     build = Build.find(build_id)
-    step = step_for_action(build.action)
 
     markdown_files = list_markdown_absolute_path_and_page_name(directory)
     markdown_files.each do |absolute_path, page_name|
       parse_questions(repository, absolute_path, page_name)
     end
-    build.logs.create(content: 'Questions successfully parsed.', step:)
+    build.logs.create(content: 'Questions successfully parsed.')
     build.finished_parsing_questions
   end
 
   private
-
-  def step_for_action(action)
-    case action
-    when 'create'
-      5
-    when 'webhook_push'
-      4
-    when 'update'
-      3
-    when 'rebuild'
-      3
-    end
-  end
 
   def list_markdown_absolute_path_and_page_name(directory)
     absolute_paths = Dir.glob("#{directory}/**/*.md")

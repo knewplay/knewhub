@@ -2,7 +2,7 @@ class Build < ApplicationRecord
   include AASM
 
   belongs_to :repository
-  has_many :logs, dependent: :destroy, after_add: %i[verify_complete verify_failed]
+  has_many :logs, dependent: :destroy, after_add: :verify_failed
 
   validates :status, presence: true
   validates :action, presence: true
@@ -13,16 +13,6 @@ class Build < ApplicationRecord
 
   def repository_author
     repository.author.name
-  end
-
-  def current_step
-    unique_logs = logs.select(:step).distinct
-    # Background jobs can create duplicates of a log or can result in logs being created out of order
-    unique_logs.count
-  end
-
-  def max_step
-    MAX_LOG_STEPS[action.to_sym]
   end
 
   aasm do
@@ -50,7 +40,7 @@ class Build < ApplicationRecord
     end
 
     event :clone_repo, after_commit: :schedule_clone_repo do
-      transitions from: %i[initiated receiving_webhook], to: :cloning_repo
+      transitions from: %i[initiated receiving_webhook testing_webhook], to: :cloning_repo
     end
 
     event :pull_repo, after_commit: :schedule_pull_repo do
@@ -69,7 +59,7 @@ class Build < ApplicationRecord
       transitions from: :parsing_questions, to: :creating_repo_index
     end
 
-    event :complete do
+    event :complete, after_commit: :complete_build do
       transitions from: :creating_repo_index, to: :completed
     end
   end
@@ -96,13 +86,14 @@ class Build < ApplicationRecord
     end
   end
 
-  # AASM: call background jobs
+  # AASM: callbacks
   def schedule_create_webhook
     CreateGithubWebhookJob.perform_async(repository.id, id)
   end
 
   def schedule_test_webhook
-    TestGithubWebhook.perform_async(repository.id, id)
+    # Wait a few seconds for the webhook to be created on GitHub's end
+    TestGithubWebhookJob.perform_in(10.seconds, repository.id, id)
   end
 
   def schedule_receive_webhook(uuid, name, owner_name, description)
@@ -129,6 +120,10 @@ class Build < ApplicationRecord
     CreateRepoIndexJob.perform_async(repository.id, id)
   end
 
+  def complete_build
+    update(status: 'Complete', completed_at: DateTime.current)
+  end
+
   # AASM: notifications of jobs completion
   def finished_creating_webhook
     test_webhook!
@@ -147,15 +142,7 @@ class Build < ApplicationRecord
     end
   end
 
-  def finished_cloning_repo
-    if action == 'webhook_push'
-      parse_questions!
-    else
-      get_repo_description!
-    end
-  end
-
-  def finished_pulling_repo
+  def finished_cloning_or_pulling_repo
     if action == 'webhook_push'
       parse_questions!
     else
@@ -177,30 +164,9 @@ class Build < ApplicationRecord
 
   private
 
-  MAX_LOG_STEPS = {
-    create: 6,
-    update: 4,
-    rebuild: 4,
-    webhook_push: 5
-  }.freeze
-
   # `latest_log` is passed as an argument when using the `after_add` callback
   # But it is not required
-  def verify_complete(_latest_log = nil)
-    return unless no_failures? && max_steps_reached?
-
-    update(status: 'Complete', completed_at: DateTime.current)
-  end
-
   def verify_failed(_latest_log = nil)
     update(status: 'Failed', completed_at: DateTime.current) if logs.any? { |log| log.failure == true }
-  end
-
-  def max_steps_reached?
-    current_step == max_step
-  end
-
-  def no_failures?
-    logs.none? { |log| log.failure == true }
   end
 end
