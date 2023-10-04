@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Repositories#update', type: :system do
   before(:all) do
     @repo = create(:repository, :real)
-    clone_build = create(:build, repository: @repo)
+    clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
     Sidekiq::Testing.inline! do
       VCR.use_cassette('clone_github_repo') do
         CloneGithubRepoJob.perform_async(@repo.id, clone_build.id)
@@ -13,20 +13,18 @@ RSpec.describe 'Repositories#update', type: :system do
 
   context 'when logged in as an author' do
     before(:all) do
-      author = @repo.author
-      sign_in author.user
-      page.set_rack_session(author_id: author.id)
-
-      visit edit_settings_author_repository_path(@repo.id)
-      click_on 'Rebuild repository (pull from GitHub)'
-
-      sleep(1)
-      @rebuild_build = @repo.builds.last
-
       Sidekiq::Testing.inline! do
-        VCR.use_cassette('pull_github_repo') do
-          PullGithubRepoJob.perform_async(@repo.id, @rebuild_build.id)
+        author = @repo.author
+        sign_in author.user
+        page.set_rack_session(author_id: author.id)
+
+        visit edit_settings_author_repository_path(@repo.id)
+        VCR.use_cassette('rebuild_repo') do
+          click_on 'Rebuild repository (pull from GitHub)'
         end
+
+        sleep(1)
+        @rebuild_build = @repo.builds.last
       end
     end
 

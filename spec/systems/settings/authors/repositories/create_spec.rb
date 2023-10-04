@@ -74,16 +74,15 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       click_on 'Create Repository'
 
       @repo = Repository.last
-      @repo.update(uuid: 'c3a3bf52-f983-4b1a-847a-be921fa97914')
+      @repo.update(uuid: '42b189e0-5d63-4529-b863-198a9c259669')
       sleep(1)
       @build = @repo.builds.first
 
+      # The job is called here to allow the `uuid` to be specified
+      # This is to allow the tests to use the same VCR cassettes
       Sidekiq::Testing.inline! do
-        VCR.use_cassette('create_github_webhook_for_create') do
+        VCR.use_cassette('create_repo') do
           CreateGithubWebhookJob.perform_async(@repo.id, @build.id)
-        end
-        VCR.use_cassette('clone_github_repo_for_create') do
-          CloneGithubRepoJob.perform_async(@repo.id, @build.id)
         end
       end
     end
@@ -93,8 +92,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
     end
 
     scenario 'creates the first log' do
-      log_content = @build.logs.first.content
-      expect(log_content).to include('GitHub webhook successfully created.')
+      expect(@build.logs.first.content).to eq('GitHub webhook successfully created. Now testing...')
     end
 
     scenario 'creates the second log' do
@@ -127,12 +125,9 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
       FileUtils.remove_dir(directory)
 
-      log_content = @build.logs.first.content
-      hook_id = log_content.match(/Hook ID: (\d+)/)[1].to_i
-
       VCR.use_cassette('delete_github_webhook_for_create') do
         client = Octokit::Client.new(access_token: @repo.token)
-        client.remove_hook("#{@repo.author.github_username}/#{@repo.name}", hook_id)
+        client.remove_hook("#{@repo.author.github_username}/#{@repo.name}", 436611979)
       end
     end
   end

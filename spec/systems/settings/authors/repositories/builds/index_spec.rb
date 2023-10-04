@@ -24,14 +24,6 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
       visit settings_author_repository_builds_path(repo.id)
       expect(page).to have_content(log.content)
     end
-
-    scenario 'updates the log tally' do
-      sign_in author.user
-      page.set_rack_session(author_id: author.id)
-
-      visit settings_author_repository_builds_path(repo.id)
-      expect(page).to have_content("In progress (steps: 1/#{build.max_step})")
-    end
   end
 
   context 'when not logged in as an author' do

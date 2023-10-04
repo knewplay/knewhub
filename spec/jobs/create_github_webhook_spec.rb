@@ -20,7 +20,7 @@ RSpec.describe CreateGithubWebhookJob, type: :job do
 
     VCR.use_cassette('delete_github_webhook') do
       client = Octokit::Client.new(access_token: repo.token)
-      client.remove_hook("#{repo.author.github_username}/#{repo.name}", '436588649')
+      client.remove_hook("#{repo.author.github_username}/#{repo.name}", 436588649)
     end
   end
 end

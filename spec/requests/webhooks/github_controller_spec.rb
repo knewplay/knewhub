@@ -6,7 +6,7 @@ describe Webhooks::GithubController do
       before(:all) do
         # Creates and clones a repository
         @repo = create(:repository, :real, last_pull_at: DateTime.current)
-        clone_build = create(:build, repository: @repo)
+        clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
         Sidekiq::Testing.inline! do
           VCR.use_cassette('clone_github_repo') do
             CloneGithubRepoJob.perform_async(@repo.id, clone_build.id)
@@ -66,15 +66,19 @@ describe Webhooks::GithubController do
           end
 
           scenario 'with third log' do
-            expect(@build.logs.third.content).to eq('Repository successfully pulled.')
+            expect(@build.logs.third.content).to eq('Repository description successfully updated from GitHub.')
           end
 
           scenario 'with fourth log' do
-            expect(@build.logs.fourth.content).to eq('Questions successfully parsed.')
+            expect(@build.logs.fourth.content).to eq('Repository successfully pulled.')
           end
 
           scenario 'with fifth log' do
-            expect(@build.logs.fifth.content).to eq('index.md file exists for this repository.')
+            expect(@build.logs.fifth.content).to eq('Questions successfully parsed.')
+          end
+
+          scenario 'with sixth log' do
+            expect(@build.logs[5].content).to eq('index.md file exists for this repository.')
           end
 
           scenario "with status 'Complete'" do
