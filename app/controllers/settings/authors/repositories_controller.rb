@@ -18,8 +18,7 @@ module Settings
         @repository = current_author.repositories.build(repository_params)
         if @repository.save
           build = Build.create(repository: @repository, status: 'In progress', action: 'create')
-          CreateGithubWebhookJob.perform_async(@repository.id, build.id)
-          CloneGithubRepoJob.perform_async(@repository.id, build.id)
+          build.create_repo
           redirect_to settings_author_repositories_path,
                       notice: 'Repository creation process was initiated. Check Builds for progress and details.'
         else
@@ -40,9 +39,9 @@ module Settings
           if former_name != @repository.name || former_branch != @repository.branch
             old_directory = Rails.root.join('repos', @repository.author.github_username, former_name)
             FileUtils.remove_dir(old_directory) if Dir.exist?(old_directory)
-            CloneGithubRepoJob.perform_async(@repository.id, build.id)
+            build.update_repo('clone')
           else
-            PullGithubRepoJob.perform_async(@repository.id, build.id)
+            build.update_repo('pull')
           end
           redirect_to settings_author_repositories_path,
                       notice: 'Repository update process was initiated. Check Builds for progress and details.'

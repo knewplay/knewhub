@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: delete
-    uri: https://api.github.com/repos/jp524/test-repo/hooks/432467274
+    uri: https://api.github.com/repos/jp524/test-repo/hooks/436588649
     body:
       encoding: UTF-8
       string: "{}"
@@ -10,7 +10,7 @@ http_interactions:
       Accept:
       - application/vnd.github.v3+json
       User-Agent:
-      - Octokit Ruby Gem 7.0.0
+      - Octokit Ruby Gem 7.1.0
       Content-Type:
       - application/json
       Authorization:
@@ -25,11 +25,11 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Thu, 07 Sep 2023 17:45:50 GMT
+      - Wed, 04 Oct 2023 15:42:14 GMT
       X-Oauth-Scopes:
       - admin:repo_hook, repo
       X-Accepted-Oauth-Scopes:
-      - admin:repo_hook, repo
+      - repo
       Github-Authentication-Token-Expiration:
       - 2023-11-04 13:22:43 UTC
       X-Github-Media-Type:
@@ -39,11 +39,11 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4995'
+      - '4994'
       X-Ratelimit-Reset:
-      - '1694112292'
+      - '1696437646'
       X-Ratelimit-Used:
-      - '5'
+      - '6'
       X-Ratelimit-Resource:
       - core
       Access-Control-Expose-Headers:
@@ -68,9 +68,9 @@ http_interactions:
       Vary:
       - Accept-Encoding, Accept, X-Requested-With
       X-Github-Request-Id:
-      - CABF:0133:11FC081:2478BE8:64FA0C4E
+      - C1E6:7B50:8E8869:11F725B:651D87D6
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Thu, 07 Sep 2023 17:45:50 GMT
+  recorded_at: Wed, 04 Oct 2023 15:42:14 GMT
 recorded_with: VCR 6.2.0

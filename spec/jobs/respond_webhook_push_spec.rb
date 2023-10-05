@@ -3,10 +3,11 @@ require 'rails_helper'
 RSpec.describe RespondWebhookPushJob, type: :job do
   before(:all) do
     @repo = create(:repository, :real)
-    @build = create(:build, repository: @repo)
+    clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
+    @build = create(:build, action: 'webhook_push', repository: @repo, aasm_state: :receiving_webhook)
     Sidekiq::Testing.inline! do
       VCR.use_cassette('clone_github_repo') do
-        CloneGithubRepoJob.perform_async(@repo.id, @build.id)
+        CloneGithubRepoJob.perform_async(clone_build.id)
       end
     end
   end

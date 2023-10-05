@@ -12,7 +12,7 @@ class Webhooks::GithubController < ApplicationController
     case request.headers['X-GitHub-Event']
     when 'push'
       build = Build.create(repository:, status: 'In progress', action: 'webhook_push')
-      build.logs.create(content: "GitHub webhook 'push' received. Updating repository...", step: 1)
+      build.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
 
       name = params[:repository][:name]
       owner_name = params[:repository][:owner][:name]
@@ -24,9 +24,9 @@ class Webhooks::GithubController < ApplicationController
           The ownership of the repository has changed.
           Please login with GitHub with the new repository owner's account to add the repository to Knewhub.
         MSG
-        build.logs.create(content:, failure: true, step: 2)
+        build.logs.create(content:, failure: true) 
       else
-        RespondWebhookPushJob.perform_async(build.id, uuid, name, owner_name, description)
+        build.receive_webhook_push(uuid, name, owner_name, description)
       end
     end
   end

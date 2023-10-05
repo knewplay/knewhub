@@ -23,30 +23,4 @@ RSpec.describe Build, type: :model do
       expect(subject).to be_valid
     end
   end
-
-  describe '#current_step' do
-    context 'when duplicates of a log exists' do
-      before do
-        create(:log, step: 1)
-        build = Log.last.build
-        create_list(:log, 2, step: 2, build:)
-      end
-
-      it 'only counts the log once' do
-        expect(Build.last.current_step).to eq(2)
-      end
-    end
-
-    context 'when logs are out of order' do
-      before do
-        create(:log, step: 3)
-        build = Log.last.build
-        create(:log, step: 1, build:)
-      end
-
-      it 'returns the correct step regardless' do
-        expect(Build.last.current_step).to eq(2)
-      end
-    end
-  end
 end

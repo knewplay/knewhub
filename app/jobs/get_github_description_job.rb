@@ -1,31 +1,20 @@
 class GetGithubDescriptionJob
   include Sidekiq::Job
 
-  def perform(repository_id, build_id)
-    repository = Repository.includes(:author).find(repository_id)
+  def perform(build_id)
     build = Build.find(build_id)
-    step = step_for_action(build.action)
+    repository = Repository.includes(:author).find(build.repository.id)
+
     client = Octokit::Client.new(access_token: repository.token)
     response = client.repository("#{repository.author.github_username}/#{repository.name}")
     repository.update(description: response.description)
 
-    build.logs.create(content: 'Repository description successfully updated from GitHub.', step:)
+    build.logs.create(content: 'Repository description successfully updated from GitHub.')
+    build.finished_getting_repo_description
   rescue Octokit::Unauthorized, Octokit::UnprocessableEntity => e
     build.logs.create(
       content: "Failed to get description from GitHub. Message: #{e.message}",
-      failure: true,
-      step:
+      failure: true
     )
-  end
-
-  def step_for_action(action)
-    case action
-    when 'create'
-      4
-    when 'update'
-      2
-    when 'rebuild'
-      2
-    end
   end
 end

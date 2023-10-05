@@ -5,12 +5,6 @@ module BuildInformationHelper
     "'#{build.action}' | #{local_time(build.completed_at)}"
   end
 
-  def log_tally(build)
-    return if build.nil?
-
-    "#{build.current_step}/#{build.max_step}"
-  end
-
   def build_status_icon(build)
     return if build.nil?
 

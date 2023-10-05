@@ -42,32 +42,28 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
 
     context 'updating the name and title using the Build process' do
       before(:all) do
-        # Creates and clones a repository
-        @repo = create(:repository, :real)
-        clone_build = create(:build, repository: @repo)
         Sidekiq::Testing.inline! do
+          # Creates and clones a repository
+          @repo = create(:repository, :real)
+          clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
           VCR.use_cassette('clone_github_repo') do
-            CloneGithubRepoJob.perform_async(@repo.id, clone_build.id)
+            CloneGithubRepoJob.perform_async(clone_build.id)
           end
-        end
 
-        # Updates repository with a new name and title
-        author = @repo.author
-        sign_in author.user
-        page.set_rack_session(author_id: author.id)
+          # Updates repository with a new name and title
+          author = @repo.author
+          sign_in author.user
+          page.set_rack_session(author_id: author.id)
 
-        visit edit_settings_author_repository_path(@repo.id)
-        fill_in('Name', with: 'markdown-templates')
-        fill_in('Title', with: 'Markdown Templates')
-        click_on 'Update Repository'
-
-        sleep(1)
-        @update_build = @repo.builds.last
-
-        Sidekiq::Testing.inline! do
-          VCR.use_cassette('clone_github_repo_for_update') do
-            CloneGithubRepoJob.perform_async(@repo.id, @update_build.id)
+          visit edit_settings_author_repository_path(@repo.id)
+          fill_in('Name', with: 'markdown-templates')
+          fill_in('Title', with: 'Markdown Templates')
+          VCR.use_cassette('update_repo') do
+            click_on 'Update Repository'
           end
+
+          sleep(1)
+          @update_build = @repo.builds.last
         end
       end
 

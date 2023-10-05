@@ -2,14 +2,15 @@ require 'rails_helper'
 
 RSpec.describe 'Collections#show', type: :system do
   before(:all) do
-    # Clone the GitHub repo containing the required files
+    # Clone the GitHub repo containing the required files and parse questions
     @repo = create(:repository, :real, name: 'markdown-templates')
-    build = create(:build, repository: @repo)
+    clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
+    parse_questions_build = create(:build, repository: @repo, aasm_state: :parsing_questions)
     Sidekiq::Testing.inline! do
       VCR.use_cassette('clone_github_repo_for_collections') do
-        CloneGithubRepoJob.perform_async(@repo.id, build.id)
+        CloneGithubRepoJob.perform_async(clone_build.id)
       end
-      ParseQuestionsJob.perform_async(@repo.id, build.id)
+      ParseQuestionsJob.perform_async(parse_questions_build.id)
     end
   end
 

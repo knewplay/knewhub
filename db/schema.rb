@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_145653) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_04_143201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_145653) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "action"
+    t.string "aasm_state"
     t.index ["repository_id"], name: "index_builds_on_repository_id"
   end
 
@@ -50,7 +51,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_145653) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "failure", default: false
-    t.integer "step"
     t.index ["build_id"], name: "index_logs_on_build_id"
   end
 
@@ -77,6 +77,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_145653) do
     t.bigint "author_id"
     t.string "title"
     t.boolean "banned", default: false
+    t.integer "hook_id"
     t.index ["author_id"], name: "index_repositories_on_author_id"
   end
 
