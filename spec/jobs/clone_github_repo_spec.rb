@@ -7,15 +7,15 @@ RSpec.describe CloneGithubRepoJob, type: :job do
   end
 
   it 'queues the job' do
-    CloneGithubRepoJob.perform_async(@repo.id, @build.id)
-    expect(CloneGithubRepoJob).to have_enqueued_sidekiq_job(@repo.id, @build.id)
+    CloneGithubRepoJob.perform_async(@build.id)
+    expect(CloneGithubRepoJob).to have_enqueued_sidekiq_job(@build.id)
   end
 
   it 'executes perform' do
     expect(@repo.last_pull_at).to be_nil
     Sidekiq::Testing.inline! do
       VCR.use_cassette('clone_github_repo') do
-        CloneGithubRepoJob.perform_async(@repo.id, @build.id)
+        CloneGithubRepoJob.perform_async(@build.id)
       end
     end
     @repo.reload

@@ -88,12 +88,12 @@ class Build < ApplicationRecord
 
   # AASM: callbacks
   def schedule_create_webhook
-    CreateGithubWebhookJob.perform_async(repository.id, id)
+    CreateGithubWebhookJob.perform_async(id)
   end
 
   def schedule_test_webhook
     # Wait a few seconds for the webhook to be created on GitHub's end
-    TestGithubWebhookJob.perform_in(10.seconds, repository.id, id)
+    TestGithubWebhookJob.perform_in(10.seconds, id)
   end
 
   def schedule_receive_webhook(uuid, name, owner_name, description)
@@ -101,23 +101,23 @@ class Build < ApplicationRecord
   end
 
   def schedule_clone_repo
-    CloneGithubRepoJob.perform_async(repository.id, id)
+    CloneGithubRepoJob.perform_async(id)
   end
 
   def schedule_pull_repo
-    PullGithubRepoJob.perform_async(repository.id, id)
+    PullGithubRepoJob.perform_async(id)
   end
 
   def schedule_get_repo_description
-    GetGithubDescriptionJob.perform_async(repository.id, id)
+    GetGithubDescriptionJob.perform_async(id)
   end
 
   def schedule_parse_questions
-    ParseQuestionsJob.perform_async(repository.id, id)
+    ParseQuestionsJob.perform_async(id)
   end
 
   def schedule_create_repo_index
-    CreateRepoIndexJob.perform_async(repository.id, id)
+    CreateRepoIndexJob.perform_async(id)
   end
 
   def complete_build

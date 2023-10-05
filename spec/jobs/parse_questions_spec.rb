@@ -43,14 +43,14 @@ RSpec.describe ParseQuestionsJob, type: :job do
   end
 
   it 'queues the job' do
-    ParseQuestionsJob.perform_async(@repo.id, @build.id)
-    expect(ParseQuestionsJob).to have_enqueued_sidekiq_job(@repo.id, @build.id)
+    ParseQuestionsJob.perform_async(@build.id)
+    expect(ParseQuestionsJob).to have_enqueued_sidekiq_job(@build.id)
   end
 
   context 'when executing the job' do
     before(:all) do
       Sidekiq::Testing.inline! do
-        ParseQuestionsJob.perform_async(@repo.id, @build.id)
+        ParseQuestionsJob.perform_async(@build.id)
       end
     end
 

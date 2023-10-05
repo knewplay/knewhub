@@ -1,9 +1,9 @@
 class CloneGithubRepoJob
   include Sidekiq::Job
 
-  def perform(repository_id, build_id)
-    repository, directory = RepositoryDirectory.define(repository_id)
+  def perform(build_id)
     build = Build.find(build_id)
+    repository, directory = RepositoryDirectory.define(build.repository.id)
 
     Git.clone(repository.git_url, directory, branch: repository.branch)
     repository.update(last_pull_at: DateTime.current)

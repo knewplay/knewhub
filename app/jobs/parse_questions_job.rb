@@ -1,9 +1,9 @@
 class ParseQuestionsJob
   include Sidekiq::Job
 
-  def perform(repository_id, build_id)
-    repository, directory = RepositoryDirectory.define(repository_id)
+  def perform(build_id)
     build = Build.find(build_id)
+    repository, directory = RepositoryDirectory.define(build.repository.id)
 
     markdown_files = list_markdown_absolute_path_and_page_name(directory)
     markdown_files.each do |absolute_path, page_name|

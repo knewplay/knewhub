@@ -7,21 +7,21 @@ RSpec.describe PullGithubRepoJob, type: :job do
     @pull_build = create(:build, repository: @repo, aasm_state: :pulling_repo)
     Sidekiq::Testing.inline! do
       VCR.use_cassette('clone_github_repo') do
-        CloneGithubRepoJob.perform_async(@repo.id, clone_build.id)
+        CloneGithubRepoJob.perform_async(clone_build.id)
       end
     end
   end
 
   it 'queues the job' do
-    PullGithubRepoJob.perform_async(@repo.id, @pull_build.id)
-    expect(PullGithubRepoJob).to have_enqueued_sidekiq_job(@repo.id, @pull_build.id)
+    PullGithubRepoJob.perform_async(@pull_build.id)
+    expect(PullGithubRepoJob).to have_enqueued_sidekiq_job(@pull_build.id)
   end
 
   it 'executes perform' do
     last_pull_at = @repo.last_pull_at
     Sidekiq::Testing.inline! do
       VCR.use_cassette('pull_github_repo') do
-        PullGithubRepoJob.perform_async(@repo.id, @pull_build.id)
+        PullGithubRepoJob.perform_async(@pull_build.id)
       end
     end
     @repo.reload

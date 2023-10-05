@@ -82,7 +82,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       # This is to allow the tests to use the same VCR cassettes
       Sidekiq::Testing.inline! do
         VCR.use_cassette('create_repo') do
-          CreateGithubWebhookJob.perform_async(@repo.id, @build.id)
+          CreateGithubWebhookJob.perform_async(@build.id)
         end
       end
     end

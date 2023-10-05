@@ -47,7 +47,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
           @repo = create(:repository, :real)
           clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
           VCR.use_cassette('clone_github_repo') do
-            CloneGithubRepoJob.perform_async(@repo.id, clone_build.id)
+            CloneGithubRepoJob.perform_async(clone_build.id)
           end
 
           # Updates repository with a new name and title

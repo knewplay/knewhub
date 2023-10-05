@@ -16,8 +16,8 @@ RSpec.describe CreateRepoIndexJob, type: :job do
   end
 
   it 'queues the job' do
-    CreateRepoIndexJob.perform_async(@repo.id, @build.id)
-    expect(CreateRepoIndexJob).to have_enqueued_sidekiq_job(@repo.id, @build.id)
+    CreateRepoIndexJob.perform_async(@build.id)
+    expect(CreateRepoIndexJob).to have_enqueued_sidekiq_job(@build.id)
   end
 
   context "when the 'index.md' file exists" do
@@ -29,7 +29,7 @@ RSpec.describe CreateRepoIndexJob, type: :job do
 
     it 'does not create a new file' do
       Sidekiq::Testing.inline! do
-        CreateRepoIndexJob.perform_async(@repo.id, @build.id)
+        CreateRepoIndexJob.perform_async(@build.id)
       end
 
       index_filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
@@ -46,7 +46,7 @@ RSpec.describe CreateRepoIndexJob, type: :job do
   context "when the 'index.md' file does not exist" do
     before(:all) do
       Sidekiq::Testing.inline! do
-        CreateRepoIndexJob.perform_async(@repo.id, @build.id)
+        CreateRepoIndexJob.perform_async(@build.id)
       end
       @index_filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
       @file_data = File.read(@index_filepath)

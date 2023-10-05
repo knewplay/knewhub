@@ -5,8 +5,8 @@ RSpec.describe CreateGithubWebhookJob, type: :job do
   let(:build) { create(:build, repository: repo, aasm_state: :creating_webhook) }
 
   it 'queues the job' do
-    CreateGithubWebhookJob.perform_async(repo.id, build.id)
-    expect(CreateGithubWebhookJob).to have_enqueued_sidekiq_job(repo.id, build.id)
+    CreateGithubWebhookJob.perform_async(build.id)
+    expect(CreateGithubWebhookJob).to have_enqueued_sidekiq_job(build.id)
   end
 
   it 'executes perform' do
@@ -14,7 +14,7 @@ RSpec.describe CreateGithubWebhookJob, type: :job do
     expect(repo.last_pull_at).to be_nil
     VCR.use_cassette('create_github_webhook') do
       Sidekiq::Testing.inline! do
-        CreateGithubWebhookJob.perform_async(repo.id, build.id)
+        CreateGithubWebhookJob.perform_async(build.id)
       end
     end
 

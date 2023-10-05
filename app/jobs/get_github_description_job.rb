@@ -1,9 +1,10 @@
 class GetGithubDescriptionJob
   include Sidekiq::Job
 
-  def perform(repository_id, build_id)
-    repository = Repository.includes(:author).find(repository_id)
+  def perform(build_id)
     build = Build.find(build_id)
+    repository = Repository.includes(:author).find(build.repository.id)
+
     client = Octokit::Client.new(access_token: repository.token)
     response = client.repository("#{repository.author.github_username}/#{repository.name}")
     repository.update(description: response.description)
