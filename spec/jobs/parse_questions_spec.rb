@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.describe ParseQuestionsJob, type: :job do
   before(:all) do
     @repo = create(:repository, last_pull_at: DateTime.current)
-    @build = create(:build, repository: @repo, aasm_state: :parsing_questions)
+    @first_build = create(:build, repository: @repo, aasm_state: :parsing_questions)
     directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
     folder_directory = directory.join('Folder')
     FileUtils.mkdir_p(folder_directory)
 
-    first_filepath = File.join(directory, 'article_one.md')
+    @first_filepath = File.join(directory, 'article_one.md')
     article_one_content = <<~ARTICLE
       ---
       title: "First Article"
@@ -23,9 +23,9 @@ RSpec.describe ParseQuestionsJob, type: :job do
       Article one content
     ARTICLE
 
-    File.open(first_filepath, 'w') { |f| f.write(article_one_content) }
+    File.open(@first_filepath, 'w') { |f| f.write(article_one_content) }
 
-    second_filepath = File.join(directory, 'Folder', 'article_two.md')
+    @second_filepath = File.join(directory, 'Folder', 'article_two.md')
     article_two_content = <<~ARTICLE
       ---
       title: "Second Article"
@@ -39,18 +39,18 @@ RSpec.describe ParseQuestionsJob, type: :job do
 
       Article two content
     ARTICLE
-    File.open(second_filepath, 'w') { |f| f.write(article_two_content) }
+    File.open(@second_filepath, 'w') { |f| f.write(article_two_content) }
   end
 
   it 'queues the job' do
-    ParseQuestionsJob.perform_async(@build.id)
-    expect(ParseQuestionsJob).to have_enqueued_sidekiq_job(@build.id)
+    ParseQuestionsJob.perform_async(@first_build.id)
+    expect(ParseQuestionsJob).to have_enqueued_sidekiq_job(@first_build.id)
   end
 
-  context 'when executing the job' do
+  context 'when executing the job once' do
     before(:all) do
       Sidekiq::Testing.inline! do
-        ParseQuestionsJob.perform_async(@build.id)
+        ParseQuestionsJob.perform_async(@first_build.id)
       end
     end
 
@@ -62,6 +62,91 @@ RSpec.describe ParseQuestionsJob, type: :job do
     it 'creates questions associated with the second article' do
       questions = Question.where(page_path: 'Folder/article_two')
       expect(questions.count).to eq(2)
+    end
+
+    it 'newly created questions have hidden == false' do
+      questions = Question.all
+      expect(questions.all? { |question| question.hidden == false }).to be true
+    end
+
+    context 'when executing the job a second time' do
+      before(:all) do
+        new_article_one_content = <<~ARTICLE
+          ---
+          title: "First Article"
+          date: "2023-10-02"
+          author: "The Author"
+          illustrator: "The Illustrator"
+          questions:
+            - ["two", "Habitant morbi tristique senectus et."]
+          ---
+
+          Article one content
+        ARTICLE
+
+        File.open(@first_filepath, 'w') { |f| f.write(new_article_one_content) }
+        File.delete(@second_filepath)
+
+        @second_build = create(:build, repository: @repo, aasm_state: :parsing_questions)
+
+        Sidekiq::Testing.inline! do
+          ParseQuestionsJob.perform_async(@second_build.id)
+        end
+      end
+
+      it 'has the original number of questions' do
+        expect(Question.all.count).to eq(4)
+      end
+
+      it 'shows the unchanged question in the article that remains' do
+        question = Question.find_by(tag: 'two')
+        expect(question.hidden).to be false
+      end
+
+      it 'hides the deleted question in the article that remains' do
+        question = Question.find_by(tag: 'one')
+        expect(question.hidden).to be true
+      end
+
+      it 'hides the deleted questions in the article that was deleted' do
+        questions = Question.where(page_path: 'Folder/article_two')
+        expect(questions.all? { |question| question.hidden == true }).to be true
+      end
+
+      context 'when executing the job a third time' do
+        before(:all) do
+          new_article_one_content = <<~ARTICLE
+            ---
+            title: "First Article"
+            date: "2023-10-02"
+            author: "The Author"
+            illustrator: "The Illustrator"
+            questions:
+              - ["one", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet consectetur adipiscing elit pellentesque habitant morbi tristique senectus."]
+              - ["two", "Habitant morbi tristique senectus et."]
+            ---
+
+            Article one content
+          ARTICLE
+
+          File.open(@first_filepath, 'w') { |f| f.write(new_article_one_content) }
+
+          @third_build = create(:build, repository: @repo, aasm_state: :parsing_questions)
+
+          Sidekiq::Testing.inline! do
+            ParseQuestionsJob.perform_async(@third_build.id)
+          end
+        end
+
+        it 'has the original number of questions' do
+          expect(Question.all.count).to eq(4)
+        end
+
+        it 'shows the question that was added back' do
+          question = Question.find_by(tag: 'one')
+          expect(question.hidden).to be false
+        end
+      end
     end
   end
 
