@@ -5,7 +5,8 @@ class CustomRender < Redcarpet::Render::HTML
   end
 
   def header(text, header_level)
-    if @options[:with_toc_data]
+    # If header already includes a link, do not add an anchor link
+    if @options[:with_toc_data] && text.exclude?('a href')
       id = text.parameterize(separator: '-')
       <<~HEADER
         <h#{header_level} id=#{id}>
