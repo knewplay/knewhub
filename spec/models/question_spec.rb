@@ -24,7 +24,12 @@ RSpec.describe Question, type: :model do
       expect(subject).to_not be_valid
     end
 
-    it 'returns true when body, tag and page_path are set and when associated with a Repository' do
+    it 'returns false when batch_code is nil' do
+      subject.batch_code = nil
+      expect(subject).to_not be_valid
+    end
+
+    it 'returns true when body, tag, page_path and batch_code are set, and when associated with a Repository' do
       expect(subject).to be_valid
     end
   end
