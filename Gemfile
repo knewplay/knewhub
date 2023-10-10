@@ -80,6 +80,9 @@ gem 'administrate'
 gem 'aasm'
 gem 'after_commit_everywhere', '~> 1.0'
 
+# Code syntax highlighter
+gem 'rouge'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
