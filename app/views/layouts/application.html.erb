@@ -9,6 +9,9 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%# Importing Rouge stylesheet here since it cannot be imported in `application.scss` due
+    to issues with `dartsass-rails` gem and `erb` files %>
+    <%= stylesheet_link_tag 'rouge' %>
     <%= javascript_importmap_tags %>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree&family=Istok+Web">
 
