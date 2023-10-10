@@ -29,7 +29,8 @@ RSpec.describe CreateRepoIndexJob, type: :job do
 
     it 'does not create a new file' do
       Sidekiq::Testing.inline! do
-        CreateRepoIndexJob.perform_async(@build.id)
+        build = create(:build, repository: @repo, aasm_state: :creating_repo_index)
+        CreateRepoIndexJob.perform_async(build.id)
       end
 
       index_filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
