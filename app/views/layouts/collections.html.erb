@@ -1,8 +1,8 @@
-<% content_for(:html_title) { @front_matter['title'] } %>
+<% content_for(:html_title) { @front_matter&.[]('title') } %>
 
 <% content_for :collections_layout do %>
   <div class="collections">
-    <% if @front_matter['title'] && @front_matter['date'] %>
+    <% if @front_matter&.[]('title') && @front_matter&.[]('date') %>
       <h1><%= @front_matter['title'] %></h1>
       <h5>
         Written by <%= @front_matter['author'] %> on <%= @front_matter['date'] %>.
