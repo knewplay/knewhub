@@ -1,3 +1,6 @@
+// Rouge style sheet imported separately since there are issued with
+// the `dartsass-rails` gem and `erb` files
+
 @import "milligram";
 
 @import "utilities/sr-only";

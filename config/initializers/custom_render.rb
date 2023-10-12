@@ -1,5 +1,9 @@
 # Custom renderer that sets a custom class for code blocks
+require 'rouge/plugins/redcarpet'
+
 class CustomRender < Redcarpet::Render::HTML
+  include Rouge::Plugins::Redcarpet
+
   def paragraph(text)
     process_custom_tags(text.strip)
   end
