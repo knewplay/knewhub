@@ -26,5 +26,8 @@ module Knewhub
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Prevent creation of `div class="field_with_errors"` wrapper upon invalid form submission
+    config.action_view.field_error_proc = ->(html_tag, _instance) { html_tag.html_safe }
   end
 end
