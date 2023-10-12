@@ -13,7 +13,7 @@ class Sessions::AdministratorsController < ApplicationController
       end
       destroy_other_sessions
     else
-      redirect_to root_path, alert: 'Login failed. Please verify your username and password.'
+      redirect_to new_sessions_administrator_path, alert: 'Login failed. Please verify your username and password.'
     end
   end
 
