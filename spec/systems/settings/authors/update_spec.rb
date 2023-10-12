@@ -37,7 +37,7 @@ RSpec.describe 'Settings::Author#update', type: :system do
     end
   end
 
-  xcontext 'when given an invalid name' do
+  context 'when given an invalid name' do
     scenario 'fails to update' do
       sign_in author.user
       page.set_rack_session(author_id: author.id)
