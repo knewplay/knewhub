@@ -1,0 +1,5 @@
+<%= turbo_stream.update nested_dom_id(@question, Answer.new), "" %>
+
+<%= turbo_stream.append nested_dom_id(@question, "answers") do %>
+  <%= render @answer, question: @question %>
+<% end %>

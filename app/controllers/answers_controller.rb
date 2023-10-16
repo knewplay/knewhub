@@ -13,7 +13,10 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(answer_params)
     @answer.user = current_user
     if @answer.save
-      redirect_to answers_path(@question.id)
+      respond_to do |format|
+        format.html { redirect_to answers_path(@question.id) }
+        format.turbo_stream
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -22,7 +25,10 @@ class AnswersController < ApplicationController
   def destroy
     @answer = Answer.find(params[:id])
     @answer.destroy
-    redirect_to answers_path(@question.id)
+    respond_to do |format|
+      format.html { redirect_to answers_path(@question.id) }
+      format.turbo_stream
+    end
   end
 
   private

@@ -31,6 +31,12 @@
                     data: { turbo_frame: nested_dom_id(question, 'answers') },
                     class: 'button' %>
 
+        <%= link_to 'Add answer',
+                    new_answer_path(question.id),
+                    data: { turbo_frame: nested_dom_id(question, 'new_answer') },
+                    class: 'button button-tertiary' %>
+
+        <%= turbo_frame_tag nested_dom_id(question, 'new_answer') %>
         <%= turbo_frame_tag nested_dom_id(question, 'answers') %>
       <% end %>
       </ol>
