@@ -45,7 +45,7 @@ Rails.application.routes.draw do
 
   # Answers on collections pages
   scope '/questions/:question_id' do
-    resources :answers, only: %i[index new create]
+    resources :answers, only: %i[index new create destroy]
   end
 
   # Administrator dashboard
