@@ -1,0 +1,17 @@
+<% content_for(:html_title) { 'Answers' } %>
+
+<h2>Question</h2>
+
+<%= simple_format(@question.body) %>
+
+<h2>Answers</h2>
+
+<% if @answers.empty? %>
+  <p>No answers yet!</p>
+<% else %>
+  <ul>
+    <% @answers.each do |answer| %>
+      <li><%= answer.body %></li>
+    <% end %>
+  </ul>
+<% end %>

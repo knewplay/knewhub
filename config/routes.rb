@@ -43,6 +43,11 @@ Rails.application.routes.draw do
     root to: 'accounts#show'
   end
 
+  # Answers on collections pages
+  scope '/questions/:question_id' do
+    resources :answers, only: [:index]
+  end
+
   # Administrator dashboard
   namespace :dashboard do
     resources :authors, only: %i[index edit update]

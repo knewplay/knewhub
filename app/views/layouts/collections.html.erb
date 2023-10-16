@@ -26,6 +26,7 @@
       <ol>
       <% @questions.each do |question| %>
         <li id="<%= question.tag %>"><%= simple_format(question.body) %></li>
+        <%= link_to 'View answers', answers_path(question.id) %>
       <% end %>
       </ol>
     <% end %>
