@@ -31,6 +31,7 @@ class CollectionsController < ApplicationController
   end
 
   private
+
   def require_user_or_admin_authentication
     return if administrator_signed_in? || user_signed_in?
 

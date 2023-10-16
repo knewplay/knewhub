@@ -29,7 +29,8 @@ RSpec.describe 'Administrator#create', type: :system do
 
     click_on 'Create account'
 
-    expect(page).to have_content('Creation of administrator account failed.')
+    expect(page).to have_current_path(new_administrator_path)
+    expect(page).to have_content("Password confirmation doesn't match Password")
     expect(Administrator.count).to eq(before_count)
   end
 

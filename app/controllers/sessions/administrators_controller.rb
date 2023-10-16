@@ -2,9 +2,7 @@ class Sessions::AdministratorsController < ApplicationController
   def new; end
 
   def create
-    administrator = Administrator.find_by(name: params[:name])
-
-    if administrator&.authenticate(params[:password])
+    if (administrator = Administrator.authenticate_by(name: params[:name], password: params[:password]))
       if administrator.multi_factor_enabled?
         session[:webauthn_administrator_id] = administrator.id
         redirect_to new_webauthn_authentication_path
@@ -13,9 +11,9 @@ class Sessions::AdministratorsController < ApplicationController
         session[:administrator_expires_at] = Time.now + 1.hour
         redirect_to dashboard_root_path
       end
-      session[:author_id] = nil if session[:author_id]
+      destroy_other_sessions
     else
-      redirect_to root_path, alert: 'Login failed. Please verify your username and password.'
+      redirect_to new_sessions_administrator_path, alert: 'Login failed. Please verify your username and password.'
     end
   end
 
@@ -23,5 +21,10 @@ class Sessions::AdministratorsController < ApplicationController
     session[:administrator_id] = nil
     session[:administrator_expires_at] = nil
     redirect_to root_path
+  end
+
+  def destroy_other_sessions
+    session[:user_id] = nil if session[:user_id]
+    session[:author_id] = nil if session[:author_id]
   end
 end

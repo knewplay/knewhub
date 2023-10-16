@@ -1,4 +1,4 @@
-<%= form_with(model: [:settings, author]) do |form| %>
+<%= form_with(model: [:settings, author], url: settings_author_path) do |form| %>
   <%= render 'shared/form_errors', resource: author if author.errors.any? %>
 
   <div class="form-field">

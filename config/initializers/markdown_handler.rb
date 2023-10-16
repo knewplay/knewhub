@@ -6,9 +6,7 @@ module MarkdownHandler
   end
 
   def self.call(template, source)
-    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date])
-    parsed = FrontMatterParser::Parser.new(:md, loader:).call(source)
-    erb_source = erb.call(template, parsed.content)
+    erb_source = "#{erb.call(template, parsed_content(source))}.to_s"
     extensions = {
       fenced_code_blocks: true,
       disable_indented_code_blocks: true
@@ -20,6 +18,12 @@ module MarkdownHandler
     }
 
     "Redcarpet::Markdown.new(CustomRender.new(#{render_options}), #{extensions}).render(begin;#{erb_source};end)"
+  end
+
+  def self.parsed_content(source)
+    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date])
+    parsed = FrontMatterParser::Parser.new(:md, loader:).call(source)
+    parsed.content
   end
 end
 

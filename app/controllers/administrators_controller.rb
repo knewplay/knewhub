@@ -11,7 +11,7 @@ class AdministratorsController < ApplicationController
     if @administrator.save
       redirect_to root_path, notice: 'Administrator account successfully created.'
     else
-      redirect_to root_path, alert: 'Creation of administrator account failed.'
+      render :new, status: :unprocessable_entity
     end
   end
 
