@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_one :author, dependent: :destroy
+  has_many :answers
 
   # Include default devise modules. Others available are:
   # :lockable, :rememberable, :trackable and :omniauthable

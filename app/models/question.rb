@@ -1,5 +1,6 @@
 class Question < ApplicationRecord
   belongs_to :repository
+  has_many :answers
 
   validates :tag, presence: true
   validates :page_path, presence: true
