@@ -1,0 +1,16 @@
+<% content_for(:html_title) { 'New answer' } %>
+
+<h2>New answer</h2>
+
+<div class="form-block">
+  <%= form_with model: @answer, url: answers_path  do |f| %>
+    <%= render 'shared/form_errors', resource: @answer if @answer.errors.any? %>
+
+    <div class="form-field">
+      <%= f.text_field :body, required: true %>
+      <%= f.label :body %>
+    </div>
+
+    <%= f.submit %>
+  <% end %>
+</div>
