@@ -6,23 +6,12 @@
 
 <h2>Answers</h2>
 
-<% if @answers.empty? %>
-  <p>No answers yet!</p>
-<% else %>
-  <ul>
-    <% @answers.each do |answer| %>
-      <li>
-        <%= answer.body %>
-        <% if answer.user == current_user %>
-          <%= button_to answer_path(@question.id, answer.id),
-                        method: :delete,
-                        form: { data: { turbo_confirm: 'Are you sure?' } } do %>
-            <i class="fa-regular fa-trash-can" aria-hidden="true" title="Delete answer"></i>
-          <% end %>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
+<%= turbo_frame_tag nested_dom_id(@question, 'answers') do %>
+  <% if @answers.empty? %>
+    <p>No answers yet!</p>
+  <% else %>
+    <div><%= render @answers, question: @question %></div>
+  <% end %>
 <% end %>
 
 <%= link_to 'Add answer', new_answer_path(@question.id) %>

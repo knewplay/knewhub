@@ -1,0 +1,12 @@
+<%= turbo_frame_tag nested_dom_id(question, answer) do %>
+  <div>
+    <%= answer.body %>
+    <% if answer.user == current_user %>
+      <%= button_to answer_path(question.id, answer.id),
+                    method: :delete,
+                    form: { data: { turbo_confirm: 'Are you sure?' } } do %>
+        <i class="fa-regular fa-trash-can" aria-hidden="true" title="Delete answer"></i>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

@@ -26,7 +26,12 @@
       <ol>
       <% @questions.each do |question| %>
         <li id="<%= question.tag %>"><%= simple_format(question.body) %></li>
-        <%= link_to 'View answers', answers_path(question.id) %>
+        <%= link_to 'View answers',
+                    answers_path(question.id),
+                    data: { turbo_frame: nested_dom_id(question, 'answers') },
+                    class: 'button' %>
+
+        <%= turbo_frame_tag nested_dom_id(question, 'answers') %>
       <% end %>
       </ol>
     <% end %>
