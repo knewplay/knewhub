@@ -12,6 +12,9 @@
   <% else %>
     <div><%= render @answers, question: @question %></div>
   <% end %>
+
+  <%= link_to 'Close', :back, class: 'button' %>
 <% end %>
 
+<br>
 <%= link_to 'Add answer', new_answer_path(@question.id) %>
