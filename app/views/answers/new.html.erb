@@ -8,7 +8,7 @@
       <%= render 'shared/form_errors', resource: @answer if @answer.errors.any? %>
 
       <div class="form-field">
-        <%= f.text_field :body, required: true %>
+        <%= f.text_area :body, required: true %>
         <%= f.label :body, 'Your answer...' %>
       </div>
 
