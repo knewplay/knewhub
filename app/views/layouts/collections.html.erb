@@ -23,23 +23,27 @@
         <i class="fa-solid fa-link" aria-hidden="true"></i>
       </h2>
 
-      <ol>
-      <% @questions.each do |question| %>
-        <li id="<%= question.tag %>"><%= simple_format(question.body) %></li>
-        <%= link_to 'View answers',
-                    answers_path(question.id),
-                    data: { turbo_frame: nested_dom_id(question, 'answers') },
-                    class: 'button' %>
+      <% @questions.each_with_index do |question, index| %>
+        <div class="question">
+          <h3><%= "Question #{index + 1}" %></h3>
 
-        <%= link_to 'Add answer',
-                    new_answer_path(question.id),
-                    data: { turbo_frame: nested_dom_id(question, 'new_answer') },
-                    class: 'button button-tertiary' %>
+          <%= simple_format(question.body) %>
 
-        <%= turbo_frame_tag nested_dom_id(question, 'new_answer') %>
-        <%= turbo_frame_tag nested_dom_id(question, 'answers') %>
+          <div class="question--buttons">
+            <%= link_to 'View answers',
+                        answers_path(question.id),
+                        data: { turbo_frame: nested_dom_id(question, 'answers') },
+                        class: 'button' %>
+            <%= link_to 'Add answer',
+                        new_answer_path(question.id),
+                        data: { turbo_frame: nested_dom_id(question, 'new_answer') },
+                        class: 'button button-tertiary' %>
+          </div>
+
+          <%= turbo_frame_tag nested_dom_id(question, 'new_answer') %>
+          <%= turbo_frame_tag nested_dom_id(question, 'answers') %>
+        </div>
       <% end %>
-      </ol>
     <% end %>
 
     <hr />

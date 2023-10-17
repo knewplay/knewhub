@@ -2,18 +2,18 @@
 
 <h2>New answer</h2>
 
-<div class="form-block">
-  <%= turbo_frame_tag nested_dom_id(@question, 'new_answer') do %>
+<%= turbo_frame_tag nested_dom_id(@question, 'new_answer') do %>
+  <div class="form-block">
     <%= form_with model: @answer, url: answers_path  do |f| %>
       <%= render 'shared/form_errors', resource: @answer if @answer.errors.any? %>
 
       <div class="form-field">
         <%= f.text_field :body, required: true %>
-        <%= f.label :body %>
+        <%= f.label :body, 'Your answer...' %>
       </div>
 
       <%= f.submit %>
       <%= link_to 'Cancel', :back, class: 'button button-tertiary' %>
     <% end %>
-  <% end %>
-</div>
+  </div>
+<% end %>
