@@ -1,6 +1,24 @@
 <%= turbo_frame_tag nested_dom_id(question, answer) do %>
   <div class="answer">
-    <p><%= answer.body %></p>
+    <div class="answer--body"
+         data-controller="read-more"
+         data-read-more-lines-value="4"
+         data-read-more-truncate-class="line-clamp"
+         data-action="resize@window->read-more#render">
+      <p data-read-more-target="content"><%= answer.body %></p>
+
+      <button class="link hide"
+              data-read-more-target="moreButton"
+              data-action="read-more#showMore">
+        Show more
+      </button>
+      
+      <button class="link hide"
+        data-read-more-target="lessButton"
+        data-action="read-more#showLess">
+        Show less
+      </button>
+    </div>
 
     <div class="answer--footer">
       <p class="answer--footer--time"><%= time_ago_in_words(answer.created_at) %> ago</p>
