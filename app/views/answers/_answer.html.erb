@@ -6,9 +6,10 @@
       <p class="answer--footer--time"><%= time_ago_in_words(answer.created_at) %> ago</p>
       <% if answer.user == current_user %>
         <%= button_to answer_path(question.id, answer.id),
+                      class: 'answer--footer--delete-button',
                       method: :delete,
                       form: { data: { turbo_confirm: 'Are you sure?' } } do %>
-          <i class="fa-regular fa-trash-can" aria-hidden="true" title="Delete answer"></i>
+          <i class="fa-regular fa-trash-can fa-lg" aria-hidden="true" title="Delete answer"></i>
         <% end %>
       <% end %>
     </div>

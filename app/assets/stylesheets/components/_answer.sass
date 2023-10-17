@@ -6,16 +6,31 @@
   padding: 1rem 1.6rem
   border: .1rem solid $color-quaternary
   border-radius: .4rem
+  background-color: $color-initial
   margin-bottom: 1rem
 
   &--footer
     display: flex
     justify-content: space-between
-    align-items: flex-end
+    align-items: center
   
     &--time
       color: $color-quinary
       font-size: 1.4rem
+
+    &--delete-button
+      color: $color-secondary
+      border: none
+      background-color: transparent
+
+      &:focus,
+      &:hover
+        color: $color-primary
+        border: none
+        background-color: transparent 
+
+      svg
+        display: inline-block
 
   // Reset spacing set in Milligram/Spacing
   p, form, button
