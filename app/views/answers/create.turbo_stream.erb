@@ -1,5 +1,7 @@
 <%= turbo_stream.update nested_dom_id(@question, Answer.new), "" %>
 
-<%= turbo_stream.append nested_dom_id(@question, "answers") do %>
-  <%= render @answer, question: @question %>
-<% end %>
+<%= turbo_stream.remove 'empty-state-answers' %>
+
+<%= turbo_stream.prepend nested_dom_id(@question, 'answers') do %>
+    <%= render @answer, question: @question %>
+  <% end %>

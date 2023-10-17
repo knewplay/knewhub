@@ -8,7 +8,7 @@
 
 <%= turbo_frame_tag nested_dom_id(@question, 'answers') do %>
   <% if @answers.empty? %>
-    <p>No answers yet!</p>
+    <p id="empty-state-answers">No answers yet!</p>
   <% else %>
     <div><%= render @answers, question: @question %></div>
   <% end %>

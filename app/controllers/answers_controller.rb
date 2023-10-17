@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :set_question, :authenticate_user!
 
   def index
-    @answers = @question.answers
+    @answers = @question.answers.order(created_at: :desc)
   end
 
   def new
