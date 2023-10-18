@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
-  describe "#valid?" do
+  describe '#valid?' do
     let(:user) { create(:user, :second) }
     let(:question) { create(:question) }
     subject { build(:answer, user:, question:) }
@@ -40,6 +40,25 @@ RSpec.describe Answer, type: :model do
       it 'returns false' do
         subject.question = nil
         expect(subject).to_not be_valid
+      end
+    end
+  end
+
+  describe '#liked_by_user' do
+    let!(:answer) { create(:answer) }
+    let!(:user_author) { answer.user }
+    let!(:user_liker) { create(:user, email: 'like_user@email.com') }
+    let!(:like) { Like.create(answer:, user: user_liker) }
+
+    context 'when the user liked the answer' do
+      it 'returns the Like record' do
+        expect(answer.liked_by_user(user_liker)).to eq(like)
+      end
+    end
+
+    context 'when the user did not like the answer' do
+      it 'returns nil' do
+        expect(answer.liked_by_user(user_author)).to be_nil
       end
     end
   end

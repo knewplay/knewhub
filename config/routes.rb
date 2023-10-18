@@ -43,10 +43,11 @@ Rails.application.routes.draw do
     root to: 'accounts#show'
   end
 
-  # Answers on collections pages
+  # Answers and likes on collections pages
   scope '/questions/:question_id' do
     resources :answers, only: %i[index new create destroy]
   end
+  resources :likes, only: %i[create destroy]
 
   # Administrator dashboard
   namespace :dashboard do

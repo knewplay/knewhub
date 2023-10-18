@@ -1,0 +1,19 @@
+<div class="like">
+  <div class="like--count">
+    <% like_count = answer.likes.count %>
+    <% unless like_count.zero? %>
+      <%= like_count %>
+    <% end %>
+  </div>
+
+  <div class="like--button">
+    <% liked = answer.liked_by_user(current_user) %>
+    <% if liked.nil? %>
+      <%= button_to 'Like',
+          likes_path,
+          params: { "like[answer_id]": answer.id },
+          method: :post
+      %>
+    <% end %>
+  </div>
+</div>
