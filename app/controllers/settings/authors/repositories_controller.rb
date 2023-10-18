@@ -51,9 +51,7 @@ module Settings
       end
 
       def destroy
-        directory = Rails.root.join('repos', @repository.author.github_username, @repository.name)
-        @repository.destroy
-        FileUtils.remove_dir(directory) if Dir.exist?(directory)
+        RemoveRepoJob.perform_async(@repository.id)
         redirect_to settings_author_repositories_path, notice: 'Repository was successfully deleted.'
       end
 
