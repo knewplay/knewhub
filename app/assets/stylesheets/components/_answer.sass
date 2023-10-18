@@ -18,19 +18,27 @@
       color: $color-quinary
       font-size: 1.4rem
 
-    &--delete-button
-      color: $color-secondary
-      border: none
-      background-color: transparent
+    &--buttons
+      display: flex
+      gap: 1rem
 
-      &:focus,
-      &:hover
-        color: $color-primary
-        border: none
-        background-color: transparent 
+      &--delete
+        color: $color-secondary
+        height: 4rem
+        padding: 0 1.4rem
+        border: .2rem solid transparent
+        border-radius: .6rem
+        background-color: $color-background
 
-      svg
-        display: inline-block
+        &:focus,
+        &:hover
+          color: $color-tertiary
+          border: .2rem solid transparent
+          border-radius: .6rem
+          background-color: $color-background
+
+        svg
+          display: inline-block
 
   // Reset spacing set in Milligram/Spacing
   p, form, button

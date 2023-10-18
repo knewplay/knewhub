@@ -1,0 +1,29 @@
+// like
+
+.like
+  display: flex
+  align-items: center
+  gap: 1rem
+  padding: 0 1.4rem
+  border: .2rem solid transparent
+  border-radius: .6rem
+  background-color: $color-background
+
+  &--button
+    color: $color-secondary
+    border: none
+    background-color: transparent
+    padding: 0
+
+    &:focus,
+    &:hover
+      color: $color-tertiary
+      border: none
+      background-color: transparent 
+
+    svg
+      display: inline-block
+
+  &__liked
+    border-color: $color-tertiary
+    color: $color-tertiary

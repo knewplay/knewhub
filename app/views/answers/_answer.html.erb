@@ -23,16 +23,18 @@
     <div class="answer--footer">
       <p class="answer--footer--time"><%= time_ago_in_words(answer.created_at) %> ago</p>
 
-      <%= render 'likes/like', answer: %>
+      <div class="answer--footer--buttons">
+        <%= render 'likes/like', answer: %>
 
-      <% if answer.user == current_user %>
-        <%= button_to answer_path(question.id, answer.id),
-                      class: 'answer--footer--delete-button',
-                      method: :delete,
-                      form: { data: { turbo_confirm: 'Are you sure?' } } do %>
-          <i class="fa-regular fa-trash-can fa-lg" aria-hidden="true" title="Delete answer"></i>
+        <% if answer.user == current_user %>
+          <%= button_to answer_path(question.id, answer.id),
+                        class: 'answer--footer--buttons--delete',
+                        method: :delete,
+                        form: { data: { turbo_confirm: 'Are you sure?' } } do %>
+            <i class="fa-regular fa-trash-can fa-lg" aria-hidden="true" title="Delete answer"></i>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
 <% end %>

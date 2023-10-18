@@ -1,19 +1,28 @@
-<div class="like">
+<% like_count = answer.likes.count %>
+<% liked = answer.liked_by_user(current_user) %>
+
+<div class="like like__<%= 'liked' if liked %>">
   <div class="like--count">
-    <% like_count = answer.likes.count %>
     <% unless like_count.zero? %>
       <%= like_count %>
     <% end %>
   </div>
 
   <div class="like--button">
-    <% liked = answer.liked_by_user(current_user) %>
+
     <% if liked.nil? %>
-      <%= button_to 'Like',
-          likes_path,
+      <%= button_to likes_path,
           params: { "like[answer_id]": answer.id },
-          method: :post
-      %>
+          method: :post,
+          class: 'like--button' do %>
+          <i class="fa-regular fa-heart fa-lg" aria-hidden="true" title="Like answer"></i>
+      <% end %>
+    <% else %>
+      <%= button_to like_path(liked.id),
+                    method: :delete,
+                    class: 'like--button like__liked' do %>
+        <i class="fa-solid fa-heart fa-lg" aria-hidden="true" title="Remove like"></i>
+      <% end %>
     <% end %>
   </div>
 </div>
