@@ -2,11 +2,12 @@
 <% liked = answer.liked_by_user(current_user) %>
 
 <div class="like like__<%= 'liked' if liked %>">
-  <div class="like--count">
-    <% unless like_count.zero? %>
-      <%= like_count %>
-    <% end %>
-  </div>
+  <% unless like_count.zero? %>
+    <div class="like--count">
+    <%= like_count %>
+      </div>
+  <% end %>
+
 
   <div class="like--button">
 
