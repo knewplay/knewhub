@@ -4,8 +4,8 @@ date: 2023-12-31
 author: The Author
 keywords: [one, two]
 questions:
-  - ['one', 'First question in article one?']
-  - ['two', 'Second question in article one?']
+  - one: First question in article one?
+  - two: Second question in article one?
 ---
 
 ![Ruby on Rails logo](./figures/Ruby_On_Rails_Logo.png)
