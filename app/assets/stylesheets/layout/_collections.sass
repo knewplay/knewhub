@@ -6,21 +6,15 @@
   border-radius: 1rem
 
   &__anchor-link
-    color: $color-secondary
+    &__text
+      color: $color-secondary
 
-    &:hover + svg
+    &__icon
+      display: none
+      width: 1.4rem
+
+    &:hover > &__icon
       display: inline
-  
-  svg
-    display: none
-    width: 1.4rem
-
-  & a:not(&__anchor-link)
-    color: $color-tertiary
-
-  // Resets color for buttons
-  & a.button
-    color: $color-initial
 
   & li > p:first-child
     // Ensures li::marker is in the same line as the first paragraph
