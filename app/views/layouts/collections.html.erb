@@ -29,7 +29,7 @@
 
           <%= simple_format(question.body) %>
 
-          <div class="question--buttons">
+          <div class="question__buttons">
             <%= link_to 'View answers',
                         answers_path(question.id),
                         data: { turbo_frame: nested_dom_id(question, 'answers') },

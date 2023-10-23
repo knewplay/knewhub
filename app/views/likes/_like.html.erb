@@ -3,25 +3,21 @@
 
 <div class="like like__<%= 'liked' if liked %>">
   <% unless like_count.zero? %>
-    <div class="like--count">
     <%= like_count %>
-      </div>
   <% end %>
 
-
-  <div class="like--button">
-
+  <div class="like__button">
     <% if liked.nil? %>
       <%= button_to likes_path,
           params: { "like[answer_id]": answer.id },
           method: :post,
-          class: 'like--button' do %>
+          class: 'like__button' do %>
           <i class="fa-regular fa-heart fa-lg" aria-hidden="true" title="Like answer"></i>
       <% end %>
     <% else %>
       <%= button_to like_path(liked.id),
                     method: :delete,
-                    class: 'like--button like__liked' do %>
+                    class: 'like__button like__liked' do %>
         <i class="fa-solid fa-heart fa-lg" aria-hidden="true" title="Remove like"></i>
       <% end %>
     <% end %>
