@@ -6,7 +6,7 @@ require_relative '../config/environment'
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'capybara/rspec'
+require 'support/capybara'
 require 'database_cleaner/active_record'
 require 'vcr'
 require 'support/vcr'
@@ -44,7 +44,7 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :system
 
   config.include ActiveSupport::Testing::TimeHelpers
-  
+
   # DatabaseCleaner config to work with Capybara
   config.use_transactional_fixtures = true
 
@@ -57,6 +57,8 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system) do
+    driven_by(:headless_chrome)
+
     driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
 
     unless driver_shares_db_connection_with_specs
