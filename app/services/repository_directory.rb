@@ -2,7 +2,9 @@
 class RepositoryDirectory
   def self.define(repository_id)
     repository = Repository.includes(:author).find(repository_id)
-    directory = Rails.root.join('repos', repository.author.github_username, repository.name)
+    # directory = Rails.root.join('repos', repository.author.github_username, repository.name)
+    # When using Docker Rails.root returns 'rails', which is the WORKDIR set in the Dockerfile
+    directory = "repos/#{repository.author.github_username}/#{repository.name}"
     [repository, directory]
   end
 

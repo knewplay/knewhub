@@ -28,7 +28,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
     volumes:
-      - .:/app
+      - .:/rails
     depends_on:
       - redis
       - db
@@ -52,7 +52,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      - .:/rails
     depends_on:
       - db
 
