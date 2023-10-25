@@ -17,6 +17,11 @@ services:
     ports:
       - 6379
 
+  maildev:
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+
   web:
     build: .
     command: bin/dev
