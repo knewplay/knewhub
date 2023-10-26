@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_05_175303) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_17_200835) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -22,6 +22,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_05_175303) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "webauthn_id"
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.bigint "question_id"
+    t.bigint "user_id"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["user_id", "question_id"], name: "index_answers_on_user_id_and_question_id", unique: true
+    t.index ["user_id"], name: "index_answers_on_user_id"
   end
 
   create_table "authors", force: :cascade do |t|
@@ -43,6 +54,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_05_175303) do
     t.string "action"
     t.string "aasm_state"
     t.index ["repository_id"], name: "index_builds_on_repository_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.bigint "answer_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["answer_id"], name: "index_likes_on_answer_id"
+    t.index ["user_id", "answer_id"], name: "index_likes_on_user_id_and_answer_id", unique: true
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "logs", force: :cascade do |t|
@@ -111,8 +132,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_05_175303) do
     t.index ["external_id"], name: "index_webauthn_credentials_on_external_id", unique: true
   end
 
+  add_foreign_key "answers", "questions"
+  add_foreign_key "answers", "users"
   add_foreign_key "authors", "users"
   add_foreign_key "builds", "repositories"
+  add_foreign_key "likes", "answers"
+  add_foreign_key "likes", "users"
   add_foreign_key "logs", "builds"
   add_foreign_key "questions", "repositories"
   add_foreign_key "repositories", "authors"
