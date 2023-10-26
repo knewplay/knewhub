@@ -34,7 +34,7 @@ class Webhooks::GithubController < ApplicationController
   private
 
   def verify_event
-    secret = Rails.application.credentials.webhook_secret
+    secret = ENV.fetch('WEBHOOK_SECRET', Rails.application.credentials.webhook_secret)
     signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, request.raw_post)}"
     unless ActiveSupport::SecurityUtils.secure_compare(signature, request.headers['X-Hub-Signature-256'])
       head :bad_request

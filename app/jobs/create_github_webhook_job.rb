@@ -6,8 +6,8 @@ class CreateGithubWebhookJob
     repository = Repository.includes(:author).find(build.repository.id)
 
     client = Octokit::Client.new(access_token: repository.token)
-    host_url = Rails.application.credentials.host_url
-    webhook_secret = Rails.application.credentials.webhook_secret
+    host_url = ENV.fetch('WEBHOOK_HOST_URL', Rails.application.credentials.host_url)
+    webhook_secret = ENV.fetch('WEBHOOK_SECRET', Rails.application.credentials.webhook_secret)
 
     response = create_hook(repository, client, host_url, webhook_secret)
     repository.update(hook_id: response.id)
