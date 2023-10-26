@@ -26,9 +26,4 @@ RSpec.describe 'Settings::Authors::Repositories#destroy', type: :system do
   scenario 'removes the local directory' do
     expect(Dir.exist?(@directory)).to be(false)
   end
-
-  after(:all) do
-    parent_directory = Rails.root.join('repos', @repo.author.github_username)
-    FileUtils.remove_dir(parent_directory)
-  end
 end

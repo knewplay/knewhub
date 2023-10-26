@@ -13,9 +13,9 @@ class CustomRender < Redcarpet::Render::HTML
     if @options[:with_toc_data] && text.exclude?('a href')
       id = text.parameterize(separator: '-')
       <<~HEADER
-        <h#{header_level} id=#{id}>
-        <a href="##{id}" class="collections__anchor-link">#{text}</a>
-        <i class="fa-solid fa-link" aria-hidden="true"></i>
+        <h#{header_level} id=#{id} class="collections__anchor-link">
+        <a href="##{id}" class="collections__anchor-link__text">#{text}</a>
+        <i class="fa-solid fa-link collections__anchor-link__icon" aria-hidden="true"></i>
         </h#{header_level}>\n
       HEADER
     else

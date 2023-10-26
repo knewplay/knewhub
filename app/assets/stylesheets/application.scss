@@ -3,6 +3,8 @@
 
 @import "milligram";
 
+@import "utilities/hide";
+@import "utilities/line-clamp";
 @import "utilities/sr-only";
 
 @import "layout/collections";
@@ -12,9 +14,13 @@
 @import "layout/settings";
 @import "layout/sidebar";
 
+@import "components/answer";
 @import "components/flash";
 @import "components/form-block";
+@import "components/form-errors";
+@import "components/like";
 @import "components/nav";
+@import "components/question";
 
 @import "pages/edit-repository";
 @import "pages/index-repositories";
