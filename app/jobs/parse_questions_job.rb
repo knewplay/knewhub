@@ -26,7 +26,10 @@ class ParseQuestionsJob
 
   def parse_questions(repository, batch_code, absolute_path, page_name)
     front_matter = extract_front_matter(absolute_path)
-    front_matter['questions']&.each do |tag, body|
+    return if front_matter['questions'].nil?
+
+    questions = front_matter['questions'].inject(:merge!)
+    questions.each do |tag, body|
       question = Question.find_by(repository:, tag:, page_path: page_name)
       if question.nil?
         Question.create(repository:, tag:, page_path: page_name, body:, batch_code:)

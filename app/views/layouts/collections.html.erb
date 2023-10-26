@@ -23,11 +23,13 @@
         <i class="fa-solid fa-link" aria-hidden="true"></i>
       </h2>
 
-      <ol>
-      <% @questions.each do |question| %>
-        <li id="<%= question.tag %>"><%= simple_format(question.body) %></li>
+      <% @questions.each_with_index do |question, index| %>
+        <div class="question">
+          <h3><%= "Question #{index + 1}" %></h3>
+
+          <%= simple_format(question.body) %>
+        </div>
       <% end %>
-      </ol>
     <% end %>
 
     <hr />

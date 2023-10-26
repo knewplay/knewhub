@@ -4,8 +4,8 @@ date: 2023-12-31
 author: The Author
 keywords: [one, two]
 questions:
-  - ['one', 'First question in article two?']
-  - ['two', 'Second question in article two?']
+  - one: First question in article two?
+  - two: Second question in article two?
 ---
 
 ## Amplectitur atque mutabile
