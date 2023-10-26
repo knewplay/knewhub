@@ -18,9 +18,9 @@
 
 
     <% if @questions && @questions.any? %>
-      <h2 id="questions">
-        <a href="#questions" class="collections__anchor-link">Questions</a>
-        <i class="fa-solid fa-link" aria-hidden="true"></i>
+      <h2 id="questions" class="collections__anchor-link">
+        <a href="#questions" class="collections__anchor-link__text">Questions</a>
+        <i class="fa-solid fa-link collections__anchor-link__icon" aria-hidden="true"></i>
       </h2>
 
       <% @questions.each_with_index do |question, index| %>
@@ -29,7 +29,7 @@
 
           <%= simple_format(question.body) %>
 
-          <div class="question--buttons">
+          <div class="question__buttons">
             <%= link_to 'View answers',
                         answers_path(question.id),
                         data: { turbo_frame: nested_dom_id(question, 'answers') },

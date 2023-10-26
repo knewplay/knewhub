@@ -1,6 +1,6 @@
 <%= turbo_frame_tag nested_dom_id(question, answer) do %>
   <div class="answer">
-    <div class="answer--body"
+    <div class="answer__body"
          data-controller="read-more"
          data-read-more-lines-value="4"
          data-read-more-truncate-class="line-clamp"
@@ -20,15 +20,15 @@
       </button>
     </div>
 
-    <div class="answer--footer">
-      <p class="answer--footer--time"><%= time_ago_in_words(answer.created_at) %> ago</p>
+    <div class="answer__footer">
+      <p class="answer__footer__time"><%= time_ago_in_words(answer.created_at) %> ago</p>
 
-      <div class="answer--footer--buttons">
+      <div class="answer__footer__buttons">
         <%= render 'likes/like', answer: %>
 
         <% if answer.user == current_user %>
           <%= button_to answer_path(question.id, answer.id),
-                        class: 'answer--footer--buttons--delete',
+                        class: 'answer__footer__buttons--delete',
                         method: :delete,
                         form: { data: { turbo_confirm: 'Are you sure?' } } do %>
             <i class="fa-regular fa-trash-can fa-lg" aria-hidden="true" title="Delete answer"></i>
