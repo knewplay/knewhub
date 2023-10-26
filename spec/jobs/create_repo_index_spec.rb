@@ -3,16 +3,12 @@ require 'rails_helper'
 RSpec.describe CreateRepoIndexJob, type: :job do
   before(:all) do
     @repo = create(:repository, last_pull_at: DateTime.current)
+
     @build = create(:build, repository: @repo, aasm_state: :creating_repo_index)
-    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
-    folder_directory = directory.join('Folder')
-    FileUtils.mkdir_p(folder_directory)
-
-    first_filepath = File.join(directory, 'article_one.md')
-    File.open(first_filepath, 'w') { |f| f.write('Article one content') }
-
-    second_filepath = File.join(directory, 'Folder', 'article_two.md')
-    File.open(second_filepath, 'w') { |f| f.write('Article two content') }
+    @destination_directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    source_directory = Rails.root.join('spec/fixtures/jobs/create_repo_index')
+    FileUtils.mkdir_p(@destination_directory)
+    FileUtils.copy_entry(source_directory, @destination_directory)
   end
 
   it 'queues the job' do
@@ -22,8 +18,7 @@ RSpec.describe CreateRepoIndexJob, type: :job do
 
   context "when the 'index.md' file exists" do
     before do
-      directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
-      filepath = File.join(directory, 'index.md')
+      filepath = File.join(@destination_directory, 'index.md')
       File.open(filepath, 'w') { |f| f.write('Index file content') }
     end
 
@@ -71,8 +66,6 @@ RSpec.describe CreateRepoIndexJob, type: :job do
 
   after(:all) do
     parent_directory = Rails.root.join('repos', @repo.author.github_username)
-    directory = parent_directory.join(@repo.name)
-    FileUtils.remove_dir(directory)
     FileUtils.remove_dir(parent_directory)
   end
 end
