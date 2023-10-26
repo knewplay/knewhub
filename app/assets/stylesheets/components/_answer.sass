@@ -1,0 +1,42 @@
+// answer
+
+.answer
+  display: flex
+  flex-direction: column
+  padding: 1rem 1.6rem
+  border: .1rem solid $color-quaternary
+  border-radius: .4rem
+  background-color: $color-initial
+  margin-bottom: 1rem
+
+  &__footer
+    display: flex
+    justify-content: space-between
+    align-items: center
+  
+    &__time
+      color: $color-quinary
+      font-size: 1.4rem
+
+    &__buttons
+      display: flex
+      gap: 1rem
+
+      &--delete
+        color: $color-secondary
+        height: 4rem
+        padding: 0 1.4rem
+        border: .2rem solid transparent
+        border-radius: .6rem
+        background-color: $color-background
+
+        &:focus,
+        &:hover
+          color: $color-tertiary
+          border: .2rem solid transparent
+          border-radius: .6rem
+          background-color: $color-background
+
+  // Reset spacing set in Milligram/Spacing
+  p, form, button
+    margin-bottom: 0

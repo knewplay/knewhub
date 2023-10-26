@@ -1,0 +1,20 @@
+<% content_for(:html_title) { 'Answers' } %>
+
+<h2>Question</h2>
+
+<%= simple_format(@question.body) %>
+
+<h2>Answers</h2>
+
+<%= turbo_frame_tag nested_dom_id(@question, 'answers') do %>
+  <% if @answers.empty? %>
+    <p id="empty-state-answers">No answers yet!</p>
+  <% else %>
+    <div><%= render @answers, question: @question %></div>
+  <% end %>
+
+  <%= link_to 'Close', :back, class: 'button' %>
+<% end %>
+
+<br>
+<%= link_to 'Add answer', new_answer_path(@question.id) %>

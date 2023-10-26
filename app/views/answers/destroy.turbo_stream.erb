@@ -1,0 +1,7 @@
+<%= turbo_stream.remove nested_dom_id(@question, @answer) %>
+
+<% if @question.answers.none? %>
+  <%= turbo_stream.prepend nested_dom_id(@question, 'answers') do %>
+    <p id="empty-state-answers">No answers yet!</p>
+  <% end %>
+<% end %>
