@@ -9,7 +9,7 @@ module Sessions
           redirect_to new_webauthn_authentication_path
         else
           session[:administrator_id] = administrator.id
-          session[:administrator_expires_at] = Time.now + 1.hour
+          session[:administrator_expires_at] = Time.current + 1.hour
           redirect_to dashboard_root_path
         end
         destroy_other_sessions

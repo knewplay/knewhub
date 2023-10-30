@@ -27,7 +27,7 @@ module Settings
       end
 
       def edit
-        render file: "#{Rails.root}/public/404.html", layout: false, status: :not_found if @repository.nil?
+        render file: Rails.root.join('public/404.html').to_s, layout: false, status: :not_found if @repository.nil?
       end
 
       def update

@@ -30,7 +30,7 @@ module AdministratorAuthentication
     def validate_session
       return if session[:administrator_expires_at].nil?
 
-      session[:administrator_id] = nil if session[:administrator_expires_at] < Time.now
+      session[:administrator_id] = nil if session[:administrator_expires_at] < Time.current
     end
   end
 end

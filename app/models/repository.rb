@@ -33,11 +33,7 @@ class Repository < ApplicationRecord
   end
 
   def set_branch
-    self.branch = if branch.blank?
-                    'main'
-                  else
-                    branch
-                  end
+    self.branch = (branch.presence || 'main')
   end
 
   def generate_uuid

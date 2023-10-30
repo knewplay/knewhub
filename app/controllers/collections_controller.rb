@@ -11,11 +11,11 @@ class CollectionsController < ApplicationController
       format.html do
         @front_matter = extract_front_matter(file_path)
         @questions = Question.where(repository: @repository, page_path: params[:path])
-        prepend_view_path "#{Rails.root}/repos"
+        prepend_view_path Rails.root.join('repos').to_s
         render file_path
       end
       format.any(:png, :jpg, :jpeg, :gif, :svg, :webp) do
-        send_file "#{Rails.root}/repos/#{file_path}.#{request.format.to_sym}"
+        send_file Rails.root.join("repos/#{file_path}.#{request.format.to_sym}").to_s
       end
       format.all { render_not_found }
     end
@@ -26,7 +26,7 @@ class CollectionsController < ApplicationController
     render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
 
     @front_matter = extract_front_matter(file_path)
-    prepend_view_path "#{Rails.root}/repos"
+    prepend_view_path Rails.root.join('repos').to_s
     render file_path
   end
 
@@ -39,8 +39,8 @@ class CollectionsController < ApplicationController
   end
 
   def file_exists?(file_path)
-    File.exist?("#{Rails.root}/repos/#{file_path}.md") \
-    || File.exist?("#{Rails.root}/repos/#{file_path}.#{request.format.to_sym}")
+    File.exist?(Rails.root.join("repos/#{file_path}.md").to_s) \
+    || File.exist?(Rails.root.join("repos/#{file_path}.#{request.format.to_sym}").to_s)
   end
 
   def repository_visible?(owner, name)
@@ -61,7 +61,7 @@ class CollectionsController < ApplicationController
   end
 
   def extract_front_matter(file_path)
-    file = "#{Rails.root}/repos/#{file_path}.md"
+    file = Rails.root.join("repos/#{file_path}.md").to_s
     loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date])
     FrontMatterParser::Parser.parse_file(file, loader:).front_matter
   end

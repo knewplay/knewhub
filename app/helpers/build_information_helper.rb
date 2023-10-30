@@ -8,15 +8,17 @@ module BuildInformationHelper
   def build_status_icon(build)
     return if build.nil?
 
-    attributes = "aria-hidden='true' title='#{build.status}"
-
+    options = { 'aria-hidden': 'true', title: build.status }
     case build.status
     when 'Complete'
-      "<i class='fa-regular fa-circle-check' style='color: #4ea832;' #{attributes}'></i>".html_safe
+      options[:class] = 'fa-regular fa-circle-check'
+      options[:style] = 'color: #4ea832;'
     when 'Failed'
-      "<i class='fa-regular fa-circle-xmark' style='color: #c23434;' #{attributes}'></i>".html_safe
+      options[:class] = 'fa-regular fa-circle-xmark'
+      options[:style] = 'color: #c23434;'
     when 'In progress'
-      "<i class='fa-solid fa-spinner fa-spin' #{attributes}'></i>".html_safe
+      options[:class] = 'fa-solid fa-spinner fa-spin'
     end
+    content_tag(:i, '', options)
   end
 end

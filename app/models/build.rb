@@ -7,9 +7,7 @@ class Build < ApplicationRecord
   validates :status, presence: true
   validates :action, presence: true
 
-  def repository_name
-    repository.name
-  end
+  delegate :name, to: :repository, prefix: true
 
   def repository_author
     repository.author.name
