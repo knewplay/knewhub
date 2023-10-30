@@ -148,6 +148,7 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
+    faraday-retry (1.0.3)
     ffi (1.16.3)
     front_matter_parser (1.0.1)
     git (1.18.0)
@@ -433,6 +434,7 @@ DEPENDENCIES
   debug
   devise
   factory_bot_rails
+  faraday-retry
   front_matter_parser
   git
   importmap-rails
