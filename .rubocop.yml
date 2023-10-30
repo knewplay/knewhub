@@ -1,6 +1,20 @@
+inherit_from: .rubocop_todo.yml
+
 require:
   - rubocop-capybara
   - rubocop-factory_bot
   - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
+
+AllCops:
+  Exclude:
+    - bin/bundle
+    - config/environments/production.rb
+    - db/migrate/20230821182611_add_service_name_to_active_storage_blobs.active_storage.rb
+    - db/migrate/20230821182612_create_active_storage_variant_records.active_storage.rb
+    - db/schema.rb
+
+Layout/LineLength:
+  Exclude:
+    - config/initializers/devise.rb

@@ -24,7 +24,7 @@ class Webhooks::GithubController < ApplicationController
           The ownership of the repository has changed.
           Please login with GitHub with the new repository owner's account to add the repository to Knewhub.
         MSG
-        build.logs.create(content:, failure: true) 
+        build.logs.create(content:, failure: true)
       else
         build.receive_webhook_push(uuid, name, owner_name, description)
       end
