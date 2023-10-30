@@ -37,6 +37,22 @@ Rails/UniqueValidationWithoutIndex:
     - app/models/author.rb
     - app/models/repository.rb
 
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/ExampleLength:
+  CountAsOne: [ 'method_call']
+  Max: 10
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+RSpec/NestedGroups:
+  Max: 5
+
 Style/BlockComments:
   Exclude:
     - spec/spec_helper.rb

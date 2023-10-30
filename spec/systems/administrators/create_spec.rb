@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Administrator#create', type: :system do
-  scenario 'create account with valid credentials' do
+  it 'create account with valid credentials' do
     before_count = Administrator.count
 
     visit new_administrator_path
@@ -17,7 +17,7 @@ RSpec.describe 'Administrator#create', type: :system do
     expect(Administrator.count).to eq(before_count + 1)
   end
 
-  scenario 'create account fails with invalid password confirmation' do
+  it 'create account fails with invalid password confirmation' do
     before_count = Administrator.count
 
     visit new_administrator_path
@@ -34,7 +34,7 @@ RSpec.describe 'Administrator#create', type: :system do
     expect(Administrator.count).to eq(before_count)
   end
 
-  scenario 'access to create account page fails when an administrator already exists' do
+  it 'access to create account page fails when an administrator already exists' do
     Administrator.create(name: 'admin', password: 'password')
 
     visit new_administrator_path

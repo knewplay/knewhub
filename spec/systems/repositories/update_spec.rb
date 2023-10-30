@@ -11,6 +11,11 @@ RSpec.describe 'Repositories#update', type: :system do
     end
   end
 
+  after(:all) do
+    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    FileUtils.remove_dir(directory)
+  end
+
   context 'when logged in as an author' do
     before(:all) do
       Sidekiq::Testing.inline! do
@@ -28,36 +33,31 @@ RSpec.describe 'Repositories#update', type: :system do
       end
     end
 
-    context 'rebuilding the repository' do
-      scenario "creates an associated Build with action 'rebuild'" do
+    context 'when rebuilding the repository' do
+      it "creates an associated Build with action 'rebuild'" do
         expect(@rebuild_build.action).to eq('rebuild')
       end
 
-      scenario 'creates the first log' do
+      it 'creates the first log' do
         expect(@rebuild_build.logs.first.content).to eq('Repository successfully pulled.')
       end
 
-      scenario 'creates the second log' do
+      it 'creates the second log' do
         expect(@rebuild_build.logs.second.content).to eq('Repository description successfully updated from GitHub.')
       end
 
-      scenario 'with the third log' do
+      it 'with the third log' do
         expect(@rebuild_build.logs.third.content).to eq('Questions successfully parsed.')
       end
 
-      scenario 'creates the fourth log' do
+      it 'creates the fourth log' do
         expect(@rebuild_build.logs.fourth.content).to eq('index.md file exists for this repository.')
       end
 
-      scenario "sets Build status to 'Complete'" do
+      it "sets Build status to 'Complete'" do
         @rebuild_build.reload
         expect(@rebuild_build.status).to eq('Complete')
       end
     end
-  end
-
-  after(:all) do
-    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
-    FileUtils.remove_dir(directory)
   end
 end

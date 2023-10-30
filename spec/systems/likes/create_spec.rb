@@ -7,7 +7,7 @@ RSpec.describe 'Likes#create', type: :system do
   let!(:user_liker) { create(:user, email: 'like_user@email.com') }
 
   context 'when logged in as a user' do
-    scenario 'can like an answer with no likes' do
+    it 'can like an answer with no likes' do
       sign_in user_liker
       visit answers_path(question.id)
 
@@ -18,7 +18,7 @@ RSpec.describe 'Likes#create', type: :system do
       expect(page).to have_css('.like--count', text: '1')
     end
 
-    scenario 'can like an answer already having likes' do
+    it 'can like an answer already having likes' do
       Like.create(user: user_author, answer:)
 
       sign_in user_liker
@@ -33,7 +33,7 @@ RSpec.describe 'Likes#create', type: :system do
   end
 
   context 'when not logged in as a user' do
-    scenario 'it redirects to login page' do
+    it 'redirects to login page' do
       visit answers_path(question.id)
 
       expect(page).to have_content('You need to log in or create an account before continuing.')

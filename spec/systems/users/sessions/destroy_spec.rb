@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'User::Sessions#destroy', type: :system do
   let(:user) { create(:user) }
 
-  scenario 'signs out' do
+  it 'signs out' do
     sign_in user
     visit root_path
 

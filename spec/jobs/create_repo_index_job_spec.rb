@@ -11,9 +11,14 @@ RSpec.describe CreateRepoIndexJob, type: :job do
     FileUtils.copy_entry(source_directory, @destination_directory)
   end
 
+  after(:all) do
+    parent_directory = Rails.root.join('repos', @repo.author.github_username)
+    FileUtils.remove_dir(parent_directory)
+  end
+
   it 'queues the job' do
-    CreateRepoIndexJob.perform_async(@build.id)
-    expect(CreateRepoIndexJob).to have_enqueued_sidekiq_job(@build.id)
+    described_class.perform_async(@build.id)
+    expect(described_class).to have_enqueued_sidekiq_job(@build.id)
   end
 
   context "when the 'index.md' file exists" do
@@ -22,27 +27,27 @@ RSpec.describe CreateRepoIndexJob, type: :job do
       File.open(filepath, 'w') { |f| f.write('Index file content') }
     end
 
+    after do
+      filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
+      File.delete(filepath)
+    end
+
     it 'does not create a new file' do
       Sidekiq::Testing.inline! do
         build = create(:build, repository: @repo, aasm_state: :creating_repo_index)
-        CreateRepoIndexJob.perform_async(build.id)
+        described_class.perform_async(build.id)
       end
 
       index_filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
       file_data = File.read(index_filepath)
       expect(file_data).to eq('Index file content')
     end
-
-    after do
-      filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
-      File.delete(filepath)
-    end
   end
 
   context "when the 'index.md' file does not exist" do
     before(:all) do
       Sidekiq::Testing.inline! do
-        CreateRepoIndexJob.perform_async(@build.id)
+        described_class.perform_async(@build.id)
       end
       @index_filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
       @file_data = File.read(@index_filepath)
@@ -62,10 +67,5 @@ RSpec.describe CreateRepoIndexJob, type: :job do
       expect(@file_data).to include('* [Article One](./article_one)')
       expect(@file_data).to include('* [Folder/Article Two](./Folder/article_two)')
     end
-  end
-
-  after(:all) do
-    parent_directory = Rails.root.join('repos', @repo.author.github_username)
-    FileUtils.remove_dir(parent_directory)
   end
 end

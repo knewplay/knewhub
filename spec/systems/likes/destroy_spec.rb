@@ -5,10 +5,10 @@ RSpec.describe 'Likes#destroy', type: :system do
   let!(:question) { answer.question }
   let!(:user_author) { answer.user }
   let!(:user_liker) { create(:user, email: 'like_user@email.com') }
-  let!(:like) { Like.create(user: user_liker, answer:) }
 
   context 'when logged in as a user' do
-    scenario 'can unlike an answer that has one like' do
+    it 'can unlike an answer that has one like' do
+      Like.create(user: user_liker, answer:)
       sign_in user_liker
       visit answers_path(question.id)
 
@@ -18,10 +18,11 @@ RSpec.describe 'Likes#destroy', type: :system do
         click_on 'Remove like'
       end
 
-      expect(page).to_not have_css('.like--count')
+      expect(page).not_to have_css('.like--count')
     end
 
-    scenario 'can unlike an answer that has multiple likes' do
+    it 'can unlike an answer that has multiple likes' do
+      Like.create(user: user_liker, answer:)
       Like.create(user: user_author, answer:)
 
       sign_in user_liker
@@ -38,7 +39,7 @@ RSpec.describe 'Likes#destroy', type: :system do
   end
 
   context 'when not logged in as a user' do
-    scenario 'it redirects to login page' do
+    it 'redirects to login page' do
       visit answers_path(question.id)
 
       expect(page).to have_content('You need to log in or create an account before continuing.')

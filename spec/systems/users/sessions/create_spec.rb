@@ -4,7 +4,7 @@ RSpec.describe 'User::Sessions#create', type: :system do
   let(:user) { create(:user) }
 
   context 'when given valid credentials' do
-    scenario 'logs in the user' do
+    it 'logs in the user' do
       visit new_user_session_path
 
       fill_in('Email', with: user.email)
@@ -17,7 +17,7 @@ RSpec.describe 'User::Sessions#create', type: :system do
   end
 
   context 'when given invalid credentials' do
-    scenario 'login fails' do
+    it 'login fails' do
       visit new_user_session_path
 
       fill_in('Email', with: 'unregistered_email@example.com')

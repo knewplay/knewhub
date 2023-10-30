@@ -5,15 +5,15 @@ RSpec.describe RemoveRepoJob, type: :job do
   let(:client) { Octokit::Client.new(access_token: repo.token) }
 
   it 'queues the job' do
-    RemoveRepoJob.perform_async(repo.id)
-    expect(RemoveRepoJob).to have_enqueued_sidekiq_job(repo.id)
+    described_class.perform_async(repo.id)
+    expect(described_class).to have_enqueued_sidekiq_job(repo.id)
   end
 
   context 'when executing perform' do
     before do
       VCR.use_cassette('remove_repo') do
         Sidekiq::Testing.inline! do
-          RemoveRepoJob.perform_async(repo.id)
+          described_class.perform_async(repo.id)
         end
       end
     end

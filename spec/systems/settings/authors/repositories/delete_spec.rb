@@ -19,11 +19,11 @@ RSpec.describe 'Settings::Authors::Repositories#destroy', type: :system do
     end
   end
 
-  scenario 'removes the record' do
+  it 'removes the record' do
     expect(Repository.all.count).to eq(@before_count - 1)
   end
 
-  scenario 'removes the local directory' do
+  it 'removes the local directory' do
     expect(Dir.exist?(@directory)).to be(false)
   end
 end

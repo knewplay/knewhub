@@ -11,15 +11,20 @@ RSpec.describe ParseQuestionsJob, type: :job do
     FileUtils.copy_entry(source_directory, @destination_directory)
   end
 
+  after(:all) do
+    parent_directory = Rails.root.join('repos', @repo.author.github_username)
+    FileUtils.remove_dir(parent_directory)
+  end
+
   it 'queues the job' do
-    ParseQuestionsJob.perform_async(@first_build.id)
-    expect(ParseQuestionsJob).to have_enqueued_sidekiq_job(@first_build.id)
+    described_class.perform_async(@first_build.id)
+    expect(described_class).to have_enqueued_sidekiq_job(@first_build.id)
   end
 
   context 'when executing the job once' do
     before(:all) do
       Sidekiq::Testing.inline! do
-        ParseQuestionsJob.perform_async(@first_build.id)
+        described_class.perform_async(@first_build.id)
       end
     end
 
@@ -47,7 +52,7 @@ RSpec.describe ParseQuestionsJob, type: :job do
         @second_build = create(:build, repository: @repo, aasm_state: :parsing_questions)
 
         Sidekiq::Testing.inline! do
-          ParseQuestionsJob.perform_async(@second_build.id)
+          described_class.perform_async(@second_build.id)
         end
       end
 
@@ -79,7 +84,7 @@ RSpec.describe ParseQuestionsJob, type: :job do
           @third_build = create(:build, repository: @repo, aasm_state: :parsing_questions)
 
           Sidekiq::Testing.inline! do
-            ParseQuestionsJob.perform_async(@third_build.id)
+            described_class.perform_async(@third_build.id)
           end
         end
 
@@ -93,10 +98,5 @@ RSpec.describe ParseQuestionsJob, type: :job do
         end
       end
     end
-  end
-
-  after(:all) do
-    parent_directory = Rails.root.join('repos', @repo.author.github_username)
-    FileUtils.remove_dir(parent_directory)
   end
 end
