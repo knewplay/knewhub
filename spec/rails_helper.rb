@@ -3,7 +3,7 @@ require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'support/capybara'
@@ -61,9 +61,7 @@ RSpec.configure do |config|
 
     driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
 
-    unless driver_shares_db_connection_with_specs
-      DatabaseCleaner.strategy = :truncation
-    end
+    DatabaseCleaner.strategy = :truncation unless driver_shares_db_connection_with_specs
   end
 
   config.before(:each) do

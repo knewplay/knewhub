@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe RemoveRepoJob, type: :job do
-  let(:repo) { create(:repository, :real, hook_id: 436760769) }
+  let(:repo) { create(:repository, :real, hook_id: 436_760_769) }
   let(:client) { Octokit::Client.new(access_token: repo.token) }
 
   it 'queues the job' do

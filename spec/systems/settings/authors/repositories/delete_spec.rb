@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Settings::Authors::Repositories#destroy', type: :system do
   before(:all) do
-    @repo = create(:repository, :real, hook_id: 436760769)
+    @repo = create(:repository, :real, hook_id: 436_760_769)
     @directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
     FileUtils.mkdir_p(@directory)
 

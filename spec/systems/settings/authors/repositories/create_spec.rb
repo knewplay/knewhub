@@ -127,7 +127,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
 
       VCR.use_cassette('delete_github_webhook_for_create') do
         client = Octokit::Client.new(access_token: @repo.token)
-        client.remove_hook("#{@repo.author.github_username}/#{@repo.name}", 436611979)
+        client.remove_hook("#{@repo.author.github_username}/#{@repo.name}", 436_611_979)
       end
     end
   end

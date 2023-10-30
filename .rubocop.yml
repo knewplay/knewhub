@@ -8,13 +8,20 @@ require:
   - rubocop-rspec
 
 AllCops:
+  # NewCops: enable
   Exclude:
-    - bin/bundle
-    - config/environments/production.rb
-    - db/migrate/20230821182611_add_service_name_to_active_storage_blobs.active_storage.rb
-    - db/migrate/20230821182612_create_active_storage_variant_records.active_storage.rb
+    - bin/*
+    - config/**/*
+    - db/migrate/*
     - db/schema.rb
+    - Rakefile
 
-Layout/LineLength:
+Style/BlockComments:
   Exclude:
-    - config/initializers/devise.rb
+    - spec/spec_helper.rb
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
