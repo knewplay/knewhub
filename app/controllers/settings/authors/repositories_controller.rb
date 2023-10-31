@@ -43,7 +43,12 @@ module Settings
       end
 
       def destroy
-        RemoveRepoJob.perform_async(@repository.id)
+        github_username = @repository.author.github_username
+        name = @repository.name
+        directory = Rails.root.join('repos', github_username, name)
+
+        RemoveRepoJob.perform_async(github_username, name, @repository.hook_id, @repository.token, directory.to_s)
+        @repository.destroy
         redirect_to settings_author_repositories_path, notice: 'Repository was successfully deleted.'
       end
 

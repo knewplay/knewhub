@@ -3,7 +3,7 @@
 
 <div class="like like__<%= 'liked' if liked %>">
   <% unless like_count.zero? %>
-    <%= like_count %>
+    <p class="like--count"><%= like_count %></p>
   <% end %>
 
   <div class="like__button">
