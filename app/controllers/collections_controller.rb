@@ -2,20 +2,20 @@ class CollectionsController < ApplicationController
   before_action :require_user_or_admin_authentication, :modify_view_path
   layout 'collections'
 
-  def show
-    file_path = "#{params[:owner]}/#{params[:name]}/#{params[:path]}"
-    render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
-
-    RequestPath.store(request)
-    show_actions(file_path)
-  end
-
   def index
     file_path = "#{params[:owner]}/#{params[:name]}/index"
     render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
 
     @front_matter = extract_front_matter(file_path)
     render file_path
+  end
+
+  def show
+    file_path = "#{params[:owner]}/#{params[:name]}/#{params[:path]}"
+    render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
+
+    RequestPath.store(request)
+    show_actions(file_path)
   end
 
   private

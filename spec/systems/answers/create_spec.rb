@@ -28,7 +28,7 @@ RSpec.describe Answer, '#create', type: :system do
       it 'displays an error message' do
         click_on 'Create Answer'
 
-        message = page.find('#answer_body').native.attribute('validationMessage')
+        message = page.find_by_id('answer_body').native.attribute('validationMessage')
         expect(message).to eq 'Please fill out this field.'
       end
     end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Build, type: :model do
+RSpec.describe Build do
   describe '#valid?' do
     subject(:build_instance) { build(:build) }
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CloneGithubRepoJob, type: :job do
+RSpec.describe CloneGithubRepoJob do
   before(:all) do
     @repo = create(:repository, :real)
     @build = create(:build, repository: @repo, aasm_state: :cloning_repo)

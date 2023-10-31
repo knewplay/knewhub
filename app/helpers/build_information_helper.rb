@@ -9,8 +9,8 @@ module BuildInformationHelper
     return if build.nil?
 
     status_icon = {
-      'Complete': { class: 'fa-regular fa-circle-check', style: 'color: #4ea832;' },
-      'Failed': { class: 'fa-regular fa-circle-xmark', style: 'color: #c23434;' },
+      Complete: { class: 'fa-regular fa-circle-check', style: 'color: #4ea832;' },
+      Failed: { class: 'fa-regular fa-circle-xmark', style: 'color: #c23434;' },
       'In progress': { class: 'fa-solid fa-spinner fa-spin' }
     }
 

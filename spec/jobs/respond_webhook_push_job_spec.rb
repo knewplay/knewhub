@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RespondWebhookPushJob, type: :job do
+RSpec.describe RespondWebhookPushJob do
   before(:all) do
     @repo = create(:repository, :real)
     clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)

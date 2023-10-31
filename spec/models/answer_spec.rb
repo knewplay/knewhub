@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Answer, type: :model do
+RSpec.describe Answer do
   describe '#valid?' do
     subject(:answer) { build(:answer, user:, question:) }
 

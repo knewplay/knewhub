@@ -30,7 +30,7 @@ module Sessions
 
     def create_without_multi_factor_enabled(administrator)
       session[:administrator_id] = administrator.id
-      session[:administrator_expires_at] = Time.current + 1.hour
+      session[:administrator_expires_at] = 1.hour.from_now
       redirect_to dashboard_root_path
     end
 

@@ -15,7 +15,7 @@ describe Webhooks::GithubController do
 
         # Parameters for Webhook event
         secret = Rails.application.credentials.webhook_secret
-        data = 'repository[name]=test-repo&repository[owner][name]=jp524&'\
+        data = 'repository[name]=test-repo&repository[owner][name]=jp524&' \
                'repository[owner][id]=85654561&repository[description]=something'
         @signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, data)}"
       end
@@ -24,13 +24,13 @@ describe Webhooks::GithubController do
         before(:all) do
           post "/webhooks/github/#{@repo.uuid}",
                params: {
-                 'repository': {
-                   'name': 'test-repo',
-                   'owner': {
-                     'name': 'jp524',
-                     'id': '85654561'
+                 repository: {
+                   name: 'test-repo',
+                   owner: {
+                     name: 'jp524',
+                     id: '85654561'
                    },
-                   'description': 'something'
+                   description: 'something'
                  }
                },
                headers: {
@@ -44,8 +44,8 @@ describe Webhooks::GithubController do
           FileUtils.remove_dir(directory)
         end
 
-        it 'returns status 200' do
-          expect(response.status).to eq(200)
+        it 'returns status :ok' do
+          expect(response).to have_http_status(:ok)
         end
 
         context 'when creating an associated Build' do
@@ -96,15 +96,15 @@ describe Webhooks::GithubController do
       context 'when an invalid request is received' do
         before do
           post "/webhooks/github/#{@repo.uuid}",
-               params: { 'repository': 'modified params render signature invalid' },
+               params: { repository: 'modified params render signature invalid' },
                headers: {
                  'X-GitHub-Event': 'push',
                  'X-Hub-Signature-256': @signature
                }
         end
 
-        it 'returns status 400' do
-          expect(response.status).to eq(400)
+        it 'returns status :bad_request' do
+          expect(response).to have_http_status(:bad_request)
         end
       end
     end

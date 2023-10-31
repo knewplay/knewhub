@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Repository, type: :model do
+RSpec.describe Repository do
   describe '#valid?' do
     it 'returns false when given an invalid name' do
       repo = build(:repository, name: 'repo?name')

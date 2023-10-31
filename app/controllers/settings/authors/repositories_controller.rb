@@ -14,6 +14,8 @@ module Settings
         @repository = current_author.repositories.build
       end
 
+      def edit; end
+
       def create
         @repository = current_author.repositories.build(repository_params)
         if @repository.save
@@ -24,10 +26,6 @@ module Settings
         else
           render :new, status: :unprocessable_entity
         end
-      end
-
-      def edit
-        render file: Rails.root.join('public/404.html').to_s, layout: false, status: :not_found if @repository.nil?
       end
 
       def update
@@ -62,7 +60,7 @@ module Settings
       def update_actions(build, former_name, former_branch)
         if former_name != @repository.name || former_branch != @repository.branch
           old_directory = Rails.root.join('repos', @repository.author.github_username, former_name)
-          FileUtils.remove_dir(old_directory) if Dir.exist?(old_directory)
+          FileUtils.rm_r(old_directory) if Dir.exist?(old_directory)
           build.update_repo('clone')
         else
           build.update_repo('pull')

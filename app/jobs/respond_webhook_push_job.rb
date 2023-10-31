@@ -25,7 +25,7 @@ class RespondWebhookPushJob
 
   def update_repository(repository, build, webhook_name, webhook_owner)
     old_directory = Rails.root.join('repos', repository.author.github_username, repository.name)
-    FileUtils.remove_dir(old_directory) if Dir.exist?(old_directory)
+    FileUtils.rm_r(old_directory) if Dir.exist?(old_directory)
     repository.update(
       name: webhook_name,
       git_url: "https://#{repository.token}@github.com/#{webhook_owner}/#{webhook_name}.git"

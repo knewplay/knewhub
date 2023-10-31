@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ParseQuestionsJob, type: :job do
+RSpec.describe ParseQuestionsJob do
   before(:all) do
     @repo = create(:repository, last_pull_at: DateTime.current)
     @first_build = create(:build, repository: @repo, aasm_state: :parsing_questions)
@@ -57,7 +57,7 @@ RSpec.describe ParseQuestionsJob, type: :job do
       end
 
       it 'has the original number of questions' do
-        expect(Question.all.count).to eq(4)
+        expect(Question.count).to eq(4)
       end
 
       it 'shows the unchanged question in the article that remains' do
@@ -89,7 +89,7 @@ RSpec.describe ParseQuestionsJob, type: :job do
         end
 
         it 'has the original number of questions' do
-          expect(Question.all.count).to eq(4)
+          expect(Question.count).to eq(4)
         end
 
         it 'shows the question that was added back' do

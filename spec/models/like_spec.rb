@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Like, type: :model do
+RSpec.describe Like do
   describe '#valid?' do
     subject(:like) { described_class.new(answer:) }
 

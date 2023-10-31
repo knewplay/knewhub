@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CreateRepoIndexJob, type: :job do
+RSpec.describe CreateRepoIndexJob do
   before(:all) do
     @repo = create(:repository, last_pull_at: DateTime.current)
 
@@ -24,7 +24,7 @@ RSpec.describe CreateRepoIndexJob, type: :job do
   context "when the 'index.md' file exists" do
     before do
       filepath = File.join(@destination_directory, 'index.md')
-      File.open(filepath, 'w') { |f| f.write('Index file content') }
+      File.write(filepath, 'Index file content')
     end
 
     after do

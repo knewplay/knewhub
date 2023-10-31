@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RemoveRepoJob, type: :job do
+RSpec.describe RemoveRepoJob do
   let(:repo) { create(:repository, :real, hook_id: 436_760_769) }
   let(:client) { Octokit::Client.new(access_token: repo.token) }
 

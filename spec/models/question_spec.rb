@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Question, type: :model do
+RSpec.describe Question do
   describe '#valid?' do
     subject(:question) { build(:question) }
 

@@ -6,7 +6,7 @@ require:
   - rubocop-rspec
 
 AllCops:
-  # NewCops: enable
+  NewCops: enable
   Exclude:
     - bin/*
     - config/**/*
@@ -15,6 +15,12 @@ AllCops:
     - db/migrate/20230829170436_devise_create_users.rb
     - db/schema.rb
     - Rakefile
+
+Capybara/ClickLinkOrButtonStyle:
+  EnforcedStyle: link_or_button
+
+FactoryBot/AssociationStyle:
+  EnforcedStyle: explicit
 
 Metrics/AbcSize:
   Exclude:
@@ -34,6 +40,9 @@ Rails/BulkChangeTable:
   Exclude:
     - db/migrate/20231005175303_add_hidden_and_batch_code_to_questions.rb
 
+Rails/I18nLocaleTexts:
+  Enabled: false
+
 Rails/ReversibleMigration:
   Exclude:
     - db/migrate/20230726192619_add_author_to_repositories.rb
@@ -42,6 +51,12 @@ Rails/ReversibleMigration:
 
 Rails/SkipsModelValidations:
   AllowedMethods: [toggle!]
+
+Rails/ThreeStateBooleanColumn:
+  Exclude:
+    - db/migrate/20230822180842_add_banned_to_repositories.rb
+    - db/migrate/20230905171904_add_action_to_builds_and_failure_to_logs.rb
+    - db/migrate/20231005175303_add_hidden_and_batch_code_to_questions.rb
 
 Rails/UniqueValidationWithoutIndex:
   Exclude:
@@ -68,6 +83,10 @@ RSpec/MultipleExpectations:
 
 RSpec/NestedGroups:
   Max: 5
+
+RSpec/SpecFilePathFormat:
+  Exclude:
+    - spec/systems/repositories/update_spec.rb
 
 Style/BlockComments:
   Exclude:

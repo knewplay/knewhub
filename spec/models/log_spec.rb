@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Log, type: :model do
+RSpec.describe Log do
   describe '#valid?' do
     subject(:log) { build(:log) }
 

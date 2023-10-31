@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Administrator, type: :model do
+RSpec.describe Administrator do
   describe '#normalizes' do
     it 'does not change the name if not required' do
       admin = create(:administrator, name: 'valid-name')
