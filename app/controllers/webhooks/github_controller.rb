@@ -6,33 +6,41 @@ module Webhooks
 
     def create
       head :ok
+      return unless request.headers['X-GitHub-Event'] == 'push'
 
-      uuid = params[:uuid]
-      repository = Repository.find_by!(uuid:)
+      repository = Repository.find_by!(uuid: params[:uuid])
+      build = Build.create(repository:, status: 'In progress', action: 'webhook_push')
+      build.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
 
-      case request.headers['X-GitHub-Event']
-      when 'push'
-        build = Build.create(repository:, status: 'In progress', action: 'webhook_push')
-        build.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
-
-        name = params[:repository][:name]
-        owner_name = params[:repository][:owner][:name]
-        owner_id = params[:repository][:owner][:id].to_s
-        description = params[:repository][:description]
-
-        if repository.author.github_uid != owner_id
-          content = <<~MSG
-            The ownership of the repository has changed.
-            Please login with GitHub with the new repository owner's account to add the repository to Knewhub.
-          MSG
-          build.logs.create(content:, failure: true)
-        else
-          build.receive_webhook_push(uuid, name, owner_name, description)
-        end
-      end
+      create_actions(repository, build, params)
     end
 
     private
+
+    def create_actions(repository, build, params)
+      owner_id = params[:repository][:owner][:id].to_s
+      if repository.author.github_uid == owner_id
+        repository_owner_unchanged(params, build)
+      else
+        repository_owner_changed(build)
+      end
+    end
+
+    def repository_owner_changed(build)
+      content = <<~MSG
+        The ownership of the repository has changed.
+        Please login with GitHub with the new repository owner's account to add the repository to Knewhub.
+      MSG
+      build.logs.create(content:, failure: true)
+    end
+
+    def repository_owner_unchanged(params, build)
+      uuid = params[:uuid]
+      name = params[:repository][:name]
+      owner_name = params[:repository][:owner][:name]
+      description = params[:repository][:description]
+      build.receive_webhook_push(uuid, name, owner_name, description)
+    end
 
     def verify_event
       secret = Rails.application.credentials.webhook_secret

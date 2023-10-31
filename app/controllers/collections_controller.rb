@@ -1,5 +1,5 @@
 class CollectionsController < ApplicationController
-  before_action :require_user_or_admin_authentication
+  before_action :require_user_or_admin_authentication, :modify_view_path
   layout 'collections'
 
   def show
@@ -7,18 +7,7 @@ class CollectionsController < ApplicationController
     render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
 
     RequestPath.store(request)
-    respond_to do |format|
-      format.html do
-        @front_matter = extract_front_matter(file_path)
-        @questions = Question.where(repository: @repository, page_path: params[:path])
-        prepend_view_path Rails.root.join('repos').to_s
-        render file_path
-      end
-      format.any(:png, :jpg, :jpeg, :gif, :svg, :webp) do
-        send_file Rails.root.join("repos/#{file_path}.#{request.format.to_sym}").to_s
-      end
-      format.all { render_not_found }
-    end
+    show_actions(file_path)
   end
 
   def index
@@ -26,7 +15,6 @@ class CollectionsController < ApplicationController
     render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
 
     @front_matter = extract_front_matter(file_path)
-    prepend_view_path Rails.root.join('repos').to_s
     render file_path
   end
 
@@ -36,6 +24,22 @@ class CollectionsController < ApplicationController
     return if administrator_signed_in? || user_signed_in?
 
     redirect_to root_path, alert: 'Please log in to continue.'
+  end
+
+  def modify_view_path
+    prepend_view_path Rails.root.join('repos').to_s
+  end
+
+  def show_actions(file_path)
+    respond_to do |format|
+      format.html do
+        @front_matter = extract_front_matter(file_path)
+        @questions = Question.where(repository: @repository, page_path: params[:path])
+        render file_path
+      end
+      format.any(:png, :jpg, :jpeg, :gif, :svg, :webp) { render_image(file_path) }
+      format.all { render_not_found }
+    end
   end
 
   def file_exists?(file_path)
@@ -58,6 +62,10 @@ class CollectionsController < ApplicationController
 
   def render_not_found
     render 'errors/not_found', layout: 'errors', status: :not_found
+  end
+
+  def render_image(file_path)
+    send_file Rails.root.join("repos/#{file_path}.#{request.format.to_sym}").to_s
   end
 
   def extract_front_matter(file_path)

@@ -19,14 +19,18 @@ class Author < ApplicationRecord
     author = Author.find_by(github_uid:)
     author ||= Author.create(github_uid:, github_username:)
 
-    if author.github_username != github_username
-      author.repositories.each do |repository|
-        RepositoryDirectory.update_author(repository.id, github_username)
-      end
-      author.update(github_username:)
-    end
+    update_author_github_username(author, github_username)
 
     author
+  end
+
+  def self.update_author_github_username(author, github_username)
+    return if author.github_username == github_username
+
+    author.repositories.each do |repository|
+      RepositoryDirectory.update_author(repository.id, github_username)
+    end
+    author.update(github_username:)
   end
 
   private

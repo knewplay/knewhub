@@ -5,12 +5,9 @@ module Sessions
     def create
       if (administrator = Administrator.authenticate_by(name: params[:name], password: params[:password]))
         if administrator.multi_factor_enabled?
-          session[:webauthn_administrator_id] = administrator.id
-          redirect_to new_webauthn_authentication_path
+          create_with_multi_factor_enabled(administrator)
         else
-          session[:administrator_id] = administrator.id
-          session[:administrator_expires_at] = Time.current + 1.hour
-          redirect_to dashboard_root_path
+          create_without_multi_factor_enabled(administrator)
         end
         destroy_other_sessions
       else
@@ -22,6 +19,19 @@ module Sessions
       session[:administrator_id] = nil
       session[:administrator_expires_at] = nil
       redirect_to root_path
+    end
+
+    private
+
+    def create_with_multi_factor_enabled(administrator)
+      session[:webauthn_administrator_id] = administrator.id
+      redirect_to new_webauthn_authentication_path
+    end
+
+    def create_without_multi_factor_enabled(administrator)
+      session[:administrator_id] = administrator.id
+      session[:administrator_expires_at] = Time.current + 1.hour
+      redirect_to dashboard_root_path
     end
 
     def destroy_other_sessions

@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 require:
   - rubocop-capybara
   - rubocop-factory_bot
@@ -18,6 +16,20 @@ AllCops:
     - db/schema.rb
     - Rakefile
 
+Metrics/AbcSize:
+  Exclude:
+    - app/controllers/webauthn/**
+
+Metrics/BlockLength:
+  AllowedMethods: ['aasm']
+
+Metrics/ClassLength:
+  Max: 130
+
+Metrics/MethodLength:
+  Exclude:
+    - app/controllers/webauthn/**
+
 Rails/BulkChangeTable:
   Exclude:
     - db/migrate/20231005175303_add_hidden_and_batch_code_to_questions.rb
@@ -29,7 +41,7 @@ Rails/ReversibleMigration:
     - db/migrate/20231004143201_remove_step_from_logs.rb
 
 Rails/SkipsModelValidations:
-  AllowedMethods: [ toggle! ]
+  AllowedMethods: [toggle!]
 
 Rails/UniqueValidationWithoutIndex:
   Exclude:
@@ -41,7 +53,7 @@ RSpec/BeforeAfterAll:
   Enabled: false
 
 RSpec/ExampleLength:
-  CountAsOne: [ 'method_call']
+  CountAsOne: ['method_call']
   Max: 10
 
 RSpec/InstanceVariable:
