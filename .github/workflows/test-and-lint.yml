@@ -13,7 +13,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: test
     services:
       postgres:
         image: postgres:15-alpine
@@ -26,7 +25,7 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432/knewhub_test"
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      RAILS_MASTER_KEY: ${{ secrets.TEST_ENV_RAILS_MASTER_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
