@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Answers#index', type: :system do
+RSpec.describe Answer, '#index', type: :system do
   let!(:first_user) { create(:user, email: 'email1@test.com') }
   let!(:second_user) { create(:user, email: 'email2@test.com') }
   let!(:question) { create(:question) }
@@ -8,7 +8,7 @@ RSpec.describe 'Answers#index', type: :system do
   let!(:second_answer) { create(:answer, user: second_user, question:, body: 'This is the second answer.') }
 
   context 'when logged in as a user' do
-    scenario 'it displays all answers associated with a question' do
+    it 'displays all answers associated with a question' do
       sign_in first_user
       visit answers_path(question.id)
 
@@ -19,7 +19,7 @@ RSpec.describe 'Answers#index', type: :system do
   end
 
   context 'when not logged in as a user' do
-    scenario 'it redirects to login page' do
+    it 'redirects to login page' do
       visit answers_path(question.id)
 
       expect(page).to have_content('You need to log in or create an account before continuing.')

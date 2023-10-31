@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Author, type: :model do
+RSpec.describe Author do
   describe '#set_name' do
     let(:author) { create(:author, github_username: 'user') }
 

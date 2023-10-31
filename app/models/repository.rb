@@ -3,18 +3,18 @@ class Repository < ApplicationRecord
   has_many :builds, dependent: :destroy
   has_many :questions, dependent: :destroy
 
-  before_create :set_branch, :generate_uuid
   before_save :set_git_url
+  before_create :set_branch, :generate_uuid
 
   validates :name,
             presence: true,
             uniqueness: true,
-            format: { with: /\A[\.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }
+            format: { with: /\A[.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }
   validates :token,
             presence: true,
             format: { with: /\A(github_pat|ghp)\w+\z/, message: 'must start with "github_pat" or "ghp"' }
   validates :branch,
-            format: { with: /\A[\.\/\w-]{0,100}\z/, message: 'must follow GitHub branch name restrictions' }
+            format: { with: %r{\A[./\w-]{0,100}\z}, message: 'must follow GitHub branch name restrictions' }
   validates :title, presence: true
   attribute :banned, :boolean, default: false
 
@@ -33,11 +33,7 @@ class Repository < ApplicationRecord
   end
 
   def set_branch
-    self.branch = if branch.blank?
-                    'main'
-                  else
-                    branch
-                  end
+    self.branch = (branch.presence || 'main')
   end
 
   def generate_uuid

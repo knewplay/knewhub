@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Administrator, type: :model do
+RSpec.describe Administrator do
   describe '#normalizes' do
     it 'does not change the name if not required' do
       admin = create(:administrator, name: 'valid-name')
@@ -14,25 +14,25 @@ RSpec.describe Administrator, type: :model do
   end
 
   describe '#valid?' do
-    subject { build(:administrator) }
+    subject(:administrator) { build(:administrator) }
 
     it 'returns false when name contains invalid characters' do
-      subject.name = 'invalid!name%'
-      expect(subject).to_not be_valid
+      administrator.name = 'invalid!name%'
+      expect(administrator).not_to be_valid
     end
 
     it 'returns false when permissions is nil' do
-      subject.permissions = nil
-      expect(subject).to_not be_valid
+      administrator.permissions = nil
+      expect(administrator).not_to be_valid
     end
 
     it 'returns false when password is too short' do
-      subject.password = '123'
-      expect(subject).to_not be_valid
+      administrator.password = '123'
+      expect(administrator).not_to be_valid
     end
 
     it 'returns true when name and password have valid formats, and when permissions are set' do
-      expect(subject).to be_valid
+      expect(administrator).to be_valid
     end
   end
 end

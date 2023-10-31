@@ -5,7 +5,7 @@ RSpec.describe 'Sessions::Authors#create', type: :system do
   context 'when logged in as a user' do
     let(:author) { create(:author) }
 
-    scenario 'can log in as an author' do
+    it 'can log in as an author' do
       sign_in author.user
       visit settings_root_path
 
@@ -15,7 +15,7 @@ RSpec.describe 'Sessions::Authors#create', type: :system do
   end
 
   context 'when not logged in as a user' do
-    scenario 'cannot access log in as an author page' do
+    it 'cannot access log in as an author page' do
       visit settings_root_path
 
       expect(page).to have_current_path(new_user_session_path)
