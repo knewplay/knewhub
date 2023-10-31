@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Repositories#update', type: :system do
+RSpec.describe Repository, '#update', type: :system do
   before(:all) do
     @repo = create(:repository, :real)
     clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)

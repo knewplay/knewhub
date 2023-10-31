@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Likes#create', type: :system do
+RSpec.describe Like, '#create', type: :system do
   let!(:answer) { create(:answer) }
   let!(:question) { answer.question }
   let!(:user_author) { answer.user }
@@ -19,7 +19,7 @@ RSpec.describe 'Likes#create', type: :system do
     end
 
     it 'can like an answer already having likes' do
-      Like.create(user: user_author, answer:)
+      described_class.create(user: user_author, answer:)
 
       sign_in user_liker
       visit answers_path(question.id)

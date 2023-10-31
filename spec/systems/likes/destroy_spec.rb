@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Likes#destroy', type: :system do
+RSpec.describe Like, '#destroy', type: :system do
   let!(:answer) { create(:answer) }
   let!(:question) { answer.question }
   let!(:user_author) { answer.user }
@@ -8,7 +8,7 @@ RSpec.describe 'Likes#destroy', type: :system do
 
   context 'when logged in as a user' do
     it 'can unlike an answer that has one like' do
-      Like.create(user: user_liker, answer:)
+      described_class.create(user: user_liker, answer:)
       sign_in user_liker
       visit answers_path(question.id)
 
@@ -22,8 +22,8 @@ RSpec.describe 'Likes#destroy', type: :system do
     end
 
     it 'can unlike an answer that has multiple likes' do
-      Like.create(user: user_liker, answer:)
-      Like.create(user: user_author, answer:)
+      described_class.create(user: user_liker, answer:)
+      described_class.create(user: user_author, answer:)
 
       sign_in user_liker
       visit answers_path(question.id)

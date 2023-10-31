@@ -56,6 +56,10 @@ RSpec/ExampleLength:
   CountAsOne: ['method_call']
   Max: 10
 
+RSpec/FilePath:
+  Exclude:
+    - spec/systems/repositories/update_spec.rb
+
 RSpec/InstanceVariable:
   Enabled: false
 

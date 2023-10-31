@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Answers#destroy', type: :system do
+RSpec.describe Answer, '#destroy', type: :system do
   let!(:first_user) { create(:user, email: 'email1@test.com') }
   let!(:second_user) { create(:user, email: 'email2@test.com') }
   let!(:question) { create(:question) }

@@ -7,7 +7,7 @@ RSpec.shared_context 'when creating a new answer' do
   end
 end
 
-RSpec.describe 'Answers#create', type: :system do
+RSpec.describe Answer, '#create', type: :system do
   let(:user) { create(:user, :second) }
   let(:question) { create(:question) }
 
