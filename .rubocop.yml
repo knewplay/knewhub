@@ -15,6 +15,7 @@ AllCops:
     - db/migrate/20230829170436_devise_create_users.rb
     - db/schema.rb
     - Rakefile
+    - vendor/bundle/**/*
 
 Capybara/ClickLinkOrButtonStyle:
   EnforcedStyle: link_or_button
