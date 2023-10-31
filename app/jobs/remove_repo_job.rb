@@ -1,16 +1,14 @@
 class RemoveRepoJob
   include Sidekiq::Job
 
-  def perform(repository_id)
-    repository, directory = RepositoryDirectory.define(repository_id)
-    remove_webhook(repository)
+  def perform(github_username, name, hook_id, token, directory)
+    remove_webhook(github_username, name, hook_id, token)
     delete_local_files(directory)
-    repository.destroy
   end
 
-  def remove_webhook(repository)
-    client = Octokit::Client.new(access_token: repository.token)
-    client.remove_hook("#{repository.author.github_username}/#{repository.name}", repository.hook_id)
+  def remove_webhook(github_username, name, hook_id, token)
+    client = Octokit::Client.new(access_token: token)
+    client.remove_hook("#{github_username}/#{name}", hook_id)
   end
 
   def delete_local_files(directory)
