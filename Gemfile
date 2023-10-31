@@ -117,6 +117,7 @@ group :test do
   gem 'rack_session_access'
   gem 'rspec-sidekiq'
   gem 'selenium-webdriver'
+  gem 'simplecov', require: false
   gem 'vcr'
   gem 'webmock'
 end
