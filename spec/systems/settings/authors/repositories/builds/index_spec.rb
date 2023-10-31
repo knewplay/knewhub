@@ -7,7 +7,7 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
   let(:author) { repo.author }
 
   context 'when logged in as an author' do
-    scenario 'displays build information' do
+    it 'displays build information' do
       sign_in author.user
       page.set_rack_session(author_id: author.id)
 
@@ -17,7 +17,7 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
       expect(page).to have_content(build.status)
     end
 
-    scenario 'displays logs content' do
+    it 'displays logs content' do
       sign_in author.user
       page.set_rack_session(author_id: author.id)
 
@@ -27,7 +27,7 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
   end
 
   context 'when not logged in as an author' do
-    scenario 'redirects to root path' do
+    it 'redirects to root path' do
       visit settings_author_repository_builds_path(repo.id)
 
       expect(page).to have_current_path(root_path)

@@ -26,6 +26,6 @@ class AdministratorsController < ApplicationController
   end
 
   def empty_table
-    return true if Administrator.any? == false
+    true if Administrator.any? == false
   end
 end

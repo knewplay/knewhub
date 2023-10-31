@@ -1,16 +1,22 @@
 require 'rails_helper'
 
+RSpec.shared_context 'when updating a repository' do
+  before do
+    sign_in author.user
+    page.set_rack_session(author_id: author.id)
+    visit edit_settings_author_repository_path(repo.id)
+  end
+end
+
 RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
   let(:repo) { create(:repository) }
   let(:author) { repo.author }
 
   context 'when given valid input' do
     context 'without the Build process' do
-      scenario 'updates the name' do
-        sign_in author.user
-        page.set_rack_session(author_id: author.id)
+      include_context 'when updating a repository'
 
-        visit edit_settings_author_repository_path(repo.id)
+      it 'updates the name' do
         expect(page).to have_content('Edit Repository')
 
         fill_in('Name', with: 'a_new_name')
@@ -23,11 +29,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
         expect(repo.git_url).to eq('https://ghp_abcde12345@github.com/user/a_new_name.git')
       end
 
-      scenario 'updates the branch' do
-        sign_in author.user
-        page.set_rack_session(author_id: author.id)
-
-        visit edit_settings_author_repository_path(repo.id)
+      it 'updates the branch' do
         expect(page).to have_content('Edit Repository')
 
         fill_in('Branch', with: 'other_branch')
@@ -40,7 +42,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       end
     end
 
-    context 'updating the name and title using the Build process' do
+    context 'when updating the name and title using the Build process' do
       before(:all) do
         Sidekiq::Testing.inline! do
           # Creates and clones a repository
@@ -67,41 +69,41 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
         end
       end
 
-      scenario "creates an associated Build with action 'update'" do
-        expect(@update_build.action).to eq('update')
-      end
-
-      scenario 'creates the first log' do
-        expect(@update_build.logs.first.content).to eq('Repository successfully cloned.')
-      end
-
-      scenario 'creates the second log' do
-        expect(@update_build.logs.second.content).to eq('Repository description successfully updated from GitHub.')
-      end
-
-      scenario 'with the third log' do
-        expect(@update_build.logs.third.content).to eq('Questions successfully parsed.')
-      end
-
-      scenario 'creates the fourth log' do
-        expect(@update_build.logs.fourth.content).to eq('index.md file exists for this repository.')
-      end
-
-      scenario "sets Build status to 'Complete'" do
-        @update_build.reload
-        expect(@update_build.status).to eq('Complete')
-      end
-
       after(:all) do
         @repo.reload
         directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
         FileUtils.remove_dir(directory)
       end
+
+      it "creates an associated Build with action 'update'" do
+        expect(@update_build.action).to eq('update')
+      end
+
+      it 'creates the first log' do
+        expect(@update_build.logs.first.content).to eq('Repository successfully cloned.')
+      end
+
+      it 'creates the second log' do
+        expect(@update_build.logs.second.content).to eq('Repository description successfully updated from GitHub.')
+      end
+
+      it 'with the third log' do
+        expect(@update_build.logs.third.content).to eq('Questions successfully parsed.')
+      end
+
+      it 'creates the fourth log' do
+        expect(@update_build.logs.fourth.content).to eq('index.md file exists for this repository.')
+      end
+
+      it "sets Build status to 'Complete'" do
+        @update_build.reload
+        expect(@update_build.status).to eq('Complete')
+      end
     end
   end
 
   context 'when given invalid input' do
-    scenario 'fails to update' do
+    it 'fails to update' do
       sign_in author.user
       page.set_rack_session(author_id: author.id)
 

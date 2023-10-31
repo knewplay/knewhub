@@ -8,8 +8,7 @@ class ParseQuestionsJob
 
     markdown_files = list_markdown_absolute_path_and_page_name(directory)
     markdown_files.each do |absolute_path, page_name|
-      parse_questions(repository, batch_code, absolute_path, page_name)
-      hide_old_questions(repository, batch_code)
+      perform_for_each_file(absolute_path, page_name, repository, batch_code)
     end
     build.logs.create(content: 'Questions successfully parsed.')
     build.finished_parsing_questions
@@ -24,11 +23,20 @@ class ParseQuestionsJob
     end
   end
 
-  def parse_questions(repository, batch_code, absolute_path, page_name)
-    front_matter = extract_front_matter(absolute_path)
-    return if front_matter['questions'].nil?
+  def perform_for_each_file(absolute_path, page_name, repository, batch_code)
+    questions = extract_questions(absolute_path)
+    parse_questions(repository, batch_code, questions, page_name) if questions
+    hide_old_questions(repository, batch_code)
+  end
 
-    questions = front_matter['questions'].inject(:merge!)
+  def extract_questions(absolute_path)
+    front_matter = extract_front_matter(absolute_path)
+    questions_array = front_matter['questions']
+
+    questions_array&.inject(:merge!)
+  end
+
+  def parse_questions(repository, batch_code, questions, page_name)
     questions.each do |tag, body|
       question = Question.find_by(repository:, tag:, page_path: page_name)
       if question.nil?

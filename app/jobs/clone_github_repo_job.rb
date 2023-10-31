@@ -7,6 +7,7 @@ class CloneGithubRepoJob
 
     Git.clone(repository.git_url, directory, branch: repository.branch)
     repository.update(last_pull_at: DateTime.current)
+
     build.logs.create(content: 'Repository successfully cloned.')
     build.finished_cloning_or_pulling_repo
   rescue Git::FailedError => e

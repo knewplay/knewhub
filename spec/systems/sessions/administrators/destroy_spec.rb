@@ -12,7 +12,7 @@ RSpec.describe 'Sessions::Administrators#destroy', type: :system do
     )
   end
 
-  scenario 'logout' do
+  it 'logout' do
     page.set_rack_session(administrator_id: @admin.id)
 
     visit dashboard_root_path

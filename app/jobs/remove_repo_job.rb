@@ -12,6 +12,6 @@ class RemoveRepoJob
   end
 
   def delete_local_files(directory)
-    FileUtils.remove_dir(directory) if Dir.exist?(directory)
+    FileUtils.rm_r(directory) if Dir.exist?(directory)
   end
 end

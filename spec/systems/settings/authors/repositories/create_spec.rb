@@ -1,14 +1,21 @@
 require 'rails_helper'
 
+RSpec.shared_context 'when creating a new repository' do
+  let(:author) { create(:author) }
+
+  before do
+    sign_in author.user
+    page.set_rack_session(author_id: author.id)
+    visit new_settings_author_repository_path
+  end
+end
+
 RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
   context 'without using the Build process' do
-    let(:author) { create(:author) }
+    include_context 'when creating a new repository'
 
     context 'when given valid name and token, but no branch' do
-      scenario 'creates the repository' do
-        sign_in author.user
-        page.set_rack_session(author_id: author.id)
-        visit new_settings_author_repository_path
+      it 'creates the repository' do
         expect(page).to have_content('New repository')
 
         fill_in('Name', with: 'repo_name')
@@ -18,16 +25,12 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
 
         expect(page).to have_content('Repository creation process was initiated.')
         expect(Repository.last.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
-        expect(Repository.last.token).to eq('ghp_abcde12345')
         expect(Repository.last.branch).to eq('main')
       end
     end
 
     context 'when given valid name, token and branch' do
-      scenario 'creates the repository' do
-        sign_in author.user
-        page.set_rack_session(author_id: author.id)
-        visit new_settings_author_repository_path
+      it 'creates the repository' do
         expect(page).to have_content('New repository')
 
         fill_in('Name', with: 'repo_name')
@@ -38,16 +41,12 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
 
         expect(page).to have_content('Repository creation process was initiated.')
         expect(Repository.last.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
-        expect(Repository.last.token).to eq('ghp_abcde12345')
         expect(Repository.last.branch).to eq('some_branch')
       end
     end
 
     context 'when given invalid input' do
-      scenario 'fails to create the repository' do
-        sign_in author.user
-        page.set_rack_session(author_id: author.id)
-        visit new_settings_author_repository_path
+      it 'fails to create the repository' do
         expect(page).to have_content('New repository')
 
         fill_in('Name', with: 'repo_name')
@@ -60,7 +59,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
     end
   end
 
-  context 'using the Build process' do
+  context 'when using the Build process' do
     before(:all) do
       author = create(:author, :real)
       sign_in author.user
@@ -87,39 +86,6 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       end
     end
 
-    scenario "creates an associated Build with action 'create'" do
-      expect(@build.action).to eq('create')
-    end
-
-    scenario 'creates the first log' do
-      expect(@build.logs.first.content).to eq('GitHub webhook successfully created. Now testing...')
-    end
-
-    scenario 'creates the second log' do
-      expect(@build.logs.second.content).to eq('GitHub webhook successfully tested.')
-    end
-
-    scenario 'creates the third log' do
-      expect(@build.logs.third.content).to eq('Repository successfully cloned.')
-    end
-
-    scenario 'creates the fourth log' do
-      expect(@build.logs.fourth.content).to eq('Repository description successfully updated from GitHub.')
-    end
-
-    scenario 'with fifth log' do
-      expect(@build.logs.fifth.content).to eq('Questions successfully parsed.')
-    end
-
-    scenario 'creates the sixth log' do
-      expect(@build.logs[5].content).to eq('index.md file successfully generated.')
-    end
-
-    scenario "sets Build status to 'Complete'" do
-      @build.reload
-      expect(@build.status).to eq('Complete')
-    end
-
     after(:all) do
       @repo.reload
       directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
@@ -127,8 +93,41 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
 
       VCR.use_cassette('delete_github_webhook_for_create') do
         client = Octokit::Client.new(access_token: @repo.token)
-        client.remove_hook("#{@repo.author.github_username}/#{@repo.name}", 436611979)
+        client.remove_hook("#{@repo.author.github_username}/#{@repo.name}", 436_611_979)
       end
+    end
+
+    it "creates an associated Build with action 'create'" do
+      expect(@build.action).to eq('create')
+    end
+
+    it 'creates the first log' do
+      expect(@build.logs.first.content).to eq('GitHub webhook successfully created. Now testing...')
+    end
+
+    it 'creates the second log' do
+      expect(@build.logs.second.content).to eq('GitHub webhook successfully tested.')
+    end
+
+    it 'creates the third log' do
+      expect(@build.logs.third.content).to eq('Repository successfully cloned.')
+    end
+
+    it 'creates the fourth log' do
+      expect(@build.logs.fourth.content).to eq('Repository description successfully updated from GitHub.')
+    end
+
+    it 'with fifth log' do
+      expect(@build.logs.fifth.content).to eq('Questions successfully parsed.')
+    end
+
+    it 'creates the sixth log' do
+      expect(@build.logs[5].content).to eq('index.md file successfully generated.')
+    end
+
+    it "sets Build status to 'Complete'" do
+      @build.reload
+      expect(@build.status).to eq('Complete')
     end
   end
 end

@@ -1,21 +1,21 @@
 require 'rails_helper'
 
-RSpec.describe RemoveRepoJob, type: :job do
-  let(:repo) { create(:repository, :real, hook_id: 436760769) }
+RSpec.describe RemoveRepoJob do
+  let(:repo) { create(:repository, :real, hook_id: 436_760_769) }
   let(:client) { Octokit::Client.new(access_token: repo.token) }
   let(:github_username) { repo.author.github_username }
   let(:directory) { Rails.root.join('repos', github_username, repo.name).to_s }
 
   it 'queues the job' do
-    RemoveRepoJob.perform_async(github_username, repo.name, repo.hook_id, repo.token, directory)
-    expect(RemoveRepoJob).to have_enqueued_sidekiq_job(github_username, repo.name, repo.hook_id, repo.token, directory)
+    described_class.perform_async(github_username, repo.name, repo.hook_id, repo.token, directory)
+    expect(described_class).to have_enqueued_sidekiq_job(github_username, repo.name, repo.hook_id, repo.token, directory)
   end
 
   context 'when executing perform' do
     before do
       VCR.use_cassette('remove_repo') do
         Sidekiq::Testing.inline! do
-          RemoveRepoJob.perform_async(github_username, repo.name, repo.hook_id, repo.token, directory)
+          described_class.perform_async(github_username, repo.name, repo.hook_id, repo.token, directory)
         end
       end
     end

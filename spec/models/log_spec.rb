@@ -1,21 +1,21 @@
 require 'rails_helper'
 
-RSpec.describe Log, type: :model do
+RSpec.describe Log do
   describe '#valid?' do
-    subject { build(:log) }
+    subject(:log) { build(:log) }
 
     it 'returns false when not associated with a Build' do
-      subject.build = nil
-      expect(subject).to_not be_valid
+      log.build = nil
+      expect(log).not_to be_valid
     end
 
     it 'returns false when content is nil' do
-      subject.content = nil
-      expect(subject).to_not be_valid
+      log.content = nil
+      expect(log).not_to be_valid
     end
 
     it 'returns true when content and step are set and when associated with a Build' do
-      expect(subject).to be_valid
+      expect(log).to be_valid
     end
   end
 end

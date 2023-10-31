@@ -10,21 +10,28 @@ class TestGithubWebhookJob
     handle_response(build, response)
   end
 
+  private
+
   def handle_response(build, response)
     case response.last_response.code
     when 200
-      build.logs.create(content: 'GitHub webhook successfully tested.')
-      build.finished_testing_webhook
+      successful_test(build)
     when nil?
       content = <<~MSG
         Test of GitHub webhook failed. Message: Hook does not exist. Check GitHub repository settings, under Webhooks tab.
       MSG
-      build.logs.create(content:, failure: true)
+      failed_test(build, content)
     else
-      build.logs.create(
-        content: "Test of GitHub webhook failed. Message: #{response.last_response.message}",
-        failure: true
-      )
+      failed_test(build, "Test of GitHub webhook failed. Message: #{response.last_response.message}")
     end
+  end
+
+  def successful_test(build)
+    build.logs.create(content: 'GitHub webhook successfully tested.')
+    build.finished_testing_webhook
+  end
+
+  def failed_test(build, content)
+    build.logs.create(content:, failure: true)
   end
 end
