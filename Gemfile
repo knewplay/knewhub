@@ -84,6 +84,8 @@ gem 'after_commit_everywhere', '~> 1.0'
 gem 'rouge'
 
 group :development, :test do
+  gem 'brakeman'
+  gem 'bundler-audit'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'

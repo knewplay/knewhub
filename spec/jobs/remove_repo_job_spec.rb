@@ -8,7 +8,13 @@ RSpec.describe RemoveRepoJob do
 
   it 'queues the job' do
     described_class.perform_async(github_username, repo.name, repo.hook_id, repo.token, directory)
-    expect(described_class).to have_enqueued_sidekiq_job(github_username, repo.name, repo.hook_id, repo.token, directory)
+    expect(described_class).to have_enqueued_sidekiq_job(
+      github_username,
+      repo.name,
+      repo.hook_id,
+      repo.token,
+      directory
+    )
   end
 
   context 'when executing perform' do

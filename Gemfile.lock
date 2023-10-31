@@ -99,7 +99,11 @@ GEM
     bindex (0.8.1)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
+    brakeman (6.0.1)
     builder (3.2.4)
+    bundler-audit (0.9.1)
+      bundler (>= 1.2.0, < 3)
+      thor (~> 1.0)
     capybara (3.39.2)
       addressable
       matrix
@@ -157,6 +161,7 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     google-protobuf (3.24.4-arm64-darwin)
+    google-protobuf (3.24.4-x86_64-linux)
     hashdiff (1.0.1)
     hashie (5.0.0)
     i18n (1.14.1)
@@ -220,6 +225,8 @@ GEM
       net-protocol
     nio4r (2.5.9)
     nokogiri (1.15.4-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
     oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
@@ -376,6 +383,8 @@ GEM
       jwt (~> 2.0)
     sass-embedded (1.69.3-arm64-darwin)
       google-protobuf (~> 3.23)
+    sass-embedded (1.69.3-x86_64-linux-gnu)
+      google-protobuf (~> 3.23)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -457,6 +466,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   aasm
@@ -464,6 +474,8 @@ DEPENDENCIES
   after_commit_everywhere (~> 1.0)
   bcrypt (~> 3.1.7)
   bootsnap
+  brakeman
+  bundler-audit
   capybara
   dartsass-rails
   database_cleaner-active_record

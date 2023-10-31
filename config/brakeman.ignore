@@ -1,0 +1,98 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "6f5daed66efb7a58056b72f21760c9d6ac2b02d99e2e455a677feb9bfdd45751",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/controllers/collections_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => \"#{params[:owner]}/#{params[:name]}/#{params[:path]}\", {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CollectionsController",
+        "method": "show"
+      },
+      "user_input": "params[:owner]",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ],
+      "note": "#valid_render? checks if the supplied `file_path` is allowed to be accessed"
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "ba58c4c9ae079a0428ae1261b6834dd37ec1cc2a4db3020114c19896b66b71de",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/settings/authors/repositories_controller.rb",
+      "line": 41,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "FileUtils.remove_dir(Rails.root.join(\"repos\", Repository.find_by(:id => params[:id], :author_id => current_author.id).author.github_username, Repository.find_by(:id => params[:id], :author_id => current_author.id).name))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Settings::Authors::RepositoriesController",
+        "method": "update"
+      },
+      "user_input": "Repository.find_by(:id => params[:id], :author_id => current_author.id).name",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": "Model attribute must be used to find associated folder to be removed"
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "bae3a7a23dbc86c1b9d1b2074d4c312a24c52ab36d6ee3080210d7af0899aefe",
+      "check_name": "SendFile",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/collections_controller.rb",
+      "line": 18,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(\"#{Rails.root}/repos/#{\"#{params[:owner]}/#{params[:name]}/#{params[:path]}\"}.#{request.format.to_sym}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CollectionsController",
+        "method": "show"
+      },
+      "user_input": "params[:owner]",
+      "confidence": "High",
+      "cwe_id": [
+        22
+      ],
+      "note": "#valid_render? checks if the supplied `file_path` is allowed to be accessed."
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "dc4403a5004736b6b8142d25f13c310de8ba268a8476912470efd2e77a2495b8",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/controllers/collections_controller.rb",
+      "line": 30,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => \"#{params[:owner]}/#{params[:name]}/index\", {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CollectionsController",
+        "method": "index"
+      },
+      "user_input": "params[:owner]",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ],
+      "note": "#valid_render? checks if the supplied `file_path` is allowed to be accessed"
+    }
+  ],
+  "updated": "2023-10-30 13:05:50 -0400",
+  "brakeman_version": "6.0.1"
+}
