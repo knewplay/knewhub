@@ -4,7 +4,7 @@ on:
     branches: [ "main", "push-docker-to-artifact-registry" ]
 
 env:
-  GAR_LOCATION: northamerica-northeast1-docker.pkg.dev/knewhub/knewhub-development
+  GAR_LOCATION: northamerica-northeast1-docker.pkg.dev/knewhub/knewhub
   REGION: northamerica-northeast1
 
 jobs:
@@ -42,4 +42,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ env.GAR_LOCATION }}:${{ github.sha }}
+          tags: ${{ env.GAR_LOCATION }}/development:${{ github.sha }}
