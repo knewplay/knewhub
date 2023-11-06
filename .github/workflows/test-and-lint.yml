@@ -26,6 +26,7 @@ jobs:
       RAILS_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432/knewhub_test"
       RAILS_MASTER_KEY: ${{ secrets.TEST_ENV_RAILS_MASTER_KEY }}
+      CC_TEST_REPORTER_ID: bdccd2be8fc60a7e4cb2ea7ba07933e73453e6171f6f6a20938fb06735aeb9dd
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -45,8 +46,6 @@ jobs:
       - name: Run tests
         run: bundle exec rspec --order random
       - name: Publish test coverage
-        env:
-          CC_TEST_REPORTER_ID: bdccd2be8fc60a7e4cb2ea7ba07933e73453e6171f6f6a20938fb06735aeb9dd
         run: ./cc-test-reporter after-build --exit-code $?
 
   lint:
