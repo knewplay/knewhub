@@ -7,7 +7,7 @@
 name: "Test and Lint"
 on:
   push:
-    branches: [ "main", "display-test-coverage" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 jobs:
