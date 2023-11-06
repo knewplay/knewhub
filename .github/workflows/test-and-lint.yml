@@ -7,7 +7,7 @@
 name: "Test and Lint"
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "display-test-coverage" ]
   pull_request:
     branches: [ "main" ]
 jobs:
@@ -37,8 +37,17 @@ jobs:
         run: bin/rails db:schema:load
       - name: Build Sass files
         run: bundle exec rails dartsass:build
+      - name: Setup Code Climate test coverage reporter
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
       - name: Run tests
         run: bundle exec rspec --order random
+      - name: Publish test coverage
+        env:
+          CC_TEST_REPORTER_ID: bdccd2be8fc60a7e4cb2ea7ba07933e73453e6171f6f6a20938fb06735aeb9dd
+        run: ./cc-test-reporter after-build --exit-code $?
 
   lint:
     runs-on: ubuntu-latest
