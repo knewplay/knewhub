@@ -83,6 +83,9 @@ gem 'after_commit_everywhere', '~> 1.0'
 # Code syntax highlighter
 gem 'rouge'
 
+# Catch unsafe database migrations
+gem 'strong_migrations'
+
 group :development, :test do
   gem 'brakeman'
   gem 'bundler-audit'
