@@ -44,7 +44,7 @@ services:
       - redis
       - maildev
 
-  # backend-instanse-1
+  # backend-instance-1
   web-b:
     build: .
     command: bin/dev
@@ -66,7 +66,7 @@ services:
       - sidekiq
       - maildev
 
-  # backend-instanse-2
+  # backend-instance-2
   web-a:
     build: .
     command: bin/dev

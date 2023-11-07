@@ -13,7 +13,6 @@ ENV RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_PATH="/usr/local/bundle"
 
-
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
@@ -50,7 +49,7 @@ COPY --from=build /rails /rails
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp repos
+    chown -R rails:rails db log storage tmp repos .env
 
 VOLUME /rails/repos
 
