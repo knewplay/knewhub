@@ -59,12 +59,6 @@ Rails/ThreeStateBooleanColumn:
     - db/migrate/20230905171904_add_action_to_builds_and_failure_to_logs.rb
     - db/migrate/20231005175303_add_hidden_and_batch_code_to_questions.rb
 
-Rails/UniqueValidationWithoutIndex:
-  Exclude:
-    - app/models/administrator.rb
-    - app/models/author.rb
-    - app/models/repository.rb
-
 RSpec/BeforeAfterAll:
   Enabled: false
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_17_200835) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_06_204257) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_17_200835) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "webauthn_id"
+    t.index ["name"], name: "index_administrators_on_name", unique: true
   end
 
   create_table "answers", force: :cascade do |t|
@@ -42,6 +43,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_17_200835) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.bigint "user_id"
+    t.index ["github_uid"], name: "index_authors_on_github_uid", unique: true
+    t.index ["github_username"], name: "index_authors_on_github_username", unique: true
     t.index ["user_id"], name: "index_authors_on_user_id", unique: true
   end
 
