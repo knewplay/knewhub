@@ -1,61 +1,94 @@
+# This configuration file is only used 
+# to demonstrate how to deploy in a production environment
+
 services:
   db:
     image: postgres:15-alpine
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_vol:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=knewhub
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=pwd
     ports:
       - "5432:5432"
 
   redis:
     image: redis:7-alpine
     volumes:
-      - redis_data:/var/lib/redis/data
+      - redis_vol:/var/lib/redis/data
     ports:
       - 6379
-
-  sidekiq:
-    build: .
-    command: bundle exec sidekiq -C config/sidekiq.yml
-    environment:
-      - REDIS_URL_SIDEKIQ=redis://redis:6379/1
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
-    volumes:
-      - .:/rails
-    depends_on:
-      - redis
-      - db
 
   maildev:
     image: maildev/maildev
     ports:
       - "1080:1080"
 
-  web:
+  # background-service
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    environment:
+      - RAILS_ENV=development
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=knewhub
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=pwd
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/1
+    volumes:
+      - repos_vol:/rails/repos
+    depends_on:
+      - db
+      - redis
+      - maildev
+
+  # backend-instanse-1
+  web-b:
     build: .
     command: bin/dev
     environment:
-      - RAILS_ENV=${RAILS_ENV}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - RAILS_ENV=development
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=knewhub
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=pwd
       - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
       - REDIS_URL_SIDEKIQ=redis://redis:6379/1
-    ports:
-      - "3000:3000"
     volumes:
-      - .:/rails
+      - repos_vol:/rails/repos
+    ports:
+      - "3001:3000"
     depends_on:
       - db
+      - redis
+      - sidekiq
+      - maildev
+
+  # backend-instanse-2
+  web-a:
+    build: .
+    command: bin/dev
+    environment:
+      - RAILS_ENV=development
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=knewhub
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=pwd
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/1
+    volumes:
+      - repos_vol:/rails/repos
+    ports:
+      - "3002:3000"
+    depends_on:
+      - db
+      - redis
+      - sidekiq
+      - maildev
 
 volumes:
-  db_data:
-  redis_data:
+  db_vol:
+  redis_vol:
+  repos_vol:
