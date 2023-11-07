@@ -86,11 +86,20 @@ gem 'after_commit_everywhere', '~> 1.0'
 # Code syntax highlighter
 gem 'rouge'
 
+# Catch unsafe database migrations
+gem 'strong_migrations'
+
 group :development, :test do
+  gem 'brakeman'
+  gem 'bundler-audit'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
 end
 
 group :development do
@@ -111,6 +120,7 @@ group :test do
   gem 'rack_session_access'
   gem 'rspec-sidekiq'
   gem 'selenium-webdriver'
+  gem 'simplecov', require: false
   gem 'vcr'
   gem 'webmock'
 end

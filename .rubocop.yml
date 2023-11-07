@@ -1,0 +1,94 @@
+require:
+  - rubocop-capybara
+  - rubocop-factory_bot
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - bin/*
+    - config/**/*
+    - db/migrate/20230821182611_add_service_name_to_active_storage_blobs.active_storage.rb
+    - db/migrate/20230821182612_create_active_storage_variant_records.active_storage.rb
+    - db/migrate/20230829170436_devise_create_users.rb
+    - db/schema.rb
+    - Rakefile
+    - vendor/bundle/**/*
+
+Capybara/ClickLinkOrButtonStyle:
+  EnforcedStyle: link_or_button
+
+FactoryBot/AssociationStyle:
+  EnforcedStyle: explicit
+
+Metrics/AbcSize:
+  Exclude:
+    - app/controllers/webauthn/**
+
+Metrics/BlockLength:
+  AllowedMethods: ['aasm']
+
+Metrics/ClassLength:
+  Max: 130
+
+Metrics/MethodLength:
+  Exclude:
+    - app/controllers/webauthn/**
+
+Rails/BulkChangeTable:
+  Exclude:
+    - db/migrate/20231005175303_add_hidden_and_batch_code_to_questions.rb
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Rails/ReversibleMigration:
+  Exclude:
+    - db/migrate/20230726192619_add_author_to_repositories.rb
+    - db/migrate/20230911185221_remove_remember_created_at.rb
+    - db/migrate/20231004143201_remove_step_from_logs.rb
+
+Rails/SkipsModelValidations:
+  AllowedMethods: [toggle!]
+
+Rails/ThreeStateBooleanColumn:
+  Exclude:
+    - db/migrate/20230822180842_add_banned_to_repositories.rb
+    - db/migrate/20230905171904_add_action_to_builds_and_failure_to_logs.rb
+    - db/migrate/20231005175303_add_hidden_and_batch_code_to_questions.rb
+
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/ExampleLength:
+  CountAsOne: ['method_call']
+  Max: 10
+
+RSpec/FilePath:
+  Exclude:
+    - spec/systems/repositories/update_spec.rb
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+RSpec/NestedGroups:
+  Max: 5
+
+RSpec/SpecFilePathFormat:
+  Exclude:
+    - spec/systems/repositories/update_spec.rb
+
+Style/BlockComments:
+  Exclude:
+    - spec/spec_helper.rb
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

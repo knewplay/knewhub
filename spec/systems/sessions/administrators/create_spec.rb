@@ -6,8 +6,8 @@ RSpec.describe 'Sessions::Administrators#create', type: :system do
     @admin = create(:administrator)
   end
 
-  context 'login without multi-factor authentication' do
-    scenario 'redirects to set up MFA' do
+  context 'when logging in without multi-factor authentication' do
+    it 'redirects to set up MFA' do
       visit new_sessions_administrator_path
       expect(page).to have_content('Administrator login')
 
@@ -22,7 +22,7 @@ RSpec.describe 'Sessions::Administrators#create', type: :system do
     end
   end
 
-  context 'login with multi-factor authentication' do
+  context 'when logging in with multi-factor authentication' do
     before do
       @admin.update(webauthn_id: WebAuthn.generate_user_id)
       fake_client = WebAuthn::FakeClient.new('http://localhost:3030')
@@ -36,7 +36,7 @@ RSpec.describe 'Sessions::Administrators#create', type: :system do
       @admin.webauthn_credentials.take
     end
 
-    scenario 'asks for MFA' do
+    it 'asks for MFA' do
       visit new_sessions_administrator_path
       expect(page).to have_content('Administrator login')
 
@@ -49,7 +49,7 @@ RSpec.describe 'Sessions::Administrators#create', type: :system do
     end
   end
 
-  scenario 'login fails with wrong username' do
+  it 'login fails with wrong username' do
     visit new_sessions_administrator_path
 
     fill_in('Name', with: 'other')
@@ -60,7 +60,7 @@ RSpec.describe 'Sessions::Administrators#create', type: :system do
     expect(page).to have_content('Login failed. Please verify your username and password.')
   end
 
-  scenario 'login fails with wrong password' do
+  it 'login fails with wrong password' do
     visit new_sessions_administrator_path
 
     fill_in('Name', with: 'admin')

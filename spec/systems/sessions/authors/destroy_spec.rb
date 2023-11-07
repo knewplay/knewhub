@@ -5,7 +5,7 @@ RSpec.describe 'Sessions::Authors#destroy', type: :system do
   context 'when logging out as a user' do
     let(:author) { create(:author) }
 
-    scenario 'it also logs out as an author' do
+    it 'also logs out as an author' do
       page.set_rack_session(author_id: author.id)
       sign_in author.user
 

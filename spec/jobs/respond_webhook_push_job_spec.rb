@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RespondWebhookPushJob, type: :job do
+RSpec.describe RespondWebhookPushJob do
   before(:all) do
     @repo = create(:repository, :real)
     clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
@@ -12,15 +12,20 @@ RSpec.describe RespondWebhookPushJob, type: :job do
     end
   end
 
+  after(:all) do
+    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    FileUtils.remove_dir(directory)
+  end
+
   it 'queues the job' do
-    RespondWebhookPushJob.perform_async(
+    described_class.perform_async(
       @build.id,
       @repo.uuid,
       @repo.name,
       @repo.author.github_username,
       @repo.description
     )
-    expect(RespondWebhookPushJob).to have_enqueued_sidekiq_job(
+    expect(described_class).to have_enqueued_sidekiq_job(
       @build.id,
       @repo.uuid,
       @repo.name,
@@ -29,10 +34,10 @@ RSpec.describe RespondWebhookPushJob, type: :job do
     )
   end
 
-  context 'executes perform' do
+  context 'when executing perform' do
     it 'when webhook_name == name && webhook_owner == repository.author.github_username' do
       Sidekiq::Testing.inline! do
-        RespondWebhookPushJob.perform_async(
+        described_class.perform_async(
           @build.id,
           @repo.uuid,
           @repo.name,
@@ -47,7 +52,7 @@ RSpec.describe RespondWebhookPushJob, type: :job do
 
     it 'when webhook_name != name && webhook_owner == repository.author.github_username' do
       Sidekiq::Testing.inline! do
-        RespondWebhookPushJob.perform_async(
+        described_class.perform_async(
           @build.id,
           @repo.uuid, 'markdown-templates',
           @repo.author.github_username,
@@ -60,10 +65,5 @@ RSpec.describe RespondWebhookPushJob, type: :job do
         expect(@repo.description).to eq('The description has changed')
       end
     end
-  end
-
-  after(:all) do
-    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
-    FileUtils.remove_dir(directory)
   end
 end

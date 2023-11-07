@@ -56,6 +56,6 @@ class CreateRepoIndexJob
     content = "#{front_matter}\n#{links}"
 
     filepath = File.join(directory, 'index.md')
-    File.open(filepath, 'w') { |f| f.write(content) }
+    File.write(filepath, content)
   end
 end

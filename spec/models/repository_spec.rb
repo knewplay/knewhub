@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Repository, type: :model do
+RSpec.describe Repository do
   describe '#valid?' do
     it 'returns false when given an invalid name' do
       repo = build(:repository, name: 'repo?name')
@@ -25,6 +25,20 @@ RSpec.describe Repository, type: :model do
     it 'returns true when given a valid name, token and title, and associated author' do
       repo = build(:repository)
       expect(repo.valid?).to be true
+    end
+
+    it 'returns false when a repository with the same name exists for a given author' do
+      first_repository = create(:repository)
+      author = first_repository.author
+      second_repo = build(:repository, author:)
+      expect(second_repo.valid?).to be false
+    end
+
+    it 'returns true when a repository with the same name exists for another author' do
+      create(:repository)
+      second_author = create(:author, :real)
+      second_repo = build(:repository, author: second_author)
+      expect(second_repo.valid?).to be true
     end
   end
 

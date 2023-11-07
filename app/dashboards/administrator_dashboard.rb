@@ -1,4 +1,4 @@
-require "administrate/base_dashboard"
+require 'administrate/base_dashboard'
 
 class AdministratorDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
@@ -6,7 +6,7 @@ class AdministratorDashboard < Administrate::BaseDashboard
     name: Field::String,
     permissions: Field::String,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # Attributes that will be displayed on the model's index page.
