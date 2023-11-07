@@ -154,6 +154,7 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
+    faraday-retry (1.0.3)
     ffi (1.16.3)
     front_matter_parser (1.0.1)
     git (1.18.0)
@@ -161,6 +162,7 @@ GEM
       rchardet (~> 1.8)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (3.24.4-aarch64-linux)
     google-protobuf (3.24.4-arm64-darwin)
     google-protobuf (3.24.4-x86_64-linux)
     hashdiff (1.0.1)
@@ -196,10 +198,6 @@ GEM
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
     language_server-protocol (3.17.0.3)
-    launchy (2.5.2)
-      addressable (~> 2.8)
-    letter_opener (1.8.1)
-      launchy (>= 2.2, < 3)
     loofah (2.21.4)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -225,6 +223,8 @@ GEM
     net-smtp (0.4.0)
       net-protocol
     nio4r (2.5.9)
+    nokogiri (1.15.4-aarch64-linux)
+      racc (~> 1.4)
     nokogiri (1.15.4-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.4-x86_64-linux)
@@ -382,6 +382,8 @@ GEM
     rubyzip (2.3.2)
     safety_net_attestation (0.4.0)
       jwt (~> 2.0)
+    sass-embedded (1.69.3-aarch64-linux-gnu)
+      google-protobuf (~> 3.23)
     sass-embedded (1.69.3-arm64-darwin)
       google-protobuf (~> 3.23)
     sass-embedded (1.69.3-x86_64-linux-gnu)
@@ -474,6 +476,7 @@ GEM
     zeitwerk (2.6.12)
 
 PLATFORMS
+  aarch64-linux
   arm64-darwin-22
   x86_64-linux
 
@@ -491,11 +494,11 @@ DEPENDENCIES
   debug
   devise
   factory_bot_rails
+  faraday-retry
   front_matter_parser
   git
   importmap-rails
   jbuilder
-  letter_opener
   octokit
   omniauth-github
   omniauth-rails_csrf_protection

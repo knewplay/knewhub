@@ -36,11 +36,16 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Mailer to use with Devise
+  # URL used in links from Devise emails
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
-  # Preview emails with Letter Opener
-  config.action_mailer.delivery_method = :letter_opener
+  # Receive emails in MailDev at http://localhost:1080
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'maildev',
+    port: 1025,
+    enable_starttls_auto: false
+  }
   config.action_mailer.perform_deliveries = true
 
   # Don't care if the mailer can't send.
@@ -82,7 +87,7 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   # Add ngrok host used to receive webhooks
-  config.hosts << Rails.application.credentials.host_url
+  config.hosts << ENV.fetch('WEBHOOK_HOST_URL', Rails.application.credentials.host_url)
 
   # View custom error pages
   config.consider_all_requests_local = false

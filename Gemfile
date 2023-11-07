@@ -60,6 +60,9 @@ gem 'git'
 # Toolkit for the GitHub API
 gem 'octokit'
 
+# Catches Faraday exceptions and retries requests
+gem 'faraday-retry'
+
 # Parse front matter from files
 gem 'front_matter_parser'
 
@@ -108,9 +111,6 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem 'spring'
-
-  # Preview email in browser instead of sending it
-  gem 'letter_opener'
 end
 
 group :test do
