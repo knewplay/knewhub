@@ -47,7 +47,6 @@ services:
   # backend-instance-1
   web-b:
     build: .
-    command: bin/dev
     environment:
       - RAILS_ENV=development
       - POSTGRES_HOST=db
@@ -69,7 +68,6 @@ services:
   # backend-instance-2
   web-a:
     build: .
-    command: bin/dev
     environment:
       - RAILS_ENV=development
       - POSTGRES_HOST=db

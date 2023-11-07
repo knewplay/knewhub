@@ -55,10 +55,7 @@ VOLUME /rails/repos
 
 USER rails:rails
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, and bind to allow access to app outside of Docker container
-# Specifying binding is required in development environment, but by default in others
 EXPOSE 3000
 CMD ["./bin/rails", "server", "--binding", "0.0.0.0"]
