@@ -14,4 +14,10 @@ class User < ApplicationRecord
   def password_required?
     confirmed? ? super : false
   end
+
+  # Override method to send e-mail using background job
+  def send_devise_notification(notification, *)
+    message = devise_mailer.send(notification, self, *)
+    message.deliver_later
+  end
 end

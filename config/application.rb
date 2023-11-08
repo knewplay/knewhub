@@ -32,5 +32,9 @@ module Knewhub
 
     # Prevent creation of `div class="field_with_errors"` wrapper upon invalid form submission
     config.action_view.field_error_proc = ->(html_tag, _instance) { html_tag.html_safe }
+
+    # Configure queue adapter to use with Action Mailer (relying on Active Job)
+    # Other jobs are done with native Sidekiq
+    config.active_job.queue_adapter = :sidekiq
   end
 end
