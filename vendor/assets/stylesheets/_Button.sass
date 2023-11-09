@@ -26,10 +26,11 @@ input[type='submit']
 
   &:focus,
   &:hover
-    background-color: $color-secondary
-    border-color: $color-secondary
+    background-color: $color-primary-hover
+    border-color: $color-primary-hover
     color: $color-initial
     outline: 0
+    text-decoration: none
 
   &[disabled]
     cursor: default
@@ -77,6 +78,11 @@ input[type='submit']
   &.button-tertiary
     background-color: $color-tertiary
     border: .1rem solid $color-tertiary
+
+    &:focus,
+    &:hover
+      background-color: $color-tertiary-hover
+      border-color: $color-tertiary-hover
 
   &.button-small
     padding: 0 1.2rem
