@@ -55,7 +55,6 @@ VOLUME /rails/repos
 
 USER rails:rails
 
-
 # Start the server by default, and bind to allow access to app outside of Docker container
 EXPOSE 3000
 CMD ["./bin/rails", "server", "--binding", "0.0.0.0"]

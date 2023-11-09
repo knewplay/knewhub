@@ -1,0 +1,45 @@
+name: Push to Google Artifact Registry
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  GAR_LOCATION: northamerica-northeast1-docker.pkg.dev/knewhub/knewhub
+  REGION: northamerica-northeast1
+
+jobs:
+  docker-release:
+    name: Docker release to Google Artifact Registry
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v2
+
+      - id: auth
+        name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          access_token_lifetime: 300s
+
+      - name: Login to Artifact Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGION }}-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      - id: docker-push-tagged
+        name: Build Docker image and push to Google Artifact Registry
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ env.GAR_LOCATION }}/development:${{ github.sha }}
