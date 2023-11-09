@@ -8,12 +8,10 @@ FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 WORKDIR /rails
 
 # Set production environment
-ENV RAILS_ENV="development" \
+ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_WITHOUT="development:test" \
     BUNDLE_PATH="/usr/local/bundle"
-    # Uncomment next line if RAILS_ENV="production"
-    # BUNDLE_WITHOUT="development"
-
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
@@ -37,7 +35,6 @@ RUN bundle exec bootsnap precompile app/ lib/
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-
 # Final stage for app image
 FROM base
 
@@ -52,13 +49,12 @@ COPY --from=build /rails /rails
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+    chown -R rails:rails db log storage tmp repos 
+
+VOLUME /rails/repos
+
 USER rails:rails
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
 # Start the server by default, and bind to allow access to app outside of Docker container
-# Specifying binding is required in development environment, but by default in others
 EXPOSE 3000
 CMD ["./bin/rails", "server", "--binding", "0.0.0.0"]

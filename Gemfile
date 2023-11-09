@@ -60,6 +60,9 @@ gem 'git'
 # Toolkit for the GitHub API
 gem 'octokit'
 
+# Catches Faraday exceptions and retries requests
+gem 'faraday-retry'
+
 # Parse front matter from files
 gem 'front_matter_parser'
 
@@ -83,6 +86,9 @@ gem 'after_commit_everywhere', '~> 1.0'
 # Code syntax highlighter
 gem 'rouge'
 
+# Catch unsafe database migrations
+gem 'strong_migrations'
+
 group :development, :test do
   gem 'brakeman'
   gem 'bundler-audit'
@@ -105,9 +111,6 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem 'spring'
-
-  # Preview email in browser instead of sending it
-  gem 'letter_opener'
 end
 
 group :test do
@@ -117,6 +120,7 @@ group :test do
   gem 'rack_session_access'
   gem 'rspec-sidekiq'
   gem 'selenium-webdriver'
+  gem 'simplecov', require: false
   gem 'vcr'
   gem 'webmock'
 end

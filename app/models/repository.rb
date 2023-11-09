@@ -8,8 +8,8 @@ class Repository < ApplicationRecord
 
   validates :name,
             presence: true,
-            uniqueness: true,
             format: { with: /\A[.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }
+  validates :name, uniqueness: { scope: :author_id }
   validates :token,
             presence: true,
             format: { with: /\A(github_pat|ghp)\w+\z/, message: 'must start with "github_pat" or "ghp"' }
