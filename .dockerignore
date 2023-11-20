@@ -38,3 +38,4 @@
 
 # Ignore cloned repositories
 /repos/*
+!/repos/.keep

@@ -38,6 +38,7 @@
 
 # Ignore cloned repositories
 /repos/*
+!/repos/.keep
 
 # Ignore built assets
 /app/assets/builds/*
