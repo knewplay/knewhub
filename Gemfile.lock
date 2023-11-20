@@ -316,7 +316,8 @@ GEM
     rdoc (6.5.0)
       psych (>= 4.0.0)
     redcarpet (3.6.0)
-    redis (4.8.1)
+    redis (5.0.8)
+      redis-client (>= 0.17.0)
     redis-client (0.18.0)
       connection_pool
     regexp_parser (2.8.2)
@@ -508,7 +509,7 @@ DEPENDENCIES
   rack_session_access
   rails (~> 7.1.1)
   redcarpet
-  redis (~> 4.0)
+  redis (~> 5.0)
   rouge
   rspec-rails
   rspec-sidekiq
