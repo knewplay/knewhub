@@ -1,5 +1,6 @@
 class ParseQuestionsJob
   include Sidekiq::Job
+  include ExtractFrontMatterHelper
 
   def perform(build_id)
     build = Build.find(build_id)
@@ -56,10 +57,5 @@ class ParseQuestionsJob
         question.update(hidden: true)
       end
     end
-  end
-
-  def extract_front_matter(file_path)
-    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date])
-    FrontMatterParser::Parser.parse_file(file_path, loader:).front_matter
   end
 end
