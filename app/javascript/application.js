@@ -10,3 +10,4 @@ import "@fortawesome/fontawesome-free"
 library.add(far, fas, fab)
 
 import "timezone"
+import "export_marp"
