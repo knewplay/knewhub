@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
-import { Marpit } from "@marp-team/marpit"
+import { Marpit, Element } from "@marp-team/marpit"
 
 export default class extends Controller {
-  static targets = ['content']
+  static targets = ["content"]
 
   static values = {
     markdown: String
@@ -10,7 +10,10 @@ export default class extends Controller {
 
   connect() {
     // Create instance
-    const marpit = new Marpit()
+    const marpit = new Marpit({
+      container: new Element("swiper-container", { navigation: "true", pagination: "true", scrollbar: "true" }),
+      slideContainer: new Element("swiper-slide")
+    })
 
     // Render markdown
     const { html, css } = marpit.render(this.markdownValue)
