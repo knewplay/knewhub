@@ -2,54 +2,60 @@
 
 <% content_for :collections_layout do %>
   <div class="collections">
-    <% if @front_matter&.[]('title') && @front_matter&.[]('date') %>
-      <h1><%= @front_matter['title'] %></h1>
-      <h5>
-        Written by <%= @front_matter['author'] %> on <%= @front_matter['date'] %>.
-        <% if @front_matter['illustrator'] %>
-          Illustrated by <%= @front_matter['illustrator'] %>
-        <% end %>
-      </h5>
+    <% if @front_matter['marp'] %>
+      <div data-controller="export-marp"
+           data-export-marp-target="content"
+           data-export-marp-markdown-value="<%= @markdown_content %>">
+      </div>
+    <% else %>
+      <% if @front_matter&.[]('title') && @front_matter&.[]('date') %>
+        <h1><%= @front_matter['title'] %></h1>
+        <h5>
+          Written by <%= @front_matter['author'] %> on <%= @front_matter['date'] %>.
+          <% if @front_matter['illustrator'] %>
+            Illustrated by <%= @front_matter['illustrator'] %>
+          <% end %>
+        </h5>
 
-    <hr />
-    <% end %>
-
-    <%= yield %>
-
-
-    <% if @questions && @questions.any? %>
-      <h2 id="questions" class="collections__anchor-link">
-        <a href="#questions" class="collections__anchor-link__text">Questions</a>
-        <i class="fa-solid fa-link collections__anchor-link__icon" aria-hidden="true"></i>
-      </h2>
-
-      <% @questions.each_with_index do |question, index| %>
-        <div class="question">
-          <h3><%= "Question #{index + 1}" %></h3>
-
-          <%= simple_format(question.body) %>
-
-          <div class="question__buttons">
-            <%= link_to 'View answers',
-                        answers_path(question.id),
-                        data: { turbo_frame: nested_dom_id(question, 'answers') },
-                        class: 'button' %>
-            <%= link_to 'Add answer',
-                        new_answer_path(question.id),
-                        data: { turbo_frame: nested_dom_id(question, 'new_answer') },
-                        class: 'button button-tertiary' %>
-          </div>
-
-          <%= turbo_frame_tag nested_dom_id(question, 'new_answer') %>
-          <%= turbo_frame_tag nested_dom_id(question, 'answers') %>
-        </div>
+      <hr />
       <% end %>
-    <% end %>
 
-    <hr />
-    <%= link_to 'View book',
-                index_path(request.path),
-                class: 'button' %>
+      <%= yield %>
+
+      <% if @questions && @questions.any? %>
+        <h2 id="questions" class="collections__anchor-link">
+          <a href="#questions" class="collections__anchor-link__text">Questions</a>
+          <i class="fa-solid fa-link collections__anchor-link__icon" aria-hidden="true"></i>
+        </h2>
+
+        <% @questions.each_with_index do |question, index| %>
+          <div class="question">
+            <h3><%= "Question #{index + 1}" %></h3>
+
+            <%= simple_format(question.body) %>
+
+            <div class="question__buttons">
+              <%= link_to 'View answers',
+                          answers_path(question.id),
+                          data: { turbo_frame: nested_dom_id(question, 'answers') },
+                          class: 'button' %>
+              <%= link_to 'Add answer',
+                          new_answer_path(question.id),
+                          data: { turbo_frame: nested_dom_id(question, 'new_answer') },
+                          class: 'button button-tertiary' %>
+            </div>
+
+            <%= turbo_frame_tag nested_dom_id(question, 'new_answer') %>
+            <%= turbo_frame_tag nested_dom_id(question, 'answers') %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <hr />
+      <%= link_to 'View book',
+                  index_path(request.path),
+                  class: 'button' %>
+    <% end %>
   </div>
 <% end %>
 
