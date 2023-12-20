@@ -16,7 +16,10 @@ export default class extends Controller {
       "pagination-clickable":"true",
       keyboard: "true",
     }),
-      slideContainer: new Element("swiper-slide")
+      slideContainer: [
+        new Element("swiper-slide"),
+        new Element("div", {class: "marp-slide"})
+      ]
     })
 
     // `css` value is not used since styles are defined by Swiper and application stylesheets
