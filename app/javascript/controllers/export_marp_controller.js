@@ -9,23 +9,19 @@ export default class extends Controller {
   }
 
   connect() {
-    // Create instance
     const marpit = new Marpit({
-      container: new Element("swiper-container", { navigation: "true", pagination: "true", scrollbar: "true" }),
+      container: new Element("swiper-container", {
+      navigation: "true",
+      pagination: "true",
+      "pagination-clickable":"true",
+      keyboard: "true",
+    }),
       slideContainer: new Element("swiper-slide")
     })
 
-    // Render markdown
+    // `css` value is not used since styles are defined by Swiper and application stylesheets
     const { html, css } = marpit.render(this.markdownValue)
-  
-    // Use output in HTML
-    const htmlFile = `
-    <!DOCTYPE html>
-    <html><body>
-      <style>${css}</style>
-      ${html}
-    </body></html>
-    `
-    this.contentTarget.innerHTML = htmlFile
+
+    this.contentTarget.innerHTML = html
   }
 }
