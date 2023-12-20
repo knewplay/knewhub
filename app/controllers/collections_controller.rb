@@ -31,10 +31,10 @@ class CollectionsController < ApplicationController
   end
 
   def show_actions(file_path)
-    @markdown_content = Rails.root.join("repos/#{file_path}.md").read
     respond_to do |format|
       format.html do
         @front_matter = extract_front_matter_from_relative_path(file_path)
+        @markdown_content = Rails.root.join("repos/#{file_path}.md").read
         @questions = Question.where(repository: @repository, page_path: params[:path])
         render file_path
       end
