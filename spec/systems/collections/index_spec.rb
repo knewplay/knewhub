@@ -36,6 +36,11 @@ RSpec.describe 'Collections#index', type: :system do
       expect(page).to have_content('Course Name')
       expect(page).to have_content('Written by The Author on 2023-12-31')
     end
+
+    it 'does not render content from an HTML file with the same name' do
+      visit '/collections/user/markdown-templates/pages/index'
+      expect(page).not_to have_content('Content from HTML file')
+    end
   end
 
   context 'when repository is set to banned = true' do

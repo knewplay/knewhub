@@ -48,6 +48,11 @@ RSpec.describe 'Collections#show', type: :system do
       expect(page).to have_content('Written by The Author on 2023-12-31')
     end
 
+    it 'does not render content from an HTML file with the same name' do
+      visit '/collections/user/markdown-templates/pages/chapter-2/chapter-2-article-2'
+      expect(page).not_to have_content('Content from HTML file')
+    end
+
     context 'when page has questions in front-matter' do
       it 'displays the questions associated with an article' do
         visit '/collections/user/markdown-templates/pages/chapter-1/chapter-1-article-1'
