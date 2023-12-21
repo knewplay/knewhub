@@ -68,13 +68,8 @@ class CollectionsController < ApplicationController
     send_file Rails.root.join("repos/#{file_path}.#{request.format.to_sym}").to_s
   end
 
-  def extract_front_matter_from_relative_path(file_path)
-    absolute_path = Rails.root.join("repos/#{file_path}.md").to_s
-    helpers.extract_front_matter(absolute_path)
-  end
-
   def extract_markdown_file(file_path)
-    @front_matter = extract_front_matter_from_relative_path(file_path)
-    @markdown_content = Rails.root.join("repos/#{file_path}.md").read
+    absolute_path = Rails.root.join("repos/#{file_path}.md").to_s
+    @front_matter, @markdown_content = helpers.split_markdown(absolute_path)
   end
 end
