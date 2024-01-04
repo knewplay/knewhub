@@ -71,6 +71,30 @@ RSpec.describe 'Collections#show', type: :system do
         expect(page).not_to have_content('Questions')
       end
     end
+
+    context 'when marp == true in front-matter' do
+      before do
+        visit '/collections/user/markdown-templates/pages/chapter-3/marp-slides'
+      end
+
+      it 'parses content as slides' do
+        assert_selector 'swiper-container'
+        assert_selector 'swiper-slide'
+      end
+
+      it 'displays Markdown text in HTML' do
+        assert_selector 'h1', text: 'Hello, Marpit!'
+      end
+
+      it 'displays embedded images' do
+        expect(page).to have_css("img[alt='Ruby on Rails logo']")
+      end
+
+      it 'displays front-matter' do
+        expect(page).to have_content('Marp Slides')
+        expect(page).to have_content('Written by The Author on 2023-12-31')
+      end
+    end
   end
 
   context 'when repository is set to banned = true' do
