@@ -18,7 +18,7 @@ RSpec.describe Like, '#destroy', type: :system do
         click_on 'Remove like'
       end
 
-      expect(page).not_to have_css('.like--count')
+      expect(page).to have_no_css('.like--count')
     end
 
     it 'can unlike an answer that has multiple likes' do

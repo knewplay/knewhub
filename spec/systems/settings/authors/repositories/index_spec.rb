@@ -20,7 +20,7 @@ RSpec.describe 'Settings::Authors::Repositories#index', type: :system do
       page.set_rack_session(author_id: author.id)
 
       visit settings_author_repositories_path
-      expect(page).not_to have_content(repo_from_other_author.name)
+      expect(page).to have_no_content(repo_from_other_author.name)
     end
   end
 
