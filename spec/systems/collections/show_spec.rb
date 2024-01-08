@@ -48,6 +48,11 @@ RSpec.describe 'Collections#show', type: :system do
       expect(page).to have_content('Written by The Author on 2023-12-31')
     end
 
+    it 'does not render content from an HTML file with the same name' do
+      visit '/collections/user/markdown-templates/pages/chapter-2/chapter-2-article-2'
+      expect(page).to have_no_content('Content from HTML file')
+    end
+
     context 'when page has questions in front-matter' do
       it 'displays the questions associated with an article' do
         visit '/collections/user/markdown-templates/pages/chapter-1/chapter-1-article-1'
@@ -69,6 +74,30 @@ RSpec.describe 'Collections#show', type: :system do
         visit '/collections/user/markdown-templates/pages/chapter-2/chapter-2-article-1'
 
         expect(page).to have_no_content('Questions')
+      end
+    end
+
+    context 'when marp == true in front-matter' do
+      before do
+        visit '/collections/user/markdown-templates/pages/chapter-3/marp-slides'
+      end
+
+      it 'parses content as slides' do
+        assert_selector 'swiper-container'
+        assert_selector 'swiper-slide'
+      end
+
+      it 'displays Markdown text in HTML' do
+        assert_selector 'h1', text: 'Hello, Marpit!'
+      end
+
+      it 'displays embedded images' do
+        expect(page).to have_css("img[alt='Ruby on Rails logo']")
+      end
+
+      it 'displays front-matter' do
+        expect(page).to have_content('Marp Slides')
+        expect(page).to have_content('Written by The Author on 2023-12-31')
       end
     end
   end

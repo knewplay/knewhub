@@ -1,5 +1,6 @@
 class ParseQuestionsJob
   include Sidekiq::Job
+  include SplitMarkdownHelper
 
   def perform(build_id)
     build = Build.find(build_id)
@@ -30,7 +31,7 @@ class ParseQuestionsJob
   end
 
   def extract_questions(absolute_path)
-    front_matter = extract_front_matter(absolute_path)
+    front_matter, _markdown_content = split_markdown(absolute_path)
     questions_array = front_matter['questions']
 
     questions_array&.inject(:merge!)
@@ -56,10 +57,5 @@ class ParseQuestionsJob
         question.update(hidden: true)
       end
     end
-  end
-
-  def extract_front_matter(file_path)
-    loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date])
-    FrontMatterParser::Parser.parse_file(file_path, loader:).front_matter
   end
 end

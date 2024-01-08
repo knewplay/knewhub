@@ -10,3 +10,5 @@ import "@fortawesome/fontawesome-free"
 library.add(far, fas, fab)
 
 import "timezone"
+import { register } from "swiper/element/bundle";
+register();

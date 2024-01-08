@@ -1,19 +1,20 @@
 // collections
 
 .collections
-  background-color: $color-initial
-  padding: 2rem 4rem
-  border-radius: 1rem
+  &__content
+    background-color: $color-initial
+    padding: 2rem 4rem
+    border-radius: 1rem
 
-  img
-    max-width: 50%
-    height: auto
-    display: block
-    margin: 0 auto
-
-    & + em
+    img
+      max-width: 50%
+      height: auto
       display: block
-      text-align: center
+      margin: 0 auto
+
+      & + em
+        display: block
+        text-align: center
 
   &__anchor-link
     &__text
@@ -28,4 +29,9 @@
 
   & li > p:first-child
     // Ensures li::marker is in the same line as the first paragraph
-    display: inline 
+    display: inline
+
+  &__book-button
+    padding: 2em
+    display: flex
+    justify-content: center
