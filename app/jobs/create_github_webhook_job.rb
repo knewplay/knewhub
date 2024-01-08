@@ -10,7 +10,7 @@ class CreateGithubWebhookJob
 
     build.logs.create(content: 'GitHub webhook successfully created. Now testing...')
     build.finished_creating_webhook
-  rescue Octokit::Unauthorized, Octokit::UnprocessableEntity => e
+  rescue Octokit::Unauthorized, Octokit::UnprocessableEntity, Octokit::Forbidden => e
     build.logs.create(content: "Failed to create GitHub webhook. Message: #{e.message}", failure: true)
   end
 

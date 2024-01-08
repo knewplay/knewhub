@@ -64,8 +64,8 @@ RSpec.describe 'Collections#show', type: :system do
       it 'does not display questions associated with other articles' do
         visit '/collections/user/markdown-templates/pages/chapter-1/chapter-1-article-1'
 
-        expect(page).not_to have_content('First question in article two?')
-        expect(page).not_to have_content('Second question in article two?')
+        expect(page).to have_no_content('First question in article two?')
+        expect(page).to have_no_content('Second question in article two?')
       end
     end
 
@@ -73,7 +73,7 @@ RSpec.describe 'Collections#show', type: :system do
       it 'does not show the Questions header' do
         visit '/collections/user/markdown-templates/pages/chapter-2/chapter-2-article-1'
 
-        expect(page).not_to have_content('Questions')
+        expect(page).to have_no_content('Questions')
       end
     end
 

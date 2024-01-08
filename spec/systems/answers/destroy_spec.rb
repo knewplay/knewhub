@@ -21,7 +21,7 @@ RSpec.describe Answer, '#destroy', type: :system do
         end
       end
 
-      expect(page).not_to have_content(first_answer.body)
+      expect(page).to have_no_content(first_answer.body)
     end
 
     it "cannot delete other user's answers" do
@@ -32,7 +32,7 @@ RSpec.describe Answer, '#destroy', type: :system do
       expect(page).to have_content(second_answer.body)
 
       within "#question_#{question.id}_answer_#{second_answer.id}" do
-        expect(page).not_to have_selector(:link_or_button, 'Delete')
+        expect(page).to have_no_selector(:link_or_button, 'Delete')
       end
     end
   end
