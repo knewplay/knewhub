@@ -6,7 +6,7 @@ class CollectionsController < ApplicationController
     file_path = "#{params[:owner]}/#{params[:name]}/index"
     render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
 
-    @front_matter = extract_front_matter_from_relative_path(file_path)
+    extract_markdown_file(file_path)
     render file_path
   end
 
@@ -33,8 +33,7 @@ class CollectionsController < ApplicationController
   def show_actions(file_path)
     respond_to do |format|
       format.html do
-        @front_matter = extract_front_matter_from_relative_path(file_path)
-        @markdown_content = Rails.root.join("repos/#{file_path}.md").read
+        extract_markdown_file(file_path)
         @questions = Question.where(repository: @repository, page_path: params[:path])
         render file_path
       end
@@ -69,8 +68,8 @@ class CollectionsController < ApplicationController
     send_file Rails.root.join("repos/#{file_path}.#{request.format.to_sym}").to_s
   end
 
-  def extract_front_matter_from_relative_path(file_path)
+  def extract_markdown_file(file_path)
     absolute_path = Rails.root.join("repos/#{file_path}.md").to_s
-    helpers.extract_front_matter(absolute_path)
+    @front_matter, @markdown_content = helpers.split_markdown(absolute_path)
   end
 end
