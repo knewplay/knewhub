@@ -39,7 +39,7 @@ RSpec.describe 'Collections#index', type: :system do
 
     it 'does not render content from an HTML file with the same name' do
       visit '/collections/user/markdown-templates/pages/index'
-      expect(page).not_to have_content('Content from HTML file')
+      expect(page).to have_no_content('Content from HTML file')
     end
   end
 

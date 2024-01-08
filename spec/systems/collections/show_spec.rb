@@ -50,7 +50,7 @@ RSpec.describe 'Collections#show', type: :system do
 
     it 'does not render content from an HTML file with the same name' do
       visit '/collections/user/markdown-templates/pages/chapter-2/chapter-2-article-2'
-      expect(page).not_to have_content('Content from HTML file')
+      expect(page).to have_no_content('Content from HTML file')
     end
 
     context 'when page has questions in front-matter' do
