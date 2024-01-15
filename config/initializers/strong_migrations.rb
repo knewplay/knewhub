@@ -1,0 +1,1 @@
+StrongMigrations.safe_by_default = true
