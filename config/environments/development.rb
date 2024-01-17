@@ -87,7 +87,7 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   # Add ngrok host used to receive webhooks
-  config.hosts << ENV.fetch('WEBHOOK_HOST_URL', Rails.application.credentials.host_url)
+  config.hosts << URI(Rails.application.credentials.host_url).hostname
 
   # View custom error pages
   config.consider_all_requests_local = false
