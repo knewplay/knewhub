@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'support/omniauth'
 
 RSpec.describe 'Settings::EnableAuthor#get', type: :system do
-  let(:user) { create(:user) }
+  let!(:user) { create(:user) }
 
   context 'when logged in as a user but not an author' do
     it 'displays the page to enable the feature' do
