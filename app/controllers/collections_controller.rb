@@ -51,7 +51,7 @@ class CollectionsController < ApplicationController
     author_id = Author.find_by(github_username: owner).id
     @repository = Repository.find_by(author_id:, name:)
 
-    @repository.banned == false
+    @repository.visible?
   end
 
   def valid_render?(file_path, owner, name)
