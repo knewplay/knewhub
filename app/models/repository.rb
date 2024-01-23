@@ -26,6 +26,10 @@ class Repository < ApplicationRecord
     builds.last&.status
   end
 
+  def visible?
+    banned == false && last_build_status == 'Complete'
+  end
+
   private
 
   def set_git_url

@@ -32,7 +32,9 @@
           <%= link_to 'View book',
                       "/collections/#{repository.author.github_username}/#{repository.name}/pages/index",
                       target: :_blank,
-                      class: 'button button-small button-tertiary' %>
+                      class: 'button button-small button-tertiary',
+                      disabled: !repository.visible?,
+                      title: "#{repository.visible? ? '' : 'This repository is disabled' }" %>
           <%= link_to 'Edit', edit_settings_author_repository_path(repository.id), class: 'button button-small' %>
           <%= link_to 'Show builds', settings_author_repository_builds_path(repository.id), class: 'button button-small' %>
         </div>

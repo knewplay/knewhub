@@ -19,27 +19,46 @@ RSpec.describe 'Collections#index', type: :system do
       sign_in @repo.author.user
     end
 
-    it 'displays Markdown text in HTML' do
-      visit '/collections/user/markdown-templates/pages/index'
+    context 'when repository build state is Complete' do
+      before do
+        create(:build, repository: @repo, aasm_state: :completed, status: 'Complete')
+      end
 
-      expect(page).to have_content('Course Name')
+      it 'displays Markdown text in HTML' do
+        visit '/collections/user/markdown-templates/pages/index'
+
+        expect(page).to have_content('Course Name')
+      end
+
+      it 'displays links to other pages' do
+        visit '/collections/user/markdown-templates/pages/index'
+
+        expect(page).to have_link(href: './chapter-1/chapter-1-article-1')
+      end
+
+      it 'displays front matter' do
+        visit '/collections/user/markdown-templates/pages/index'
+        expect(page).to have_content('Course Name')
+        expect(page).to have_content('Written by The Author on 2023-12-31')
+      end
+
+      it 'does not render content from an HTML file with the same name' do
+        visit '/collections/user/markdown-templates/pages/index'
+        expect(page).to have_no_content('Content from HTML file')
+      end
     end
 
-    it 'displays links to other pages' do
-      visit '/collections/user/markdown-templates/pages/index'
+    context 'when repository build state is not Complete' do
+      before do
+        sign_in @repo.author.user
+        create(:build, repository: @repo, aasm_state: :cloning_repo, status: 'In progress')
+      end
 
-      expect(page).to have_link(href: './chapter-1/chapter-1-article-1')
-    end
+      it 'displays an error page' do
+        visit '/collections/user/markdown-templates/pages/index'
 
-    it 'displays front matter' do
-      visit '/collections/user/markdown-templates/pages/index'
-      expect(page).to have_content('Course Name')
-      expect(page).to have_content('Written by The Author on 2023-12-31')
-    end
-
-    it 'does not render content from an HTML file with the same name' do
-      visit '/collections/user/markdown-templates/pages/index'
-      expect(page).to have_no_content('Content from HTML file')
+        expect(page).to have_content('404')
+      end
     end
   end
 
