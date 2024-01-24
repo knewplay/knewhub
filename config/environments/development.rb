@@ -39,13 +39,17 @@ Rails.application.configure do
   # URL used in links from Devise emails
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
-  # Receive emails in MailDev at http://localhost:1080
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: 'maildev',
-    port: 1025,
-    enable_starttls_auto: false
-  }
+  # Emails will be available in a new browser tab 
+  config.action_mailer.delivery_method = :letter_opener
+
+  # Receive emails in MailDev at http://localhost:1080 when using Docker
+  # config.action_mailer.delivery_method = :smtp 
+  # config.action_mailer.smtp_settings = {
+  #   address: 'maildev',
+  #   port: 1025,
+  #   enable_starttls_auto: false
+  # }
+
   config.action_mailer.perform_deliveries = true
 
   # Don't care if the mailer can't send.
