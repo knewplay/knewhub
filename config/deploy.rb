@@ -40,7 +40,12 @@ task :deploy do
     invoke :'git:clone'
     command %{ source ~/.profile } # Fetch environment variables
     invoke :'deploy:link_shared_paths'
-    invoke :'bundle:install'
+    # invoke :'bundle:install' # Override default 'bundle:install' task to take into account deprecation warnings from Bundler
+    comment %(Installing gem dependencies using Bundler)
+    command %(#{fetch(:bundle_bin)} config set --local without '#{fetch(:bundle_withouts)}')
+    command %(#{fetch(:bundle_bin)} config set --local path '#{fetch(:bundle_path)}')
+    command %(#{fetch(:bundle_bin)} config set --local deployment 'true')
+    command %(#{fetch(:bundle_bin)} install)
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
