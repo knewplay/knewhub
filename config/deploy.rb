@@ -49,7 +49,8 @@ task :deploy do
       in_path(fetch(:current_path)) do
         command %(mkdir -p tmp/)
         command %(touch tmp/restart.txt)
-        command %{sudo mount -a} # Mount shared disk for repos at current release location
+        command %{sudo umount /dev/disk/by-uuid/c1a04b38-4b31-4ebd-a4e7-cf3f3ddf9b59} # Unmount disk for repos at previous release location
+        command %{sudo mount -a} # Mount disk for repos at current release location
         command %{sudo systemctl restart sidekiq}
         command %{sudo systemctl restart knewhub} # Restart app
       end
