@@ -16,6 +16,7 @@
 
 * [Create virtual machine (VM) on Compute Engine](#create-virtual-machine-vm-on-compute-engine)
 * [Create Cloud SQL database](#create-cloud-sql-database)
+* [Store environment variables in Secret Manager](#store-environment-variables-in-secret-manager)
 
 ## Create virtual machine (VM) on Compute Engine
 
@@ -52,6 +53,22 @@
 * Configuration options -> Connections -> Authorized networks: enter static external IP address of the VM
 
 ## Store environment variables in Secret Manager
+
+* [Reference Guide: Create and access a secret using Secret Manager](https://cloud.google.com/secret-manager/docs/create-secret-quickstart)
+* Create secrets for the following environment variables
+    * RAILS_MASTER_KEY
+    * WEB_URL
+    * POSTGRES_HOST
+    * POSTGRES_DB
+    * POSTGRES_USER
+    * POSTGRES_PASSWORD
+    * GITHUB_APP_ID
+    * GITHUB_APP_SECRET
+    * BREVO_USERNAME
+    * BREVO_PASSWORD
+* Configure Permissions for each secret
+    * Grant access to the `compute-engine` service account with the roles `Secret Manager Secret Accessor` and `Secret Manager Viewer`
+    * (This is done to prevent the service account from accessing other secrets that belong to the project. If this is not a concern, the service account's IAM permissions could be set at the project level instead)
 
 ## Configure VM
 ### Installations
