@@ -71,7 +71,26 @@
     * (This is done to prevent the service account from accessing other secrets that belong to the project. If this is not a concern, the service account's IAM permissions could be set at the project level instead)
 
 ## Configure VM
+
+### Create `rails` user
+
+* From a local terminal, generate the SSH keypair for a user named `rails`. This user will be used to perform all operations on the VM
+    ```
+    ssh-keygen -t rsa -f knewhub_vm_rails -C rails
+    ```
+    * This creates two files: `knewhub_vm_rails` and `knewhub_vm_rails.pub`
+    * Move the files to folder `~/.ssh` on the local machine, if they are not already there
+* Add the SSH public key to the VM
+    * Navigate to the VM instances page on Google Cloud console
+    * Edit instance
+    * SSH keys: copy the content of the `knewhub_vm_rails.pub` file
+* Connect to the VM with the command. The `<VM_EXTERNAL_IP>` is the static external IP used in previous steps
+    ```
+    ssh -i ~/.ssh/knewhub_vm_rails rails@<VM_EXTERNAL_IP>
+    ```
+
 ### Installations
+### Access secrets from Secret Manager
 ### Load Rails application
 ### Systemd services
 
