@@ -12,6 +12,11 @@
 * Automatic deployment using Mina
 * Logs accessible on Google Cloud Logging
 
+## Table of contents
+
+* [Create virtual machine (VM) on Compute Engine](#create-virtual-machine-vm-on-compute-engine)
+* [Create Cloud SQL database](#create-cloud-sql-database)
+
 ## Create virtual machine (VM) on Compute Engine
 
 * Create service account
