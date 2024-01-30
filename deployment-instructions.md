@@ -311,11 +311,35 @@ systemd will be used to manage all services that the Rails application requires.
 * `sudo blkid /dev/sdb` to find the UUID for the disk
 * Edit the `fstab` file at `/etc/stab` to add:
     ```sh
-    UUID=<UUID_VALUE> /home/rails/knewhub/current/repos ext4 discard,defaults,nofail,user 0 2
+    UUID=<UUID_VALUE> /home/rails/knewhub/repos ext4 discard,defaults,nofail,user 0 2
     ```
 * `sudo umount /dev/sdb` to unmount the disk
 * `sudo mount -a` to mount the disk using fstab
 
 ## Deploy using Mina
+
+### Add Mina script
+
+* `gem install mina`
+* `mina init`
+* Refer to [`config/deploy.rb`](./config/deploy.rb) and update variables as needed:
+    * `:identify_file` location
+    * UUID in `command %{sudo umount /dev/disk/by-uuid/<UUID> }`
+
+### Remove existing `knewhub` directory
+
+Mina will organize the `/home/rails/knewhub` directory into `releases`. The current release will be accessed using a symlink. For instance, `/home/rails/knewhub/current` points to `/home/rails/knewhub/releases/1`.
+
+The `knewhub` directory currently set up does not use releases so it needs to me removed prior to deployment with Mina:
+* `sudo umount /dev/sdb` to unmount the `knewhub-repos` disk
+* `sudo rm knewhub -r`
+
+### Modify systemd services and fstab to work with Mina releases
+
+systemd and fstab files also need to be modified to make use of the "releases" folder structure:
+* Modify `/etc/systemd/system/sidekiq.service` and `/etc/systemd/system/knewhub.service` to have `WorkingDirectory=/home/rails/knewhub/current`
+* Modify `/etc/fstab` to use mount path `/home/rails/knewhub/current/repos`
+
+From local terminal, run `mina deploy`.
 
 ## Display Systemd logs on Cloud Logging
