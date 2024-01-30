@@ -105,7 +105,7 @@
 * Caddy
     * Used for the reverse proxy web server
     * https://caddyserver.com/docs/install#debian-ubuntu-raspbian
-    * Edit the Caddyfile at `/etc/caddy/Caddyfile` to be:
+    * Edit the `Caddyfile` at `/etc/caddy/Caddyfile` to be:
         ```
         knewhub.com {
             reverse_proxy localhost:3000
@@ -146,9 +146,10 @@
     * Check that jq was installed with command `jq`. It should return a list of jq commands
 
 ### Access secrets from Secret Manager
+
 Environment variables are set by fetching secrets from Secret Manager. This is done by adding a script in the `.profile` file. This file is called every time the `rails` user logs in.
 
-* Edit the .profile at `~/.profile` to be:
+* Edit the `.profile` file at `~/.profile` to be:
     ```sh
     PROJECT_ID="knewhub"
     SECRETS=("RAILS_MASTER_KEY" "WEB_URL" "POSTGRES_HOST" "POSTGRES_DB" "POSTGRES_USER" "POSTGRES_PASSWORD" "GITHUB_APP_ID" "GITHUB_APP_SECRET" "BREVO_USERNAME" "BREVO_PASSWORD")
@@ -169,8 +170,64 @@ Environment variables are set by fetching secrets from Secret Manager. This is d
 * Verify that environment variables are set with command `env`. It should return a list of environment variables and their values
 
 ### Load Rails application
-### Systemd services
 
+### systemd services
+
+systemd will be used to manage all services that the Rails application requires. The systemd services used are as follow.
+
+* Caddy
+    * The Caddy service was already set up as part of the package installation. No action is required
+* redis-server
+    * The redis-server service was already set up as part of the package installation. No action is required
+* Sidekiq
+    * Create a `sidekiq.service` file at `/etc/systemd/system/sidekiq.service` with the following:
+        ```service
+        [Unit]
+        Description=sidekiq
+        After=syslog.target network.target redis-server.service
+
+        [Service]
+        Type=notify
+        NotifyAccess=all
+        WatchdogSec=10
+        WorkingDirectory=/home/rails/knewhub
+        ExecStart=/bin/bash -lc 'exec /home/rails/.rbenv/shims/bundle exec sidekiq -e production'
+        User=rails
+        Group=rails
+        UMask=0002
+        Environment=MALLOC_ARENA_MAX=2
+        RestartSec=1
+        Restart=always
+        StandardOutput=syslog
+        StandardError=syslog
+        SyslogIdentifier=sidekiq
+
+        [Install]
+        WantedBy=multi-user.target
+        ```
+* Knewhub (Rails application)
+    * Create a `knewhub.service` file at `/etc/systemd/system/knewhub.service` with the following:
+        ```service
+        [Unit]
+        Description=KnewHub
+        After=network.target redis-server.service sidekiq.service
+        
+        [Service]
+        Type=simple
+        User=rails
+        Group=rails
+        WorkingDirectory=/home/rails/knewhub
+        ExecStart=/bin/bash -lc 'exec /home/rails/.rbenv/shims/bundle exec rails server -e production'
+        TimeoutSec=30
+        RestartSec=15s
+        Restart=always
+        SyslogIdentifier=rails
+        
+        [Install]
+        WantedBy=multi-user.target
+        ```
+
+Use command `systemctl list-units --type=service --state=running` to lists the systemd services that are currently running.
 
 ## Create additional storage disk attached to VM
 
