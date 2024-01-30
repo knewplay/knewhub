@@ -98,7 +98,53 @@
     ```
     * During the first connection, if the warning `The authenticity of host '<VM_EXTERNAL_IP>' can't be established` appears, enter `yes` to continue
 
-### Installations
+### Installation of packages
+
+* Once connected to the VM, run `sudo apt-get update` to update the list of packages
+* The following packages need to be installed. Follow instructions from their respective documentation below
+* Caddy
+    * Used for the reverse proxy web server
+    * https://caddyserver.com/docs/install#debian-ubuntu-raspbian
+    * Edit the Caddyfile at `/etc/caddy/Caddyfile` to be:
+        ```
+        knewhub.com {
+            reverse_proxy localhost:3000
+        }
+        ```
+    * Check that the Caddy service is running with command `systemctl status caddy`. "Started Caddy." will appear on the logs
+* Git
+    * Used to install packages, and perform Git operations during deployment and within the Rails application
+    * https://github.com/git-guides/install-git#debianubuntu
+    * Check that Git was installed with command `git version`
+* rbenv & ruby-build
+    * Used to manage Ruby versions
+    * https://github.com/rbenv/rbenv?tab=readme-ov-file#basic-git-checkout
+        * Use the instructions for `bash`
+        * Restart the shell with command `source ~/.bashrc`
+        * Check that rbenv was installed with command `rbenv`. It should return a list of rbenv commands
+    * https://github.com/rbenv/ruby-build?tab=readme-ov-file#clone-as-rbenv-plugin-using-git
+* Ruby
+    * Used to run our Rails application
+    * Install dependencies
+        * https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
+    * Refer to the file `.ruby_version` for the version to install
+    * Install Ruby with command `rbenv install <RUBY_VERSION>`
+    * Apply this version globally with `rbenv global <RUBY_VERSION>``
+    * Check that the correct Ruby version was installed with command `rbenv version`
+* Redis
+    * Used for storage by the Rails application
+    * https://redis.io/docs/install/install-redis/install-redis-on-linux/
+    * Check that Redis was installed with command `redis-server --version`
+* Sidekiq
+    * Used for background jobs by the Rails application
+    * `gem install sidekiq`
+    * `gem install bundler`
+    * Check that Sidekiq was installed with command `sidekiq`. It should return logs with "Please point Sidekiq to a Rails application or a Ruby file to load your job classes with -r [DIR|FILE]."
+* jq
+    * Used to decrypt secrets from Secret Manager
+    * `sudo apt-get install jq`
+    * Check that jq was installed with command `jq`. It should return a list of jq commands
+
 ### Access secrets from Secret Manager
 ### Load Rails application
 ### Systemd services
