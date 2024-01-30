@@ -189,7 +189,7 @@ The Rails application will be cloned onto the VM using Git. To perform this oper
 * `bundle install` to install gems
 * `RAILS_ENV=production bin/rails assets:precompile` to pre-compile JavaScript and CSS assets
 * `bin/rails s -e production` to start a server. If the output is similar to below, then move on to the next steps:
-    ```rb
+    ```
     => Booting Puma
     => Rails 7.1.3 application starting in production 
     => Run `bin/rails server --help` for more startup options
@@ -238,6 +238,9 @@ systemd will be used to manage all services that the Rails application requires.
         [Install]
         WantedBy=multi-user.target
         ```
+    * `sudo systemctl daemon-reload` to reload systemd
+    * `sudo systemctl enable sidekiq` to enable the service
+    * `sudo systemctl start sidekiq` to start the service. If no output appears, then the service was successfully started
 * Knewhub (Rails application)
     * Create a `knewhub.service` file at `/etc/systemd/system/knewhub.service` with the following:
         ```service
@@ -259,8 +262,15 @@ systemd will be used to manage all services that the Rails application requires.
         [Install]
         WantedBy=multi-user.target
         ```
+    * `sudo systemctl daemon-reload` to reload systemd
+    * `sudo systemctl enable knewhub` to enable the service
+    * `sudo systemctl start knewhub` to start the service. If no output appears, then the service was successfully started
 
-Use command `systemctl list-units --type=service --state=running` to lists the systemd services that are currently running.
+#### Useful commands
+
+* `systemctl list-units --type=service --state=running` to lists the systemd services that are currently running.
+* `journalctl -f -u <SERVICE_NAME>` to view the logs for a given service.
+* `sudo systemctl stop <SERVICE_NAME>` to stop a service
 
 ## Create additional storage disk attached to VM
 
