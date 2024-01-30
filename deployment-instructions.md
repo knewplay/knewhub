@@ -274,6 +274,48 @@ systemd will be used to manage all services that the Rails application requires.
 
 ## Create additional storage disk attached to VM
 
+### Create and attach disk
+
+* [Reference Guide: Add a persistent disk](https://cloud.google.com/compute/docs/disks/add-persistent-disk)
+* Navigate to the VM instances page on Google Cloud console
+* Edit instance 
+* Additional disks -> Add new disk
+    * Name: `knewhub-repos`
+    * Disk source type: `blank disk`
+    * Disk type: `Balanced persistent disk`
+    * Size: `10` GB
+    * Attachment setting: `Read/write`
+    * Deletion rule: `Keep disk`
+
+### Format and mount disk
+
+* [Reference Guide: Format and mount a non-boot disk on a Linux VM](https://cloud.google.com/compute/docs/disks/format-mount-disk-linux)
+* In the VM, identify name of `knewhub-repos` disk with command `ls -l /dev/disk/by-id/google-*`
+    * Example output:
+        ```sh
+        lrwxrwxrwx 1 root root  9 Jan 30 14:32 /dev/disk/by-id/google-knewhub -> ../../sda
+        lrwxrwxrwx 1 root root 10 Jan 30 14:32 /dev/disk/by-id/google-knewhub-part1 -> ../../sda1
+        lrwxrwxrwx 1 root root 11 Jan 30 14:32 /dev/disk/by-id/google-knewhub-part14 -> ../../sda14
+        lrwxrwxrwx 1 root root 11 Jan 30 14:32 /dev/disk/by-id/google-knewhub-part15 -> ../../sda15
+        lrwxrwxrwx 1 root root  9 Jan 30 19:36 /dev/disk/by-id/google-knewhub-repos -> ../../sdb
+        ```
+    * The `knewhub-repos` disk name is `sdb`
+* `sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb` to format the disk
+* Remove the `.keep` file inside `/home/rails/knewhub/repos`. It will not be required after the disk is mounted
+* `sudo mount -o discard,defaults /dev/sdb /home/rails/knewhub/repos` to mount the directory where repositories will be located within the Rails application
+* Confirm that the disk is mounted by calling `df -h`
+* `sudo chown -R rails:rails /home/rails/knewhub/repos` to give the `rails` user access to the repos directory
+
+### Persist mount after restart with fstab
+
+* `sudo blkid /dev/sdb` to find the UUID for the disk
+* Edit the `fstab` file at `/etc/stab` to add:
+    ```sh
+    UUID=<UUID_VALUE> /home/rails/knewhub/current/repos ext4 discard,defaults,nofail,user 0 2
+    ```
+* `sudo umount /dev/sdb` to unmount the disk
+* `sudo mount -a` to mount the disk using fstab
+
 ## Deploy using Mina
 
 ## Display Systemd logs on Cloud Logging
