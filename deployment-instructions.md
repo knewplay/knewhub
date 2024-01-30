@@ -146,6 +146,28 @@
     * Check that jq was installed with command `jq`. It should return a list of jq commands
 
 ### Access secrets from Secret Manager
+Environment variables are set by fetching secrets from Secret Manager. This is done by adding a script in the `.profile` file. This file is called every time the `rails` user logs in.
+
+* Edit the .profile at `~/.profile` to be:
+    ```sh
+    PROJECT_ID="knewhub"
+    SECRETS=("RAILS_MASTER_KEY" "WEB_URL" "POSTGRES_HOST" "POSTGRES_DB" "POSTGRES_USER" "POSTGRES_PASSWORD" "GITHUB_APP_ID" "GITHUB_APP_SECRET" "BREVO_USERNAME" "BREVO_PASSWORD")
+
+    function get_secret() {
+        curl "https://secretmanager.googleapis.com/v1/projects/$PROJECT_ID/secrets/$1/versions/latest:access" \
+        --request "GET" \
+        --header "authorization: Bearer $(gcloud auth print-access-token)" \
+        --header "content-type: application/json" \
+        | jq -r ".payload.data" | base64 --decode
+    }
+
+    for secret in ${SECRETS[@]}; do
+        export $secret=$(get_secret $secret)
+    done
+    ```
+* Reload the file with command `. ~/.profile`
+* Verify that environment variables are set with command `env`. It should return a list of environment variables and their values
+
 ### Load Rails application
 ### Systemd services
 
