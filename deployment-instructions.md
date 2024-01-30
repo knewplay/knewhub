@@ -144,6 +144,9 @@
     * Used to decrypt secrets from Secret Manager
     * `sudo apt-get install jq`
     * Check that jq was installed with command `jq`. It should return a list of jq commands
+* PostgreSQL client
+    * Used for database
+    * `sudo apt install libpq-dev`
 
 ### Access secrets from Secret Manager
 
@@ -180,7 +183,26 @@ The Rails application will be cloned onto the VM using Git. To perform this oper
 * In the VM, run `git clone git@github.com:knewplay/knewhub.git`
 * Use command `ls` to confirm that the directory `knewhub` was created
 
-### Load Rails application
+### Start Rails application
+
+* In the VM, enter the `knewhub` directory
+* `bundle install` to install gems
+* `RAILS_ENV=production bin/rails assets:precompile` to pre-compile JavaScript and CSS assets
+* `bin/rails s -e production` to start a server. If the output is similar to below, then move on to the next steps:
+    ```rb
+    => Booting Puma
+    => Rails 7.1.3 application starting in production 
+    => Run `bin/rails server --help` for more startup options
+    Puma starting in single mode...
+    * Puma version: 6.4.2 (ruby 3.3.0-p0) ("The Eagle of Durango")
+    *  Min threads: 5
+    *  Max threads: 5
+    *  Environment: production
+    *          PID: 35434
+    * Listening on http://0.0.0.0:3000
+    Use Ctrl-C to stop
+    ```
+* Stop the server
 
 ### systemd services
 
