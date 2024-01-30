@@ -169,6 +169,17 @@ Environment variables are set by fetching secrets from Secret Manager. This is d
 * Reload the file with command `. ~/.profile`
 * Verify that environment variables are set with command `env`. It should return a list of environment variables and their values
 
+### Set up SSH for GitHub
+
+The Rails application will be cloned onto the VM using Git. To perform this operation, the VM needs to have its own keypair to SSH into GitHub.
+
+* [Reference Guide: Managing deploy keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)
+* In the VM, run `ssh-keygen -t ed25519 -C "noreply@knewhub.com"`. Click `Enter` to accept the file location and bypass setting a passphrase
+* The keypair should be saved in the directory `/home/rails/.ssh`
+* Edit the KnewHub directory on Github and add a deploy key. Give it read-only access
+* In the VM, run `git clone git@github.com:knewplay/knewhub.git`
+* Use command `ls` to confirm that the directory `knewhub` was created
+
 ### Load Rails application
 
 ### systemd services
