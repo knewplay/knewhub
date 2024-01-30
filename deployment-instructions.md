@@ -32,14 +32,19 @@
     * Type: `regional` -> `northamerica-northeast1`
 * Create VM
     * [Reference Guide: Create a VM that uses a user-managed service account](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances)
+    * Choose the `New VM Instance` option
     * Name: `knewhub`
     * Region and zone: `northamerica-northeast1-b`
     * Machine configuration: `E2-medium`
     * VM provisioning model: `Standard`
-    * Boot disk: `Ubuntu 20.04 LTS x86/64, amd focal image`
+    * Boot disk
+        * Operating system version: `Ubuntu 20.04 LTS x86/64, amd focal image`
+        * Boot disk type: `Balanced persistent disk`
+        * Size: `10` GB
     * Service account: `compute-engine` service account created earlier
     * Firewall: `Allow HTTPS traffic`
-    * Advanced options -> Networking -> Network interfaces: select IPv4 address created earlier
+    * Advanced options -> Networking -> Network interfaces -> Edit network interface: click on `default` network and select option `knewhub-vm` under "External IPv4 address"
+* Point the domain `knewhub.com` to the static external IP address of the VM
 
 ## Create Cloud SQL database
 
@@ -49,8 +54,10 @@
 * Password: click on `Generate` button to generate a password
 * Database version: `PostgreSQL 15`
 * Cloud SQL edition: `Enterprise`
+* Preset: `Development`
 * Region: `northamerica-northeast1`
-* Configuration options -> Connections -> Authorized networks: enter static external IP address of the VM
+* Zonal availability: `Single zone`
+* Configuration options -> Connections -> Authorized networks -> Add a network: enter the IPv4 address of the VM instance
 
 ## Store environment variables in Secret Manager
 
@@ -76,18 +83,20 @@
 
 * From a local terminal, generate the SSH keypair for a user named `rails`. This user will be used to perform all operations on the VM
     ```
-    ssh-keygen -t rsa -f knewhub_vm_rails -C rails
+    ssh-keygen -t rsa -f knewhub-vm-rails -C rails
     ```
-    * This creates two files: `knewhub_vm_rails` and `knewhub_vm_rails.pub`
-    * Move the files to folder `~/.ssh` on the local machine, if they are not already there
+    * Skip entering a passphrase by clicking `Enter` key
+    * This creates two files: `knewhub-vm_rails` and `knewhub-vm-rails.pub`
+    * Move the files to directory `~/.ssh` on the local machine if they are not already there
 * Add the SSH public key to the VM
     * Navigate to the VM instances page on Google Cloud console
     * Edit instance
-    * SSH keys: copy the content of the `knewhub_vm_rails.pub` file
-* Connect to the VM with the command. The `<VM_EXTERNAL_IP>` is the static external IP used in previous steps
+    * SSH keys: copy the content of the `knewhub-vm-rails.pub` file
+* Ensure the VM is running then connect to it using this command. The `<VM_EXTERNAL_IP>` is the static external IP used in previous steps
     ```
-    ssh -i ~/.ssh/knewhub_vm_rails rails@<VM_EXTERNAL_IP>
+    ssh -i ~/.ssh/knewhub-vm-rails rails@<VM_EXTERNAL_IP>
     ```
+    * During the first connection, if the warning `The authenticity of host '<VM_EXTERNAL_IP>' can't be established` appears, enter `yes` to continue
 
 ### Installations
 ### Access secrets from Secret Manager
