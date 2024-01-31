@@ -4,7 +4,6 @@ Sidekiq.configure_server do |config|
   config.logger.formatter = proc do |severity, _time, _progname, msg|
     "#{severity}: #{msg}\n"
   end
-  config.logger.level = Logger::WARN if Rails.env == "production"
 end
 
 Sidekiq.configure_client do |config|

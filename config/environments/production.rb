@@ -57,7 +57,7 @@ Rails.application.configure do
     "#{severity}: #{msg}\n"
   end
 
-  # Prepend all log lines with the following tags.
+  # Do not prepend log lines with the following tags.
   # config.log_tags = [ :request_id ]
 
   # "info" includes generic and useful information about system operation, but avoids logging too much
