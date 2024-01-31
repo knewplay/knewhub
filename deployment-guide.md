@@ -1,10 +1,10 @@
-# Deployment instructions
+# Deployment guide
 
 ## Overview
 
 * Ruby on Rails application
 * PostgreSQL database
-* Sidekiq background worker
+* Sidekiq background processing
 * Redis storage
 * Caddy web server
 * Deployed on a Linux VM on Google Cloud
@@ -74,7 +74,6 @@
 
 ## Create Cloud SQL database
 
-
 [Reference Guide: Create instances](https://cloud.google.com/sql/docs/postgres/create-instance)
 * Create PostgreSQL instance
     * Instance ID: `knewhub`
@@ -84,7 +83,7 @@
     * Preset: `Development`
     * Region: `northamerica-northeast1`
     * Zonal availability: `Single zone`
-    * Configuration options -> Connections -> Authorized networks -> Add a network: enter the IPv4 address of the VM instance
+    * Configuration options -> Connections -> Authorized networks -> Add a network: enter the static external IP address of the VM
 
 ## Store environment variables in Secret Manager
 
@@ -92,11 +91,11 @@
 
 1. Create secrets for the following environment variables
     * RAILS_MASTER_KEY
-    * WEB_URL
-    * POSTGRES_HOST
-    * POSTGRES_DB
-    * POSTGRES_USER
-    * POSTGRES_PASSWORD
+    * WEB_URL (the domain)
+    * POSTGRES_HOST (static external IP address of the VM)
+    * POSTGRES_DB (refer to SQL instance details on the Google console)
+    * POSTGRES_USER (refer to SQL instance details on the Google console)
+    * POSTGRES_PASSWORD (password for the SQL instance created in the previous step)
     * GITHUB_APP_ID
     * GITHUB_APP_SECRET
     * BREVO_USERNAME
@@ -120,7 +119,7 @@
     * Navigate to the VM instances page on Google Cloud console
     * Edit instance
     * SSH keys: copy the content of the `knewhub-vm-rails.pub` file
-3. Ensure the VM is running then connect to it using this command. The `<VM_EXTERNAL_IP>` is the static external IP used in previous steps
+3. Ensure the VM is running, then connect to it using the command below. The `<VM_EXTERNAL_IP>` is the static external IP used in previous steps
     ```
     ssh -i ~/.ssh/knewhub-vm-rails rails@<VM_EXTERNAL_IP>
     ```
@@ -153,11 +152,10 @@
         * https://github.com/rbenv/ruby-build?tab=readme-ov-file#clone-as-rbenv-plugin-using-git
     4. Ruby
         * Used to run our Rails application
-        * Install dependencies
-            * https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
+        * Install dependencies according to https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
         * Refer to the file `.ruby_version` for the version to install
         * Install Ruby with command `rbenv install <RUBY_VERSION>`
-        * Apply this version globally with `rbenv global <RUBY_VERSION>``
+        * Apply this version globally with `rbenv global <RUBY_VERSION>`
         * Check that the correct Ruby version was installed with command `rbenv version`
     5. Redis
         * Used for storage by the Rails application
@@ -167,7 +165,7 @@
         * Used for background jobs by the Rails application
         * `gem install sidekiq`
         * `gem install bundler`
-        * Check that Sidekiq was installed with command `sidekiq`. It should return logs with "Please point Sidekiq to a Rails application or a Ruby file to load your job classes with -r [DIR|FILE]."
+        * Check that Sidekiq was installed with command `sidekiq`. It should return logs with `Please point Sidekiq to a Rails application or a Ruby file to load your job classes with -r [DIR|FILE].`
     7. jq
         * Used to decrypt secrets from Secret Manager
         * `sudo apt-get install jq`
@@ -373,9 +371,9 @@ systemd and fstab files also need to be modified to make use of the "releases" f
 
 ## Display systemd logs on Cloud Logging
 
-All systemd services have logs but they are accessible outside of the VM as it is. Google Cloud Logging will be used to keep track of the VM services logs, including the Rails application and the Sidekiq worker.
+All systemd services have logs but they currently aren't accessible outside of the VM. Google Cloud Logging will be used to keep track of the VM services logs, including the Rails application and the Sidekiq worker.
 
-### Active Ops Agent
+### Activate Ops Agent
 
 [Reference Guide: Installing the Ops Agent on individual VMs](https://cloud.google.com/logging/docs/agent/ops-agent/installation)
 
@@ -510,6 +508,7 @@ logging:
 ```
 
 In the VM, restart the agent to see the changes in logs: `sudo systemctl restart google-cloud-ops-agent"*"`.
+
 In the Google console the logs should now be properly formatted.
 
 ```json
@@ -542,9 +541,7 @@ In the Google console the logs should now be properly formatted.
 
 ### Connection to the SQL database using Cloud SQL Auth Proxy
 
-The Google documentation on [connecting to Cloud SQL from Compute Engine](https://cloud.google.com/sql/docs/postgres/connect-compute-engine) presents three options: private IP, public IP and Cloud SQL Auth Proxy.
-
-The initial plan was to use Cloud SQL Auth Proxy since it was presented as the most secure option.
+The Google documentation on [connecting to Cloud SQL from Compute Engine](https://cloud.google.com/sql/docs/postgres/connect-compute-engine) presents three options: private IP, public IP and Cloud SQL Auth Proxy. The initial plan was to use Cloud SQL Auth Proxy since it was presented as the most secure option.
 
 The VM and SQL instance were able to be connected using the proxy, but the Rails application would not be able to find the database.
 
@@ -556,7 +553,7 @@ The original plan was to run the Rails application on Docker. A CI/CD pipeline w
 
 We wanted to have the Rails application on Docker but all other support systems running directly on the Linux VM using systemd.
 
-The Sidekiq systemd service would not cooperate with the Rails application on Docker. We ended up moving the Rails application directly on the VM, and deploying semi-automatically using Mina. i.e. the `mina deploy` commands needs to be called on a local nachine but the rest of the process is automatic.
+The Sidekiq systemd service would not cooperate with the Rails application on Docker. We ended up moving the Rails application directly on the VM, and deploying semi-automatically using Mina. i.e. the `mina deploy` commands needs to be called on a local machine but the rest of the process is automatic.
 
 ### Using Cloud Storage FUSE (instead of an attached disk)
 
