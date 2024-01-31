@@ -39,6 +39,10 @@
     + [Modify logger for Rails](#modify-logger-for-rails)
     + [Modify logger for Sidekiq](#modify-logger-for-sidekiq)
     + [Enable custom formatter for Ops Agent](#enable-custom-formatter-for-ops-agent)
+* [Experiments that did not make it into the final solution](#experiments-that-did-not-make-it-into-the-final-solution)
+    + [Connection to the SQL database using Cloud SQL Auth Proxy](#connection-to-the-sql-database-using-cloud-sql-auth-proxy)
+    + [Running the Rails application on Docker](#running-the-rails-application-on-docker)
+    + [Using Cloud Storage FUSE (instead of an attached disk)](using-cloud-storage-fuse-instead-of-an-attached-disk)
 
 ## Create virtual machine (VM) on Compute Engine
 
