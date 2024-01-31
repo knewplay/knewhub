@@ -42,17 +42,17 @@
 
 ## Create virtual machine (VM) on Compute Engine
 
-* Create service account
+1. Create service account
     * [Reference Guide: Create service accounts](https://cloud.google.com/iam/docs/service-accounts-create)
     * Service account ID: `compute-engine`
     * Role: `Cloud SQL Client`
-* Reserve static external IP address
+2. Reserve static external IP address
     * [Reference Guide: Reserve a static external IP address](https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address)
     * Name: `knewhub-vm`
     * Network service tier: `Standard`
     * IP version: `IPv4`
     * Type: `regional` -> `northamerica-northeast1`
-* Create VM
+3. Create VM
     * [Reference Guide: Create a VM that uses a user-managed service account](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances)
     * Choose the `New VM Instance` option
     * Name: `knewhub`
@@ -66,25 +66,27 @@
     * Service account: `compute-engine` service account created earlier
     * Firewall: `Allow HTTPS traffic`
     * Advanced options -> Networking -> Network interfaces -> Edit network interface: click on `default` network and select option `knewhub-vm` under "External IPv4 address"
-* Point the domain `knewhub.com` to the static external IP address of the VM
+4. Point the domain `knewhub.com` to the static external IP address of the VM
 
 ## Create Cloud SQL database
 
-* [Reference Guide: Create instances](https://cloud.google.com/sql/docs/postgres/create-instance)
+
+[Reference Guide: Create instances](https://cloud.google.com/sql/docs/postgres/create-instance)
 * Create PostgreSQL instance
-* Instance ID: `knewhub`
-* Password: click on `Generate` button to generate a password
-* Database version: `PostgreSQL 15`
-* Cloud SQL edition: `Enterprise`
-* Preset: `Development`
-* Region: `northamerica-northeast1`
-* Zonal availability: `Single zone`
-* Configuration options -> Connections -> Authorized networks -> Add a network: enter the IPv4 address of the VM instance
+    * Instance ID: `knewhub`
+    * Password: click on `Generate` button to generate a password
+    * Database version: `PostgreSQL 15`
+    * Cloud SQL edition: `Enterprise`
+    * Preset: `Development`
+    * Region: `northamerica-northeast1`
+    * Zonal availability: `Single zone`
+    * Configuration options -> Connections -> Authorized networks -> Add a network: enter the IPv4 address of the VM instance
 
 ## Store environment variables in Secret Manager
 
-* [Reference Guide: Create and access a secret using Secret Manager](https://cloud.google.com/secret-manager/docs/create-secret-quickstart)
-* Create secrets for the following environment variables
+[Reference Guide: Create and access a secret using Secret Manager](https://cloud.google.com/secret-manager/docs/create-secret-quickstart)
+
+1. Create secrets for the following environment variables
     * RAILS_MASTER_KEY
     * WEB_URL
     * POSTGRES_HOST
@@ -95,7 +97,7 @@
     * GITHUB_APP_SECRET
     * BREVO_USERNAME
     * BREVO_PASSWORD
-* Configure Permissions for each secret
+2. Configure Permissions for each secret
     * Grant access to the `compute-engine` service account with the roles `Secret Manager Secret Accessor` and `Secret Manager Viewer`
     * (This is done to prevent the service account from accessing other secrets that belong to the project. If this is not a concern, the service account's IAM permissions could be set at the project level instead)
 
@@ -103,18 +105,18 @@
 
 ### Create `rails` user
 
-* From a local terminal, generate the SSH keypair for a user named `rails`. This user will be used to perform all operations on the VM
+1. From a local terminal, generate the SSH keypair for a user named `rails`. This user will be used to perform all operations on the VM
     ```
     ssh-keygen -t rsa -f knewhub-vm-rails -C rails
     ```
     * Skip entering a passphrase by clicking `Enter` key
     * This creates two files: `knewhub-vm_rails` and `knewhub-vm-rails.pub`
     * Move the files to directory `~/.ssh` on the local machine if they are not already there
-* Add the SSH public key to the VM
+2. Add the SSH public key to the VM
     * Navigate to the VM instances page on Google Cloud console
     * Edit instance
     * SSH keys: copy the content of the `knewhub-vm-rails.pub` file
-* Ensure the VM is running then connect to it using this command. The `<VM_EXTERNAL_IP>` is the static external IP used in previous steps
+3. Ensure the VM is running then connect to it using this command. The `<VM_EXTERNAL_IP>` is the static external IP used in previous steps
     ```
     ssh -i ~/.ssh/knewhub-vm-rails rails@<VM_EXTERNAL_IP>
     ```
@@ -122,59 +124,59 @@
 
 ### Installation of packages
 
-* Once connected to the VM, run `sudo apt-get update` to update the list of packages
-* The following packages need to be installed. Follow instructions from their respective documentation below
-* Caddy
-    * Used for the reverse proxy web server
-    * https://caddyserver.com/docs/install#debian-ubuntu-raspbian
-    * Edit the `Caddyfile` at `/etc/caddy/Caddyfile` to be:
-        ```
-        knewhub.com {
-            reverse_proxy localhost:3000
-        }
-        ```
-    * Check that the Caddy service is running with command `systemctl status caddy`. "Started Caddy." will appear on the logs
-* Git
-    * Used to install packages, and perform Git operations during deployment and within the Rails application
-    * https://github.com/git-guides/install-git#debianubuntu
-    * Check that Git was installed with command `git version`
-* rbenv & ruby-build
-    * Used to manage Ruby versions
-    * https://github.com/rbenv/rbenv?tab=readme-ov-file#basic-git-checkout
-        * Use the instructions for `bash`
-        * Restart the shell with command `source ~/.bashrc`
-        * Check that rbenv was installed with command `rbenv`. It should return a list of rbenv commands
-    * https://github.com/rbenv/ruby-build?tab=readme-ov-file#clone-as-rbenv-plugin-using-git
-* Ruby
-    * Used to run our Rails application
-    * Install dependencies
-        * https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
-    * Refer to the file `.ruby_version` for the version to install
-    * Install Ruby with command `rbenv install <RUBY_VERSION>`
-    * Apply this version globally with `rbenv global <RUBY_VERSION>``
-    * Check that the correct Ruby version was installed with command `rbenv version`
-* Redis
-    * Used for storage by the Rails application
-    * https://redis.io/docs/install/install-redis/install-redis-on-linux/
-    * Check that Redis was installed with command `redis-server --version`
-* Sidekiq
-    * Used for background jobs by the Rails application
-    * `gem install sidekiq`
-    * `gem install bundler`
-    * Check that Sidekiq was installed with command `sidekiq`. It should return logs with "Please point Sidekiq to a Rails application or a Ruby file to load your job classes with -r [DIR|FILE]."
-* jq
-    * Used to decrypt secrets from Secret Manager
-    * `sudo apt-get install jq`
-    * Check that jq was installed with command `jq`. It should return a list of jq commands
-* PostgreSQL client
-    * Used for database
-    * `sudo apt install libpq-dev`
+1. Once connected to the VM, run `sudo apt-get update` to update the list of packages
+2. The following packages need to be installed. Follow instructions from their respective documentation below
+    1. Caddy
+        * Used for the reverse proxy web server
+        * https://caddyserver.com/docs/install#debian-ubuntu-raspbian
+        * Edit the `Caddyfile` at `/etc/caddy/Caddyfile` to be:
+            ```
+            knewhub.com {
+                reverse_proxy localhost:3000
+            }
+            ```
+        * Check that the Caddy service is running with command `systemctl status caddy`. "Started Caddy." will appear on the logs
+    2. Git
+        * Used to install packages, and perform Git operations during deployment and within the Rails application
+        * https://github.com/git-guides/install-git#debianubuntu
+        * Check that Git was installed with command `git version`
+    3. rbenv & ruby-build
+        * Used to manage Ruby versions
+        * https://github.com/rbenv/rbenv?tab=readme-ov-file#basic-git-checkout
+            * Use the instructions for `bash`
+            * Restart the shell with command `source ~/.bashrc`
+            * Check that rbenv was installed with command `rbenv`. It should return a list of rbenv commands
+        * https://github.com/rbenv/ruby-build?tab=readme-ov-file#clone-as-rbenv-plugin-using-git
+    4. Ruby
+        * Used to run our Rails application
+        * Install dependencies
+            * https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
+        * Refer to the file `.ruby_version` for the version to install
+        * Install Ruby with command `rbenv install <RUBY_VERSION>`
+        * Apply this version globally with `rbenv global <RUBY_VERSION>``
+        * Check that the correct Ruby version was installed with command `rbenv version`
+    5. Redis
+        * Used for storage by the Rails application
+        * https://redis.io/docs/install/install-redis/install-redis-on-linux/
+        * Check that Redis was installed with command `redis-server --version`
+   6. Sidekiq
+        * Used for background jobs by the Rails application
+        * `gem install sidekiq`
+        * `gem install bundler`
+        * Check that Sidekiq was installed with command `sidekiq`. It should return logs with "Please point Sidekiq to a Rails application or a Ruby file to load your job classes with -r [DIR|FILE]."
+    7. jq
+        * Used to decrypt secrets from Secret Manager
+        * `sudo apt-get install jq`
+        * Check that jq was installed with command `jq`. It should return a list of jq commands
+    8. PostgreSQL client
+        * Used for database
+        * `sudo apt install libpq-dev`
 
 ### Access secrets from Secret Manager
 
 Environment variables are set by fetching secrets from Secret Manager. This is done by adding a script in the `.profile` file. This file is called every time the `rails` user logs in.
 
-* Edit the `.profile` file at `~/.profile` to be:
+1. Edit the `.profile` file at `~/.profile` to be:
     ```sh
     PROJECT_ID="knewhub"
     SECRETS=("RAILS_MASTER_KEY" "WEB_URL" "POSTGRES_HOST" "POSTGRES_DB" "POSTGRES_USER" "POSTGRES_PASSWORD" "GITHUB_APP_ID" "GITHUB_APP_SECRET" "BREVO_USERNAME" "BREVO_PASSWORD")
@@ -191,26 +193,27 @@ Environment variables are set by fetching secrets from Secret Manager. This is d
         export $secret=$(get_secret $secret)
     done
     ```
-* Reload the file with command `. ~/.profile`
-* Verify that environment variables are set with command `env`. It should return a list of environment variables and their values
+2. Reload the file with command `. ~/.profile`
+3. Verify that environment variables are set with command `env`. It should return a list of environment variables and their values
 
 ### Set up SSH for GitHub
 
 The Rails application will be cloned onto the VM using Git. To perform this operation, the VM needs to have its own keypair to SSH into GitHub.
 
-* [Reference Guide: Managing deploy keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)
-* In the VM, run `ssh-keygen -t ed25519 -C "noreply@knewhub.com"`. Click `Enter` to accept the file location and bypass setting a passphrase
-* The keypair should be saved in the directory `/home/rails/.ssh`
-* Edit the KnewHub directory on Github and add a deploy key. Give it read-only access
-* In the VM, run `git clone git@github.com:knewplay/knewhub.git`
-* Use command `ls` to confirm that the directory `knewhub` was created
+[Reference Guide: Managing deploy keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)
+
+1. In the VM, run `ssh-keygen -t ed25519 -C "noreply@knewhub.com"`. Click `Enter` to accept the file location and bypass setting a passphrase
+2. The keypair should be saved in the directory `/home/rails/.ssh`
+3. Edit the KnewHub directory on Github and add a deploy key. Give it read-only access
+4. In the VM, run `git clone git@github.com:knewplay/knewhub.git`
+5. Use command `ls` to confirm that the directory `knewhub` was created
 
 ### Start Rails application
 
-* In the VM, enter the `knewhub` directory
-* `bundle install` to install gems
-* `RAILS_ENV=production bin/rails assets:precompile` to pre-compile JavaScript and CSS assets
-* `bin/rails s -e production` to start a server. If the output is similar to below, then move on to the next steps:
+1. In the VM, enter the `knewhub` directory
+2. `bundle install` to install gems
+3. `RAILS_ENV=production bin/rails assets:precompile` to pre-compile JavaScript and CSS assets
+4. `bin/rails s -e production` to start a server. If the output is similar to below, then move on to the next steps:
     ```
     => Booting Puma
     => Rails 7.1.3 application starting in production 
@@ -224,18 +227,18 @@ The Rails application will be cloned onto the VM using Git. To perform this oper
     * Listening on http://0.0.0.0:3000
     Use Ctrl-C to stop
     ```
-* Stop the server
+5. Stop the server
 
 ### systemd services
 
 systemd will be used to manage all services that the Rails application requires. The systemd services used are as follow.
 
-* Caddy
+1. Caddy
     * The Caddy service was already set up as part of the package installation. No action is required
-* redis-server
+2. redis-server
     * The redis-server service was already set up as part of the package installation. No action is required
-* Sidekiq
-    * Create a `sidekiq.service` file at `/etc/systemd/system/sidekiq.service` with the following:
+3. Sidekiq
+    1. Create a `sidekiq.service` file at `/etc/systemd/system/sidekiq.service` with the following:
         ```service
         [Unit]
         Description=sidekiq
@@ -260,11 +263,11 @@ systemd will be used to manage all services that the Rails application requires.
         [Install]
         WantedBy=multi-user.target
         ```
-    * `sudo systemctl daemon-reload` to reload systemd
-    * `sudo systemctl enable sidekiq` to enable the service
-    * `sudo systemctl start sidekiq` to start the service. If no output appears, then the service was successfully started
-* Knewhub (Rails application)
-    * Create a `knewhub.service` file at `/etc/systemd/system/knewhub.service` with the following:
+    2. `sudo systemctl daemon-reload` to reload systemd
+    3. `sudo systemctl enable sidekiq` to enable the service
+    4. `sudo systemctl start sidekiq` to start the service. If no output appears, then the service was successfully started
+4. Knewhub (Rails application)
+    1. Create a `knewhub.service` file at `/etc/systemd/system/knewhub.service` with the following:
         ```service
         [Unit]
         Description=KnewHub
@@ -284,9 +287,9 @@ systemd will be used to manage all services that the Rails application requires.
         [Install]
         WantedBy=multi-user.target
         ```
-    * `sudo systemctl daemon-reload` to reload systemd
-    * `sudo systemctl enable knewhub` to enable the service
-    * `sudo systemctl start knewhub` to start the service. If no output appears, then the service was successfully started
+    2. `sudo systemctl daemon-reload` to reload systemd
+    3. `sudo systemctl enable knewhub` to enable the service
+    4. `sudo systemctl start knewhub` to start the service. If no output appears, then the service was successfully started
 
 #### Useful commands
 
@@ -298,10 +301,10 @@ systemd will be used to manage all services that the Rails application requires.
 
 ### Create and attach disk
 
-* [Reference Guide: Add a persistent disk](https://cloud.google.com/compute/docs/disks/add-persistent-disk)
-* Navigate to the VM instances page on Google Cloud console
-* Edit instance 
-* Additional disks -> Add new disk
+[Reference Guide: Add a persistent disk](https://cloud.google.com/compute/docs/disks/add-persistent-disk)
+
+1. Navigate to the VM instances page on Google Cloud console
+2. Edit instance: Additional disks -> Add new disk
     * Name: `knewhub-repos`
     * Disk source type: `blank disk`
     * Disk type: `Balanced persistent disk`
@@ -311,8 +314,9 @@ systemd will be used to manage all services that the Rails application requires.
 
 ### Format and mount disk
 
-* [Reference Guide: Format and mount a non-boot disk on a Linux VM](https://cloud.google.com/compute/docs/disks/format-mount-disk-linux)
-* In the VM, identify name of `knewhub-repos` disk with command `ls -l /dev/disk/by-id/google-*`
+[Reference Guide: Format and mount a non-boot disk on a Linux VM](https://cloud.google.com/compute/docs/disks/format-mount-disk-linux)
+
+1. In the VM, identify name of `knewhub-repos` disk with command `ls -l /dev/disk/by-id/google-*`
     * Example output:
         ```sh
         lrwxrwxrwx 1 root root  9 Jan 30 14:32 /dev/disk/by-id/google-knewhub -> ../../sda
@@ -322,29 +326,29 @@ systemd will be used to manage all services that the Rails application requires.
         lrwxrwxrwx 1 root root  9 Jan 30 19:36 /dev/disk/by-id/google-knewhub-repos -> ../../sdb
         ```
     * The `knewhub-repos` disk name is `sdb`
-* `sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb` to format the disk
-* Remove the `.keep` file inside `/home/rails/knewhub/repos`. It will not be required after the disk is mounted
-* `sudo mount -o discard,defaults /dev/sdb /home/rails/knewhub/repos` to mount the directory where repositories will be located within the Rails application
-* Confirm that the disk is mounted by calling `df -h`
-* `sudo chown -R rails:rails /home/rails/knewhub/repos` to give the `rails` user access to the repos directory
+2. `sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb` to format the disk
+3. Remove the `.keep` file inside `/home/rails/knewhub/repos`. It will not be required after the disk is mounted
+4. `sudo mount -o discard,defaults /dev/sdb /home/rails/knewhub/repos` to mount the directory where repositories will be located within the Rails application
+5. Confirm that the disk is mounted by calling `df -h`
+6. `sudo chown -R rails:rails /home/rails/knewhub/repos` to give the `rails` user access to the repos directory
 
 ### Persist mount after restart with fstab
 
-* `sudo blkid /dev/sdb` to find the UUID for the disk
-* Edit the `fstab` file at `/etc/stab` to add:
+1. `sudo blkid /dev/sdb` to find the UUID for the disk
+2. Edit the `fstab` file at `/etc/stab` to add:
     ```sh
     UUID=<UUID_VALUE> /home/rails/knewhub/repos ext4 discard,defaults,nofail,user 0 2
     ```
-* `sudo umount /dev/sdb` to unmount the disk
-* `sudo mount -a` to mount the disk using fstab
+3. `sudo umount /dev/sdb` to unmount the disk
+4. `sudo mount -a` to mount the disk using fstab
 
 ## Deploy using Mina
 
 ### Add Mina script
 
-* `gem install mina`
-* `mina init`
-* Refer to [`config/deploy.rb`](./config/deploy.rb) and update variables as needed:
+1. `gem install mina`
+2. `mina init`
+3. Refer to [`config/deploy.rb`](./config/deploy.rb) and update variables as needed:
     * `:identify_file` location
     * UUID in `command %{sudo umount /dev/disk/by-uuid/<UUID> }`
 
@@ -353,16 +357,15 @@ systemd will be used to manage all services that the Rails application requires.
 Mina will organize the `/home/rails/knewhub` directory into `releases`. The current release will be accessed using a symlink. For instance, `/home/rails/knewhub/current` points to `/home/rails/knewhub/releases/1`.
 
 The `knewhub` directory currently set up does not use releases so it needs to me removed prior to deployment with Mina:
-* `sudo umount /dev/sdb` to unmount the `knewhub-repos` disk
-* `sudo rm knewhub -r`
+1. `sudo umount /dev/sdb` to unmount the `knewhub-repos` disk
+2. `sudo rm knewhub -r`
 
 ### Modify systemd services and fstab to work with Mina releases
 
 systemd and fstab files also need to be modified to make use of the "releases" folder structure:
-* Modify `/etc/systemd/system/sidekiq.service` and `/etc/systemd/system/knewhub.service` to have `WorkingDirectory=/home/rails/knewhub/current`
-* Modify `/etc/fstab` to use mount path `/home/rails/knewhub/current/repos`
-
-From local terminal, run `mina deploy`.
+1. Modify `/etc/systemd/system/sidekiq.service` and `/etc/systemd/system/knewhub.service` to have `WorkingDirectory=/home/rails/knewhub/current`
+2. Modify `/etc/fstab` to use mount path `/home/rails/knewhub/current/repos`
+3. From local terminal, run `mina deploy`.
 
 ## Display systemd logs on Cloud Logging
 
@@ -370,23 +373,24 @@ All systemd services have logs but they are accessible outside of the VM as it i
 
 ### Active Ops Agent
 
-* [Reference Guide: Installing the Ops Agent on individual VMs](https://cloud.google.com/logging/docs/agent/ops-agent/installation)
-* In the Google console, enable the Stackdriver Monitoring API
-* Add permission to the `compute-engine` service account for `Monitoring Metric Writer`
-* Install the latest version of the agent
+[Reference Guide: Installing the Ops Agent on individual VMs](https://cloud.google.com/logging/docs/agent/ops-agent/installation)
+
+1. In the Google console, enable the Stackdriver Monitoring API
+2. Add permission to the `compute-engine` service account for `Monitoring Metric Writer`
+3. Install the latest version of the agent
     ```
     curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
     sudo bash add-google-cloud-ops-agent-repo.sh --also-install
     ```
-* Verify that the agent is running
+4. Verify that the agent is running
     * In the Google console, navigate to: Monitoring -> Dashboard -> VM Instances
     * Click the "List" view
     * Under the column "Agent", the value `✅ Ops Agent` should appear
 
 ### View logs in Cloud Logging
 
-* In the Google console, navigate to: Logging -> Logs explorer
-* Selecting "VM Instance" in the "Resource Type" filter displays all the logs associated with VMs
+1. In the Google console, navigate to: Logging -> Logs explorer
+2. Selecting "VM Instance" in the "Resource Type" filter displays all the logs associated with VMs
 
 The logs are showing but there is too much information displayed in the message, especially for the `knewhub` and `sidekiq` services.
 ```json
