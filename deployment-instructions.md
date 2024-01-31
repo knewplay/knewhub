@@ -536,3 +536,29 @@ In the Google console the logs should now be properly formatted.
   ...
 }
 ```
+
+## Experiments that did not make it into the final solution
+
+### Connection to the SQL database using Cloud SQL Auth Proxy
+
+The Google documentation on [connecting to Cloud SQL from Compute Engine](https://cloud.google.com/sql/docs/postgres/connect-compute-engine) presents three options: private IP, public IP and Cloud SQL Auth Proxy.
+
+The initial plan was to use Cloud SQL Auth Proxy since it was presented as the most secure option.
+
+The VM and SQL instance were able to be connected using the proxy, but the Rails application would not be able to find the database.
+
+We ended up moving to using a public IP by setting it up the connection directly in the Rails application database configuration (`config/database.yml`).
+
+### Running the Rails application on Docker
+
+The original plan was to run the Rails application on Docker. A CI/CD pipeline was already set up to build a Docker image and push it to Artifact Registry every time a new commit takes place on the `main` branch.
+
+We wanted to have the Rails application on Docker but all other support systems running directly on the Linux VM using systemd.
+
+The Sidekiq systemd service would not cooperate with the Rails application on Docker. We ended up moving the Rails application directly on the VM, and deploying semi-automatically using Mina. i.e. the `mina deploy` commands needs to be called on a local nachine but the rest of the process is automatic.
+
+### Using Cloud Storage FUSE (instead of an attached disk)
+
+The original plan was to use Cloud Storage to store the repositories that are on KnewHub. The storage bucket would have been mounted to the VM through GCS FUSE.
+
+This solution did not work in the end because the `Git clone` operation is not supported by GCS Fuse. Refer to [issue 539](https://github.com/GoogleCloudPlatform/gcsfuse/issues/539).
