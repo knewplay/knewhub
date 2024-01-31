@@ -399,21 +399,17 @@ All systemd services have logs but they are accessible outside of the VM as it i
 The logs are showing but there is too much information displayed in the message, especially for the `knewhub` and `sidekiq` services.
 ```json
 {
-  ...
   "jsonPayload": {
     "message": "Jan 31 13:56:09 knewhub sidekiq[15817]: 2024-01-31T13:56:09.808Z pid=15817 tid=8xp INFO: Sidekiq 7.2.1 connecting to Redis with options {:size=>10, :pool_name=>\"internal\", :url=>\"redis://localhost:6379/1\"}"
   },
-  ...
 }
 ```
 
 ```json
 {
-  ...
   "jsonPayload": {
     "message": "Jan 31 14:01:12 knewhub rails[16858]: I, [2024-01-31T14:01:12.688702 #16858]  INFO -- : [6b5a34e3-65a6-453d-bb9e-d77e0c8e5a09] Processing by StaticPagesController#index as HTML"
   },
-  ...
 }
 ```
 Moreover, the severity and service are indicated in the message field but they do not have their own JSON key, making it difficult to filter logs by severity level or service name.
@@ -450,11 +446,9 @@ The `:request_id` tag is removed as well.
 In Cloud Logging, the logs coming from the `knewhub` service now have the following information:
 ```json
 {
-  ...
   "jsonPayload": {
     "message": "Jan 31 14:34:10 knewhub rails[17330]: INFO: Processing by StaticPagesController#index as HTML"
   },
-  ...
 }
 ```
 
@@ -520,7 +514,6 @@ In the Google console the logs should now be properly formatted.
 
 ```json
 {
-  ...
   "jsonPayload": {
     "message": "Processing by StaticPagesController#index as HTML",
     "process_id": "[18543]",
@@ -528,15 +521,12 @@ In the Google console the logs should now be properly formatted.
     "process_name": "rails",
     "datetime": "Jan 31 14:37:41"
   },
-  ...
   "severity": "INFO",
-  ...
 }
 ```
 
 ```json
 {
-  ...
   "jsonPayload": {
     "vm_name": "knewhub",
     "datetime": "Jan 31 14:37:05",
@@ -544,9 +534,7 @@ In the Google console the logs should now be properly formatted.
     "process_name": "sidekiq",
     "process_id": "[18164]"
   },
-  ...
   "severity": "INFO",
-  ...
 }
 ```
 
