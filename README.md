@@ -4,4 +4,4 @@
 
 An open learning platform for STEM.
 
-[Deployment Instructions](./deployment-instructions.md)
+[Deployment Guide](./deployment-guide.md)
