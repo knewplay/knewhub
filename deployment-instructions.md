@@ -462,22 +462,31 @@ In Cloud Logging, the logs coming from the `knewhub` service now have the follow
 
 Add the following logger configuration to `config/initializers/sidekiq.rb`:
 ```rb
-Sidekiq.configure_server do |config|
-  config.logger = Logger.new(STDOUT)
-  config.logger.formatter = proc do |severity, _time, _progname, msg|
-    "#{severity}: #{msg}\n"
+module Sidekiq
+  class Logger < ::Logger
+    module Formatters
+      class CustomFormatter < Base
+        def call(severity, time, program_name, message)
+          "#{severity}: #{message} | pid=#{::Process.pid} tid=#{tid}#{format_context} \n"
+        end
+      end
+    end
   end
 end
-```
 
-Note: I know that logger formatter code is not DRY. I had created a `lib/customer_formatter.rb` file but the production configuration file was not able to find it, despite having autoloading on.
+Sidekiq.configure_server do |config|
+  config.logger = Logger.new(STDOUT)
+  config.logger.formatter = Sidekiq::Logger::Formatters::CustomFormatter.new
+  # Other config here
+end
+```
 
 In Cloud Logging, the logs coming from the `sidekiq` service now have the following information:
 ```json
 {
   ...
   "jsonPayload": {
-    "message": "Jan 31 14:30:36 knewhub sidekiq[17607]: INFO: Sidekiq 7.2.1 connecting to Redis with options {:size=>10, :pool_name=>\"internal\", :url=>\"redis://localhost:6379/1\"}"
+    "message": "Jan 31 14:30:36 knewhub sidekiq[17607]: INFO: Sidekiq 7.2.1 connecting to Redis with options {:size=>10, :pool_name=>\"internal\", :url=>\"redis://localhost:6379/1\"} | pid=29461 tid=jq9"
   },
   ...
 }
@@ -531,7 +540,7 @@ In the Google console the logs should now be properly formatted.
   "jsonPayload": {
     "vm_name": "knewhub",
     "datetime": "Jan 31 14:37:05",
-    "message": "Sidekiq 7.2.1 connecting to Redis with options {:size=>10, :pool_name=>\"internal\", :url=>\"redis://localhost:6379/1\"}",
+    "message": "Sidekiq 7.2.1 connecting to Redis with options {:size=>10, :pool_name=>\"internal\", :url=>\"redis://localhost:6379/1\"} | pid=29461 tid=jq9",
     "process_name": "sidekiq",
     "process_id": "[18164]"
   },
