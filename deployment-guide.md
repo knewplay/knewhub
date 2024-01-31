@@ -476,11 +476,9 @@ end
 In Cloud Logging, the logs coming from the `sidekiq` service now have the following information:
 ```json
 {
-  ...
   "jsonPayload": {
     "message": "Jan 31 14:30:36 knewhub sidekiq[17607]: INFO: Sidekiq 7.2.1 connecting to Redis with options {:size=>10, :pool_name=>\"internal\", :url=>\"redis://localhost:6379/1\"} | pid=29461 tid=jq9"
   },
-  ...
 }
 ```
 
