@@ -1,0 +1,17 @@
+[Unit]
+Description=KnewHub
+After=network.target redis-server.service sidekiq.service
+
+[Service]
+Type=simple
+User=rails
+Group=rails
+WorkingDirectory=/home/rails/knewhub
+ExecStart=/bin/bash -lc 'exec /home/rails/.rbenv/shims/bundle exec rails server -e production'
+TimeoutSec=30
+RestartSec=15s
+Restart=always
+SyslogIdentifier=rails
+
+[Install]
+WantedBy=multi-user.target

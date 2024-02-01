@@ -178,23 +178,7 @@
 
 Environment variables are set by fetching secrets from Secret Manager. This is done by adding a script in the `.profile` file. This file is called every time the `rails` user logs in.
 
-1. Edit the `.profile` file at `~/.profile` to be:
-    ```sh
-    PROJECT_ID="knewhub"
-    SECRETS=("RAILS_MASTER_KEY" "WEB_URL" "POSTGRES_HOST" "POSTGRES_DB" "POSTGRES_USER" "POSTGRES_PASSWORD" "GITHUB_APP_ID" "GITHUB_APP_SECRET" "BREVO_USERNAME" "BREVO_PASSWORD")
-
-    function get_secret() {
-        curl "https://secretmanager.googleapis.com/v1/projects/$PROJECT_ID/secrets/$1/versions/latest:access" \
-        --request "GET" \
-        --header "authorization: Bearer $(gcloud auth print-access-token)" \
-        --header "content-type: application/json" \
-        | jq -r ".payload.data" | base64 --decode
-    }
-
-    for secret in ${SECRETS[@]}; do
-        export $secret=$(get_secret $secret)
-    done
-    ```
+1. In the VM, add the content of the [`.profile` file](/deployment/files/.profile) to `~/.profile`
 2. Reload the file with command `. ~/.profile`
 3. Verify that environment variables are set with command `env`. It should return a list of environment variables and their values
 
@@ -240,55 +224,12 @@ systemd will be used to manage all services that the Rails application requires.
 2. redis-server
     * The redis-server service was already set up as part of the package installation. No action is required
 3. Sidekiq
-    1. Create a `sidekiq.service` file at `/etc/systemd/system/sidekiq.service` with the following:
-        ```service
-        [Unit]
-        Description=sidekiq
-        After=syslog.target network.target redis-server.service
-
-        [Service]
-        Type=notify
-        NotifyAccess=all
-        WatchdogSec=10
-        WorkingDirectory=/home/rails/knewhub
-        ExecStart=/bin/bash -lc 'exec /home/rails/.rbenv/shims/bundle exec sidekiq -e production'
-        User=rails
-        Group=rails
-        UMask=0002
-        Environment=MALLOC_ARENA_MAX=2
-        RestartSec=1
-        Restart=always
-        StandardOutput=syslog
-        StandardError=syslog
-        SyslogIdentifier=sidekiq
-
-        [Install]
-        WantedBy=multi-user.target
-        ```
+    1. Create `/etc/systemd/system/sidekiq.service` with the content of the [`sidekiq.service` file](/deployment/files/sidekiq.service)
     2. `sudo systemctl daemon-reload` to reload systemd
     3. `sudo systemctl enable sidekiq` to enable the service
     4. `sudo systemctl start sidekiq` to start the service. If no output appears, then the service was successfully started
 4. Knewhub (Rails application)
-    1. Create a `knewhub.service` file at `/etc/systemd/system/knewhub.service` with the following:
-        ```service
-        [Unit]
-        Description=KnewHub
-        After=network.target redis-server.service sidekiq.service
-        
-        [Service]
-        Type=simple
-        User=rails
-        Group=rails
-        WorkingDirectory=/home/rails/knewhub
-        ExecStart=/bin/bash -lc 'exec /home/rails/.rbenv/shims/bundle exec rails server -e production'
-        TimeoutSec=30
-        RestartSec=15s
-        Restart=always
-        SyslogIdentifier=rails
-        
-        [Install]
-        WantedBy=multi-user.target
-        ```
+    1. Create `/etc/systemd/system/knewhub.service` with the content of the [`knewhub.service` file](/deployment/files/knewhub.service)
     2. `sudo systemctl daemon-reload` to reload systemd
     3. `sudo systemctl enable knewhub` to enable the service
     4. `sudo systemctl start knewhub` to start the service. If no output appears, then the service was successfully started
