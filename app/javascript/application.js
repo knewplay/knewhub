@@ -1,5 +1,5 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
-import "@hotwired/turbo-rails"
+import { Turbo } from "@hotwired/turbo-rails"
 import "controllers"
 
 import {far} from "@fortawesome/free-regular-svg-icons"
@@ -12,3 +12,7 @@ library.add(far, fas, fab)
 import "timezone"
 import { register } from "swiper/element/bundle";
 register();
+
+Turbo.StreamActions.redirect = function () {
+  Turbo.visit(this.target)
+}
