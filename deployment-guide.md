@@ -22,17 +22,13 @@
     + [Installation of packages](#installation-of-packages)
     + [Access secrets from Secret Manager](#access-secrets-from-secret-manager)
     + [Set up SSH for GitHub](#set-up-ssh-for-github)
-    + [Start Rails application](#start-rails-application)
-    + [systemd services](#systemd-services)
-        - [Useful commands](#useful-commands)
 * [Create additional storage disk attached to VM](#create-additional-storage-disk-attached-to-vm)
     + [Create and attach disk](#create-and-attach-disk)
     + [Format and mount disk](#format-and-mount-disk)
     + [Persist mount after restart with fstab](#persist-mount-after-restart-with-fstab)
 * [Deploy using Mina](#deploy-using-mina)
     + [Add Mina script](#add-mina-script)
-    + [Remove existing `knewhub` directory](#remove-existing-knewhub-directory)
-    + [Modify systemd services and fstab to work with Mina releases](#modify-systemd-services-and-fstab-to-work-with-mina-releases)
+    + [Using systemd services](#using-systemd-services)
 * [Display systemd logs on Cloud Logging](#display-systemd-logs-on-cloud-logging)
     + [Active Ops Agent](#active-ops-agent)
     + [View logs in Cloud Logging](#view-logs-in-cloud-logging)
@@ -180,7 +176,7 @@ Environment variables are set by fetching secrets from Secret Manager. This is d
 
 ### Set up SSH for GitHub
 
-The Rails application will be cloned onto the VM using Git. To perform this operation, the VM needs to have its own keypair to SSH into GitHub.
+During deployment the Rails application will be cloned onto the VM using Git. To perform this operation, the VM needs to have its own keypair to SSH into GitHub.
 
 [Reference Guide: Managing deploy keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)
 
@@ -189,52 +185,6 @@ The Rails application will be cloned onto the VM using Git. To perform this oper
 3. Edit the KnewHub directory on Github and add a deploy key. Give it read-only access
 4. In the VM, run `git clone git@github.com:knewplay/knewhub.git`
 5. Use command `ls` to confirm that the directory `knewhub` was created
-
-### Start Rails application
-
-1. In the VM, enter the `knewhub` directory
-2. `bundle install` to install gems
-3. `RAILS_ENV=production bin/rails assets:precompile` to pre-compile JavaScript and CSS assets
-4. `bin/rails s -e production` to start a server. If the output is similar to below, then move on to the next steps:
-    ```
-    => Booting Puma
-    => Rails 7.1.3 application starting in production 
-    => Run `bin/rails server --help` for more startup options
-    Puma starting in single mode...
-    * Puma version: 6.4.2 (ruby 3.3.0-p0) ("The Eagle of Durango")
-    *  Min threads: 5
-    *  Max threads: 5
-    *  Environment: production
-    *          PID: 35434
-    * Listening on http://0.0.0.0:3000
-    Use Ctrl-C to stop
-    ```
-5. Stop the server
-
-### systemd services
-
-systemd will be used to manage all services that the Rails application requires. The systemd services used are as follow.
-
-1. Caddy
-    * The Caddy service was already set up as part of the package installation. No action is required
-2. redis-server
-    * The redis-server service was already set up as part of the package installation. No action is required
-3. Sidekiq
-    1. Create `/etc/systemd/system/sidekiq.service` with the content of the [`sidekiq.service` file](/deployment/files/sidekiq.service)
-    2. `sudo systemctl daemon-reload` to reload systemd
-    3. `sudo systemctl enable sidekiq` to enable the service
-    4. `sudo systemctl start sidekiq` to start the service. If no output appears, then the service was successfully started
-4. Knewhub (Rails application)
-    1. Create `/etc/systemd/system/knewhub.service` with the content of the [`knewhub.service` file](/deployment/files/knewhub.service)
-    2. `sudo systemctl daemon-reload` to reload systemd
-    3. `sudo systemctl enable knewhub` to enable the service
-    4. `sudo systemctl start knewhub` to start the service. If no output appears, then the service was successfully started
-
-#### Useful commands
-
-* `systemctl list-units --type=service --state=running` to lists the systemd services that are currently running.
-* `journalctl -f -u <SERVICE_NAME>` to view the logs for a given service.
-* `sudo systemctl stop <SERVICE_NAME>` to stop a service
 
 ## Create additional storage disk attached to VM
 
@@ -276,7 +226,6 @@ systemd will be used to manage all services that the Rails application requires.
 1. `sudo blkid /dev/sdb` to find the UUID for the disk
 2. Add the content of the [`fstab` file](/deployment/files/fstab) to `/etc/stab`, making sure to replace the `<UUID_VALUE>` with the value from the previous step
 3. `sudo umount /dev/sdb` to unmount the disk
-4. `sudo mount -a` to mount the disk using fstab
 
 ## Deploy using Mina
 
@@ -287,21 +236,18 @@ systemd will be used to manage all services that the Rails application requires.
 3. Refer to [`config/deploy.rb`](./config/deploy.rb) and update variables as needed:
     * `:identify_file` location
     * UUID in `command %{sudo umount /dev/disk/by-uuid/<UUID> }`
+4. From local terminal, run `mina deploy`.
 
-### Remove existing `knewhub` directory
+### Using systemd services
 
-Mina will organize the `/home/rails/knewhub` directory into `releases`. The current release will be accessed using a symlink. For instance, `/home/rails/knewhub/current` points to `/home/rails/knewhub/releases/1`.
+systemd is used to manage all services that the Rails application requires.
+* The Caddy and redis-server services were started when the packages were added in a previous step
+* The `deploy.rb` script already includes the setup and start of the Sidekiq and Knewhub (Rails application) sevices
 
-The `knewhub` directory currently set up does not use releases so it needs to me removed prior to deployment with Mina:
-1. `sudo umount /dev/sdb` to unmount the `knewhub-repos` disk
-2. `sudo rm knewhub -r`
-
-### Modify systemd services and fstab to work with Mina releases
-
-systemd and fstab files also need to be modified to make use of the "releases" folder structure:
-1. Modify `/etc/systemd/system/sidekiq.service` and `/etc/systemd/system/knewhub.service` to have `WorkingDirectory=/home/rails/knewhub/current`
-2. Modify `/etc/fstab` to use mount path `/home/rails/knewhub/current/repos`
-3. From local terminal, run `mina deploy`.
+Useful systemd commands to run in the VM:
+* `systemctl list-units --type=service --state=running` to lists the systemd services that are currently running.
+* `journalctl -f -u <SERVICE_NAME>` to view the logs for a given service.
+* `sudo systemctl stop <SERVICE_NAME>` to stop a service
 
 ## Display systemd logs on Cloud Logging
 
