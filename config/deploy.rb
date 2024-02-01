@@ -27,9 +27,11 @@ end
 # Put any custom commands you need to run at setup
 # All paths in `shared_dirs` and `shared_paths` will be created on their own.
 task :setup do
-  # command %{rbenv install 2.5.3 --skip-existing}
-  # command %{rvm install ruby-2.5.3}
-  # command %{gem install bundler}
+  command %{sudo systemctl daemon-reload}
+  command %{sudo systemctl enable sidekiq}
+  command %{sudo systemctl enable knewhub}
+  command %{sudo systemctl start sidekiq}
+  command %{sudo systemctl start knewhub}
 end
 
 desc 'Deploys the current version to the server.'

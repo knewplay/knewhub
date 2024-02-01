@@ -186,6 +186,27 @@ During deployment the Rails application will be cloned onto the VM using Git. To
 4. In the VM, run `git clone git@github.com:knewplay/knewhub.git`
 5. Use command `ls` to confirm that the directory `knewhub` was created
 
+### systemd services
+
+systemd will be used to manage all services that the Rails application requires. The systemd services used are as follow.
+
+1. Caddy
+    * The Caddy service was already set up as part of the package installation. No action is required
+2. redis-server
+    * The redis-server service was already set up as part of the package installation. No action is required
+3. Sidekiq
+    * Create `/etc/systemd/system/sidekiq.service` with the content of the [`sidekiq.service` file](/deployment/files/sidekiq.service)
+4. Knewhub (Rails application)
+    * Create `/etc/systemd/system/knewhub.service` with the content of the [`knewhub.service` file](/deployment/files/knewhub.service)
+
+The Sidekiq and Knewhub services will be enabled as part of the [Deploy using Mina](#deploy-using-mina) section.
+
+#### Useful commands
+
+* `systemctl list-units --type=service --state=running` to lists the systemd services that are currently running.
+* `journalctl -f -u <SERVICE_NAME>` to view the logs for a given service.
+* `sudo systemctl stop <SERVICE_NAME>` to stop a service
+
 ## Create additional storage disk attached to VM
 
 ### Create and attach disk
@@ -229,25 +250,12 @@ During deployment the Rails application will be cloned onto the VM using Git. To
 
 ## Deploy using Mina
 
-### Add Mina script
-
-1. `gem install mina`
+1. In local terminal, `gem install mina`
 2. `mina init`
 3. Refer to [`config/deploy.rb`](./config/deploy.rb) and update variables as needed:
     * `:identify_file` location
     * UUID in `command %{sudo umount /dev/disk/by-uuid/<UUID> }`
-4. From local terminal, run `mina deploy`.
-
-### Using systemd services
-
-systemd is used to manage all services that the Rails application requires.
-* The Caddy and redis-server services were started when the packages were added in a previous step
-* The `deploy.rb` script already includes the setup and start of the Sidekiq and Knewhub (Rails application) sevices
-
-Useful systemd commands to run in the VM:
-* `systemctl list-units --type=service --state=running` to lists the systemd services that are currently running.
-* `journalctl -f -u <SERVICE_NAME>` to view the logs for a given service.
-* `sudo systemctl stop <SERVICE_NAME>` to stop a service
+4. `mina deploy`.
 
 ## Display systemd logs on Cloud Logging
 
