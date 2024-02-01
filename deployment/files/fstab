@@ -1,0 +1,1 @@
+UUID=<UUID_VALUE> /home/rails/knewhub/current/repos ext4 discard,defaults,nofail,user 0 2

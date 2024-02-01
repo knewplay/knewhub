@@ -133,11 +133,7 @@
         * Used for the reverse proxy web server
         * https://caddyserver.com/docs/install#debian-ubuntu-raspbian
         * Edit the `Caddyfile` at `/etc/caddy/Caddyfile` to be:
-            ```
-            knewhub.com {
-                reverse_proxy localhost:3000
-            }
-            ```
+        * Replace the content of existing `/etc/Caddyfile` with the [`Caddyfile` file](/deployment/files/fstab)
         * Check that the Caddy service is running with command `systemctl status caddy`. "Started Caddy." will appear on the logs
     2. Git
         * Used to install packages, and perform Git operations during deployment and within the Rails application
@@ -278,10 +274,7 @@ systemd will be used to manage all services that the Rails application requires.
 ### Persist mount after restart with fstab
 
 1. `sudo blkid /dev/sdb` to find the UUID for the disk
-2. Edit the `fstab` file at `/etc/stab` to add:
-    ```sh
-    UUID=<UUID_VALUE> /home/rails/knewhub/repos ext4 discard,defaults,nofail,user 0 2
-    ```
+2. Add the content of the [`fstab` file](/deployment/files/fstab) to `/etc/stab`, making sure to replace the `<UUID_VALUE>` with the value from the previous step
 3. `sudo umount /dev/sdb` to unmount the disk
 4. `sudo mount -a` to mount the disk using fstab
 
