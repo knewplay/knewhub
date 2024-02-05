@@ -34,7 +34,7 @@
     + [View logs in Cloud Logging](#view-logs-in-cloud-logging)
     + [Modify logger for Rails](#modify-logger-for-rails)
     + [Modify logger for Sidekiq](#modify-logger-for-sidekiq)
-    + [Enable custom formatter for Ops Agent](#enable-custom-formatter-for-ops-agent)
+    + [Enable custom processor for Ops Agent](#enable-custom-processor-for-ops-agent)
 * [Experiments that did not make it into the final solution](#experiments-that-did-not-make-it-into-the-final-solution)
     + [Connection to the SQL database using Cloud SQL Auth Proxy](#connection-to-the-sql-database-using-cloud-sql-auth-proxy)
     + [Running the Rails application on Docker](#running-the-rails-application-on-docker)
@@ -370,7 +370,7 @@ In Cloud Logging, the logs coming from the `sidekiq` service now have the follow
 }
 ```
 
-### Enable custom formatter for Ops Agent
+### Enable custom processor for Ops Agent
 
 [Reference Guide: Configuring the Ops Agent](https://cloud.google.com/stackdriver/docs/solutions/agents/ops-agent/configuration)
 
@@ -381,7 +381,7 @@ logging:
     systemd_processor:
       type: parse_regex
       field: message
-      regex: "^(?<datetime>[a-zA-Z]+ [\d]+ [\d]+:[\d]+:[\d]+) (?<vm_name>[a-zA-Z]+) (?<process_name>[a-zA-Z]+)(?<process_id>\[\d+\])(: )(?<severity>EMERG|ALERT|CRIT|ERROR|WARN|NOTICE|INFO|DEBUG)?(:\s)?(?<message>(.|\\n)*)$"
+      regex: "^(?<datetime>[a-zA-Z]+.+[\d]+ [\d]+:[\d]+:[\d]+) (?<vm_name>[a-zA-Z]+) (?<process_name>[a-zA-Z]+)(?<process_id>\[\d+\])(: )(?<severity>EMERG|ALERT|CRIT|ERROR|WARN|NOTICE|INFO|DEBUG)?(:\s)?(?<message>(.|\\n)*)$"
     move_severity:
       type: modify_fields
       fields:
