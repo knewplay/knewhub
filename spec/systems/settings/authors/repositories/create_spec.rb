@@ -18,8 +18,8 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       it 'creates the repository' do
         expect(page).to have_content('New repository')
 
-        fill_in('Name', with: 'repo_name')
-        fill_in('Title', with: 'Test Repo')
+        fill_in('Repository name on GitHub', with: 'repo_name')
+        fill_in('Repository title', with: 'Test Repo')
         fill_in('Token', with: 'ghp_abcde12345')
         click_on 'Create Repository'
 
@@ -33,8 +33,8 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       it 'creates the repository' do
         expect(page).to have_content('New repository')
 
-        fill_in('Name', with: 'repo_name')
-        fill_in('Title', with: 'Test Repo')
+        fill_in('Repository name on GitHub', with: 'repo_name')
+        fill_in('Repository title', with: 'Test Repo')
         fill_in('Token', with: 'ghp_abcde12345')
         fill_in('Branch', with: 'some_branch')
         click_on 'Create Repository'
@@ -49,8 +49,8 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       it 'fails to create the repository' do
         expect(page).to have_content('New repository')
 
-        fill_in('Name', with: 'repo_name')
-        fill_in('Title', with: 'Test Repo')
+        fill_in('Repository name on GitHub', with: 'repo_name')
+        fill_in('Repository title', with: 'Test Repo')
         fill_in('Token', with: 'abcde12345')
         click_on 'Create Repository'
 
@@ -67,8 +67,8 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
 
       visit new_settings_author_repository_path
 
-      fill_in('Name', with: 'test-repo')
-      fill_in('Title', with: 'Test Repo')
+      fill_in('Repository name on GitHub', with: 'test-repo')
+      fill_in('Repository title', with: 'Test Repo')
       fill_in('Token', with: Rails.application.credentials.pat)
       click_on 'Create Repository'
 
