@@ -2,15 +2,15 @@
   <%= render 'shared/form_errors', resource: repository if repository.errors.any? %>
 
   <div class="form-field">
-    <%= form.text_field :name, required: true %>
-    <%= form.label :name, 'Name' %>
-  </div>
-  
-  <div class="form-field">
     <%= form.text_field :title, required: true %>
-    <%= form.label :title, 'Title' %>
+    <%= form.label :title, 'Repository title' %>
   </div>
 
+  <div class="form-field">
+    <%= form.text_field :name, required: true %>
+    <%= form.label :name, 'Repository name on GitHub' %>
+  </div>
+  
   <div class="form-field">
     <%= form.text_field :branch %>
     <%= form.label :branch, 'Branch (if other than main)' %>
