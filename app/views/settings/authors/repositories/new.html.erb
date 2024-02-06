@@ -6,8 +6,10 @@
   <%= render 'new_form', repository: @repository %>
   
   <div>
-    <p>
-      A <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"> GitHub personal access token</a>
+    <p>A 
+      <%= link_to 'GitHub personal access token',
+                  'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens',
+                  target: :_blank %>
       must be provided for us to access content of repositories and set up webhooks to be notified of changes.</p>
     <ul>
       <li>For a classic token, select scopes <b>repo</b> and <b>admin: repo_hook</b></li>
