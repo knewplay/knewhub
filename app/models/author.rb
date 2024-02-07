@@ -34,7 +34,7 @@ class Author < ApplicationRecord
   end
 
   def github_client
-    Octokit::Client.new(access_token: Github.new.access_token)
+    Octokit::Client.new(access_token: Github.new.access_token(installation_id))
   end
 
   def list_repositories

@@ -1,11 +1,7 @@
 class Github
-  def access_token
+  def access_token(installation_id)
     access_token = Octokit::Client.new(bearer_token: jwt).create_app_installation_access_token(installation_id)
     access_token[:token]
-  end
-
-  def installation_id
-    Rails.application.credentials.dig(:github, :installation_id)
   end
 
   def jwt
