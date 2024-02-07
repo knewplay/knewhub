@@ -33,6 +33,14 @@ class Author < ApplicationRecord
     author.update(github_username:)
   end
 
+  def github_client
+    Octokit::Client.new(access_token: Github.new.access_token)
+  end
+
+  def list_repositories
+    github_client.list_app_installation_repositories
+  end
+
   private
 
   def set_name
