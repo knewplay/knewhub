@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       post :options, on: :collection, as: 'options_for'
     end
   end
+  get 'github/callback', to: 'static_pages#index'
 
   # User and Author settings
   namespace :settings do

@@ -40,6 +40,8 @@
                 </li>
               <% else %>
                 <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
+                <%= link_to 'Login with GitHub (new)',
+                            "https://github.com/apps/#{Rails.application.credentials.dig(:github, :app_name)}/installations/new" %>
               <% end %>
             <% end %>
           </ul>
