@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   # Static pages
   root 'static_pages#index'
@@ -60,6 +62,10 @@ Rails.application.routes.draw do
 
   resources :repositories, only: [:update] do
     patch :toggle_banned_status, on: :member
+  end
+
+  constraints(Constraints::AdministratorRouteConstraint.new) do
+    mount Sidekiq::Web => '/sidekiq'
   end
 
   # Webhooks
