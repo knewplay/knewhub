@@ -1,6 +1,6 @@
 module Auth
   class GithubController < ApplicationController
-    before_action :authenticate_user!
+    before_action :authenticate_user!, :verify_params
 
     def create
       create_user(params)
@@ -42,6 +42,10 @@ module Auth
       client.user
     rescue Octokit::Unauthorized, Octokit::Forbidden => e
       logger.error "Could not get GitHub user info to create Author: #{e}"
+    end
+
+    def verify_params
+      head :bad_request and return if params[:code].nil? || params[:installation_id].nil? || params[:setup_action].nil?
     end
   end
 end
