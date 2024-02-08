@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     resource :author, only: %i[edit update]
     scope module: 'authors', path: 'author', as: 'author' do
       resources :repositories, except: [:show] do
+        get :available, on: :collection
         resources :builds, only: [:index], controller: 'repositories/builds'
       end
     end

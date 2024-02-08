@@ -1,0 +1,22 @@
+<% content_for(:html_title) { 'Available Repositories - Settings' } %>
+
+<div class="form-block">
+  <h2>Available Repositories</h2>
+
+  <h5>
+    Choose from one of the repositories below. If the repository you want is not listed, check your
+    <%= link_to 'GitHub settings', "https://github.com/settings/installations/#{current_author.installation_id}", target: :_blank %>
+    to verify that is can be accessed by KnewHub.
+  </h5>
+  
+  <ul>
+    <% current_author.available_repositories.each do |repository| %>
+      <li>
+        <%= repository['full_name'] %>
+        <%= link_to 'Add repository',
+                      new_settings_author_repository_path(name: repository[:name], owner: repository[:owner][:login]),
+                      class: 'button' %>
+      </li>
+    <% end %>
+  </ul>
+</div>

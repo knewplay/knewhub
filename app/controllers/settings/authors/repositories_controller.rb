@@ -10,6 +10,8 @@ module Settings
         @repositories = current_author.repositories.order('id ASC')
       end
 
+      def available_repositories; end
+
       def new
         @repository = current_author.repositories.build(name: params[:name], owner: params[:owner])
       end
