@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.shared_context 'when creating a new repository' do
-  let(:author) { create(:author, :real) }
+  let(:author) { create(:author) }
 
   before do
     sign_in author.user
-    visit new_settings_author_repository_path(name: 'test-repo', owner: 'jp524')
+    visit new_settings_author_repository_path(name: 'repo_name', owner: 'user')
   end
 end
 
@@ -16,20 +16,19 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
     it 'displays the name and owner' do
       expect(page).to have_content('New repository')
 
-      expect(page).to have_content('Name: test-repo')
-      expect(page).to have_content('Owner: jp524')
+      expect(page).to have_content('Name: repo_name')
+      expect(page).to have_content('Owner: user')
     end
 
     context 'when given a valid title but no branch' do
       it "creates the repository with default branch 'main" do
         fill_in('Title', with: 'Test Repo')
-        # Cassette required because the index we are redirected to will display available repositories
-        VCR.use_cassette('available_repositories') do
-          click_on 'Create Repository'
-          expect(page).to have_content('Repository creation process was initiated.')
-          expect(Repository.last.title).to eq('Test Repo')
-          expect(Repository.last.branch).to eq('main')
-        end
+
+        click_on 'Create Repository'
+
+        expect(page).to have_content('Repository creation process was initiated.')
+        expect(Repository.last.title).to eq('Test Repo')
+        expect(Repository.last.branch).to eq('main')
       end
     end
 
@@ -37,12 +36,11 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       it 'creates the repository' do
         fill_in('Title', with: 'Test Repo')
         fill_in('Branch', with: 'some_branch')
-        # Cassette required because the index we are redirected to will display available repositories
-        VCR.use_cassette('available_repositories') do
-          click_on 'Create Repository'
-          expect(page).to have_content('Repository creation process was initiated.')
-          expect(Repository.last.branch).to eq('some_branch')
-        end
+
+        click_on 'Create Repository'
+
+        expect(page).to have_content('Repository creation process was initiated.')
+        expect(Repository.last.branch).to eq('some_branch')
       end
     end
 
