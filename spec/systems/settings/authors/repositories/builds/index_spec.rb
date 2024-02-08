@@ -31,7 +31,7 @@ RSpec.describe 'Settings::Authors::Repositories::Builds#index', type: :system do
       visit settings_author_repository_builds_path(repo.id)
 
       expect(page).to have_current_path(root_path)
-      expect(page).to have_content('Please log in with GitHub.')
+      expect(page).to have_content('Please link your GitHub account.')
     end
   end
 end
