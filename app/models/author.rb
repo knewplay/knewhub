@@ -11,29 +11,6 @@ class Author < ApplicationRecord
             length: { maximum: 39 },
             on: :update
 
-  # Changing implementation of Authors: removing Omniauth GitHub and adding GitHub App installation
-  # def self.from_omniauth(access_token)
-  #   github_uid = access_token.uid
-  #   data = access_token.info
-  #   github_username = data['nickname']
-
-  #   author = Author.find_by(github_uid:)
-  #   author ||= Author.create(github_uid:, github_username:)
-
-  #   update_author_github_username(author, github_username)
-
-  #   author
-  # end
-
-  # def self.update_author_github_username(author, github_username)
-  #   return if author.github_username == github_username
-
-  #   author.repositories.each do |repository|
-  #     RepositoryDirectory.update_author(repository.id, github_username)
-  #   end
-  #   author.update(github_username:)
-  # end
-
   def github_client
     Octokit::Client.new(access_token: Github.new.access_token(installation_id))
   end

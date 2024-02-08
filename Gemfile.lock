@@ -478,6 +478,7 @@ DEPENDENCIES
   debug
   devise
   factory_bot_rails
+  faraday
   faraday-retry
   front_matter_parser
   git
