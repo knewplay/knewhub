@@ -42,5 +42,7 @@
     <% end %>     
   </div>
 
-  <%= link_to 'New repository', new_settings_author_repository_path, class: 'button' %>
+  <hr>
+  <h3>Add a new repository</h3>
+  <%= render 'available_repositories', author: current_author %>
 </div>

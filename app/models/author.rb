@@ -20,8 +20,8 @@ class Author < ApplicationRecord
     Octokit::Client.new(access_token:)
   end
 
-  def list_repositories
-    github_client.list_app_installation_repositories
+  def available_repositories
+    github_client.list_app_installation_repositories['repositories']
   end
 
   private

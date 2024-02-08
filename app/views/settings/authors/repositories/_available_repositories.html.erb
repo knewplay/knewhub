@@ -1,0 +1,11 @@
+<h5>
+  Choose from one of the repositories below. If the repository you want is not listed, check your
+  <%= link_to 'GitHub settings', "https://github.com/settings/installations/#{author.installation_id}", target: :_blank %>
+  to verify that is can be accessed by KnewHub.
+</h5>
+
+<ul>
+  <% author.available_repositories.each do |repository| %>
+    <li><%= repository['full_name'] %></li>
+  <% end %>
+</ul>
