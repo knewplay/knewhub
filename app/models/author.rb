@@ -10,6 +10,7 @@ class Author < ApplicationRecord
             format: { with: /\A[a-zA-Z0-9-]{0,39}\z/, message: 'can only contain alphanumeric characters and dashes' },
             length: { maximum: 39 },
             on: :update
+  validates :installation_id, presence: true
 
   def github_client
     Octokit::Client.new(access_token: Github.new.access_token(installation_id))
