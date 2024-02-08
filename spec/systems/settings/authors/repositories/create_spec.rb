@@ -1,67 +1,62 @@
 require 'rails_helper'
 
 RSpec.shared_context 'when creating a new repository' do
-  let(:author) { create(:author) }
+  let(:author) { create(:author, :real) }
 
   before do
     sign_in author.user
-    page.set_rack_session(author_id: author.id)
-    visit new_settings_author_repository_path
+    visit new_settings_author_repository_path(name: 'test-repo', owner: 'jp524')
   end
 end
 
-RSpec.describe 'Settings::Authors::Repositories#create',
-               skip: 'Process for adding a repository will change',
-               type: :system do
+RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
   context 'without using the Build process' do
     include_context 'when creating a new repository'
 
-    context 'when given valid name and token, but no branch' do
-      it 'creates the repository' do
-        expect(page).to have_content('New repository')
+    it 'displays the name and owner' do
+      expect(page).to have_content('New repository')
 
-        fill_in('Repository name on GitHub', with: 'repo_name')
-        fill_in('Repository title', with: 'Test Repo')
-        fill_in('Token', with: 'ghp_abcde12345')
-        click_on 'Create Repository'
+      expect(page).to have_content('Name: test-repo')
+      expect(page).to have_content('Owner: jp524')
+    end
 
-        expect(page).to have_content('Repository creation process was initiated.')
-        expect(Repository.last.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
-        expect(Repository.last.branch).to eq('main')
+    context 'when given a valid title but no branch' do
+      it "creates the repository with default branch 'main" do
+        fill_in('Title', with: 'Test Repo')
+        # Cassette required because the index we are redirected to will display available repositories
+        VCR.use_cassette('available_repositories') do
+          click_on 'Create Repository'
+          expect(page).to have_content('Repository creation process was initiated.')
+          expect(Repository.last.title).to eq('Test Repo')
+          expect(Repository.last.branch).to eq('main')
+        end
       end
     end
 
-    context 'when given valid name, token and branch' do
+    context 'when given a valid title and branch' do
       it 'creates the repository' do
-        expect(page).to have_content('New repository')
-
-        fill_in('Repository name on GitHub', with: 'repo_name')
-        fill_in('Repository title', with: 'Test Repo')
-        fill_in('Token', with: 'ghp_abcde12345')
+        fill_in('Title', with: 'Test Repo')
         fill_in('Branch', with: 'some_branch')
-        click_on 'Create Repository'
-
-        expect(page).to have_content('Repository creation process was initiated.')
-        expect(Repository.last.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
-        expect(Repository.last.branch).to eq('some_branch')
+        # Cassette required because the index we are redirected to will display available repositories
+        VCR.use_cassette('available_repositories') do
+          click_on 'Create Repository'
+          expect(page).to have_content('Repository creation process was initiated.')
+          expect(Repository.last.branch).to eq('some_branch')
+        end
       end
     end
 
     context 'when given invalid input' do
       it 'fails to create the repository' do
-        expect(page).to have_content('New repository')
-
-        fill_in('Repository name on GitHub', with: 'repo_name')
-        fill_in('Repository title', with: 'Test Repo')
-        fill_in('Token', with: 'abcde12345')
+        fill_in('Title', with: '')
         click_on 'Create Repository'
-
-        expect(page).to have_content('Token must start with "github_pat" or "ghp"')
+        expect(page).to have_no_content('Repository creation process was initiated.')
+        # The validation takes place using JS so the Rails backend doesn't return an error
       end
     end
   end
 
-  context 'when using the Build process' do
+  context 'when using the Build process', skip: 'To be updated' do
     before(:all) do
       author = create(:author, :real)
       sign_in author.user

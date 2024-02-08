@@ -1,24 +1,20 @@
 <%= form_with(model: [:settings, :author, repository]) do |form| %>
   <%= render 'shared/form_errors', resource: repository if repository.errors.any? %>
 
-  <div class="form-field">
-    <%= form.text_field :title, required: true %>
-    <%= form.label :title, 'Repository title' %>
-  </div>
+  <p><%= "Name: #{repository.name}" %></p>
+  <%= form.hidden_field :name, value: repository.name %>
 
-  <div class="form-field">
-    <%= form.text_field :name, required: true %>
-    <%= form.label :name, 'Repository name on GitHub' %>
-  </div>
-  
+  <p><%= "Owner: #{repository.owner}" %></p>
+  <%= form.hidden_field :owner, value: repository.owner %>
+
   <div class="form-field">
     <%= form.text_field :branch %>
     <%= form.label :branch, 'Branch (if other than main)' %>
   </div>
 
   <div class="form-field">
-    <%= form.password_field :token, required: true %>
-    <%= form.label :token, 'GitHub Personal Access Token' %>
+    <%= form.text_field :title, required: true %>
+    <%= form.label :title, 'Title' %>
   </div>
 
   <%= form.submit %>

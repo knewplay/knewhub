@@ -6,6 +6,11 @@
 
 <ul>
   <% author.available_repositories.each do |repository| %>
-    <li><%= repository['full_name'] %></li>
+    <li>
+      <%= repository['full_name'] %>
+      <%= link_to 'Add repository',
+                    new_settings_author_repository_path(name: repository[:name], owner: repository[:owner][:login]),
+                    class: 'button' %>
+    </li>
   <% end %>
 </ul>

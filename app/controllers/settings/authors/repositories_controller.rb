@@ -11,7 +11,7 @@ module Settings
       end
 
       def new
-        @repository = current_author.repositories.build
+        @repository = current_author.repositories.build(name: params[:name], owner: params[:owner])
       end
 
       def edit; end
@@ -59,7 +59,7 @@ module Settings
       end
 
       def repository_params
-        params.require(:repository).permit(:name, :title, :branch, :token)
+        params.require(:repository).permit(:name, :owner, :branch, :title)
       end
 
       def update_actions(build, former_name, former_branch)
