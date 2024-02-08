@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/omniauth'
 
 RSpec.describe 'Settings::EnableAuthor#get', type: :system do
   let!(:user) { create(:user) }
