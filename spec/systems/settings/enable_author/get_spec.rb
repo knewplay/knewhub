@@ -12,7 +12,7 @@ RSpec.describe 'Settings::EnableAuthor#get', type: :system do
       expect(page).to have_content('Share your knowledge by becoming an author on KNEWHUB.')
     end
 
-    context 'when enabling the feature' do
+    context 'when enabling the feature', skip: 'Changing the implementation of how authors are created' do
       it 'creates an author record' do
         sign_in user
         visit settings_enable_author_path

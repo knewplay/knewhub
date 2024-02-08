@@ -10,7 +10,9 @@ module AuthorAuthentication
     end
 
     def current_author
-      @current_author ||= Author.find(session[:author_id]) if session[:author_id]
+      return if current_user.nil?
+
+      current_user.author
     end
 
     def author_logged_in?
