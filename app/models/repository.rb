@@ -6,10 +6,12 @@ class Repository < ApplicationRecord
   before_save :set_git_url
   before_create :set_branch, :generate_uuid
 
+  validates :owner,
+            presence: true
   validates :name,
             presence: true,
             format: { with: /\A[.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }
-  validates :name, uniqueness: { scope: :author_id }
+  validates :name, uniqueness: { scope: :owner }
   validates :token,
             presence: true,
             format: { with: /\A(github_pat|ghp)\w+\z/, message: 'must start with "github_pat" or "ghp"' }

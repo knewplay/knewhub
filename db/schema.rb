@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_07_202634) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_08_175541) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -105,6 +105,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_07_202634) do
     t.string "title"
     t.boolean "banned", default: false
     t.integer "hook_id"
+    t.string "owner"
     t.index ["author_id"], name: "index_repositories_on_author_id"
     t.index ["name", "author_id"], name: "index_repositories_on_name_and_author_id", unique: true
   end

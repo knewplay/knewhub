@@ -27,17 +27,15 @@ RSpec.describe Repository do
       expect(repo.valid?).to be true
     end
 
-    it 'returns false when a repository with the same name exists for a given author' do
-      first_repository = create(:repository)
-      author = first_repository.author
-      second_repo = build(:repository, author:)
+    it 'returns false when a repository with the same name exists for a given owner' do
+      create(:repository)
+      second_repo = build(:repository)
       expect(second_repo.valid?).to be false
     end
 
-    it 'returns true when a repository with the same name exists for another author' do
+    it 'returns true when a repository with the same name exists for another owner' do
       create(:repository)
-      second_author = create(:author, :real)
-      second_repo = build(:repository, author: second_author)
+      second_repo = build(:repository, owner: 'another-user')
       expect(second_repo.valid?).to be true
     end
   end

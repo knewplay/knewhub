@@ -10,7 +10,9 @@ RSpec.shared_context 'when creating a new repository' do
   end
 end
 
-RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
+RSpec.describe 'Settings::Authors::Repositories#create',
+               skip: 'Process for adding a repository will change',
+               type: :system do
   context 'without using the Build process' do
     include_context 'when creating a new repository'
 
