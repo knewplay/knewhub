@@ -10,8 +10,8 @@
           <ul>
             <li class="sidebar__item">
               <%= link_to 'Account',
-                 settings_account_path,
-                 class: current_path_class(settings_account_path) || current_path_class(settings_root_path) %>
+                          settings_account_path,
+                          class: current_path_class(settings_account_path) || current_path_class(settings_root_path) %>
             </li>
           </ul>
         </div>
@@ -24,25 +24,19 @@
           <span><%= "- Logged in as #{current_author.name}" if current_author %></span>
           </h6>
           <ul>
-            <% if current_user.author.nil? %>
+            <% if current_author.nil? %>
               <li class="sidebar__item">
                 <%= link_to 'Enable', settings_enable_author_path, class: current_path_class(settings_enable_author_path) %>
               </li>
             <% else %>
-              <% if current_author %>
-                <li class="sidebar__item">
-                  <%= link_to 'Profile', edit_settings_author_path, class: current_path_class(edit_settings_author_path) %>
-                </li>
-                <li class="sidebar__item">
-                  <%= link_to 'Repositories',
-                              settings_author_repositories_path,
-                              class: current_path_class(settings_author_repositories_path) %>
-                </li>
-              <% else %>
-                <%= button_to 'Login with GitHub', '/auth/github', data: { turbo: false } %>
-              <% end %>
-              <%= link_to 'Login with GitHub (new)',
-                          "https://github.com/apps/#{Rails.application.credentials.dig(:github, :app_name)}/installations/new" %>
+              <li class="sidebar__item">
+                <%= link_to 'Profile', edit_settings_author_path, class: current_path_class(edit_settings_author_path) %>
+              </li>
+              <li class="sidebar__item">
+                <%= link_to 'Repositories',
+                            settings_author_repositories_path,
+                            class: current_path_class(settings_author_repositories_path) %>
+              </li>
             <% end %>
           </ul>
         </div>
