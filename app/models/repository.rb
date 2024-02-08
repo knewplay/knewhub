@@ -3,7 +3,6 @@ class Repository < ApplicationRecord
   has_many :builds, dependent: :destroy
   has_many :questions, dependent: :destroy
 
-  before_save :set_git_url
   before_create :set_branch, :generate_uuid
 
   validates :owner,
@@ -12,13 +11,14 @@ class Repository < ApplicationRecord
             presence: true,
             format: { with: /\A[.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }
   validates :name, uniqueness: { scope: :owner }
-  validates :token,
-            presence: true,
-            format: { with: /\A(github_pat|ghp)\w+\z/, message: 'must start with "github_pat" or "ghp"' }
   validates :branch,
             format: { with: %r{\A[./\w-]{0,100}\z}, message: 'must follow GitHub branch name restrictions' }
   validates :title, presence: true
   attribute :banned, :boolean, default: false
+
+  def git_url
+    "https://x-access-token:#{author.access_token}@github.com/#{owner}/#{name}.git"
+  end
 
   def last_build_created_at
     builds.last&.created_at
@@ -33,10 +33,6 @@ class Repository < ApplicationRecord
   end
 
   private
-
-  def set_git_url
-    self.git_url = "https://#{token}@github.com/#{author.github_username}/#{name}.git"
-  end
 
   def set_branch
     self.branch = (branch.presence || 'main')

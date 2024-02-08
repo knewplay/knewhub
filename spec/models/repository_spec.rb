@@ -7,22 +7,12 @@ RSpec.describe Repository do
       expect(repo.valid?).to be false
     end
 
-    it 'returns false when given an invalid token' do
-      repo = build(:repository, token: 'invalid_token')
-      expect(repo.valid?).to be false
-    end
-
     it 'returns false when given an invalid branch' do
       repo = build(:repository, branch: 'invalid?branch')
       expect(repo.valid?).to be false
     end
 
-    it 'returns false when given a name, but no token' do
-      repo = build(:repository, name: 'repo_name', token: nil)
-      expect(repo.valid?).to be false
-    end
-
-    it 'returns true when given a valid name, token and title, and associated author' do
+    it 'returns true when given a valid name, title, and associated author' do
       repo = build(:repository)
       expect(repo.valid?).to be true
     end
@@ -40,11 +30,12 @@ RSpec.describe Repository do
     end
   end
 
-  describe '#set_git_url' do
+  describe '#git_url' do
     let(:repo) { create(:repository) }
 
-    it 'returns the git_url created using Repository owner, name and token' do
-      expect(repo.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
+    it "returns the git_url created using Repository owner, name and Author's access token" do
+      allow(repo.author).to receive(:access_token).and_return('ghs_abcde12345')
+      expect(repo.git_url).to eq('https://x-access-token:ghs_abcde12345@github.com/user/repo_name.git')
     end
   end
 

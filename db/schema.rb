@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_08_175541) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_08_180715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -93,8 +93,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_175541) do
 
   create_table "repositories", force: :cascade do |t|
     t.string "name"
-    t.string "token"
-    t.string "git_url"
     t.string "branch"
     t.string "description"
     t.datetime "last_pull_at"
