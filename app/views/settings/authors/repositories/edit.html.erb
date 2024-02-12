@@ -3,7 +3,7 @@
 <div class="edit-repository form-block">
   <div class="edit-repository__header">
     <h1><%= "Edit Repository" %></h1>
-   
+
     <%= button_to 'Delete Repository',
                     settings_author_repository_path(@repository),
                     method: :delete,
@@ -11,7 +11,7 @@
                     class: 'edit-author-repository__button' %>
   </div>
   
-  <%= render 'edit_form', repository: @repository %>
+  <%= render 'form', repository: @repository %>
   
   <br />
   <%= button_to 'Rebuild repository (pull from GitHub)', repository_path(@repository), method: :patch, class: 'link' %>
