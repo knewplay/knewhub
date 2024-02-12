@@ -35,12 +35,12 @@ module Settings
       end
 
       def update
-        former_name = @repository.name
         former_branch = @repository.branch
 
         if @repository.update(repository_params)
           build = Build.create(repository: @repository, status: 'In progress', action: 'update')
-          update_actions(build, former_name, former_branch)
+          directory = Rails.root.join('repos', @repository.owner, @repository.name)
+          update_actions(build, directory, former_branch)
           redirect_to settings_author_repositories_path,
                       notice: 'Repository update process was initiated. Check Builds for progress and details.'
         else
@@ -68,13 +68,12 @@ module Settings
         params.require(:repository).permit(:name, :owner, :branch, :title)
       end
 
-      def update_actions(build, former_name, former_branch)
-        if former_name != @repository.name || former_branch != @repository.branch
-          old_directory = Rails.root.join('repos', @repository.author.github_username, former_name)
-          FileUtils.rm_r(old_directory) if Dir.exist?(old_directory)
-          build.update_repo('clone')
-        else
+      def update_actions(build, directory, former_branch)
+        if former_branch == @repository.branch
           build.update_repo('pull')
+        else
+          FileUtils.rm_r(directory) if Dir.exist?(directory)
+          build.update_repo('clone')
         end
       end
 

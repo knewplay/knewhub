@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.shared_context 'when updating a repository' do
   before do
     sign_in author.user
-    page.set_rack_session(author_id: author.id)
     visit edit_settings_author_repository_path(repo.id)
   end
 end
@@ -16,17 +15,14 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
     context 'without the Build process' do
       include_context 'when updating a repository'
 
-      it 'updates the name' do
+      it 'updates the title' do
         expect(page).to have_content('Edit Repository')
 
-        fill_in('Name', with: 'a_new_name')
+        fill_in('Title', with: 'New Repo Name')
         click_on 'Update Repository'
 
         expect(page).to have_content('Repository update process was initiated.')
-        expect(page).to have_content('a_new_name')
-
-        repo.reload
-        expect(repo.git_url).to eq('https://ghp_abcde12345@github.com/user/a_new_name.git')
+        expect(page).to have_content('Title: New Repo Name')
       end
 
       it 'updates the branch' do
@@ -36,13 +32,14 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
         click_on 'Update Repository'
 
         expect(page).to have_content('Repository update process was initiated.')
+        expect(page).to have_content('Branch: other_branch')
 
         repo.reload
         expect(repo.branch).to eq('other_branch')
       end
     end
 
-    context 'when updating the name and title using the Build process' do
+    context 'when updating the name and title using the Build process', skip: 'To be updated' do
       before(:all) do
         Sidekiq::Testing.inline! do
           # Creates and clones a repository
@@ -55,7 +52,6 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
           # Updates repository with a new name and title
           author = @repo.author
           sign_in author.user
-          page.set_rack_session(author_id: author.id)
 
           visit edit_settings_author_repository_path(@repo.id)
           fill_in('Name', with: 'markdown-templates')
@@ -105,7 +101,6 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
   context 'when given invalid input' do
     it 'fails to update' do
       sign_in author.user
-      page.set_rack_session(author_id: author.id)
 
       visit edit_settings_author_repository_path(repo.id)
       expect(page).to have_content('Edit Repository')

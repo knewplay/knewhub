@@ -3,7 +3,8 @@ class Repository < ApplicationRecord
   has_many :builds, dependent: :destroy
   has_many :questions, dependent: :destroy
 
-  before_create :set_branch, :generate_uuid
+  before_save :set_branch
+  before_create :generate_uuid
 
   validates :owner,
             presence: true
