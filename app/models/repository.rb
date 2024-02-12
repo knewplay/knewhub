@@ -32,6 +32,10 @@ class Repository < ApplicationRecord
     banned == false && last_build_status == 'Complete'
   end
 
+  def full_name
+    "#{owner}/#{name}"
+  end
+
   private
 
   def set_branch

@@ -13,7 +13,9 @@ module Settings
       def available_repositories; end
 
       def new
-        @repository = current_author.repositories.build(name: params[:name], owner: params[:owner])
+        full_name = params[:full_name]
+        owner, name = full_name.split('/')
+        @repository = current_author.repositories.build(name:, owner:)
       end
 
       def edit; end
