@@ -81,7 +81,7 @@ gem 'administrate'
 
 # State machines
 gem 'aasm'
-gem 'after_commit_everywhere', '~> 1.0'
+gem 'after_commit_everywhere', '~> 1.4'
 
 # Code syntax highlighter
 gem 'rouge'
