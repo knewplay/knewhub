@@ -42,12 +42,13 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
     context 'when updating the branch and title using the Build process' do
       before(:all) do
         Sidekiq::Testing.inline! do
-          # Creates and clones a repository
-          @repo = create(:repository, :real)
-          clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
           # HTTP request required to clone repository using Octokit client
           VCR.turn_off!
           WebMock.allow_net_connect!
+          # Creates and clones a repository
+          @repo = create(:repository, :real)
+          clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
+
           CloneGithubRepoJob.perform_async(clone_build.id)
           # Updates repository with a new name and title
           author = @repo.author

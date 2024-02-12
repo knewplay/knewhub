@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Repository, '#update', type: :system do
   before(:all) do
+    @repo = create(:repository, :real)
+    clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
     # HTTP request required to clone repository using Octokit client
     VCR.turn_off!
     WebMock.allow_net_connect!
-    @repo = create(:repository, :real)
-    clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
     Sidekiq::Testing.inline! do
       CloneGithubRepoJob.perform_async(clone_build.id)
     end

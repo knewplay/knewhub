@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe PullGithubRepoJob do
   before(:all) do
-    # HTTP request required to clone repository using Octokit client
-    VCR.turn_off!
-    WebMock.allow_net_connect!
     @repo = create(:repository, :real)
     clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
     @pull_build = create(:build, repository: @repo, aasm_state: :pulling_repo)
+    # HTTP request required to clone repository using Octokit client
+    VCR.turn_off!
+    WebMock.allow_net_connect!
     Sidekiq::Testing.inline! do
       CloneGithubRepoJob.perform_async(clone_build.id)
     end
