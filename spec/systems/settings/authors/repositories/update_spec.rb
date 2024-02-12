@@ -39,26 +39,24 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       end
     end
 
-    context 'when updating the name and title using the Build process', skip: 'To be updated' do
+    context 'when updating the branch and title using the Build process' do
       before(:all) do
         Sidekiq::Testing.inline! do
           # Creates and clones a repository
           @repo = create(:repository, :real)
           clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
-          VCR.use_cassette('clone_github_repo') do
-            CloneGithubRepoJob.perform_async(clone_build.id)
-          end
-
+          # HTTP request required to clone repository using Octokit client
+          VCR.turn_off!
+          WebMock.allow_net_connect!
+          CloneGithubRepoJob.perform_async(clone_build.id)
           # Updates repository with a new name and title
           author = @repo.author
           sign_in author.user
 
           visit edit_settings_author_repository_path(@repo.id)
-          fill_in('Name', with: 'markdown-templates')
-          fill_in('Title', with: 'Markdown Templates')
-          VCR.use_cassette('update_repo') do
-            click_on 'Update Repository'
-          end
+          fill_in('Branch', with: 'other')
+          fill_in('Title', with: 'Test Repo')
+          click_on 'Update Repository'
 
           sleep(1)
           @update_build = @repo.builds.last
@@ -69,6 +67,8 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
         @repo.reload
         directory = Rails.root.join('repos', @repo.full_name)
         FileUtils.remove_dir(directory)
+        VCR.turn_on!
+        WebMock.disable_net_connect!
       end
 
       it "creates an associated Build with action 'update'" do
@@ -88,7 +88,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       end
 
       it 'creates the fourth log' do
-        expect(@update_build.logs.fourth.content).to eq('index.md file exists for this repository.')
+        expect(@update_build.logs.fourth.content).to eq('index.md file successfully generated.')
       end
 
       it "sets Build status to 'Complete'" do
