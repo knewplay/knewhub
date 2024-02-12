@@ -2,13 +2,18 @@ require 'rails_helper'
 
 RSpec.describe CloneGithubRepoJob do
   before(:all) do
+    # HTTP request required to clone repository using Octokit client
+    VCR.turn_off!
+    WebMock.allow_net_connect!
     @repo = create(:repository, :real)
     @build = create(:build, repository: @repo, aasm_state: :cloning_repo)
   end
 
   after(:all) do
-    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    directory = Rails.root.join('repos', @repo.full_name)
     FileUtils.remove_dir(directory)
+    VCR.turn_on!
+    WebMock.disable_net_connect!
   end
 
   it 'queues the job' do
@@ -19,9 +24,7 @@ RSpec.describe CloneGithubRepoJob do
   it 'executes perform' do
     expect(@repo.last_pull_at).to be_nil
     Sidekiq::Testing.inline! do
-      VCR.use_cassette('clone_github_repo') do
-        described_class.perform_async(@build.id)
-      end
+      described_class.perform_async(@build.id)
     end
     @repo.reload
     expect(@repo.last_pull_at).not_to be_nil

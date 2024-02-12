@@ -15,7 +15,7 @@ class GetGithubDescriptionJob
   end
 
   def get_description(repository)
-    client = Octokit::Client.new(access_token: repository.token)
-    client.repository("#{repository.author.github_username}/#{repository.name}")
+    github_client = repository.author.github_client
+    github_client.repository(repository.full_name)
   end
 end
