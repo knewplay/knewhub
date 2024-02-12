@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Settings::Authors::Repositories#destroy', type: :system do
   before(:all) do
-    @repo = create(:repository, :real, hook_id: 440_848_647)
+    @repo = create(:repository, :real, hook_id: 460_475_619)
     @directory = Rails.root.join('repos', @repo.full_name)
     FileUtils.mkdir_p(@directory)
 
@@ -12,7 +12,7 @@ RSpec.describe 'Settings::Authors::Repositories#destroy', type: :system do
     visit edit_settings_author_repository_path(@repo.id)
 
     Sidekiq::Testing.inline! do
-      VCR.use_cassette('remove_repo') do
+      VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'delete_github_webhook' }]) do
         click_on 'Delete Repository'
       end
     end

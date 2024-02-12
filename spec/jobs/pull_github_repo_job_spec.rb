@@ -28,7 +28,7 @@ RSpec.describe PullGithubRepoJob do
   it 'executes perform' do
     last_pull_at = @repo.last_pull_at
     Sidekiq::Testing.inline! do
-      VCR.use_cassette('pull_github_repo') do
+      VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'pull_repo' }]) do
         described_class.perform_async(@pull_build.id)
       end
     end

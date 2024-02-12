@@ -11,7 +11,7 @@ RSpec.describe CreateGithubWebhookJob do
 
   context 'when executing perform' do
     after do
-      VCR.use_cassette('delete_github_webhook') do
+      VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'delete_github_webhook' }]) do
         repo.author.github_client.remove_hook(repo.full_name, 460_475_619)
       end
     end
@@ -19,7 +19,9 @@ RSpec.describe CreateGithubWebhookJob do
     it 'creates the webhook' do
       expect(repo.description).to be_nil
       expect(repo.last_pull_at).to be_nil
-      VCR.use_cassette('create_github_webhook') do
+      VCR.use_cassettes([{ name: 'get_installation_access_token', options: { allow_playback_repeats: true } },
+                         { name: 'create_github_webhook' },
+                         { name: 'test_github_webhook' }]) do
         Sidekiq::Testing.inline! do
           described_class.perform_async(build.id)
         end

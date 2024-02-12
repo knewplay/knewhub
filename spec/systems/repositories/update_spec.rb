@@ -26,7 +26,7 @@ RSpec.describe Repository, '#update', type: :system do
         sign_in author.user
 
         visit edit_settings_author_repository_path(@repo.id)
-        VCR.use_cassette('rebuild_repo') do
+        VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'pull_repo' }]) do
           click_on 'Rebuild repository (pull from GitHub)'
         end
 

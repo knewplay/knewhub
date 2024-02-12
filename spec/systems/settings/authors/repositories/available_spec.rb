@@ -6,7 +6,7 @@ RSpec.describe 'Settings::Authors::Repositories#index', type: :system do
   context 'when an author has not added repositories' do
     before do
       sign_in author.user
-      VCR.use_cassette('available_repositories') do
+      VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'get_repos' }]) do
         visit available_settings_author_repositories_path
       end
     end
@@ -23,7 +23,7 @@ RSpec.describe 'Settings::Authors::Repositories#index', type: :system do
     before do
       sign_in author.user
       create(:repository, author:, owner: 'jp524', name: 'test-repo')
-      VCR.use_cassette('available_repositories') do
+      VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'get_repos' }]) do
         visit available_settings_author_repositories_path
       end
     end

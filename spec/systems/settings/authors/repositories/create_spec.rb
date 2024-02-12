@@ -61,7 +61,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         author = create(:author, :real)
         sign_in author.user
 
-        VCR.use_cassette('available_repositories') do
+        VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'get_repos' }]) do
           visit new_settings_author_repository_path(full_name: 'jp524/test-repo')
         end
 
@@ -76,7 +76,9 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         # The job is called here to allow the `uuid` to be specified
         # This is to allow the tests to use the same VCR cassettes
         Sidekiq::Testing.inline! do
-          VCR.use_cassette('create_github_webhooks') do
+          VCR.use_cassettes([{ name: 'get_installation_access_token', options: { allow_playback_repeats: true } },
+                             { name: 'create_github_webhook' },
+                             { name: 'test_github_webhook' }]) do
             CreateGithubWebhookJob.perform_async(@build.id)
           end
         end
@@ -87,7 +89,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         directory = Rails.root.join('repos', @repo.full_name)
         FileUtils.remove_dir(directory)
 
-        VCR.use_cassette('delete_github_webhook') do
+        VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'delete_github_webhook' }]) do
           @repo.author.github_client.remove_hook(@repo.full_name, 460_475_619)
         end
       end

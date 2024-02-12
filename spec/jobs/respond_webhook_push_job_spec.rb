@@ -55,7 +55,7 @@ RSpec.describe RespondWebhookPushJob do
 
     it 'when webhook_name != name && webhook_owner == repository.owner' do
       Sidekiq::Testing.inline! do
-        VCR.use_cassette('clone_repo_webhook_response') do
+        VCR.use_cassette('get_installation_access_token') do
           described_class.perform_async(
             @build.id,
             @repo.uuid, 'markdown-templates',
