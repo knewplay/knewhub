@@ -7,11 +7,14 @@ describe Webhooks::GithubController do
         # Creates and clones a repository
         @repo = create(:repository, :real, last_pull_at: DateTime.current)
         clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
+        # HTTP request required to clone repository using Octokit client
+        VCR.turn_off!
+        WebMock.allow_net_connect!
         Sidekiq::Testing.inline! do
-          VCR.use_cassette('clone_github_repo') do
-            CloneGithubRepoJob.perform_async(clone_build.id)
-          end
+          CloneGithubRepoJob.perform_async(clone_build.id)
         end
+        VCR.turn_on!
+        WebMock.disable_net_connect!
 
         # Parameters for Webhook event
         secret = Rails.application.credentials.webhook_secret
