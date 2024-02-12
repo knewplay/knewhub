@@ -2,13 +2,16 @@ require 'rails_helper'
 
 RSpec.describe Repository, '#update', type: :system do
   before(:all) do
+    # HTTP request required to clone repository using Octokit client
+    VCR.turn_off!
+    WebMock.allow_net_connect!
     @repo = create(:repository, :real)
     clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
     Sidekiq::Testing.inline! do
-      VCR.use_cassette('clone_github_repo') do
-        CloneGithubRepoJob.perform_async(clone_build.id)
-      end
+      CloneGithubRepoJob.perform_async(clone_build.id)
     end
+    VCR.turn_on!
+    WebMock.disable_net_connect!
   end
 
   after(:all) do
@@ -21,7 +24,6 @@ RSpec.describe Repository, '#update', type: :system do
       Sidekiq::Testing.inline! do
         author = @repo.author
         sign_in author.user
-        page.set_rack_session(author_id: author.id)
 
         visit edit_settings_author_repository_path(@repo.id)
         VCR.use_cassette('rebuild_repo') do
