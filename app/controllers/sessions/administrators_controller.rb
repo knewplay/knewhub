@@ -36,7 +36,6 @@ module Sessions
 
     def destroy_other_sessions
       session[:user_id] = nil if session[:user_id]
-      session[:author_id] = nil if session[:author_id]
     end
   end
 end
