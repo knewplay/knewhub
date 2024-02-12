@@ -55,10 +55,9 @@ Override default partial used in `index` view to:
               style="<%= "font-family: Courier" if attribute.name == 'branch' %>"
               >
             <% if attribute.name == 'name' -%>
-              <a href="<%= "/collections/#{resource.author.github_username}/#{resource.name}/pages/index" %>"
-                 target="_blank"
-                 tabindex="-1"
-                 >
+              <a href="<%= "/collections/#{resource.full_name}/pages/index" %>"
+                target="_blank"
+                tabindex="-1">
                 <%= render_field attribute %>
               </a>
             <% elsif attribute.name == 'title' %> 
