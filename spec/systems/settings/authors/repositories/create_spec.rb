@@ -56,28 +56,27 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       end
     end
 
-    context 'when using the Build process', skip: 'To be updated' do
+    context 'when using the Build process', skip: 'To be finalized' do
       before(:all) do
         author = create(:author, :real)
         sign_in author.user
-        page.set_rack_session(author_id: author.id)
 
-        visit new_settings_author_repository_path
+        VCR.use_cassette('available_repositories') do
+          visit new_settings_author_repository_path(full_name: 'jp524/test-repo')
+        end
 
-        fill_in('Repository name on GitHub', with: 'test-repo')
-        fill_in('Repository title', with: 'Test Repo')
-        fill_in('Token', with: Rails.application.credentials.pat)
+        fill_in('Title', with: 'Test Repo')
         click_on 'Create Repository'
 
         @repo = Repository.last
-        @repo.update(uuid: '42b189e0-5d63-4529-b863-198a9c259669')
+        @repo.update(uuid: '397df2f0-489b-4d9a-8725-476ebee3b49b')
         sleep(1)
         @build = @repo.builds.first
 
         # The job is called here to allow the `uuid` to be specified
         # This is to allow the tests to use the same VCR cassettes
         Sidekiq::Testing.inline! do
-          VCR.use_cassette('create_repo') do
+          VCR.use_cassette('create_github_webhooks') do
             CreateGithubWebhookJob.perform_async(@build.id)
           end
         end
@@ -88,9 +87,8 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         directory = Rails.root.join('repos', @repo.full_name)
         FileUtils.remove_dir(directory)
 
-        VCR.use_cassette('delete_github_webhook_for_create') do
-          client = Octokit::Client.new(access_token: @repo.token)
-          client.remove_hook(@repo.full_name, 436_611_979)
+        VCR.use_cassette('delete_github_webhook') do
+          @repo.author.github_client.remove_hook(@repo.full_name, 460_475_619)
         end
       end
 
