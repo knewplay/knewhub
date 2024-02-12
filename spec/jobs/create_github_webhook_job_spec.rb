@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CreateGithubWebhookJob do
-  let(:repo) { create(:repository, :real, uuid: '42b189e0-5d63-4529-b863-198a9c259669') }
+  let(:repo) { create(:repository, :real, uuid: '397df2f0-489b-4d9a-8725-476ebee3b49b') }
   let(:build) { create(:build, repository: repo, aasm_state: :creating_webhook) }
 
   it 'queues the job' do
@@ -12,8 +12,7 @@ RSpec.describe CreateGithubWebhookJob do
   context 'when executing perform' do
     after do
       VCR.use_cassette('delete_github_webhook') do
-        client = Octokit::Client.new(access_token: repo.token)
-        client.remove_hook("#{repo.author.github_username}/#{repo.name}", 436_588_649)
+        repo.author.github_client.remove_hook(repo.full_name, 460_475_619)
       end
     end
 

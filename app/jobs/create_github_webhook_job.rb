@@ -15,12 +15,12 @@ class CreateGithubWebhookJob
   end
 
   def create_hook(repository)
-    client = Octokit::Client.new(access_token: repository.token)
+    github_client = repository.author.github_client
     host_url = ENV.fetch('WEB_URL', Rails.application.credentials.host_url)
     webhook_secret = Rails.application.credentials.webhook_secret
 
-    client.create_hook(
-      "#{repository.author.github_username}/#{repository.name}",
+    github_client.create_hook(
+      repository.full_name,
       'web',
       { url: "#{host_url}/webhooks/github/#{repository.uuid}", content_type: 'json', secret: webhook_secret },
       { events: ['push'], active: true }

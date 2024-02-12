@@ -4,9 +4,9 @@ class TestGithubWebhookJob
   def perform(build_id)
     build = Build.find(build_id)
     repository = Repository.includes(:author).find(build.repository.id)
-    client = Octokit::Client.new(access_token: repository.token)
+    github_client = repository.author.github_client
 
-    response = client.hook("#{repository.author.github_username}/#{repository.name}", repository.hook_id)
+    response = github_client.hook(repository.full_name, repository.hook_id)
     handle_response(build, response)
   end
 

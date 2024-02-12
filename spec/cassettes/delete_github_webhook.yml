@@ -1,8 +1,8 @@
 ---
 http_interactions:
 - request:
-    method: delete
-    uri: https://api.github.com/repos/jp524/test-repo/hooks/436588649
+    method: post
+    uri: https://api.github.com/app/installations/47087696/access_tokens
     body:
       encoding: UTF-8
       string: "{}"
@@ -10,11 +10,77 @@ http_interactions:
       Accept:
       - application/vnd.github.v3+json
       User-Agent:
-      - Octokit Ruby Gem 7.1.0
+      - Octokit Ruby Gem 8.1.0
       Content-Type:
       - application/json
       Authorization:
-      - token <TOKEN>
+      - Bearer <BEARER>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 12 Feb 2024 18:39:48 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '201'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - '"8ddb1ac63d7b9a2c292cf3372ee4bfd7775258f8fafd9e92d39ac576016c26a1"'
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - C120:66A7:A8FCB:152DD2:65CA65F4
+    body:
+      encoding: UTF-8
+      string: '{"token":"<INSTALLATION_ACCESS_TOKEN>","expires_at":"2024-02-12T19:39:48Z","permissions":{"contents":"read","metadata":"read","repository_hooks":"write"},"repository_selection":"selected"}'
+  recorded_at: Mon, 12 Feb 2024 18:39:48 GMT
+- request:
+    method: delete
+    uri: https://api.github.com/repos/jp524/test-repo/hooks/460475619
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 8.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token <INSTALLATION_ACCESS_TOKEN>
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
@@ -25,25 +91,21 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Wed, 04 Oct 2023 15:42:14 GMT
-      X-Oauth-Scopes:
-      - admin:repo_hook, repo
-      X-Accepted-Oauth-Scopes:
-      - repo
-      Github-Authentication-Token-Expiration:
-      - 2023-11-04 13:22:43 UTC
+      - Mon, 12 Feb 2024 18:39:48 GMT
       X-Github-Media-Type:
       - github.v3; format=json
+      X-Accepted-Github-Permissions:
+      - repository_hooks=write
       X-Github-Api-Version-Selected:
       - '2022-11-28'
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4994'
+      - '4996'
       X-Ratelimit-Reset:
-      - '1696437646'
+      - '1707766478'
       X-Ratelimit-Used:
-      - '6'
+      - '4'
       X-Ratelimit-Resource:
       - core
       Access-Control-Expose-Headers:
@@ -68,9 +130,9 @@ http_interactions:
       Vary:
       - Accept-Encoding, Accept, X-Requested-With
       X-Github-Request-Id:
-      - C1E6:7B50:8E8869:11F725B:651D87D6
+      - C121:5697:BE1CF:17E0DF:65CA65F4
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Wed, 04 Oct 2023 15:42:14 GMT
+  recorded_at: Mon, 12 Feb 2024 18:39:48 GMT
 recorded_with: VCR 6.2.0

@@ -2,19 +2,19 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api.github.com/repos/jp524/test-repo/hooks
+    uri: https://api.github.com/app/installations/47087696/access_tokens
     body:
       encoding: UTF-8
-      string: '{"name":"web","config":{"url":"https://7f08-207-61-7-7.ngrok-free.app/webhooks/github/42b189e0-5d63-4529-b863-198a9c259669","content_type":"json","secret":"<SECRET>"},"events":["push"],"active":true}'
+      string: "{}"
     headers:
       Accept:
       - application/vnd.github.v3+json
       User-Agent:
-      - Octokit Ruby Gem 7.1.0
+      - Octokit Ruby Gem 8.1.0
       Content-Type:
       - application/json
       Authorization:
-      - token <TOKEN>
+      - Bearer <BEARER>
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
@@ -25,38 +25,100 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Wed, 04 Oct 2023 15:42:14 GMT
+      - Mon, 12 Feb 2024 18:36:58 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '707'
+      - '201'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - '"da5cf9ca2708fb3f0bce8f1cd152d88779bbbe2e9ebf72f055196bc1fce41d26"'
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - C118:09F8:870B8:10F7B6:65CA654A
+    body:
+      encoding: UTF-8
+      string: '{"token":"<INSTALLATION_ACCESS_TOKEN>","expires_at":"2024-02-12T19:36:58Z","permissions":{"contents":"read","metadata":"read","repository_hooks":"write"},"repository_selection":"selected"}'
+  recorded_at: Mon, 12 Feb 2024 18:36:58 GMT
+- request:
+    method: post
+    uri: https://api.github.com/repos/jp524/test-repo/hooks
+    body:
+      encoding: UTF-8
+      string: '{"name":"web","config":{"url":"<HOST_URL>/webhooks/github/397df2f0-489b-4d9a-8725-476ebee3b49b","content_type":"json","secret":"<SECRET>"},"events":["push"],"active":true}'
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 8.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token <INSTALLATION_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 12 Feb 2024 18:36:58 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '714'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
       - Accept, Authorization, Cookie, X-GitHub-OTP
       - Accept-Encoding, Accept, X-Requested-With
       Etag:
-      - '"1b868605d4c9f42bde16482cf3c5e9e22bbeff21ff56b24049dee03c6edc8de1"'
-      X-Oauth-Scopes:
-      - admin:repo_hook, repo
-      X-Accepted-Oauth-Scopes:
-      - admin:repo_hook, repo, write:repo_hook
-      Github-Authentication-Token-Expiration:
-      - 2023-11-04 13:22:43 UTC
+      - '"ca890d1b9e886f2c47c667e3a9ebad99940b8b4b9aeefc7cf134b39fcab03ba3"'
       Location:
-      - https://api.github.com/repos/jp524/test-repo/hooks/436588649
+      - https://api.github.com/repos/jp524/test-repo/hooks/460475619
       X-Github-Media-Type:
       - github.v3; format=json
+      X-Accepted-Github-Permissions:
+      - repository_hooks=write
       X-Github-Api-Version-Selected:
       - '2022-11-28'
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4996'
+      - '4998'
       X-Ratelimit-Reset:
-      - '1696437646'
+      - '1707766478'
       X-Ratelimit-Used:
-      - '4'
+      - '2'
       X-Ratelimit-Resource:
       - core
       Access-Control-Expose-Headers:
@@ -79,14 +141,80 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - 4B9C:4108:8F5910:120B25D:651D87D5
+      - C119:52A3:A0159:14178E:65CA654A
     body:
       encoding: UTF-8
-      string: '{"type":"Repository","id":436588649,"name":"web","active":true,"events":["push"],"config":{"content_type":"json","insecure_ssl":"0","secret":"********","url":"https://7f08-207-61-7-7.ngrok-free.app/webhooks/github/42b189e0-5d63-4529-b863-198a9c259669"},"updated_at":"2023-10-04T15:42:14Z","created_at":"2023-10-04T15:42:14Z","url":"https://api.github.com/repos/jp524/test-repo/hooks/436588649","test_url":"https://api.github.com/repos/jp524/test-repo/hooks/436588649/test","ping_url":"https://api.github.com/repos/jp524/test-repo/hooks/436588649/pings","deliveries_url":"https://api.github.com/repos/jp524/test-repo/hooks/436588649/deliveries","last_response":{"code":null,"status":"unused","message":null}}'
-  recorded_at: Wed, 04 Oct 2023 15:42:14 GMT
+      string: '{"type":"Repository","id":460475619,"name":"web","active":true,"events":["push"],"config":{"content_type":"json","insecure_ssl":"0","secret":"********","url":"<HOST_URL>/webhooks/github/397df2f0-489b-4d9a-8725-476ebee3b49b"},"updated_at":"2024-02-12T18:36:58Z","created_at":"2024-02-12T18:36:58Z","url":"https://api.github.com/repos/jp524/test-repo/hooks/460475619","test_url":"https://api.github.com/repos/jp524/test-repo/hooks/460475619/test","ping_url":"https://api.github.com/repos/jp524/test-repo/hooks/460475619/pings","deliveries_url":"https://api.github.com/repos/jp524/test-repo/hooks/460475619/deliveries","last_response":{"code":null,"status":"unused","message":null}}'
+  recorded_at: Mon, 12 Feb 2024 18:36:58 GMT
+- request:
+    method: post
+    uri: https://api.github.com/app/installations/47087696/access_tokens
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 8.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <BEARER>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 12 Feb 2024 18:36:59 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '201'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - '"70eeaabfd794566b759de4a1a68b95d45e8e3e84344814ec8506e2e83102ceb6"'
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - C11A:9088:9AE53:136FE3:65CA654B
+    body:
+      encoding: UTF-8
+      string: '{"token":"<INSTALLATION_ACCESS_TOKEN>","expires_at":"2024-02-12T19:36:59Z","permissions":{"contents":"read","metadata":"read","repository_hooks":"write"},"repository_selection":"selected"}'
+  recorded_at: Mon, 12 Feb 2024 18:36:59 GMT
 - request:
     method: get
-    uri: https://api.github.com/repos/jp524/test-repo/hooks/436588649
+    uri: https://api.github.com/repos/jp524/test-repo/hooks/460475619
     body:
       encoding: US-ASCII
       string: ''
@@ -94,11 +222,11 @@ http_interactions:
       Accept:
       - application/vnd.github.v3+json
       User-Agent:
-      - Octokit Ruby Gem 7.1.0
+      - Octokit Ruby Gem 8.1.0
       Content-Type:
       - application/json
       Authorization:
-      - token <TOKEN>
+      - token <INSTALLATION_ACCESS_TOKEN>
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
@@ -109,7 +237,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Wed, 04 Oct 2023 15:42:14 GMT
+      - Mon, 12 Feb 2024 18:36:59 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -120,27 +248,23 @@ http_interactions:
       - Accept, Authorization, Cookie, X-GitHub-OTP
       - Accept-Encoding, Accept, X-Requested-With
       Etag:
-      - W/"1b868605d4c9f42bde16482cf3c5e9e22bbeff21ff56b24049dee03c6edc8de1"
+      - W/"94eee50a27312def8720151d483a8857faf9cbbfbc8657e675ca8953cc429242"
       Last-Modified:
-      - Wed, 04 Oct 2023 15:42:14 GMT
-      X-Oauth-Scopes:
-      - admin:repo_hook, repo
-      X-Accepted-Oauth-Scopes:
-      - admin:repo_hook, read:repo_hook, repo, write:repo_hook
-      Github-Authentication-Token-Expiration:
-      - 2023-11-04 13:22:43 UTC
+      - Mon, 12 Feb 2024 18:36:58 GMT
       X-Github-Media-Type:
       - github.v3; format=json
+      X-Accepted-Github-Permissions:
+      - repository_hooks=read
       X-Github-Api-Version-Selected:
       - '2022-11-28'
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4995'
+      - '4997'
       X-Ratelimit-Reset:
-      - '1696437646'
+      - '1707766478'
       X-Ratelimit-Used:
-      - '5'
+      - '3'
       X-Ratelimit-Resource:
       - core
       Access-Control-Expose-Headers:
@@ -163,9 +287,9 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - 0B00:6AF5:84F7EA:10C4579:651D87D6
+      - C11B:4CDC:82E51:1063C8:65CA654B
     body:
       encoding: ASCII-8BIT
-      string: '{"type":"Repository","id":436588649,"name":"web","active":true,"events":["push"],"config":{"content_type":"json","insecure_ssl":"0","secret":"********","url":"https://7f08-207-61-7-7.ngrok-free.app/webhooks/github/42b189e0-5d63-4529-b863-198a9c259669"},"updated_at":"2023-10-04T15:42:14Z","created_at":"2023-10-04T15:42:14Z","url":"https://api.github.com/repos/jp524/test-repo/hooks/436588649","test_url":"https://api.github.com/repos/jp524/test-repo/hooks/436588649/test","ping_url":"https://api.github.com/repos/jp524/test-repo/hooks/436588649/pings","deliveries_url":"https://api.github.com/repos/jp524/test-repo/hooks/436588649/deliveries","last_response":{"code":null,"status":"unused","message":null}}'
-  recorded_at: Wed, 04 Oct 2023 15:42:14 GMT
+      string: '{"type":"Repository","id":460475619,"name":"web","active":true,"events":["push"],"config":{"content_type":"json","insecure_ssl":"0","secret":"********","url":"<HOST_URL>/webhooks/github/397df2f0-489b-4d9a-8725-476ebee3b49b"},"updated_at":"2024-02-12T18:36:58Z","created_at":"2024-02-12T18:36:58Z","url":"https://api.github.com/repos/jp524/test-repo/hooks/460475619","test_url":"https://api.github.com/repos/jp524/test-repo/hooks/460475619/test","ping_url":"https://api.github.com/repos/jp524/test-repo/hooks/460475619/pings","deliveries_url":"https://api.github.com/repos/jp524/test-repo/hooks/460475619/deliveries","last_response":{"code":null,"status":"unused","message":null}}'
+  recorded_at: Mon, 12 Feb 2024 18:36:59 GMT
 recorded_with: VCR 6.2.0
