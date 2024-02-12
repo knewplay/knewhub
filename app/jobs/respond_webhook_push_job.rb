@@ -16,7 +16,7 @@ class RespondWebhookPushJob
   private
 
   def check_repository_update_required(repository, build, webhook_name, webhook_owner)
-    if webhook_name != repository.name || webhook_owner != repository.author.github_username
+    if webhook_name != repository.name || webhook_owner != repository.owner
       update_repository(repository, build, webhook_name, webhook_owner)
     else
       build.logs.create(content: 'No change to repository name or owner.')
@@ -28,9 +28,8 @@ class RespondWebhookPushJob
     FileUtils.rm_r(old_directory) if Dir.exist?(old_directory)
     repository.update(
       name: webhook_name,
-      git_url: "https://#{repository.token}@github.com/#{webhook_owner}/#{webhook_name}.git"
+      owner: webhook_owner
     )
-    repository.author.update(github_username: webhook_owner)
     build.logs.create(content: 'Repository name or owner successfully updated.')
   end
 end
