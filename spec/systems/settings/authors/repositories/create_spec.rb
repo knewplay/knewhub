@@ -85,7 +85,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
 
       after(:all) do
         @repo.reload
-        directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+        directory = Rails.root.join('repos', @repo.full_name)
         FileUtils.remove_dir(directory)
 
         VCR.use_cassette('delete_github_webhook_for_create') do

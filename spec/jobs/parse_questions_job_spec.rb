@@ -5,14 +5,14 @@ RSpec.describe ParseQuestionsJob do
     @repo = create(:repository, last_pull_at: DateTime.current)
     @first_build = create(:build, repository: @repo, aasm_state: :parsing_questions)
 
-    @destination_directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    @destination_directory = Rails.root.join('repos', @repo.full_name)
     source_directory = Rails.root.join('spec/fixtures/jobs/parse_questions/first_round')
     FileUtils.mkdir_p(@destination_directory)
     FileUtils.copy_entry(source_directory, @destination_directory)
   end
 
   after(:all) do
-    parent_directory = Rails.root.join('repos', @repo.author.github_username)
+    parent_directory = Rails.root.join('repos', @repo.owner)
     FileUtils.remove_dir(parent_directory)
   end
 

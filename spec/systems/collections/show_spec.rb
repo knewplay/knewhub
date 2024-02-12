@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Collections#show', type: :system do
   before(:all) do
     @repo = create(:repository, name: 'markdown-templates')
-    destination_directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    destination_directory = Rails.root.join('repos', @repo.full_name)
     source_directory = Rails.root.join('spec/fixtures/systems/collections')
     FileUtils.mkdir_p(destination_directory)
     FileUtils.copy_entry(source_directory, destination_directory)
@@ -15,7 +15,7 @@ RSpec.describe 'Collections#show', type: :system do
   end
 
   after(:all) do
-    parent_directory = Rails.root.join('repos', @repo.author.github_username)
+    parent_directory = Rails.root.join('repos', @repo.owner)
     FileUtils.remove_dir(parent_directory)
   end
 

@@ -5,14 +5,14 @@ RSpec.describe CreateRepoIndexJob do
     @repo = create(:repository, last_pull_at: DateTime.current)
 
     @build = create(:build, repository: @repo, aasm_state: :creating_repo_index)
-    @destination_directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    @destination_directory = Rails.root.join('repos', @repo.full_name)
     source_directory = Rails.root.join('spec/fixtures/jobs/create_repo_index')
     FileUtils.mkdir_p(@destination_directory)
     FileUtils.copy_entry(source_directory, @destination_directory)
   end
 
   after(:all) do
-    parent_directory = Rails.root.join('repos', @repo.author.github_username)
+    parent_directory = Rails.root.join('repos', @repo.owner)
     FileUtils.remove_dir(parent_directory)
   end
 
@@ -28,7 +28,7 @@ RSpec.describe CreateRepoIndexJob do
     end
 
     after do
-      filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
+      filepath = Rails.root.join('repos', @repo.full_name, 'index.md')
       File.delete(filepath)
     end
 
@@ -38,7 +38,7 @@ RSpec.describe CreateRepoIndexJob do
         described_class.perform_async(build.id)
       end
 
-      index_filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
+      index_filepath = Rails.root.join('repos', @repo.full_name, 'index.md')
       file_data = File.read(index_filepath)
       expect(file_data).to eq('Index file content')
     end
@@ -49,7 +49,7 @@ RSpec.describe CreateRepoIndexJob do
       Sidekiq::Testing.inline! do
         described_class.perform_async(@build.id)
       end
-      @index_filepath = Rails.root.join('repos', @repo.author.github_username, @repo.name, 'index.md')
+      @index_filepath = Rails.root.join('repos', @repo.full_name, 'index.md')
       @file_data = File.read(@index_filepath)
     end
 

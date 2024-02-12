@@ -13,7 +13,7 @@ RSpec.describe RespondWebhookPushJob do
   end
 
   after(:all) do
-    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+    directory = Rails.root.join('repos', @repo.full_name)
     FileUtils.remove_dir(directory)
   end
 

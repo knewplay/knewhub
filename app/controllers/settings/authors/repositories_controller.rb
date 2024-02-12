@@ -39,7 +39,7 @@ module Settings
 
         if @repository.update(repository_params)
           build = Build.create(repository: @repository, status: 'In progress', action: 'update')
-          directory = Rails.root.join('repos', @repository.owner, @repository.name)
+          directory = Rails.root.join('repos', @repository.full_name)
           update_actions(build, directory, former_branch)
           redirect_to settings_author_repositories_path,
                       notice: 'Repository update process was initiated. Check Builds for progress and details.'

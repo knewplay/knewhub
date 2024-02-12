@@ -67,7 +67,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
 
       after(:all) do
         @repo.reload
-        directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
+        directory = Rails.root.join('repos', @repo.full_name)
         FileUtils.remove_dir(directory)
       end
 
