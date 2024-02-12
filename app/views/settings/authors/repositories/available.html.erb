@@ -10,11 +10,8 @@
   </h5>
 
   <ul>
-    <% available_repositories = current_author.repositories_available_for_addition %>
-    <% if available_repositories.empty? %>
-      <p>No available repositories</p>
-    <% else %>
-      <% available_repositories.each do |repository| %>
+    <% if @available_repositories %>
+      <% @available_repositories.each do |repository| %>
         <li>
             <%= repository %>
             <%= link_to 'Add repository',
@@ -22,6 +19,8 @@
                           class: 'button' %>
           </li>
       <% end %>
+    <% else %>
+      <p>No available repositories</p>
     <% end %>
   </ul>
 </div>

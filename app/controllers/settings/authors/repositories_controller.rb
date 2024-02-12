@@ -5,13 +5,14 @@ module Settings
 
       before_action :require_author_authentication
       before_action :set_repository, only: %i[edit update destroy]
+      before_action :set_available_repositories, only: %i[available new]
       before_action :verify_if_available_repository, only: [:new]
 
       def index
         @repositories = current_author.repositories.order('id ASC')
       end
 
-      def available_repositories; end
+      def available; end
 
       def new
         full_name = params[:full_name]
@@ -77,8 +78,12 @@ module Settings
         end
       end
 
+      def set_available_repositories
+        @available_repositories = current_author.repositories_available_for_addition
+      end
+
       def verify_if_available_repository
-        return if current_author.repositories_available_for_addition.include?(params[:full_name])
+        return if @available_repositories.include?(params[:full_name])
 
         redirect_to root_path, alert: 'You are not have permission to add this repository.'
       end
