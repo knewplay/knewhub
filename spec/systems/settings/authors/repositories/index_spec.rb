@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-
 RSpec.describe 'Settings::Authors::Repositories#index', type: :system do
   let(:repo) { create(:repository) }
   let(:author) { repo.author }
