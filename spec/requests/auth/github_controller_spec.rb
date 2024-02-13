@@ -26,6 +26,11 @@ describe Auth::GithubController do
           expect(user.author.installation_id).to eq(installation_id)
         end
 
+        it 'creates a github installation associated with the author' do
+          user.reload
+          expect(GithubInstallation.last.author).to eq(user.author)
+        end
+
         it 'fetched the user info from GitHub' do
           user.reload
           expect(user.author.github_uid).to eq('85654561')

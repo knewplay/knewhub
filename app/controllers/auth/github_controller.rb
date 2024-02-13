@@ -20,7 +20,8 @@ module Auth
       if author
         author.update(installation_id:, github_username:)
       else
-        Author.create!(user_id: current_user.id, installation_id:, github_uid:, github_username:)
+        author = Author.create!(user_id: current_user.id, installation_id:, github_uid:, github_username:)
+        GithubInstallation.create!(author:, uid: github_uid, username: github_username, installation_id:)
       end
     rescue ActiveRecord::RecordInvalid => e
       logger.error "Could not create Author for user ##{current_user.id}: #{e}"
