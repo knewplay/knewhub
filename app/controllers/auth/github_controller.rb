@@ -3,22 +3,25 @@ module Auth
     before_action :authenticate_user!, :verify_params
 
     def create
-      create_user(params)
-      redirect_to root_path
+      user_access_token = user_access_token(params[:code])
+      user_info = user_info(user_access_token)
+      installation_id = params[:installation_id]
+      github_uid = user_info['id']
+      github_username = user_info['login']
+
+      author = Author.find_by(github_uid:)
+      update_or_create_author(author, installation_id, github_uid, github_username)
+      redirect_to settings_author_repositories_path
     end
 
     private
 
-    def create_user(params)
-      user_access_token = user_access_token(params[:code])
-      user_info = user_info(user_access_token)
-
-      Author.create!(
-        user_id: current_user.id,
-        installation_id: params[:installation_id],
-        github_uid: user_info['id'],
-        github_username: user_info['login']
-      )
+    def update_or_create_author(author, installation_id, github_uid, github_username)
+      if author
+        author.update(installation_id:, github_username:)
+      else
+        Author.create!(user_id: current_user.id, installation_id:, github_uid:, github_username:)
+      end
     rescue ActiveRecord::RecordInvalid => e
       logger.error "Could not create Author for user ##{current_user.id}: #{e}"
     end
