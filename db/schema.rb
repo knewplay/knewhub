@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_12_135529) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_13_195311) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -58,6 +58,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_135529) do
     t.string "action"
     t.string "aasm_state"
     t.index ["repository_id"], name: "index_builds_on_repository_id"
+  end
+
+  create_table "github_installations", force: :cascade do |t|
+    t.bigint "author_id"
+    t.string "uid"
+    t.string "username"
+    t.string "installation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_github_installations_on_author_id"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -140,6 +150,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_135529) do
   add_foreign_key "answers", "users"
   add_foreign_key "authors", "users"
   add_foreign_key "builds", "repositories"
+  add_foreign_key "github_installations", "authors"
   add_foreign_key "likes", "answers"
   add_foreign_key "likes", "users"
   add_foreign_key "logs", "builds"

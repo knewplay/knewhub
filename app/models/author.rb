@@ -1,5 +1,6 @@
 class Author < ApplicationRecord
   belongs_to :user, optional: true
+  has_many :github_installations, dependent: :destroy
   has_many :repositories, dependent: :destroy
 
   before_create :set_name
