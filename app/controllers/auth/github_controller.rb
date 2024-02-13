@@ -48,7 +48,12 @@ module Auth
     end
 
     def verify_params
-      head :bad_request and return if params[:code].nil? || params[:installation_id].nil? || params[:setup_action].nil?
+      if params[:code].nil?
+        head :bad_request and return
+      elsif params[:installation_id].nil? && params[:setup_action] == 'request'
+        redirect_to settings_author_repositories_path,
+                    notice: 'Access has been requested. Refresh the page once access has been granted on GitHub.'
+      end
     end
   end
 end
