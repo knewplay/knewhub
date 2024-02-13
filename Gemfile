@@ -28,7 +28,7 @@ gem 'stimulus-rails'
 gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 5.0'
+gem 'redis', '~> 5.1'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem 'kredis'
@@ -78,7 +78,7 @@ gem 'administrate'
 
 # State machines
 gem 'aasm'
-gem 'after_commit_everywhere', '~> 1.0'
+gem 'after_commit_everywhere', '~> 1.4'
 
 # Code syntax highlighter
 gem 'rouge'
