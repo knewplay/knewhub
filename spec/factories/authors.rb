@@ -8,7 +8,7 @@ FactoryBot.define do
     trait :real do
       github_uid { '85654561' }
       github_username { 'jp524' }
-      installation_id { '47087696' }
+      installation_id { '47264231' }
       association :user, :second
     end
   end

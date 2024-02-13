@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api.github.com/app/installations/47087696/access_tokens
+    uri: https://api.github.com/app/installations/47264231/access_tokens
     body:
       encoding: UTF-8
       string: "{}"
