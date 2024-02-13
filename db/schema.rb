@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_13_195311) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_13_204353) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -114,7 +114,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_13_195311) do
     t.boolean "banned", default: false
     t.integer "hook_id"
     t.string "owner"
+    t.bigint "github_installation_id"
     t.index ["author_id"], name: "index_repositories_on_author_id"
+    t.index ["github_installation_id"], name: "index_repositories_on_github_installation_id"
     t.index ["name", "owner"], name: "index_repositories_on_name_and_owner", unique: true
   end
 
@@ -156,5 +158,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_13_195311) do
   add_foreign_key "logs", "builds"
   add_foreign_key "questions", "repositories"
   add_foreign_key "repositories", "authors"
+  add_foreign_key "repositories", "github_installations"
   add_foreign_key "webauthn_credentials", "administrators"
 end

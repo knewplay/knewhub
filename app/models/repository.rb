@@ -1,5 +1,6 @@
 class Repository < ApplicationRecord
   belongs_to :author
+  belongs_to :github_installation
   has_many :builds, dependent: :destroy
   has_many :questions, dependent: :destroy
 
