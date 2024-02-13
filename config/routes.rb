@@ -20,7 +20,6 @@ Rails.application.routes.draw do
     resource :administrator, only: %i[new create destroy]
     resource :author, only: [:destroy]
   end
-  get 'auth/github/callback', to: 'sessions/authors#create'
 
   namespace :webauthn do
     resources :credentials, only: %i[index create destroy] do
