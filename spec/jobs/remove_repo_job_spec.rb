@@ -5,10 +5,11 @@ RSpec.describe RemoveRepoJob do
   let!(:github_installation) { repo.github_installation }
 
   it 'queues the job' do
-    described_class.perform_async(github_installation.id, repo.full_name, repo.hook_id)
+    described_class.perform_async(github_installation.id, repo.full_name, repo.storage_path.to_s, repo.hook_id)
     expect(described_class).to have_enqueued_sidekiq_job(
       github_installation.id,
       repo.full_name,
+      repo.storage_path.to_s,
       repo.hook_id
     )
   end
@@ -17,7 +18,7 @@ RSpec.describe RemoveRepoJob do
     before do
       VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'delete_github_webhook' }]) do
         Sidekiq::Testing.inline! do
-          described_class.perform_async(github_installation.id, repo.full_name, repo.hook_id)
+          described_class.perform_async(github_installation.id, repo.full_name, repo.storage_path.to_s, repo.hook_id)
         end
       end
     end

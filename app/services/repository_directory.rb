@@ -2,7 +2,7 @@
 class RepositoryDirectory
   def self.define(repository_id)
     repository = Repository.find(repository_id)
-    directory = Rails.root.join('repos', repository.full_name)
+    directory = repository.storage_path
     [repository, directory]
   end
 end

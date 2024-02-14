@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Settings::Authors::Repositories#destroy', type: :system do
   before(:all) do
     @repo = create(:repository, :real, hook_id: 460_475_619)
-    @directory = Rails.root.join('repos', @repo.full_name)
+    @directory = @repo.storage_path
     FileUtils.mkdir_p(@directory)
 
     @before_count = Repository.count

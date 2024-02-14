@@ -40,7 +40,7 @@ module Settings
 
         if @repository.update(repository_params.except(:owner))
           build = Build.create(repository: @repository, status: 'In progress', action: 'update')
-          directory = Rails.root.join('repos', @repository.full_name)
+          directory = @repository.storage_path
           update_actions(build, directory, former_branch)
           redirect_to settings_author_repositories_path,
                       notice: 'Repository update process was initiated. Check Builds for progress and details.'
@@ -50,7 +50,12 @@ module Settings
       end
 
       def destroy
-        RemoveRepoJob.perform_async(@repository.github_installation.id, @repository.full_name, @repository.hook_id)
+        RemoveRepoJob.perform_async(
+          @repository.github_installation.id,
+          @repository.full_name,
+          @repository.storage_path.to_s,
+          @repository.hook_id
+        )
         @repository.destroy
         redirect_to settings_author_repositories_path, notice: 'Repository was successfully deleted.'
       end

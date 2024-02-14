@@ -87,8 +87,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
 
       after(:all) do
         @repo.reload
-        directory = Rails.root.join('repos', @repo.full_name)
-        FileUtils.remove_dir(directory)
+        FileUtils.remove_dir(@repo.storage_path)
 
         VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'delete_github_webhook' }]) do
           @repo.github_installation.github_client.remove_hook(@repo.full_name, 460_475_619)

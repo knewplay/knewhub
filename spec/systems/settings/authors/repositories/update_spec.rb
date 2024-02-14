@@ -66,8 +66,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
 
       after(:all) do
         @repo.reload
-        directory = Rails.root.join('repos', @repo.full_name)
-        FileUtils.remove_dir(directory)
+        FileUtils.remove_dir(@repo.storage_path)
         VCR.turn_on!
         WebMock.disable_net_connect!
       end

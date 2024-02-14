@@ -16,8 +16,7 @@ RSpec.describe RespondWebhookPushJob do
   end
 
   after(:all) do
-    directory = Rails.root.join('repos', @repo.full_name)
-    FileUtils.remove_dir(directory)
+    FileUtils.remove_dir(@repo.storage_path)
   end
 
   it 'queues the job' do

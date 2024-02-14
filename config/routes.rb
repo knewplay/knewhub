@@ -3,8 +3,8 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   # Static pages
   root 'static_pages#index'
-  get 'collections/:owner/:name/pages/index', to: 'collections#index'
-  get 'collections/:owner/:name/pages/*path', to: 'collections#show'
+  get 'collections/:author_username/:owner/:name/pages/index', to: 'collections#index'
+  get 'collections/:author_username/:owner/:name/pages/*path', to: 'collections#show'
   get '/404', to: 'errors#not_found'
   get '/500', to: 'errors#internal_server_error'
 

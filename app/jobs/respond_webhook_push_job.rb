@@ -9,7 +9,7 @@ class RespondWebhookPushJob
     repository.update(description: webhook_description)
     build.logs.create(content: 'Repository description successfully updated from GitHub.')
 
-    directory = Rails.root.join('repos', repository.full_name)
+    directory = repository.storage_path
     Dir.exist?(directory) ? build.finished_receiving_webhook('pull') : build.finished_receiving_webhook('clone')
   end
 
@@ -24,7 +24,7 @@ class RespondWebhookPushJob
   end
 
   def update_repository(repository, build, webhook_name, webhook_owner)
-    old_directory = Rails.root.join('repos', repository.full_name)
+    old_directory = repository.storage_path
     FileUtils.rm_r(old_directory) if Dir.exist?(old_directory)
     repository.update(name: webhook_name)
     repository.github_installation.update(username: webhook_owner)

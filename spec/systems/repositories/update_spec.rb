@@ -15,8 +15,7 @@ RSpec.describe Repository, '#update', type: :system do
   end
 
   after(:all) do
-    directory = Rails.root.join('repos', @repo.full_name)
-    FileUtils.remove_dir(directory)
+    FileUtils.remove_dir(@repo.storage_path)
   end
 
   context 'when logged in as an author' do

@@ -24,6 +24,7 @@ FactoryBot/AssociationStyle:
   EnforcedStyle: explicit
 
 Metrics/AbcSize:
+  CountRepeatedAttributes: false
   Exclude:
     - app/controllers/webauthn/**
 
