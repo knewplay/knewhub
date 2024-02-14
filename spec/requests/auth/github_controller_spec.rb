@@ -50,11 +50,11 @@ describe Auth::GithubController do
     end
 
     context 'when the user is already an author' do
-      let!(:user) { create(:user, author: nil) }
-      let!(:author) { create(:author, :real, user:, installation_id: '12345678') }
+      let!(:github_installation) { create(:github_installation, :real, installation_id: '12345678') }
+      let!(:author) { github_installation.author }
 
       before do
-        sign_in user
+        sign_in author.user
       end
 
       it "updates the author's github_username" do
