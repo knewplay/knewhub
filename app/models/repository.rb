@@ -6,18 +6,20 @@ class Repository < ApplicationRecord
   before_save :set_branch
   before_create :generate_uuid
 
-  validates :owner,
-            presence: true
   validates :name,
             presence: true,
             format: { with: /\A[.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }
-  validates :name, uniqueness: { scope: :owner }
+  validates :name, uniqueness: { scope: :github_installation_id }
   validates :branch,
             format: { with: %r{\A[./\w-]{0,100}\z}, message: 'must follow GitHub branch name restrictions' }
   validates :title, presence: true
   attribute :banned, :boolean, default: false
 
   delegate :author, to: :github_installation
+
+  def owner
+    github_installation.username
+  end
 
   def git_url
     "https://x-access-token:#{github_installation.access_token}@github.com/#{owner}/#{name}.git"

@@ -26,10 +26,8 @@ class RespondWebhookPushJob
   def update_repository(repository, build, webhook_name, webhook_owner)
     old_directory = Rails.root.join('repos', repository.full_name)
     FileUtils.rm_r(old_directory) if Dir.exist?(old_directory)
-    repository.update(
-      name: webhook_name,
-      owner: webhook_owner
-    )
+    repository.update(name: webhook_name)
+    repository.github_installation.update(username: webhook_owner)
     build.logs.create(content: 'Repository name or owner successfully updated.')
   end
 end

@@ -17,15 +17,17 @@ RSpec.describe Repository do
       expect(repo.valid?).to be true
     end
 
-    it 'returns false when a repository with the same name exists for a given owner' do
-      create(:repository)
-      second_repo = build(:repository)
+    it 'returns false when a repository with the same name exists for a given github_installation' do
+      first_repo = create(:repository)
+      github_installation = first_repo.github_installation
+      second_repo = build(:repository, github_installation:)
       expect(second_repo.valid?).to be false
     end
 
-    it 'returns true when a repository with the same name exists for another owner' do
+    it 'returns true when a repository with the same name exists for another github_installation' do
       create(:repository)
-      second_repo = build(:repository, owner: 'another-user')
+      second_github_installation = create(:github_installation, :real)
+      second_repo = build(:repository, github_installation: second_github_installation)
       expect(second_repo.valid?).to be true
     end
   end

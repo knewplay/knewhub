@@ -17,13 +17,14 @@ module Settings
       def new
         full_name = params[:full_name]
         owner, name = full_name.split('/')
-        @repository = github_installation(owner).repositories.build(name:, owner:)
+        @repository = github_installation(owner).repositories.build(name:)
       end
 
       def edit; end
 
       def create
-        @repository = github_installation(repository_params[:owner]).repositories.build(repository_params)
+        @repository = github_installation(repository_params[:owner]).repositories
+                                                                    .build(repository_params.except(:owner))
         if @repository.save
           build = Build.create(repository: @repository, status: 'In progress', action: 'create')
           build.create_repo
@@ -37,7 +38,7 @@ module Settings
       def update
         former_branch = @repository.branch
 
-        if @repository.update(repository_params)
+        if @repository.update(repository_params.except(:owner))
           build = Build.create(repository: @repository, status: 'In progress', action: 'update')
           directory = Rails.root.join('repos', @repository.full_name)
           update_actions(build, directory, former_branch)

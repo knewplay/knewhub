@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_14_152429) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_14_153850) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -112,11 +112,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_14_152429) do
     t.string "title"
     t.boolean "banned", default: false
     t.integer "hook_id"
-    t.string "owner"
     t.bigint "github_installation_id"
     t.index ["author_id"], name: "index_repositories_on_author_id"
     t.index ["github_installation_id"], name: "index_repositories_on_github_installation_id"
-    t.index ["name", "owner"], name: "index_repositories_on_name_and_owner", unique: true
+    t.index ["name", "github_installation_id"], name: "index_repositories_on_name_and_github_installation_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
