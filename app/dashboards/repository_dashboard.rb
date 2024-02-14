@@ -11,7 +11,7 @@ class RepositoryDashboard < Administrate::BaseDashboard
     name: Field::String,
     title: Field::String,
     token: Field::Password,
-    uuid: Field::String,
+    uid: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     last_build_created_at: Field::DateTime,

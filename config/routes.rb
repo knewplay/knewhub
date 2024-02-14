@@ -70,5 +70,5 @@ Rails.application.routes.draw do
   end
 
   # Webhooks
-  post '/webhooks/github/:uuid', to: 'webhooks/github#create'
+  post '/webhooks/github', to: 'webhooks/github#create'
 end

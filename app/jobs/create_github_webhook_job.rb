@@ -22,7 +22,7 @@ class CreateGithubWebhookJob
     github_client.create_hook(
       repository.full_name,
       'web',
-      { url: "#{host_url}/webhooks/github/#{repository.uuid}", content_type: 'json', secret: webhook_secret },
+      { url: "#{host_url}/webhooks/github", content_type: 'json', secret: webhook_secret },
       { events: ['push'], active: true }
     )
   end

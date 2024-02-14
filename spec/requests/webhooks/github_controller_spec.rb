@@ -18,16 +18,17 @@ describe Webhooks::GithubController do
 
         # Parameters for Webhook event
         secret = Rails.application.credentials.webhook_secret
-        data = 'repository[name]=test-repo&repository[owner][name]=jp524&' \
+        data = 'repository[id]=663068537&repository[name]=test-repo&repository[owner][name]=jp524&' \
                'repository[owner][id]=85654561&repository[description]=something'
         @signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, data)}"
       end
 
       context 'when a valid request is received' do
         before(:all) do
-          post "/webhooks/github/#{@repo.uuid}",
+          post '/webhooks/github',
                params: {
                  repository: {
+                   id: 663_068_537,
                    name: 'test-repo',
                    owner: {
                      name: 'jp524',
@@ -56,7 +57,7 @@ describe Webhooks::GithubController do
             Sidekiq::Testing.inline! do
               RespondWebhookPushJob.perform_async(
                 @build.id,
-                @repo.uuid,
+                @repo.uid,
                 'test-repo',
                 'jp524',
                 'something'
@@ -97,7 +98,7 @@ describe Webhooks::GithubController do
 
       context 'when an invalid request is received' do
         before do
-          post "/webhooks/github/#{@repo.uuid}",
+          post '/webhooks/github',
                params: { repository: 'modified params render signature invalid' },
                headers: {
                  'X-GitHub-Event': 'push',

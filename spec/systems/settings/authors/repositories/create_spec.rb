@@ -67,22 +67,17 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         end
 
         fill_in('Title', with: 'Test Repo')
-        click_on 'Create Repository'
 
-        @repo = Repository.last
-        @repo.update(uuid: '397df2f0-489b-4d9a-8725-476ebee3b49b')
-        sleep(1)
-        @build = @repo.builds.first
-
-        # The job is called here to allow the `uuid` to be specified
-        # This is to allow the tests to use the same VCR cassettes
         Sidekiq::Testing.inline! do
           VCR.use_cassettes([{ name: 'get_installation_access_token', options: { allow_playback_repeats: true } },
                              { name: 'create_github_webhook' },
                              { name: 'test_github_webhook' }]) do
-            CreateGithubWebhookJob.perform_async(@build.id)
+            click_on 'Create Repository'
           end
         end
+
+        @repo = Repository.last
+        @build = @repo.builds.first
       end
 
       after(:all) do

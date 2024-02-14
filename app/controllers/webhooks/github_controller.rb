@@ -8,7 +8,7 @@ module Webhooks
       head :ok
       return unless request.headers['X-GitHub-Event'] == 'push'
 
-      repository = Repository.find_by!(uuid: params[:uuid])
+      repository = Repository.find_by!(uid: params[:repository][:id].to_i)
       build = Build.create(repository:, status: 'In progress', action: 'webhook_push')
       build.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
 
@@ -35,11 +35,11 @@ module Webhooks
     end
 
     def repository_owner_unchanged(params, build)
-      uuid = params[:uuid]
+      uid = params[:repository][:id].to_i
       name = params[:repository][:name]
       owner_name = params[:repository][:owner][:name]
       description = params[:repository][:description]
-      build.receive_webhook_push(uuid, name, owner_name, description)
+      build.receive_webhook_push(uid, name, owner_name, description)
     end
 
     def verify_event

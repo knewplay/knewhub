@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CreateGithubWebhookJob do
-  let(:repo) { create(:repository, :real, uuid: '397df2f0-489b-4d9a-8725-476ebee3b49b') }
+  let(:repo) { create(:repository, :real) }
   let(:build) { create(:build, repository: repo, aasm_state: :creating_webhook) }
 
   it 'queues the job' do

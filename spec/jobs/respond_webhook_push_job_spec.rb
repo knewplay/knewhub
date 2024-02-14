@@ -22,14 +22,14 @@ RSpec.describe RespondWebhookPushJob do
   it 'queues the job' do
     described_class.perform_async(
       @build.id,
-      @repo.uuid,
+      @repo.uid,
       @repo.name,
       @repo.owner,
       @repo.description
     )
     expect(described_class).to have_enqueued_sidekiq_job(
       @build.id,
-      @repo.uuid,
+      @repo.uid,
       @repo.name,
       @repo.owner,
       @repo.description
@@ -41,7 +41,7 @@ RSpec.describe RespondWebhookPushJob do
       Sidekiq::Testing.inline! do
         described_class.perform_async(
           @build.id,
-          @repo.uuid,
+          @repo.uid,
           @repo.name,
           @repo.owner,
           @repo.description
@@ -57,7 +57,8 @@ RSpec.describe RespondWebhookPushJob do
         VCR.use_cassette('get_installation_access_token') do
           described_class.perform_async(
             @build.id,
-            @repo.uuid, 'markdown-templates',
+            @repo.uid,
+            'markdown-templates',
             @repo.owner,
             'The description has changed'
           )

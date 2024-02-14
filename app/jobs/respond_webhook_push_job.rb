@@ -1,8 +1,8 @@
 class RespondWebhookPushJob
   include Sidekiq::Job
 
-  def perform(build_id, uuid, webhook_name, webhook_owner, webhook_description)
-    repository = Repository.find_by(uuid:)
+  def perform(build_id, uid, webhook_name, webhook_owner, webhook_description)
+    repository = Repository.find_by(uid:)
     build = Build.find(build_id)
     check_repository_update_required(repository, build, webhook_name, webhook_owner)
 

@@ -67,8 +67,8 @@ class Build < ApplicationRecord
     create_webhook!
   end
 
-  def receive_webhook_push(uuid, name, owner_name, description)
-    receive_webhook!(uuid, name, owner_name, description)
+  def receive_webhook_push(uid, name, owner_name, description)
+    receive_webhook!(uid, name, owner_name, description)
   end
 
   def rebuild_repo
@@ -94,8 +94,8 @@ class Build < ApplicationRecord
     TestGithubWebhookJob.perform_in(10.seconds, id)
   end
 
-  def schedule_receive_webhook(uuid, name, owner_name, description)
-    RespondWebhookPushJob.perform_async(id, uuid, name, owner_name, description)
+  def schedule_receive_webhook(uid, name, owner_name, description)
+    RespondWebhookPushJob.perform_async(id, uid, name, owner_name, description)
   end
 
   def schedule_clone_repo

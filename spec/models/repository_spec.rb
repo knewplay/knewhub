@@ -56,12 +56,4 @@ RSpec.describe Repository do
       expect(repo.branch).to eq('some_branch')
     end
   end
-
-  describe '#generate_uuid' do
-    let(:repo) { create(:repository) }
-
-    it 'generates a uuid when a record is created' do
-      expect(repo.uuid).not_to be_nil
-    end
-  end
 end

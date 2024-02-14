@@ -4,7 +4,6 @@ class Repository < ApplicationRecord
   has_many :questions, dependent: :destroy
 
   before_save :set_branch
-  before_create :generate_uuid
 
   validates :name,
             presence: true,
@@ -57,9 +56,5 @@ class Repository < ApplicationRecord
 
   def set_branch
     self.branch = (branch.presence || 'main')
-  end
-
-  def generate_uuid
-    self.uuid = SecureRandom.uuid if uuid.nil?
   end
 end
