@@ -1,5 +1,4 @@
 class Repository < ApplicationRecord
-  belongs_to :author
   belongs_to :github_installation
   has_many :builds, dependent: :destroy
   has_many :questions, dependent: :destroy
@@ -18,8 +17,10 @@ class Repository < ApplicationRecord
   validates :title, presence: true
   attribute :banned, :boolean, default: false
 
+  delegate :author, to: :github_installation
+
   def git_url
-    "https://x-access-token:#{author.access_token}@github.com/#{owner}/#{name}.git"
+    "https://x-access-token:#{github_installation.access_token}@github.com/#{owner}/#{name}.git"
   end
 
   def last_build_created_at

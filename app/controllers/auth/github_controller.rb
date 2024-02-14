@@ -18,9 +18,9 @@ module Auth
 
     def update_or_create_author(author, installation_id, github_uid, github_username)
       if author
-        author.update(installation_id:, github_username:)
+        author.update(github_username:)
       else
-        author = Author.create!(user_id: current_user.id, installation_id:, github_uid:, github_username:)
+        author = Author.create!(user_id: current_user.id, github_uid:, github_username:)
         GithubInstallation.create!(author:, uid: github_uid, username: github_username, installation_id:)
       end
     rescue ActiveRecord::RecordInvalid => e

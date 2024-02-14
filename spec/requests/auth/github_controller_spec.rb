@@ -21,14 +21,14 @@ describe Auth::GithubController do
           expect(Author.last.user).to eq(user)
         end
 
-        it 'has the information provided in the request' do
-          user.reload
-          expect(user.author.installation_id).to eq(installation_id)
-        end
-
         it 'creates a github installation associated with the author' do
           user.reload
           expect(GithubInstallation.last.author).to eq(user.author)
+        end
+
+        it 'has the information provided in the request' do
+          github_installation = GithubInstallation.last
+          expect(github_installation.installation_id).to eq(installation_id)
         end
 
         it 'fetched the user info from GitHub' do
@@ -55,16 +55,6 @@ describe Auth::GithubController do
 
       before do
         sign_in user
-      end
-
-      it "updates the author's installation_id" do
-        new_installation_id = '85654561'
-        expect(author.installation_id).to eq('12345678')
-        VCR.use_cassette('receive_callback_github_auth') do
-          get "/github/callback?code=a92fb7bc9ef2ac53f26e&installation_id=#{new_installation_id}&setup_action=install"
-        end
-        author.reload
-        expect(author.installation_id).to eq(new_installation_id)
       end
 
       it "updates the author's github_username" do

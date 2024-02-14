@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.shared_context 'when creating a new repository' do
-  let(:author) { create(:author) }
+  let!(:github_installation) { create(:github_installation) }
+  let!(:author) { github_installation.author }
 
   before do
     sign_in author.user
@@ -90,7 +91,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         FileUtils.remove_dir(directory)
 
         VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'delete_github_webhook' }]) do
-          @repo.author.github_client.remove_hook(@repo.full_name, 460_475_619)
+          @repo.github_installation.github_client.remove_hook(@repo.full_name, 460_475_619)
         end
       end
 

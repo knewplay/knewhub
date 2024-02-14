@@ -3,7 +3,7 @@ class CreateGithubWebhookJob
 
   def perform(build_id)
     build = Build.find(build_id)
-    repository = Repository.includes(:author).find(build.repository.id)
+    repository = Repository.includes(:github_installation).find(build.repository.id)
 
     response = create_hook(repository)
     repository.update(hook_id: response.id)
@@ -15,7 +15,7 @@ class CreateGithubWebhookJob
   end
 
   def create_hook(repository)
-    github_client = repository.author.github_client
+    github_client = repository.github_installation.github_client
     host_url = ENV.fetch('WEB_URL', Rails.application.credentials.host_url)
     webhook_secret = Rails.application.credentials.webhook_secret
 

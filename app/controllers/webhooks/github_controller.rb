@@ -19,7 +19,7 @@ module Webhooks
 
     def create_actions(repository, build, params)
       owner_id = params[:repository][:owner][:id].to_s
-      if repository.author.github_uid == owner_id
+      if repository.github_installation.uid == owner_id
         repository_owner_unchanged(params, build)
       else
         repository_owner_changed(build)

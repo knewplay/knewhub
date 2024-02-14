@@ -48,8 +48,8 @@ class CollectionsController < ApplicationController
   end
 
   def repository_visible?(owner, name)
-    author_id = Author.find_by(github_username: owner).id
-    @repository = Repository.find_by(author_id:, name:)
+    github_installation_id = GithubInstallation.find_by(username: owner).id
+    @repository = Repository.find_by(github_installation_id:, name:)
 
     @repository.visible?
   end

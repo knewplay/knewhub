@@ -32,9 +32,10 @@ RSpec.describe Repository do
 
   describe '#git_url' do
     let(:repo) { create(:repository) }
+    let(:github_installation) { repo.github_installation }
 
     it "returns the git_url created using Repository owner, name and Author's access token" do
-      allow(repo.author).to receive(:access_token).and_return('ghs_abcde12345')
+      allow(github_installation).to receive(:access_token).and_return('ghs_abcde12345')
       expect(repo.git_url).to eq('https://x-access-token:ghs_abcde12345@github.com/user/repo_name.git')
     end
   end

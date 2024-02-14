@@ -12,7 +12,7 @@ RSpec.describe CreateGithubWebhookJob do
   context 'when executing perform' do
     after do
       VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'delete_github_webhook' }]) do
-        repo.author.github_client.remove_hook(repo.full_name, 460_475_619)
+        repo.github_installation.github_client.remove_hook(repo.full_name, 460_475_619)
       end
     end
 

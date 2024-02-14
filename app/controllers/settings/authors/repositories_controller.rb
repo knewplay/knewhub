@@ -17,13 +17,13 @@ module Settings
       def new
         full_name = params[:full_name]
         owner, name = full_name.split('/')
-        @repository = current_author.repositories.build(name:, owner:)
+        @repository = github_installation(owner).repositories.build(name:, owner:)
       end
 
       def edit; end
 
       def create
-        @repository = current_author.repositories.build(repository_params)
+        @repository = github_installation(repository_params[:owner]).repositories.build(repository_params)
         if @repository.save
           build = Build.create(repository: @repository, status: 'In progress', action: 'create')
           build.create_repo
@@ -49,7 +49,7 @@ module Settings
       end
 
       def destroy
-        RemoveRepoJob.perform_async(@repository.author_id, @repository.full_name, @repository.hook_id)
+        RemoveRepoJob.perform_async(@repository.github_installation.id, @repository.full_name, @repository.hook_id)
         @repository.destroy
         redirect_to settings_author_repositories_path, notice: 'Repository was successfully deleted.'
       end
@@ -57,11 +57,16 @@ module Settings
       private
 
       def set_repository
-        @repository = Repository.find_by(id: params[:id], author_id: current_author.id)
+        @repository = Repository.includes(:github_installation)
+                                .find_by(id: params[:id], github_installation: { author_id: current_author.id })
       end
 
       def repository_params
         params.require(:repository).permit(:name, :owner, :branch, :title)
+      end
+
+      def github_installation(username)
+        GithubInstallation.find_by(author_id: current_author.id, username:)
       end
 
       def update_actions(build, directory, former_branch)

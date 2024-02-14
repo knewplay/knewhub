@@ -3,8 +3,8 @@ class TestGithubWebhookJob
 
   def perform(build_id)
     build = Build.find(build_id)
-    repository = Repository.includes(:author).find(build.repository.id)
-    github_client = repository.author.github_client
+    repository = Repository.includes(:github_installation).find(build.repository.id)
+    github_client = repository.github_installation.github_client
 
     response = github_client.hook(repository.full_name, repository.hook_id)
     handle_response(build, response)
