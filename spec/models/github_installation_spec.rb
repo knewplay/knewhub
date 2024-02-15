@@ -22,10 +22,26 @@ RSpec.describe GithubInstallation do
   describe '#list_github_repositories' do
     let(:github_installation) { create(:github_installation, :real) }
 
-    it 'returns the full_name of repositories available for the Installation' do
-      result = ['jp524/test-repo', 'jp524/book-programming-essential']
+    it 'returns the full_name and uid of repositories available for the Installation' do
+      result = [{ full_name: 'jp524/test-repo', uid: 663_068_537 },
+                { full_name: 'jp524/book-programming-essential', uid: 696_415_885 }]
       VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'get_repos' }]) do
         expect(github_installation.list_github_repositories).to eq(result)
+      end
+    end
+  end
+
+  describe '#already_added_repositories' do
+    let!(:github_installation) { create(:github_installation, :real) }
+
+    before do
+      create(:repository, :real, github_installation:)
+    end
+
+    it 'returns uid of repositories that have already been added' do
+      result = [663_068_537]
+      VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'get_repos' }]) do
+        expect(github_installation.already_added_repositories).to eq(result)
       end
     end
   end
@@ -37,8 +53,8 @@ RSpec.describe GithubInstallation do
       create(:repository, :real, github_installation:)
     end
 
-    it 'returns the full_name of repositories that can be added' do
-      result = ['jp524/book-programming-essential']
+    it 'returns the full_name and uid of repositories that can be added' do
+      result = [{ full_name: 'jp524/book-programming-essential', uid: 696_415_885 }]
       VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'get_repos' }]) do
         expect(github_installation.repositories_available_for_addition).to eq(result)
       end

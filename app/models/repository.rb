@@ -5,6 +5,7 @@ class Repository < ApplicationRecord
 
   before_save :set_branch
 
+  validates :uid, presence: true
   validates :name,
             presence: true,
             format: { with: /\A[.\w-]{0,100}\z/, message: 'must follow GitHub repository name restrictions' }

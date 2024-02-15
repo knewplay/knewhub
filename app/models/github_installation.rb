@@ -12,14 +12,21 @@ class GithubInstallation < ApplicationRecord
     Octokit::Client.new(access_token:)
   end
 
-  def list_github_repositories
+  def list_github_repositories(result = [])
     repositories = github_client.list_app_installation_repositories['repositories']
-    repositories.pluck(:full_name)
+    repositories.each do |repository|
+      result << { full_name: repository[:full_name], uid: repository[:id] }
+    end
+    result
+  end
+
+  def already_added_repositories
+    repositories.map(&:uid)
   end
 
   def repositories_available_for_addition
-    github_repositories = list_github_repositories
-    already_added_repositories = repositories.map(&:full_name)
-    github_repositories - already_added_repositories
+    list_github_repositories.reject do |repository|
+      already_added_repositories.include?(repository[:uid])
+    end
   end
 end

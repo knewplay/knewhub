@@ -18,12 +18,12 @@ RSpec.describe Author do
     end
 
     it 'returns the full_name of repositories available for the Installation' do
-      result = ['jp524/markdown-templates',
-                'jp524/test-repo',
-                'jp524/book-programming-essential',
-                'knewplay/book-programming-essential',
-                'knewplay/vex-robotics-programming-with-c',
-                'knewplay/course-vex-vrc-in-c']
+      result = [{ full_name: 'jp524/markdown-templates', uid: 656_764_501 },
+                { full_name: 'jp524/test-repo', uid: 663_068_537 },
+                { full_name: 'jp524/book-programming-essential', uid: 696_415_885 },
+                { full_name: 'knewplay/book-programming-essential', uid: 635_362_242 },
+                { full_name: 'knewplay/vex-robotics-programming-with-c', uid: 660_263_073 },
+                { full_name: 'knewplay/course-vex-vrc-in-c', uid: 704_073_409 }]
       VCR.use_cassettes([{ name: 'get_installation_access_token' },
                          { name: 'get_installation_access_token_additional' },
                          { name: 'get_repos_multiple_installations' }]) do
@@ -42,11 +42,11 @@ RSpec.describe Author do
     end
 
     it 'returns the full_name of repositories that can be added' do
-      result = ['jp524/markdown-templates',
-                'jp524/book-programming-essential',
-                'knewplay/book-programming-essential',
-                'knewplay/vex-robotics-programming-with-c',
-                'knewplay/course-vex-vrc-in-c']
+      result = [{ full_name: 'jp524/markdown-templates', uid: 656_764_501 },
+                { full_name: 'jp524/book-programming-essential', uid: 696_415_885 },
+                { full_name: 'knewplay/book-programming-essential', uid: 635_362_242 },
+                { full_name: 'knewplay/vex-robotics-programming-with-c', uid: 660_263_073 },
+                { full_name: 'knewplay/course-vex-vrc-in-c', uid: 704_073_409 }]
       VCR.use_cassettes([{ name: 'get_installation_access_token' },
                          { name: 'get_installation_access_token_additional' },
                          { name: 'get_repos_multiple_installations' }]) do
