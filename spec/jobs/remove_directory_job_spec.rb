@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RemoveRepoJob do
+RSpec.describe RemoveDirectoryJob do
   let!(:repo) { create(:repository, :real) }
 
   it 'queues the job' do
