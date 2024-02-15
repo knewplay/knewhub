@@ -50,12 +50,7 @@ module Settings
       end
 
       def destroy
-        RemoveRepoJob.perform_async(
-          @repository.github_installation.id,
-          @repository.full_name,
-          @repository.storage_path.to_s,
-          @repository.hook_id
-        )
+        RemoveRepoJob.perform_async(@repository.storage_path.to_s)
         @repository.destroy
         redirect_to settings_author_repositories_path, notice: 'Repository was successfully deleted.'
       end
