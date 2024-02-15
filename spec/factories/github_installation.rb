@@ -11,5 +11,12 @@ FactoryBot.define do
       installation_id { '47275538' }
       association :author, :real
     end
+
+    trait :real_additional do
+      uid { '120281562' }
+      username { 'knewplay' }
+      installation_id { '47263399' }
+      association :author, :real
+    end
   end
 end
