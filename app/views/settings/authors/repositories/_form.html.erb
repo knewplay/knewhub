@@ -7,6 +7,8 @@
   <p><%= "Owner: #{repository.owner}" %></p>
   <%= form.hidden_field :owner, value: repository.owner %>
 
+  <%= form.hidden_field :uid, value: repository.uid %>
+
   <div class="form-field">
     <%= form.text_field :branch %>
     <%= form.label :branch, 'Branch (if other than main)' %>

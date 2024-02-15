@@ -17,7 +17,7 @@ module Settings
       def new
         full_name = params[:full_name]
         owner, name = full_name.split('/')
-        @repository = github_installation(owner).repositories.build(name:)
+        @repository = github_installation(owner).repositories.build(name:, uid: params[:uid].to_i)
       end
 
       def edit; end
@@ -68,7 +68,7 @@ module Settings
       end
 
       def repository_params
-        params.require(:repository).permit(:name, :owner, :branch, :title)
+        params.require(:repository).permit(:uid, :name, :owner, :branch, :title)
       end
 
       def github_installation(username)
@@ -96,7 +96,7 @@ module Settings
       end
 
       def verify_if_available_repository
-        return if @available_repositories.include?(params[:full_name])
+        return if @available_repositories.include?({ full_name: params[:full_name], uid: params[:uid].to_i })
 
         redirect_to root_path, alert: 'You are not have permission to add this repository.'
       end

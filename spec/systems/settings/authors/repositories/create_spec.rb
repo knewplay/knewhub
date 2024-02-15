@@ -6,8 +6,9 @@ RSpec.shared_context 'when creating a new repository' do
 
   before do
     sign_in author.user
-    allow(author).to receive(:repositories_available_for_addition).and_return('user/repo_name')
-    visit new_settings_author_repository_path(full_name: 'user/repo_name')
+    allow(author).to receive(:repositories_available_for_addition)
+                 .and_return([{ full_name: 'user/repo_name', uid: 123_456_789 }])
+    visit new_settings_author_repository_path(full_name: 'user/repo_name', uid: 123_456_789)
   end
 end
 
@@ -63,7 +64,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         sign_in author.user
 
         VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'get_repos' }]) do
-          visit new_settings_author_repository_path(full_name: 'jp524/test-repo')
+          visit new_settings_author_repository_path(full_name: 'jp524/test-repo', uid: 123_456_789)
         end
 
         fill_in('Title', with: 'Test Repo')
@@ -129,8 +130,9 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
 
     before do
       sign_in author.user
-      allow(author).to receive(:repositories_available_for_addition).and_return('user/repository')
-      visit new_settings_author_repository_path(full_name: 'user/repo_name')
+      allow(author).to receive(:repositories_available_for_addition)
+                   .and_return([{ full_name: 'user/repository', uid: 987_654_321 }])
+      visit new_settings_author_repository_path(full_name: 'user/repo_name', uid: 123_456_789)
     end
 
     it 'redirects to root path and displays an alert' do

@@ -11,11 +11,11 @@
 
   <ul>
     <% if @available_repositories %>
-      <% @available_repositories.each do |repository| %>
+      <% @available_repositories.each do |full_name, uid| %>
         <li>
-            <%= repository %>
+            <%= full_name %>
             <%= link_to 'Add repository',
-                          new_settings_author_repository_path(full_name: repository),
+                          new_settings_author_repository_path(full_name:, uid:),
                           class: 'button' %>
           </li>
       <% end %>
