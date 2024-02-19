@@ -269,7 +269,7 @@ GEM
     parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
-    pg (1.5.4)
+    pg (1.5.5)
     psych (5.1.2)
       stringio
     public_suffix (5.0.4)
@@ -516,7 +516,7 @@ DEPENDENCIES
   octokit
   omniauth-github
   omniauth-rails_csrf_protection
-  pg (~> 1.1)
+  pg (~> 1.5)
   puma (~> 6.4)
   rack_session_access
   rails (~> 7.1.3)
