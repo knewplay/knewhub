@@ -7,6 +7,7 @@ describe Webhooks::GithubController do
         github_installation = create(:github_installation)
         create(:repository, github_installation:)
         @author = github_installation.author
+        @repo_count = Repository.count
         params = {
           action: 'deleted',
           installation: {
@@ -36,8 +37,8 @@ describe Webhooks::GithubController do
           expect(@author.github_installations).to eq([])
         end
 
-        it 'deletes repositories association with the github installation' do
-          expect(@author.repositories).to eq([])
+        it 'does not delete repositories association with the github installation' do
+          expect(Repository.count).to eq(@repo_count)
         end
       end
     end

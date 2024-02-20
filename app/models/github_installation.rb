@@ -1,6 +1,6 @@
 class GithubInstallation < ApplicationRecord
   belongs_to :author
-  has_many :repositories, dependent: :destroy
+  has_many :repositories, dependent: :nullify
 
   validates :installation_id, presence: true
 
