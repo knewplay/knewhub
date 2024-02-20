@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :github_installation do
-    uid { '12345' }
+    uid { '12345678' }
     username { 'user' }
     installation_id { '12345678' }
     association :author

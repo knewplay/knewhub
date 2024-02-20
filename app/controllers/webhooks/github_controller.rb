@@ -9,8 +9,12 @@ module Webhooks
 
       if request.headers['X-GitHub-Event'] == 'push'
         push_event
-      elsif request.headers['X-GitHub-Event'] == 'installation' && params[:github][:action] == 'created'
-        create_installation_event
+      elsif request.headers['X-GitHub-Event'] == 'installation'
+        if params[:github][:action] == 'created'
+          create_installation_event
+        elsif params[:github][:action] == 'deleted'
+          delete_installation_event
+        end
       end
     end
 
@@ -70,6 +74,19 @@ module Webhooks
         username: installation_params[:account][:login]
       )
       author.save
+    end
+
+    def delete_installation_event
+      installation_params = params[:github][:installation]
+      installation_id = installation_params[:id].to_s
+      uid = installation_params[:account][:id].to_s
+      github_installation = GithubInstallation.find_by(installation_id:, uid:)
+
+      if github_installation.nil?
+        logger.error "Could not find Github Installation with installation_id: #{installation_id} and uid: #{uid}."
+      else
+        github_installation.destroy
+      end
     end
 
     def verify_event
