@@ -85,8 +85,15 @@ module Webhooks
       if github_installation.nil?
         logger.error "Could not find Github Installation with installation_id: #{installation_id} and uid: #{uid}."
       else
-        github_installation.destroy
+        delete_github_installation(github_installation)
       end
+    end
+
+    def delete_github_installation(github_installation)
+      if github_installation.repositories.count.positive?
+        AuthorMailer.with(github_installation:).github_installation_deleted.deliver_later
+      end
+      github_installation.destroy
     end
 
     def verify_event

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hello <%= @author.name %>!</p>
+    
+    <div>
+      <p>The following GitHub installation has been deleted from your author account on KnewHub:</p>
+      <ul>
+        <li>Installation ID: <%= @github_installation.installation_id %></li>
+        <li>GitHub Account: <%= @github_installation.username %></li>
+      </ul>
+
+      <div>
+        <p>This impacts the following repositories:</p>
+        <ul>
+          <% @github_installation.repositories.each do |repository| %>
+            <li><%= repository.name %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <p>The repositories are still available on our platform at this time. Please log in into KnewHub to delete them if you wish.</p>
+
+    <p><b>KnewHub</b></p>
+  </body>
+</html>

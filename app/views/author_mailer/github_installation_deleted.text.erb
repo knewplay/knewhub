@@ -1,0 +1,14 @@
+Hello <%= @author.name %>!
+
+The following GitHub installation has been deleted from your author account on KnewHub:
+  - Installation ID: <%= @github_installation.installation_id %>
+  - GitHub Account: <%= @github_installation.username %>
+
+This impacts the following repositories:
+<% @github_installation.repositories.each do |repository| %>
+  - <%= repository.name %>
+<% end %>
+
+The repositories are still available on our platform at this time. Please log in into KnewHub to delete them if you wish.
+
+KnewHub
