@@ -15,32 +15,29 @@ describe Webhooks::GithubController do
         end
         VCR.turn_on!
         WebMock.disable_net_connect!
-
-        # Parameters for Webhook event
-        secret = Rails.application.credentials.webhook_secret
-        data = 'repository[id]=663068537&repository[name]=test-repo&repository[owner][name]=jp524&' \
-               'repository[owner][id]=85654561&repository[description]=something'
-        @signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, data)}"
       end
 
       context 'when a valid request is received' do
         before(:all) do
-          post '/webhooks/github',
-               params: {
-                 repository: {
-                   id: 663_068_537,
-                   name: 'test-repo',
-                   owner: {
-                     name: 'jp524',
-                     id: '85654561'
-                   },
-                   description: 'something'
-                 }
-               },
-               headers: {
-                 'X-GitHub-Event': 'push',
-                 'X-Hub-Signature-256': @signature
-               }
+          params = {
+            repository: {
+              description: 'something',
+              id: 663_068_537,
+              name: 'test-repo',
+              owner: {
+                id: 85_654_561,
+                name: 'jp524'
+              }
+            }
+          }
+
+          secret = Rails.application.credentials.webhook_secret
+          signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, params.to_json)}"
+
+          post '/webhooks/github', as: :json, params:, headers: {
+            'X-GitHub-Event': 'push',
+            'X-Hub-Signature-256': signature
+          }
         end
 
         after(:all) do
@@ -98,12 +95,27 @@ describe Webhooks::GithubController do
 
       context 'when an invalid request is received' do
         before do
-          post '/webhooks/github',
-               params: { repository: 'modified params render signature invalid' },
-               headers: {
-                 'X-GitHub-Event': 'push',
-                 'X-Hub-Signature-256': @signature
-               }
+          old_params = {
+            repository: {
+              description: 'something',
+              id: 663_068_537,
+              name: 'test-repo',
+              owner: {
+                id: 85_654_561,
+                name: 'jp524'
+              }
+            }
+          }
+
+          new_params = { repository: 'modified params render signature invalid' }
+
+          secret = Rails.application.credentials.webhook_secret
+          signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, old_params.to_json)}"
+
+          post '/webhooks/github', as: :json, params: new_params, headers: {
+            'X-GitHub-Event': 'push',
+            'X-Hub-Signature-256': signature
+          }
         end
 
         it 'returns status :bad_request' do
