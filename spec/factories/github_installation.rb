@@ -8,14 +8,14 @@ FactoryBot.define do
     trait :real do
       uid { '85654561' }
       username { 'jp524' }
-      installation_id { '47275538' }
+      installation_id { '47359514' }
       association :author, :real
     end
 
     trait :real_additional do
       uid { '120281562' }
       username { 'knewplay' }
-      installation_id { '47263399' }
+      installation_id { '47356899' }
       association :author, :real
     end
   end
