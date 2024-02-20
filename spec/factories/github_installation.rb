@@ -8,7 +8,7 @@ FactoryBot.define do
     trait :real do
       uid { '85654561' }
       username { 'jp524' }
-      installation_id { '47359514' }
+      installation_id { '47537695' }
       association :author, :real
     end
 

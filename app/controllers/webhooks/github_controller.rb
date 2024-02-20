@@ -9,6 +9,8 @@ module Webhooks
 
       if request.headers['X-GitHub-Event'] == 'push'
         push_event
+      elsif request.headers['X-GitHub-Event'] == 'installation' && params[:github][:action] == 'created'
+        create_installation_event
       end
     end
 
@@ -46,6 +48,28 @@ module Webhooks
       owner_name = repository_params[:owner][:name]
       description = repository_params[:description]
       build.receive_webhook_push(uid, name, owner_name, description)
+    end
+
+    def create_installation_event
+      requester_params = params[:github][:requester]
+      github_uid = requester_params ? requester_params[:id].to_s : params[:github][:sender][:id].to_s
+      author = Author.find_by(github_uid:)
+      if author.nil?
+        logger.error "Could not find Author with github_uid: #{github_uid}."
+      else
+        create_github_installation(author)
+      end
+    end
+
+    def create_github_installation(author)
+      installation_params = params[:github][:installation]
+
+      author.github_installations.build(
+        installation_id: installation_params[:id].to_s,
+        uid: installation_params[:account][:id].to_s,
+        username: installation_params[:account][:login]
+      )
+      author.save
     end
 
     def verify_event
