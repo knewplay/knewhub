@@ -27,7 +27,8 @@ describe Webhooks::GithubController do
               id: 85_654_561,
               name: 'jp524'
             }
-          }
+          },
+          installation: { id: 47_537_695 }
         }
 
         secret = Rails.application.credentials.webhook_secret
@@ -97,7 +98,8 @@ describe Webhooks::GithubController do
               id: 85_654_561,
               name: 'jp524'
             }
-          }
+          },
+          installation: { id: 47_537_695 }
         }
 
         new_params = { repository: 'modified params render signature invalid' }

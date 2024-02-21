@@ -68,30 +68,45 @@ module Webhooks
       github_params[:installation][:account][:login]
     end
 
+    def find_repository
+      repository = Repository.includes(:github_installation).find_by(
+        name: repository_name,
+        uid: repository_id,
+        github_installation: { installation_id: github_installation_id }
+      )
+      repository_not_found_log if repository.nil?
+      repository
+    end
+
+    def repository_not_found_log
+      content = <<~MSG
+        Could not find Repository with uid: #{repository_id} and name: #{repository_name} for Github Installation with installation_id: #{github_installation_id}.
+      MSG
+      logger.warn content
+    end
+
     # 'push' event
     def push_event
-      repository = Repository.find_by!(uid: repository_id)
+      repository = find_repository
+      return if repository.nil?
+
       build = Build.create(repository:, status: 'In progress', action: 'webhook_push')
       build.logs.create(content: "GitHub webhook 'push' received. Updating repository...")
 
-      create_actions(repository, build)
+      continue_push(repository, build)
     end
 
-    def create_actions(repository, build)
+    def continue_push(repository, build)
       if repository.github_installation.uid == repository_owner_id
         description = github_params[:repository][:description]
         build.receive_webhook_push(repository_id, repository_name, repository_owner_name, description)
       else
-        repository_owner_changed(build)
+        content = <<~MSG
+          The ownership of the repository has changed.
+          Please login with GitHub with the new repository owner's account to add the repository to Knewhub.
+        MSG
+        build.logs.create(content:, failure: true)
       end
-    end
-
-    def repository_owner_changed(build)
-      content = <<~MSG
-        The ownership of the repository has changed.
-        Please login with GitHub with the new repository owner's account to add the repository to Knewhub.
-      MSG
-      build.logs.create(content:, failure: true)
     end
 
     # 'installation' event
@@ -138,29 +153,18 @@ module Webhooks
 
     # 'repository' event
     def repository_event
-      repository = Repository.includes(:github_installation).find_by(
-        name: repository_name,
-        uid: repository_id,
-        github_installation: { installation_id: github_installation_id }
-      )
+      repository = find_repository
+      return if repository.nil?
+
       repository_actions(repository)
     end
 
     def repository_actions(repository)
-      if repository.nil?
-        repository_not_found_log
-      elsif github_params[:action] == 'renamed'
+      if github_params[:action] == 'renamed'
         rename_repository_and_move_directory(repository)
       elsif github_params[:action] == 'deleted'
         AuthorMailer.with(repository:).repository_deleted.deliver_later
       end
-    end
-
-    def repository_not_found_log
-      content = <<~MSG
-        Could not find Repository with uid: #{repository_id} and name: #{repository_name} for Github Installation with installation_id: #{github_installation_id}.
-      MSG
-      logger.warn content
     end
 
     def rename_repository_and_move_directory(repository)
