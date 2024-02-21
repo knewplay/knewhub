@@ -1,5 +1,4 @@
 module Webhooks
-  # rubocop:disable Metrics/ClassLength
   class GithubController < ApplicationController
     skip_forgery_protection
 
@@ -14,7 +13,7 @@ module Webhooks
       when 'installation'
         handle_installation_event
       when 'repository'
-        handle_repository_event
+        repository_event
       end
     end
 
@@ -33,14 +32,6 @@ module Webhooks
         create_installation_event
       elsif params[:github][:action] == 'deleted'
         delete_installation_event
-      end
-    end
-
-    def handle_repository_event
-      if params[:github][:action] == 'renamed'
-        rename_repository_event
-      elsif params[:github][:action] == 'deleted'
-        delete_repository_event
       end
     end
 
@@ -123,7 +114,7 @@ module Webhooks
     end
 
     # 'repository' event
-    def rename_repository_event
+    def repository_event
       installation_id = params[:github][:installation][:id].to_s
       repository_uid = params[:github][:repository][:id]
       repository_name = params[:github][:changes][:repository][:name][:from]
@@ -132,18 +123,24 @@ module Webhooks
         uid: repository_uid,
         github_installation: { installation_id: }
       )
-      rename_repository_actions(repository, repository_uid, repository_name, installation_id)
+      repository_actions(repository, repository_uid, repository_name, installation_id)
     end
 
-    def rename_repository_actions(repository, repository_uid, repository_name, installation_id)
+    def repository_actions(repository, repository_uid, repository_name, installation_id)
       if repository.nil?
-        content = <<~MSG
-          Could not find Repository with uid: #{repository_uid} and name: #{repository_name} for Github Installation with installation_id: #{installation_id}.
-        MSG
-        logger.error content
-      else
+        repository_not_found_log(repository_uid, repository_name, installation_id)
+      elsif params[:github][:action] == 'renamed'
         rename_repository_and_move_directory(repository)
+      elsif params[:github][:action] == 'deleted'
+        AuthorMailer.with(repository:).repository_deleted.deliver_later
       end
+    end
+
+    def repository_not_found_log(repository_uid, repository_name, installation_id)
+      content = <<~MSG
+        Could not find Repository with uid: #{repository_uid} and name: #{repository_name} for Github Installation with installation_id: #{installation_id}.
+      MSG
+      logger.error content
     end
 
     def rename_repository_and_move_directory(repository)
@@ -153,29 +150,5 @@ module Webhooks
       new_directory = repository.storage_path
       FileUtils.mv(old_directory, new_directory)
     end
-
-    def delete_repository_event
-      installation_id = params[:github][:installation][:id].to_s
-      repository_uid = params[:github][:repository][:id]
-      repository_name = params[:github][:changes][:repository][:name][:from]
-      repository = Repository.includes(:github_installation).find_by(
-        name: repository_name,
-        uid: repository_uid,
-        github_installation: { installation_id: }
-      )
-      delete_repository_actions(repository, repository_uid, repository_name, installation_id)
-    end
-
-    def delete_repository_actions(repository, repository_uid, repository_name, installation_id)
-      if repository.nil?
-        content = <<~MSG
-          Could not find Repository with uid: #{repository_uid} and name: #{repository_name} for Github Installation with installation_id: #{installation_id}.
-        MSG
-        logger.error content
-      else
-        AuthorMailer.with(repository:).repository_deleted.deliver_later
-      end
-    end
   end
-  # rubocop:enable Metrics/ClassLength
 end
