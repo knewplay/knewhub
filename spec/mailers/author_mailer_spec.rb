@@ -20,4 +20,18 @@ RSpec.describe AuthorMailer do
       expect(mail.body.encoded).to match(repository.name)
     end
   end
+
+  describe 'repository_deleted' do
+    let!(:repository) { create(:repository) }
+    let!(:mail) { described_class.repository_deleted(repository) }
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq('Repository deleted from GitHub')
+      expect(mail.to).to eq([repository.author.user.email])
+    end
+
+    it 'renders the body containing information on the repository deleted' do
+      expect(mail.body.encoded).to match(repository.full_name)
+    end
+  end
 end

@@ -9,4 +9,9 @@ class AuthorPreview < PreviewMailer
     create(:repository, github_installation:)
     AuthorMailer.github_installation_deleted(github_installation)
   end
+
+  def repository_deleted
+    repository = create(:repository)
+    AuthorMailer.repository_deleted(repository)
+  end
 end
