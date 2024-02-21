@@ -33,6 +33,8 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Max: 130
+  Exclude:
+    - app/controllers/webhooks/github_controller.rb
 
 Metrics/MethodLength:
   Exclude:
