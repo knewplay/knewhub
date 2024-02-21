@@ -7,19 +7,43 @@ module Webhooks
     def create
       head :ok
 
-      if request.headers['X-GitHub-Event'] == 'push'
+      case request.headers['X-GitHub-Event']
+      when 'push'
         push_event
-      elsif request.headers['X-GitHub-Event'] == 'installation'
-        if params[:github][:action] == 'created'
-          create_installation_event
-        elsif params[:github][:action] == 'deleted'
-          delete_installation_event
-        end
+      when 'installation'
+        handle_installation_event
+      when 'repository'
+        handle_repository_event
       end
     end
 
     private
 
+    def verify_event
+      secret = Rails.application.credentials.webhook_secret
+      signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, request.raw_post)}"
+      return if ActiveSupport::SecurityUtils.secure_compare(signature, request.headers['X-Hub-Signature-256'])
+
+      head :bad_request
+    end
+
+    def handle_installation_event
+      if params[:github][:action] == 'created'
+        create_installation_event
+      elsif params[:github][:action] == 'deleted'
+        delete_installation_event
+      end
+    end
+
+    def handle_repository_event
+      if params[:github][:action] == 'renamed'
+        rename_repository_event
+      elsif params[:github][:action] == 'deleted'
+        delete_repository_event
+      end
+    end
+
+    # 'push' event
     def push_event
       repository_params = params[:repository]
       repository = Repository.find_by!(uid: repository_params[:id].to_i)
@@ -54,6 +78,7 @@ module Webhooks
       build.receive_webhook_push(uid, name, owner_name, description)
     end
 
+    # 'installation' event
     def create_installation_event
       requester_params = params[:github][:requester]
       github_uid = requester_params ? requester_params[:id].to_s : params[:github][:sender][:id].to_s
@@ -94,14 +119,6 @@ module Webhooks
         AuthorMailer.with(github_installation:).github_installation_deleted.deliver_later
       end
       github_installation.destroy
-    end
-
-    def verify_event
-      secret = Rails.application.credentials.webhook_secret
-      signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, request.raw_post)}"
-      return if ActiveSupport::SecurityUtils.secure_compare(signature, request.headers['X-Hub-Signature-256'])
-
-      head :bad_request
     end
   end
 end
