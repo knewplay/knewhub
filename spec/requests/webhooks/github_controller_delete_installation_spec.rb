@@ -8,7 +8,7 @@ describe Webhooks::GithubController do
         create(:repository, github_installation:)
         @author = github_installation.author
         @repo_count = Repository.count
-        params = {
+        @params = {
           action: 'deleted',
           installation: {
             account: {
@@ -20,26 +20,45 @@ describe Webhooks::GithubController do
         }
 
         secret = Rails.application.credentials.webhook_secret
-        signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, params.to_json)}"
-
-        post '/webhooks/github', as: :json, params:, headers: {
-          'X-GitHub-Event': 'installation',
-          'X-Hub-Signature-256': signature
-        }
+        @signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, @params.to_json)}"
       end
 
-      context 'without a requester' do
-        it 'returns status :ok' do
-          expect(response).to have_http_status(:ok)
-        end
+      it 'returns status :ok' do
+        post '/webhooks/github', as: :json, params: @params, headers: {
+          'X-GitHub-Event': 'installation',
+          'X-Hub-Signature-256': @signature
+        }
+        expect(response).to have_http_status(:ok)
+      end
 
-        it 'deletes the github installation' do
-          expect(@author.github_installations).to eq([])
-        end
+      it 'deletes the github installation' do
+        post '/webhooks/github', as: :json, params: @params, headers: {
+          'X-GitHub-Event': 'installation',
+          'X-Hub-Signature-256': @signature
+        }
+        expect(@author.github_installations).to eq([])
+      end
 
-        it 'does not delete repositories association with the github installation' do
-          expect(Repository.count).to eq(@repo_count)
-        end
+      it 'does not delete repositories association with the github installation' do
+        post '/webhooks/github', as: :json, params: @params, headers: {
+          'X-GitHub-Event': 'installation',
+          'X-Hub-Signature-256': @signature
+        }
+        expect(Repository.count).to eq(@repo_count)
+      end
+
+      it 'calls the AuthorMailer' do
+        expect do
+          post '/webhooks/github', as: :json, params: @params, headers: {
+            'X-GitHub-Event': 'installation',
+            'X-Hub-Signature-256': @signature
+          }
+        end.to have_enqueued_job(ActionMailer::MailDeliveryJob).with(
+          'AuthorMailer',
+          'github_installation_deleted',
+          'deliver_now',
+          Hash
+        )
       end
     end
 
