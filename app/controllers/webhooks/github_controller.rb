@@ -28,11 +28,15 @@ module Webhooks
     end
 
     def handle_installation_event
-      if params[:github][:action] == 'created'
+      if github_params[:action] == 'created'
         create_installation_event
-      elsif params[:github][:action] == 'deleted'
+      elsif github_params[:action] == 'deleted'
         delete_installation_event
       end
+    end
+
+    def github_params
+      params[:github]
     end
 
     # 'push' event
@@ -72,8 +76,8 @@ module Webhooks
 
     # 'installation' event
     def create_installation_event
-      requester_params = params[:github][:requester]
-      github_uid = requester_params ? requester_params[:id].to_s : params[:github][:sender][:id].to_s
+      requester_params = github_params[:requester]
+      github_uid = requester_params ? requester_params[:id].to_s : github_params[:sender][:id].to_s
       author = Author.find_by(github_uid:)
       if author.nil?
         logger.error "Could not find Author with github_uid: #{github_uid}."
@@ -83,7 +87,7 @@ module Webhooks
     end
 
     def create_github_installation(author)
-      installation_params = params[:github][:installation]
+      installation_params = github_params[:installation]
 
       author.github_installations.build(
         installation_id: installation_params[:id].to_s,
@@ -94,7 +98,7 @@ module Webhooks
     end
 
     def delete_installation_event
-      installation_params = params[:github][:installation]
+      installation_params = github_params[:installation]
       installation_id = installation_params[:id].to_s
       uid = installation_params[:account][:id].to_s
       github_installation = GithubInstallation.find_by(installation_id:, uid:)
@@ -115,23 +119,24 @@ module Webhooks
 
     # 'repository' event
     def repository_event
-      installation_id = params[:github][:installation][:id].to_s
-      repository_uid = params[:github][:repository][:id]
-      repository_name = params[:github][:changes][:repository][:name][:from]
-      repository = Repository.includes(:github_installation).find_by(
-        name: repository_name,
-        uid: repository_uid,
-        github_installation: { installation_id: }
-      )
+      installation_id = github_params[:installation][:id].to_s
+      repository_uid = github_params[:repository][:id]
+      repository_name = if github_params[:changes]
+                          github_params[:changes][:repository][:name][:from]
+                        else
+                          github_params[:repository][:name]
+                        end
+      repository = Repository.includes(:github_installation).find_by(name: repository_name, uid: repository_uid,
+                                                                     github_installation: { installation_id: })
       repository_actions(repository, repository_uid, repository_name, installation_id)
     end
 
     def repository_actions(repository, repository_uid, repository_name, installation_id)
       if repository.nil?
         repository_not_found_log(repository_uid, repository_name, installation_id)
-      elsif params[:github][:action] == 'renamed'
+      elsif github_params[:action] == 'renamed'
         rename_repository_and_move_directory(repository)
-      elsif params[:github][:action] == 'deleted'
+      elsif github_params[:action] == 'deleted'
         AuthorMailer.with(repository:).repository_deleted.deliver_later
       end
     end
@@ -144,7 +149,7 @@ module Webhooks
     end
 
     def rename_repository_and_move_directory(repository)
-      new_name = params[:github][:repository][:name]
+      new_name = github_params[:repository][:name]
       old_directory = repository.storage_path
       repository.update(name: new_name)
       new_directory = repository.storage_path

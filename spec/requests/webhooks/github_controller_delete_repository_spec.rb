@@ -13,16 +13,9 @@ describe Webhooks::GithubController do
         @repo_count = Repository.count
         @params = {
           action: 'deleted',
-          changes: {
-            repository: {
-              name: {
-                from: 'repo_name'
-              }
-            }
-          },
           repository: {
             id: 123_456_789,
-            name: 'new-name'
+            name: 'repo_name'
           },
           installation: {
             id: 12_345_678
@@ -79,13 +72,6 @@ describe Webhooks::GithubController do
       before(:all) do
         @params = {
           action: 'deleted',
-          changes: {
-            repository: {
-              name: {
-                from: 'some-repo'
-              }
-            }
-          },
           repository: {
             id: 88_777_666,
             name: 'some-repo-new-name'
@@ -128,7 +114,7 @@ describe Webhooks::GithubController do
         }
         expect(Rails.logger).to have_received(:warn).with(
           'Could not find Repository with uid: 88777666 and ' \
-          "name: some-repo for Github Installation with installation_id: 0.\n"
+          "name: some-repo-new-name for Github Installation with installation_id: 0.\n"
         )
       end
     end
