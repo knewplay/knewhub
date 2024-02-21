@@ -99,13 +99,13 @@ describe Webhooks::GithubController do
         expect(response).to have_http_status(:ok)
       end
 
-      it 'writes an error log' do
-        allow(Rails.logger).to receive(:error)
+      it 'writes an warn log' do
+        allow(Rails.logger).to receive(:warn)
         post '/webhooks/github', as: :json, params: @params, headers: {
           'X-GitHub-Event': 'repository',
           'X-Hub-Signature-256': @signature
         }
-        expect(Rails.logger).to have_received(:error).with(
+        expect(Rails.logger).to have_received(:warn).with(
           'Could not find Repository with uid: 123456789 and ' \
           "name: repo_name for Github Installation with installation_id: 12345678.\n"
         )

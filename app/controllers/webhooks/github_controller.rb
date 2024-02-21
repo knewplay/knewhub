@@ -140,7 +140,7 @@ module Webhooks
       content = <<~MSG
         Could not find Repository with uid: #{repository_uid} and name: #{repository_name} for Github Installation with installation_id: #{installation_id}.
       MSG
-      logger.error content
+      logger.warn content
     end
 
     def rename_repository_and_move_directory(repository)
