@@ -1,4 +1,5 @@
 module Webhooks
+  # rubocop:disable Metrics/ClassLength
   class GithubController < ApplicationController
     skip_forgery_protection
 
@@ -152,5 +153,29 @@ module Webhooks
       new_directory = repository.storage_path
       FileUtils.mv(old_directory, new_directory)
     end
+
+    def delete_repository_event
+      installation_id = params[:github][:installation][:id].to_s
+      repository_uid = params[:github][:repository][:id]
+      repository_name = params[:github][:changes][:repository][:name][:from]
+      repository = Repository.includes(:github_installation).find_by(
+        name: repository_name,
+        uid: repository_uid,
+        github_installation: { installation_id: }
+      )
+      delete_repository_actions(repository, repository_uid, repository_name, installation_id)
+    end
+
+    def delete_repository_actions(repository, repository_uid, repository_name, installation_id)
+      if repository.nil?
+        content = <<~MSG
+          Could not find Repository with uid: #{repository_uid} and name: #{repository_name} for Github Installation with installation_id: #{installation_id}.
+        MSG
+        logger.error content
+      else
+        AuthorMailer.with(repository:).repository_deleted.deliver_later
+      end
+    end
   end
+  # rubocop:enable Metrics/ClassLength
 end
