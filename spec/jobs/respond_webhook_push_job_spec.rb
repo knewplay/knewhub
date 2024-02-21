@@ -23,50 +23,26 @@ RSpec.describe RespondWebhookPushJob do
     described_class.perform_async(
       @build.id,
       @repo.uid,
-      @repo.name,
-      @repo.owner,
       @repo.description
     )
     expect(described_class).to have_enqueued_sidekiq_job(
       @build.id,
       @repo.uid,
-      @repo.name,
-      @repo.owner,
       @repo.description
     )
   end
 
   context 'when executing perform' do
-    it 'when webhook_name == name && webhook_owner == repository.owner' do
+    it 'updates the repository description' do
       Sidekiq::Testing.inline! do
         described_class.perform_async(
           @build.id,
           @repo.uid,
-          @repo.name,
-          @repo.owner,
-          @repo.description
+          'The description has changed'
         )
         @repo.reload
 
         expect(@repo.last_pull_at).not_to be_nil
-      end
-    end
-
-    it 'when webhook_name != name && webhook_owner == repository.owner' do
-      Sidekiq::Testing.inline! do
-        VCR.use_cassette('get_installation_access_token') do
-          described_class.perform_async(
-            @build.id,
-            @repo.uid,
-            'markdown-templates',
-            @repo.owner,
-            'The description has changed'
-          )
-        end
-        @repo.reload
-
-        expect(@repo.last_pull_at).not_to be_nil
-        expect(@repo.name).to eq('markdown-templates')
         expect(@repo.description).to eq('The description has changed')
       end
     end

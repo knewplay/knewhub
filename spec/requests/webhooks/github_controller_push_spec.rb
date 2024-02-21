@@ -54,8 +54,6 @@ describe Webhooks::GithubController do
             RespondWebhookPushJob.perform_async(
               @build.id,
               @repo.uid,
-              'test-repo',
-              'jp524',
               'something'
             )
           end
@@ -66,23 +64,19 @@ describe Webhooks::GithubController do
         end
 
         it 'with second log' do
-          expect(@build.logs.second.content).to eq('No change to repository name or owner.')
+          expect(@build.logs.second.content).to eq('Repository description successfully updated from GitHub.')
         end
 
         it 'with third log' do
-          expect(@build.logs.third.content).to eq('Repository description successfully updated from GitHub.')
+          expect(@build.logs.third.content).to eq('Repository successfully pulled.')
         end
 
         it 'with fourth log' do
-          expect(@build.logs.fourth.content).to eq('Repository successfully pulled.')
+          expect(@build.logs.fourth.content).to eq('Questions successfully parsed.')
         end
 
         it 'with fifth log' do
-          expect(@build.logs.fifth.content).to eq('Questions successfully parsed.')
-        end
-
-        it 'with sixth log' do
-          expect(@build.logs[5].content).to eq('index.md file exists for this repository.')
+          expect(@build.logs.fifth.content).to eq('index.md file exists for this repository.')
         end
 
         it "with status 'Complete'" do
