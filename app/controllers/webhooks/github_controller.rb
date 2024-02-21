@@ -161,18 +161,10 @@ module Webhooks
 
     def repository_actions(repository)
       if github_params[:action] == 'renamed'
-        rename_repository_and_move_directory(repository)
+        RespondWebhookRenameRepoJob.perform_async(repository.id, github_params[:repository][:name])
       elsif github_params[:action] == 'deleted'
         AuthorMailer.with(repository:).repository_deleted.deliver_later
       end
-    end
-
-    def rename_repository_and_move_directory(repository)
-      new_name = github_params[:repository][:name]
-      old_directory = repository.storage_path
-      repository.update(name: new_name)
-      new_directory = repository.storage_path
-      FileUtils.mv(old_directory, new_directory)
     end
   end
 end

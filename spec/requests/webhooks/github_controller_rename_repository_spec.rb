@@ -35,10 +35,12 @@ describe Webhooks::GithubController do
         secret = Rails.application.credentials.webhook_secret
         signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, params.to_json)}"
 
-        post '/webhooks/github', as: :json, params:, headers: {
-          'X-GitHub-Event': 'repository',
-          'X-Hub-Signature-256': signature
-        }
+        Sidekiq::Testing.inline! do
+          post '/webhooks/github', as: :json, params:, headers: {
+            'X-GitHub-Event': 'repository',
+            'X-Hub-Signature-256': signature
+          }
+        end
       end
 
       after(:all) do
@@ -58,6 +60,7 @@ describe Webhooks::GithubController do
 
       it 'changes the directory where the repository is stored' do
         expect(File).not_to exist(@directory)
+        @repo.reload
         new_directory = @repo.storage_path
         expect(File).to exist(new_directory)
       end
