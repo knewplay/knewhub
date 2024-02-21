@@ -120,5 +120,37 @@ module Webhooks
       end
       github_installation.destroy
     end
+
+    # 'repository' event
+    def rename_repository_event
+      installation_id = params[:github][:installation][:id].to_s
+      repository_uid = params[:github][:repository][:id]
+      repository_name = params[:github][:changes][:repository][:name][:from]
+      repository = Repository.includes(:github_installation).find_by(
+        name: repository_name,
+        uid: repository_uid,
+        github_installation: { installation_id: }
+      )
+      rename_repository_actions(repository, repository_uid, repository_name, installation_id)
+    end
+
+    def rename_repository_actions(repository, repository_uid, repository_name, installation_id)
+      if repository.nil?
+        content = <<~MSG
+          Could not find Repository with uid: #{repository_uid} and name: #{repository_name} for Github Installation with installation_id: #{installation_id}.
+        MSG
+        logger.error content
+      else
+        rename_repository_and_move_directory(repository)
+      end
+    end
+
+    def rename_repository_and_move_directory(repository)
+      new_name = params[:github][:repository][:name]
+      old_directory = repository.storage_path
+      repository.update(name: new_name)
+      new_directory = repository.storage_path
+      FileUtils.mv(old_directory, new_directory)
+    end
   end
 end
