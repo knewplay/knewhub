@@ -29,4 +29,11 @@ class GithubInstallation < ApplicationRecord
       already_added_repositories.include?(repository[:uid])
     end
   end
+
+  def list_repository_directories(directories = [])
+    repositories.each do |repository|
+      directories << repository.storage_path
+    end
+    directories
+  end
 end
