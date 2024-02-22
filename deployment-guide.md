@@ -93,7 +93,10 @@
     * POSTGRES_USER (refer to SQL instance details on the Google console)
     * POSTGRES_PASSWORD (password for the SQL instance created in the previous step)
     * GITHUB_APP_ID
-    * GITHUB_APP_SECRET
+    * GITHUB_APP_NAME
+    * GITHUB_CLIENT_ID
+    * GITHUB_CLIENT_SECRET
+    * GITHUB_PRIVATE_KEY
     * BREVO_USERNAME
     * BREVO_PASSWORD
 2. Configure Permissions for each secret
