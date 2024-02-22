@@ -9,11 +9,12 @@ class GithubInstallation < ApplicationRecord
   end
 
   def github_client
-    Octokit::Client.new(access_token:)
+    Octokit::Client.new(access_token:, per_page: 100)
   end
 
   def list_github_repositories(result = [])
-    repositories = github_client.list_app_installation_repositories['repositories']
+    response = github_client.list_app_installation_repositories({ per_page: 100 })
+    repositories = response[:repositories]
     repositories.each do |repository|
       result << { full_name: repository[:full_name], uid: repository[:id] }
     end

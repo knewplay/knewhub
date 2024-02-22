@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.github.com/installation/repositories
+    uri: https://api.github.com/installation/repositories?per_page=100
     body:
       encoding: US-ASCII
       string: ''
