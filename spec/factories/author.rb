@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :author do
-    github_uid { '12345678' }
-    github_username { 'user' }
+    github_uid { '11222333' }
+    github_username { 'author' }
     association :user
 
     trait :real do

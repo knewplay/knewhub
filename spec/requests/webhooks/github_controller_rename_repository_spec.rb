@@ -21,14 +21,14 @@ describe Webhooks::GithubController do
           },
           repository: {
             id: 123_456_789,
-            name: 'new-name'
+            name: 'new_repo_name'
           },
           installation: {
             id: 12_345_678
           },
           sender: {
-            id: 12_345_678,
-            login: 'user'
+            id: 44_555_666,
+            login: 'repo_owner'
           }
         }
 
@@ -44,7 +44,7 @@ describe Webhooks::GithubController do
       end
 
       after(:all) do
-        parent_directory = Rails.root.join('repos', @repo.owner)
+        parent_directory = Rails.root.join('repos', @repo.author_username)
         FileUtils.remove_dir(parent_directory)
       end
 
@@ -54,8 +54,8 @@ describe Webhooks::GithubController do
 
       it "modifies the repository's information" do
         @repo.reload
-        expect(@repo.name).to eq('new-name')
-        expect(@repo.full_name).to eq('user/new-name')
+        expect(@repo.name).to eq('new_repo_name')
+        expect(@repo.full_name).to eq('repo_owner/new_repo_name')
       end
 
       it 'changes the directory where the repository is stored' do
@@ -79,14 +79,14 @@ describe Webhooks::GithubController do
           },
           repository: {
             id: 123_456_789,
-            name: 'new-name'
+            name: 'new_repo_name'
           },
           installation: {
             id: 12_345_678
           },
           sender: {
-            id: 12_345_678,
-            login: 'user'
+            id: 44_555_666,
+            login: 'repo_owner'
           }
         }
 

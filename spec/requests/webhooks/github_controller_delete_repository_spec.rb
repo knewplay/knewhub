@@ -31,7 +31,7 @@ describe Webhooks::GithubController do
       end
 
       after(:all) do
-        parent_directory = Rails.root.join('repos', @repo.owner)
+        parent_directory = Rails.root.join('repos', @repo.author_username)
         FileUtils.remove_dir(parent_directory)
       end
 

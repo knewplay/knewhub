@@ -12,8 +12,8 @@ describe Webhooks::GithubController do
           action: 'deleted',
           installation: {
             account: {
-              id: 12_345_678,
-              login: 'user'
+              id: 44_555_666,
+              login: 'repo_owner'
             },
             id: 12_345_678
           }

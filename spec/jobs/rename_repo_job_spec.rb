@@ -8,11 +8,12 @@ RSpec.describe RenameRepoJob do
     FileUtils.mkdir_p(@directory)
     FileUtils.touch(@directory.join('index.md'))
 
-    @new_name = 'new-name'
+    @new_name = 'new_repo_name'
   end
 
   after(:all) do
-    FileUtils.remove_dir(@repo.storage_path)
+    parent_directory = Rails.root.join('repos', @repo.author_username)
+    FileUtils.remove_dir(parent_directory)
   end
 
   it 'queues the job' do
@@ -38,8 +39,8 @@ RSpec.describe RenameRepoJob do
 
     it "modifies the repository's information" do
       @repo.reload
-      expect(@repo.name).to eq('new-name')
-      expect(@repo.full_name).to eq('user/new-name')
+      expect(@repo.name).to eq(@new_name)
+      expect(@repo.full_name).to eq('repo_owner/new_repo_name')
     end
 
     it 'changes the directory where the repository is stored' do
