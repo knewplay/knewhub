@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RespondWebhookRenameRepoJob do
+RSpec.describe RenameRepoJob do
   before(:all) do
     # Create repository and its directory in `repos` folder
     @repo = create(:repository)
