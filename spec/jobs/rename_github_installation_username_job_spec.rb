@@ -13,7 +13,7 @@ RSpec.describe RenameGithubInstallationUsernameJob do
         FileUtils.touch(directory.join('index.md'))
       end
 
-      @new_username = 'new-user'
+      @new_username = 'new_repo_owner'
     end
 
     after(:all) do
