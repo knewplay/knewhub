@@ -106,7 +106,7 @@ describe Webhooks::GithubController do
         expect(initial_count).to eq(final_count)
       end
 
-      it 'writes an warn log' do
+      it 'writes a warn log' do
         allow(Rails.logger).to receive(:warn)
         post '/webhooks/github', as: :json, params: @params, headers: {
           'X-GitHub-Event': 'repository',
