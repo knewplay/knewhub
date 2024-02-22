@@ -44,7 +44,7 @@ module Webhooks
     end
 
     def repository_name
-      # [:changes] used in 'update repository' event. It is the old name of the repository
+      # [:changes] used in 'rename repository' event. It is the old name of the repository
       github_params[:changes] ? github_params[:changes][:repository][:name][:from] : github_params[:repository][:name]
     end
 
@@ -83,6 +83,18 @@ module Webhooks
         Could not find Repository with uid: #{repository_id} and name: #{repository_name} for Github Installation with installation_id: #{github_installation_id}.
       MSG
       logger.warn content
+    end
+
+    def find_github_installation
+      github_installation = GithubInstallation.find_by(
+        installation_id: github_installation_id,
+        uid: github_installation_account_id
+      )
+      if github_installation.nil?
+        logger.error "Could not find Github Installation with installation_id: #{github_installation_id}" \
+                     "and uid: #{github_installation_account_id}."
+      end
+      github_installation
     end
 
     # 'push' event
@@ -131,17 +143,10 @@ module Webhooks
     end
 
     def delete_installation_event
-      github_installation = GithubInstallation.find_by(
-        installation_id: github_installation_id,
-        uid: github_installation_account_id
-      )
+      github_installation = find_github_installation
+      return if github_installation.nil?
 
-      if github_installation.nil?
-        logger.error "Could not find Github Installation with installation_id: #{github_installation_id}" \
-                     "and uid: #{github_installation_account_id}."
-      else
-        delete_github_installation(github_installation)
-      end
+      delete_github_installation(github_installation)
     end
 
     def delete_github_installation(github_installation)
