@@ -33,6 +33,7 @@ module Webhooks
 
     def handle_installation_event
       if github_params[:action] == 'created'
+        sleep(2) # Introduce delay to ensure Author is created before installation event is processed
         create_installation_event
       elsif github_params[:action] == 'deleted'
         delete_installation_event
