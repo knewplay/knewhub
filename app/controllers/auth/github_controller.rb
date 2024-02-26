@@ -14,11 +14,9 @@ module Auth
     private
 
     def access_token
-      request_params = {
-        client_id: Rails.application.credentials.dig(:github, :client_id),
-        client_secret: Rails.application.credentials.dig(:github, :client_secret),
-        code: params[:code]
-      }
+      client_id = ENV.fetch('GITHUB_CLIENT_ID', Rails.application.credentials.dig(:github, :client_id))
+      client_secret = ENV.fetch('GITHUB_CLIENT_SECRET', Rails.application.credentials.dig(:github, :client_secret))
+      request_params = { client_id:, client_secret:, code: params[:code] }
 
       conn = Faraday.new(url: 'https://github.com')
       response = conn.post('/login/oauth/access_token', request_params, { Accept: 'application/json' })

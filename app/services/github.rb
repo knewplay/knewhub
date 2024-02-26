@@ -5,13 +5,15 @@ class Github
   end
 
   def jwt
+    github_app_id = ENV.fetch('GITHUB_APP_ID', Rails.application.credentials.dig(:github, :app_id))
+
     payload = {
       # issued at time, 60 seconds in the past to allow for clock drift
       iat: Time.now.to_i - 60,
       # JWT expiration time (10 minute maximum)
       exp: Time.now.to_i + (10 * 60),
       # GitHub App's identifier
-      iss: Rails.application.credentials.dig(:github, :app_id)
+      iss: github_app_id
     }
     JWT.encode(payload, private_key, 'RS256')
   end
@@ -21,6 +23,6 @@ class Github
   end
 
   def pem
-    Rails.application.credentials.dig(:github, :private_key)
+    ENV.fetch('GITHUB_PRIVATE_KEY', Rails.application.credentials.dig(:github, :private_key))
   end
 end
