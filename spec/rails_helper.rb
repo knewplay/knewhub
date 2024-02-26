@@ -13,6 +13,7 @@ require 'support/vcr'
 require 'rack_session_access/capybara'
 require 'devise'
 require 'active_support/testing/time_helpers'
+require 'support/octokit_helpers'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -37,6 +38,8 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|
+  config.include OctokitHelpers
+
   config.include FactoryBot::Syntax::Methods
 
   config.include Devise::Test::ControllerHelpers, type: :controller

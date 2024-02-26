@@ -60,15 +60,12 @@ gem 'git'
 # Toolkit for the GitHub API
 gem 'octokit'
 
-# Catches Faraday exceptions and retries requests
+# HTTP client
+gem 'faraday'
 gem 'faraday-retry'
 
 # Parse front matter from files
 gem 'front_matter_parser'
-
-# Authentication using OmniAuth
-gem 'omniauth-github'
-gem 'omniauth-rails_csrf_protection'
 
 # Authentication using WebAuthn standard
 gem 'webauthn'

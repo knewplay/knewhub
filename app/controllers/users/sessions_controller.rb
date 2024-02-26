@@ -7,10 +7,5 @@ module Users
       session[:administrator_id] = nil
       session[:administrator_expires_at] = nil
     end
-
-    def destroy
-      super
-      session[:author_id] = nil
-    end
   end
 end

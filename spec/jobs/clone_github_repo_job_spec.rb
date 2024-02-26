@@ -7,8 +7,7 @@ RSpec.describe CloneGithubRepoJob do
   end
 
   after(:all) do
-    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
-    FileUtils.remove_dir(directory)
+    FileUtils.remove_dir(@repo.storage_path)
   end
 
   it 'queues the job' do
@@ -19,10 +18,11 @@ RSpec.describe CloneGithubRepoJob do
   it 'executes perform' do
     expect(@repo.last_pull_at).to be_nil
     Sidekiq::Testing.inline! do
-      VCR.use_cassette('clone_github_repo') do
+      VCR.use_cassette('get_installation_access_token') do
         described_class.perform_async(@build.id)
       end
     end
+    git_clone(@repo)
     @repo.reload
     expect(@repo.last_pull_at).not_to be_nil
   end

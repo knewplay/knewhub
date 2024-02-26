@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.github.com/app/installations/47356899/access_tokens
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 8.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <BEARER> 
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Thu, 15 Feb 2024 13:47:24 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '201'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - '"7558e334bb66096540c97bd220068a6fe79706eb143bb454e31365101a4ed5e8"'
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - C116:7378:3EBE47E:7D05502:65CE15EC
+    body:
+      encoding: UTF-8
+      string: '{"token":"<INSTALLATION_ACCESS_TOKEN>","expires_at":"2024-02-15T14:47:24Z","permissions":{"contents":"read","metadata":"read","repository_hooks":"write"},"repository_selection":"selected"}'
+  recorded_at: Thu, 15 Feb 2024 13:47:24 GMT
+recorded_with: VCR 6.2.0

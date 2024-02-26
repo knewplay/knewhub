@@ -10,11 +10,11 @@ http_interactions:
       Accept:
       - application/vnd.github.v3+json
       User-Agent:
-      - Octokit Ruby Gem 7.1.0
+      - Octokit Ruby Gem 8.1.0
       Content-Type:
       - application/json
       Authorization:
-      - token <TOKEN>
+      - token <INSTALLATION_ACCESS_TOKEN>
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Thu, 05 Oct 2023 16:51:27 GMT
+      - Mon, 12 Feb 2024 17:40:55 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -36,15 +36,11 @@ http_interactions:
       - Accept, Authorization, Cookie, X-GitHub-OTP
       - Accept-Encoding, Accept, X-Requested-With
       Etag:
-      - '"9b90c32f4e8f80f743f7c7a966eb4943c0bec30cd5dd624271acba6abf82f5d0"'
-      X-Oauth-Scopes:
-      - admin:repo_hook, repo
-      X-Accepted-Oauth-Scopes:
-      - admin:repo_hook, read:repo_hook, repo, write:repo_hook
-      Github-Authentication-Token-Expiration:
-      - 2023-11-04 13:22:43 UTC
+      - '"3a448f2068d561996aebeef924dcb8a2504af10ac3a997211859d98c825bf367"'
       X-Github-Media-Type:
       - github.v3; format=json
+      X-Accepted-Github-Permissions:
+      - repository_hooks=read
       X-Github-Api-Version-Selected:
       - '2022-11-28'
       X-Ratelimit-Limit:
@@ -52,7 +48,7 @@ http_interactions:
       X-Ratelimit-Remaining:
       - '4996'
       X-Ratelimit-Reset:
-      - '1696528181'
+      - '1707762837'
       X-Ratelimit-Used:
       - '4'
       X-Ratelimit-Resource:
@@ -77,9 +73,9 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - C853:0E0F:2D9A95:5CA8C9:651EE98F
+      - C787:3EB8:1A3FF:34B85:65CA5827
     body:
       encoding: UTF-8
       string: "[]"
-  recorded_at: Thu, 05 Oct 2023 16:51:27 GMT
+  recorded_at: Mon, 12 Feb 2024 17:40:55 GMT
 recorded_with: VCR 6.2.0

@@ -1,6 +1,7 @@
 class Author < ApplicationRecord
   belongs_to :user, optional: true
-  has_many :repositories, dependent: :destroy
+  has_many :github_installations, dependent: :destroy
+  has_many :repositories, through: :github_installations
 
   before_create :set_name
 
@@ -11,26 +12,18 @@ class Author < ApplicationRecord
             length: { maximum: 39 },
             on: :update
 
-  def self.from_omniauth(access_token)
-    github_uid = access_token.uid
-    data = access_token.info
-    github_username = data['nickname']
-
-    author = Author.find_by(github_uid:)
-    author ||= Author.create(github_uid:, github_username:)
-
-    update_author_github_username(author, github_username)
-
-    author
+  def list_github_repositories(result = [])
+    github_installations.each do |install|
+      result.push(*install.list_github_repositories)
+    end
+    result
   end
 
-  def self.update_author_github_username(author, github_username)
-    return if author.github_username == github_username
-
-    author.repositories.each do |repository|
-      RepositoryDirectory.update_author(repository.id, github_username)
+  def repositories_available_for_addition(result = [])
+    github_installations.each do |install|
+      result.push(*install.repositories_available_for_addition)
     end
-    author.update(github_username:)
+    result
   end
 
   private

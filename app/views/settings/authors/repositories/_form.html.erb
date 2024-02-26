@@ -1,0 +1,23 @@
+<%= form_with(model: [:settings, :author, repository]) do |form| %>
+  <%= render 'shared/form_errors', resource: repository if repository.errors.any? %>
+
+  <p><%= "Name: #{repository.name}" %></p>
+  <%= form.hidden_field :name, value: repository.name %>
+
+  <p><%= "Owner: #{repository.owner}" %></p>
+  <%= form.hidden_field :owner, value: repository.owner %>
+
+  <%= form.hidden_field :uid, value: repository.uid %>
+
+  <div class="form-field">
+    <%= form.text_field :branch %>
+    <%= form.label :branch, 'Branch (if other than main)' %>
+  </div>
+
+  <div class="form-field">
+    <%= form.text_field :title, required: true %>
+    <%= form.label :title, 'Title' %>
+  </div>
+
+  <%= form.submit %>
+<% end %>

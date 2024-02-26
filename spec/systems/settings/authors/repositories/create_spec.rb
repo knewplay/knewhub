@@ -1,133 +1,143 @@
 require 'rails_helper'
 
 RSpec.shared_context 'when creating a new repository' do
-  let(:author) { create(:author) }
+  let!(:github_installation) { create(:github_installation) }
+  let!(:author) { github_installation.author }
 
   before do
     sign_in author.user
-    page.set_rack_session(author_id: author.id)
-    visit new_settings_author_repository_path
+    allow(author).to receive(:repositories_available_for_addition)
+                 .and_return([{ full_name: 'repo_owner/repo_name', uid: 123_456_789 }])
+    visit new_settings_author_repository_path(full_name: 'repo_owner/repo_name', uid: 123_456_789)
   end
 end
 
 RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
-  context 'without using the Build process' do
-    include_context 'when creating a new repository'
+  context 'when the author is allowed to add this repository' do
+    context 'without using the Build process' do
+      include_context 'when creating a new repository'
 
-    context 'when given valid name and token, but no branch' do
-      it 'creates the repository' do
+      it 'displays the name and owner' do
         expect(page).to have_content('New repository')
 
-        fill_in('Repository name on GitHub', with: 'repo_name')
-        fill_in('Repository title', with: 'Test Repo')
-        fill_in('Token', with: 'ghp_abcde12345')
-        click_on 'Create Repository'
-
-        expect(page).to have_content('Repository creation process was initiated.')
-        expect(Repository.last.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
-        expect(Repository.last.branch).to eq('main')
+        expect(page).to have_content('Name: repo_name')
+        expect(page).to have_content('Owner: repo_owner')
       end
-    end
 
-    context 'when given valid name, token and branch' do
-      it 'creates the repository' do
-        expect(page).to have_content('New repository')
+      context 'when given a valid title but no branch' do
+        it "creates the repository with default branch 'main" do
+          fill_in('Title', with: 'Test Repo')
 
-        fill_in('Repository name on GitHub', with: 'repo_name')
-        fill_in('Repository title', with: 'Test Repo')
-        fill_in('Token', with: 'ghp_abcde12345')
-        fill_in('Branch', with: 'some_branch')
-        click_on 'Create Repository'
+          click_on 'Create Repository'
 
-        expect(page).to have_content('Repository creation process was initiated.')
-        expect(Repository.last.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
-        expect(Repository.last.branch).to eq('some_branch')
+          expect(page).to have_content('Repository creation process was initiated.')
+          repo = Repository.last
+          expect(repo.title).to eq('Test Repo')
+          expect(repo.branch).to eq('main')
+          expect(repo.full_name).to eq('repo_owner/repo_name')
+          expect(repo.uid).to eq(123_456_789)
+        end
       end
-    end
 
-    context 'when given invalid input' do
-      it 'fails to create the repository' do
-        expect(page).to have_content('New repository')
+      context 'when given a valid title and branch' do
+        it 'creates the repository' do
+          fill_in('Title', with: 'Test Repo')
+          fill_in('Branch', with: 'some_branch')
 
-        fill_in('Repository name on GitHub', with: 'repo_name')
-        fill_in('Repository title', with: 'Test Repo')
-        fill_in('Token', with: 'abcde12345')
-        click_on 'Create Repository'
+          click_on 'Create Repository'
 
-        expect(page).to have_content('Token must start with "github_pat" or "ghp"')
+          expect(page).to have_content('Repository creation process was initiated.')
+          repo = Repository.last
+          expect(repo.title).to eq('Test Repo')
+          expect(repo.branch).to eq('some_branch')
+          expect(repo.full_name).to eq('repo_owner/repo_name')
+          expect(repo.uid).to eq(123_456_789)
+        end
       end
-    end
-  end
 
-  context 'when using the Build process' do
-    before(:all) do
-      author = create(:author, :real)
-      sign_in author.user
-      page.set_rack_session(author_id: author.id)
-
-      visit new_settings_author_repository_path
-
-      fill_in('Repository name on GitHub', with: 'test-repo')
-      fill_in('Repository title', with: 'Test Repo')
-      fill_in('Token', with: Rails.application.credentials.pat)
-      click_on 'Create Repository'
-
-      @repo = Repository.last
-      @repo.update(uuid: '42b189e0-5d63-4529-b863-198a9c259669')
-      sleep(1)
-      @build = @repo.builds.first
-
-      # The job is called here to allow the `uuid` to be specified
-      # This is to allow the tests to use the same VCR cassettes
-      Sidekiq::Testing.inline! do
-        VCR.use_cassette('create_repo') do
-          CreateGithubWebhookJob.perform_async(@build.id)
+      context 'when given invalid input' do
+        it 'fails to create the repository' do
+          fill_in('Title', with: '')
+          click_on 'Create Repository'
+          expect(page).to have_no_content('Repository creation process was initiated.')
+          # The validation takes place using JS so the Rails backend doesn't return an error
         end
       end
     end
 
-    after(:all) do
-      @repo.reload
-      directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
-      FileUtils.remove_dir(directory)
+    context 'when using the Build process' do
+      before(:all) do
+        # HTTP request required to clone repository using Octokit client
+        VCR.turn_off!
+        WebMock.allow_net_connect!
+        author = create(:author, :real)
+        github_installation = create(:github_installation, :real, author:)
+        sign_in author.user
 
-      VCR.use_cassette('delete_github_webhook_for_create') do
-        client = Octokit::Client.new(access_token: @repo.token)
-        client.remove_hook("#{@repo.author.github_username}/#{@repo.name}", 436_611_979)
+        visit new_settings_author_repository_path(full_name: 'jp524/test-repo', uid: 663_068_537)
+
+        fill_in('Title', with: 'Test Repo')
+
+        Sidekiq::Testing.inline! do
+          click_on 'Create Repository'
+        end
+
+        @repo = github_installation.repositories.last
+        @build = @repo.builds.first
+      end
+
+      after(:all) do
+        @repo.reload
+        FileUtils.remove_dir(@repo.storage_path)
+        VCR.turn_on!
+        WebMock.disable_net_connect!
+      end
+
+      it 'creates a Repository' do
+        expect(@repo.full_name).to eq('jp524/test-repo')
+        expect(@repo.uid).to eq(663_068_537)
+      end
+
+      it "creates an associated Build with action 'create'" do
+        expect(@build.action).to eq('create')
+      end
+
+      it 'creates the first log' do
+        expect(@build.logs.first.content).to eq('Repository successfully cloned.')
+      end
+
+      it 'creates the second log' do
+        expect(@build.logs.second.content).to eq('Repository description successfully updated from GitHub.')
+      end
+
+      it 'with third log' do
+        expect(@build.logs.third.content).to eq('Questions successfully parsed.')
+      end
+
+      it 'creates the fourth log' do
+        expect(@build.logs.fourth.content).to eq('index.md file successfully generated.')
+      end
+
+      it "sets Build status to 'Complete'" do
+        @build.reload
+        expect(@build.status).to eq('Complete')
       end
     end
+  end
 
-    it "creates an associated Build with action 'create'" do
-      expect(@build.action).to eq('create')
+  context 'when the author is not allowed to add this repository' do
+    let(:author) { create(:author) }
+
+    before do
+      sign_in author.user
+      allow(author).to receive(:repositories_available_for_addition)
+                   .and_return([{ full_name: 'author/repository', uid: 987_654_321 }])
+      visit new_settings_author_repository_path(full_name: 'author/repo_name', uid: 123_456_789)
     end
 
-    it 'creates the first log' do
-      expect(@build.logs.first.content).to eq('GitHub webhook successfully created. Now testing...')
-    end
-
-    it 'creates the second log' do
-      expect(@build.logs.second.content).to eq('GitHub webhook successfully tested.')
-    end
-
-    it 'creates the third log' do
-      expect(@build.logs.third.content).to eq('Repository successfully cloned.')
-    end
-
-    it 'creates the fourth log' do
-      expect(@build.logs.fourth.content).to eq('Repository description successfully updated from GitHub.')
-    end
-
-    it 'with fifth log' do
-      expect(@build.logs.fifth.content).to eq('Questions successfully parsed.')
-    end
-
-    it 'creates the sixth log' do
-      expect(@build.logs[5].content).to eq('index.md file successfully generated.')
-    end
-
-    it "sets Build status to 'Complete'" do
-      @build.reload
-      expect(@build.status).to eq('Complete')
+    it 'redirects to root path and displays an alert' do
+      expect(page).to have_current_path(root_path)
+      expect(page).to have_content('You are not have permission to add this repository.')
     end
   end
 end

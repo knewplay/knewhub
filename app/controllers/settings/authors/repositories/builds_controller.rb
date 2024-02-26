@@ -11,7 +11,9 @@ module Settings
         private
 
         def set_repository
-          @repository = Repository.find_by(id: params[:repository_id], author_id: current_author.id)
+          @repository = Repository.includes(:github_installation)
+                                  .find_by(id: params[:repository_id],
+                                           github_installation: { author_id: current_author.id })
         end
       end
     end

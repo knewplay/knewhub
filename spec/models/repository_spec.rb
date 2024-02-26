@@ -7,46 +7,38 @@ RSpec.describe Repository do
       expect(repo.valid?).to be false
     end
 
-    it 'returns false when given an invalid token' do
-      repo = build(:repository, token: 'invalid_token')
-      expect(repo.valid?).to be false
-    end
-
     it 'returns false when given an invalid branch' do
       repo = build(:repository, branch: 'invalid?branch')
       expect(repo.valid?).to be false
     end
 
-    it 'returns false when given a name, but no token' do
-      repo = build(:repository, name: 'repo_name', token: nil)
-      expect(repo.valid?).to be false
-    end
-
-    it 'returns true when given a valid name, token and title, and associated author' do
+    it 'returns true when given a valid name, title, and associated author' do
       repo = build(:repository)
       expect(repo.valid?).to be true
     end
 
-    it 'returns false when a repository with the same name exists for a given author' do
-      first_repository = create(:repository)
-      author = first_repository.author
-      second_repo = build(:repository, author:)
+    it 'returns false when a repository with the same name exists for a given github_installation' do
+      first_repo = create(:repository)
+      github_installation = first_repo.github_installation
+      second_repo = build(:repository, github_installation:)
       expect(second_repo.valid?).to be false
     end
 
-    it 'returns true when a repository with the same name exists for another author' do
+    it 'returns true when a repository with the same name exists for another github_installation' do
       create(:repository)
-      second_author = create(:author, :real)
-      second_repo = build(:repository, author: second_author)
+      second_github_installation = create(:github_installation, :real)
+      second_repo = build(:repository, github_installation: second_github_installation)
       expect(second_repo.valid?).to be true
     end
   end
 
-  describe '#set_git_url' do
+  describe '#git_url' do
     let(:repo) { create(:repository) }
+    let(:github_installation) { repo.github_installation }
 
-    it 'returns the git_url created using Repository owner, name and token' do
-      expect(repo.git_url).to eq('https://ghp_abcde12345@github.com/user/repo_name.git')
+    it "returns the git_url created using Repository owner, name and Author's access token" do
+      allow(github_installation).to receive(:access_token).and_return('ghs_abcde12345')
+      expect(repo.git_url).to eq('https://x-access-token:ghs_abcde12345@github.com/repo_owner/repo_name.git')
     end
   end
 
@@ -62,14 +54,6 @@ RSpec.describe Repository do
       repo.branch = 'some_branch'
       repo.save
       expect(repo.branch).to eq('some_branch')
-    end
-  end
-
-  describe '#generate_uuid' do
-    let(:repo) { create(:repository) }
-
-    it 'generates a uuid when a record is created' do
-      expect(repo.uuid).not_to be_nil
     end
   end
 end

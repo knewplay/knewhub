@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/omniauth'
 
 RSpec.describe 'Settings::EnableAuthor#get', type: :system do
   let!(:user) { create(:user) }
@@ -10,23 +9,6 @@ RSpec.describe 'Settings::EnableAuthor#get', type: :system do
       visit settings_enable_author_path
 
       expect(page).to have_content('Share your knowledge by becoming an author on KNEWHUB.')
-    end
-
-    context 'when enabling the feature' do
-      it 'creates an author record' do
-        sign_in user
-        visit settings_enable_author_path
-
-        expect { click_on 'Login with GitHub' }.to change(Author, :count).by(1)
-      end
-
-      it 'associates the user and the author' do
-        sign_in user
-        visit settings_enable_author_path
-
-        click_on 'Login with GitHub'
-        expect(Author.last.user).to eq(user)
-      end
     end
   end
 

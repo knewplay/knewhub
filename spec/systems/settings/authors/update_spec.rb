@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.shared_context 'when updating an author' do
   before do
     sign_in author.user
-    page.set_rack_session(author_id: author.id)
     visit edit_settings_author_path
   end
 end
@@ -24,7 +23,7 @@ RSpec.describe 'Settings::Author#update', type: :system do
       visit edit_settings_author_path
 
       expect(page).to have_current_path(root_path)
-      expect(page).to have_content('Please log in with GitHub.')
+      expect(page).to have_content('Please link your GitHub account.')
     end
   end
 

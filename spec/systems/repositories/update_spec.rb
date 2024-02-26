@@ -4,16 +4,18 @@ RSpec.describe Repository, '#update', type: :system do
   before(:all) do
     @repo = create(:repository, :real)
     clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
+    # HTTP request required to clone repository using Octokit client
+    VCR.turn_off!
+    WebMock.allow_net_connect!
     Sidekiq::Testing.inline! do
-      VCR.use_cassette('clone_github_repo') do
-        CloneGithubRepoJob.perform_async(clone_build.id)
-      end
+      CloneGithubRepoJob.perform_async(clone_build.id)
     end
+    VCR.turn_on!
+    WebMock.disable_net_connect!
   end
 
   after(:all) do
-    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
-    FileUtils.remove_dir(directory)
+    FileUtils.remove_dir(@repo.storage_path)
   end
 
   context 'when logged in as an author' do
@@ -21,10 +23,9 @@ RSpec.describe Repository, '#update', type: :system do
       Sidekiq::Testing.inline! do
         author = @repo.author
         sign_in author.user
-        page.set_rack_session(author_id: author.id)
 
         visit edit_settings_author_repository_path(@repo.id)
-        VCR.use_cassette('rebuild_repo') do
+        VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'pull_repo' }]) do
           click_on 'Rebuild repository (pull from GitHub)'
         end
 

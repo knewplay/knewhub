@@ -30,7 +30,7 @@
         
         <div class="index-repositories__card__actions">
           <%= link_to 'View book',
-                      "/collections/#{repository.author.github_username}/#{repository.name}/pages/index",
+                      "/collections/#{repository.storage}/pages/index",
                       target: :_blank,
                       class: 'button button-small button-tertiary',
                       disabled: !repository.visible?,
@@ -42,5 +42,5 @@
     <% end %>     
   </div>
 
-  <%= link_to 'New repository', new_settings_author_repository_path, class: 'button' %>
+  <%= link_to 'New repository', available_settings_author_repositories_path, class: 'button' %>
 </div>

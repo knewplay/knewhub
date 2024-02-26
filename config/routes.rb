@@ -3,8 +3,8 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   # Static pages
   root 'static_pages#index'
-  get 'collections/:owner/:name/pages/index', to: 'collections#index'
-  get 'collections/:owner/:name/pages/*path', to: 'collections#show'
+  get 'collections/:author_username/:owner/:name/pages/index', to: 'collections#index'
+  get 'collections/:author_username/:owner/:name/pages/*path', to: 'collections#show'
   get '/404', to: 'errors#not_found'
   get '/500', to: 'errors#internal_server_error'
 
@@ -20,7 +20,6 @@ Rails.application.routes.draw do
     resource :administrator, only: %i[new create destroy]
     resource :author, only: [:destroy]
   end
-  get 'auth/github/callback', to: 'sessions/authors#create'
 
   namespace :webauthn do
     resources :credentials, only: %i[index create destroy] do
@@ -30,6 +29,7 @@ Rails.application.routes.draw do
       post :options, on: :collection, as: 'options_for'
     end
   end
+  get 'github/callback', to: 'auth/github#create'
 
   # User and Author settings
   namespace :settings do
@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     resource :author, only: %i[edit update]
     scope module: 'authors', path: 'author', as: 'author' do
       resources :repositories, except: [:show] do
+        get :available, on: :collection
         resources :builds, only: [:index], controller: 'repositories/builds'
       end
     end
@@ -69,5 +70,5 @@ Rails.application.routes.draw do
   end
 
   # Webhooks
-  post '/webhooks/github/:uuid', to: 'webhooks/github#create'
+  post '/webhooks/github', to: 'webhooks/github#create'
 end

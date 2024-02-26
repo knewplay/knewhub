@@ -5,19 +5,26 @@ module Settings
 
       before_action :require_author_authentication
       before_action :set_repository, only: %i[edit update destroy]
+      before_action :set_available_repositories, only: %i[available new]
+      before_action :verify_if_available_repository, only: [:new]
 
       def index
         @repositories = current_author.repositories.order('id ASC')
       end
 
+      def available; end
+
       def new
-        @repository = current_author.repositories.build
+        full_name = params[:full_name]
+        owner, name = full_name.split('/')
+        @repository = github_installation(owner).repositories.build(name:, uid: params[:uid].to_i)
       end
 
       def edit; end
 
       def create
-        @repository = current_author.repositories.build(repository_params)
+        @repository = github_installation(repository_params[:owner]).repositories
+                                                                    .build(repository_params.except(:owner))
         if @repository.save
           build = Build.create(repository: @repository, status: 'In progress', action: 'create')
           build.create_repo
@@ -29,12 +36,12 @@ module Settings
       end
 
       def update
-        former_name = @repository.name
         former_branch = @repository.branch
 
-        if @repository.update(repository_params)
+        if @repository.update(repository_params.except(:owner))
           build = Build.create(repository: @repository, status: 'In progress', action: 'update')
-          update_actions(build, former_name, former_branch)
+          directory = @repository.storage_path
+          update_actions(build, directory, former_branch)
           redirect_to settings_author_repositories_path,
                       notice: 'Repository update process was initiated. Check Builds for progress and details.'
         else
@@ -43,11 +50,7 @@ module Settings
       end
 
       def destroy
-        github_username = @repository.author.github_username
-        name = @repository.name
-        directory = Rails.root.join('repos', github_username, name)
-
-        RemoveRepoJob.perform_async(github_username, name, @repository.hook_id, @repository.token, directory.to_s)
+        RemoveDirectoryJob.perform_async(@repository.storage_path.to_s)
         @repository.destroy
         redirect_to settings_author_repositories_path, notice: 'Repository was successfully deleted.'
       end
@@ -55,21 +58,43 @@ module Settings
       private
 
       def set_repository
-        @repository = Repository.find_by(id: params[:id], author_id: current_author.id)
+        @repository = Repository.includes(:github_installation)
+                                .find_by(id: params[:id], github_installation: { author_id: current_author.id })
       end
 
       def repository_params
-        params.require(:repository).permit(:name, :title, :branch, :token)
+        params.require(:repository).permit(:uid, :name, :owner, :branch, :title)
       end
 
-      def update_actions(build, former_name, former_branch)
-        if former_name != @repository.name || former_branch != @repository.branch
-          old_directory = Rails.root.join('repos', @repository.author.github_username, former_name)
-          FileUtils.rm_r(old_directory) if Dir.exist?(old_directory)
-          build.update_repo('clone')
-        else
+      def github_installation(username)
+        GithubInstallation.find_by(author_id: current_author.id, username:)
+      end
+
+      def update_actions(build, directory, former_branch)
+        if former_branch == @repository.branch
           build.update_repo('pull')
+        else
+          FileUtils.rm_r(directory) if Dir.exist?(directory)
+          build.update_repo('clone')
         end
+      end
+
+      def set_available_repositories
+        @available_repositories = current_author.repositories_available_for_addition
+      rescue Octokit::NotFound
+        github_app_name = ENV.fetch('GITHUB_APP_NAME', Rails.application.credentials.dig(:github, :app_name))
+        alert = <<-MSG
+        It looks like we don't have access to your GitHub account anymore.
+        Visit #{view_context.link_to 'this page', "https://github.com/apps/#{github_app_name}/installations/new"}
+        to link your account.
+        MSG
+        redirect_to settings_root_path, alert:
+      end
+
+      def verify_if_available_repository
+        return if @available_repositories.include?({ full_name: params[:full_name], uid: params[:uid].to_i })
+
+        redirect_to root_path, alert: 'You are not have permission to add this repository.'
       end
     end
   end

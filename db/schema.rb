@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_07_154115) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_15_180653) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -59,6 +59,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_07_154115) do
     t.index ["repository_id"], name: "index_builds_on_repository_id"
   end
 
+  create_table "github_installations", force: :cascade do |t|
+    t.bigint "author_id"
+    t.string "uid"
+    t.string "username"
+    t.string "installation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_github_installations_on_author_id"
+  end
+
   create_table "likes", force: :cascade do |t|
     t.bigint "answer_id"
     t.bigint "user_id"
@@ -92,20 +102,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_07_154115) do
 
   create_table "repositories", force: :cascade do |t|
     t.string "name"
-    t.string "token"
-    t.string "git_url"
     t.string "branch"
     t.string "description"
     t.datetime "last_pull_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "uuid"
-    t.bigint "author_id"
     t.string "title"
     t.boolean "banned", default: false
-    t.integer "hook_id"
-    t.index ["author_id"], name: "index_repositories_on_author_id"
-    t.index ["name", "author_id"], name: "index_repositories_on_name_and_author_id", unique: true
+    t.bigint "github_installation_id"
+    t.bigint "uid"
+    t.index ["github_installation_id"], name: "index_repositories_on_github_installation_id"
+    t.index ["name", "github_installation_id"], name: "index_repositories_on_name_and_github_installation_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -140,10 +147,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_07_154115) do
   add_foreign_key "answers", "users"
   add_foreign_key "authors", "users"
   add_foreign_key "builds", "repositories"
+  add_foreign_key "github_installations", "authors"
   add_foreign_key "likes", "answers"
   add_foreign_key "likes", "users"
   add_foreign_key "logs", "builds"
   add_foreign_key "questions", "repositories"
-  add_foreign_key "repositories", "authors"
+  add_foreign_key "repositories", "github_installations"
   add_foreign_key "webauthn_credentials", "administrators"
 end

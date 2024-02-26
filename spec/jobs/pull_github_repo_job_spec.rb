@@ -3,18 +3,12 @@ require 'rails_helper'
 RSpec.describe PullGithubRepoJob do
   before(:all) do
     @repo = create(:repository, :real)
-    clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
     @pull_build = create(:build, repository: @repo, aasm_state: :pulling_repo)
-    Sidekiq::Testing.inline! do
-      VCR.use_cassette('clone_github_repo') do
-        CloneGithubRepoJob.perform_async(clone_build.id)
-      end
-    end
+    git_clone(@repo)
   end
 
   after(:all) do
-    directory = Rails.root.join('repos', @repo.author.github_username, @repo.name)
-    FileUtils.remove_dir(directory)
+    FileUtils.remove_dir(@repo.storage_path)
   end
 
   it 'queues the job' do
@@ -25,10 +19,11 @@ RSpec.describe PullGithubRepoJob do
   it 'executes perform' do
     last_pull_at = @repo.last_pull_at
     Sidekiq::Testing.inline! do
-      VCR.use_cassette('pull_github_repo') do
+      VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'pull_repo' }]) do
         described_class.perform_async(@pull_build.id)
       end
     end
+    git_pull(@repo)
     @repo.reload
     expect(@repo.last_pull_at).not_to eq(last_pull_at)
   end
