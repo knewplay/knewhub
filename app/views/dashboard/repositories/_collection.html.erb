@@ -55,7 +55,7 @@ Override default partial used in `index` view to:
               style="<%= "font-family: Courier" if attribute.name == 'branch' %>"
               >
             <% if attribute.name == 'name' -%>
-              <a href="<%= "/collections/#{resource.full_name}/pages/index" %>"
+              <a href="<%= "/collections/#{resource.storage}/pages/index" %>"
                 target="_blank"
                 tabindex="-1">
                 <%= render_field attribute %>

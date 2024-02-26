@@ -1,8 +1,8 @@
 ---
 http_interactions:
 - request:
-    method: delete
-    uri: https://api.github.com/repos/jp524/test-repo/hooks/460475619
+    method: post
+    uri: https://api.github.com/app/installations/47356899/access_tokens
     body:
       encoding: UTF-8
       string: "{}"
@@ -14,34 +14,33 @@ http_interactions:
       Content-Type:
       - application/json
       Authorization:
-      - token <INSTALLATION_ACCESS_TOKEN>
+      - Bearer <BEARER> 
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
     status:
-      code: 204
-      message: No Content
+      code: 201
+      message: Created
     headers:
       Server:
       - GitHub.com
       Date:
-      - Mon, 12 Feb 2024 18:39:48 GMT
+      - Thu, 15 Feb 2024 13:47:24 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '201'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - '"7558e334bb66096540c97bd220068a6fe79706eb143bb454e31365101a4ed5e8"'
       X-Github-Media-Type:
       - github.v3; format=json
-      X-Accepted-Github-Permissions:
-      - repository_hooks=write
       X-Github-Api-Version-Selected:
       - '2022-11-28'
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4996'
-      X-Ratelimit-Reset:
-      - '1707766478'
-      X-Ratelimit-Used:
-      - '4'
-      X-Ratelimit-Resource:
-      - core
       Access-Control-Expose-Headers:
       - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
         X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
@@ -61,12 +60,10 @@ http_interactions:
       - origin-when-cross-origin, strict-origin-when-cross-origin
       Content-Security-Policy:
       - default-src 'none'
-      Vary:
-      - Accept-Encoding, Accept, X-Requested-With
       X-Github-Request-Id:
-      - C121:5697:BE1CF:17E0DF:65CA65F4
+      - C116:7378:3EBE47E:7D05502:65CE15EC
     body:
       encoding: UTF-8
-      string: ''
-  recorded_at: Mon, 12 Feb 2024 18:39:48 GMT
+      string: '{"token":"<INSTALLATION_ACCESS_TOKEN>","expires_at":"2024-02-15T14:47:24Z","permissions":{"contents":"read","metadata":"read","repository_hooks":"write"},"repository_selection":"selected"}'
+  recorded_at: Thu, 15 Feb 2024 13:47:24 GMT
 recorded_with: VCR 6.2.0

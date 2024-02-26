@@ -4,8 +4,9 @@
   <h2>Available Repositories</h2>
 
   <h5>
+    <% github_app_name = ENV.fetch('GITHUB_APP_NAME', Rails.application.credentials.dig(:github, :app_name))%> 
     Choose from one of the repositories below. If the repository you want is not listed, check your
-    <%= link_to 'GitHub settings', "https://github.com/settings/installations/#{current_author.installation_id}", target: :_blank %>
+    <%= link_to 'GitHub settings', "https://github.com/apps/#{github_app_name}/installations/new", target: :_blank %>
     to verify that is can be accessed by KnewHub.
   </h5>
 
@@ -13,9 +14,9 @@
     <% if @available_repositories %>
       <% @available_repositories.each do |repository| %>
         <li>
-            <%= repository %>
+            <%= repository[:full_name] %>
             <%= link_to 'Add repository',
-                          new_settings_author_repository_path(full_name: repository),
+                          new_settings_author_repository_path(full_name: repository[:full_name], uid: repository[:uid]),
                           class: 'button' %>
           </li>
       <% end %>

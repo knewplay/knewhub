@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Settings::Authors::Repositories#index', type: :system do
-  let(:author) { create(:author, :real) }
+  let!(:github_installation) { create(:github_installation, :real) }
+  let!(:author) { github_installation.author }
 
   context 'when an author has not added repositories' do
     before do
@@ -22,7 +23,7 @@ RSpec.describe 'Settings::Authors::Repositories#index', type: :system do
   context 'when an author has added a repository' do
     before do
       sign_in author.user
-      create(:repository, author:, owner: 'jp524', name: 'test-repo')
+      create(:repository, github_installation:, name: 'test-repo', uid: 663_068_537)
       VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'get_repos' }]) do
         visit available_settings_author_repositories_path
       end

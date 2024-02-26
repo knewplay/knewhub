@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.shared_context 'when creating a new repository' do
-  let(:author) { create(:author) }
+  let!(:github_installation) { create(:github_installation) }
+  let!(:author) { github_installation.author }
 
   before do
     sign_in author.user
-    allow(author).to receive(:repositories_available_for_addition).and_return('user/repo_name')
-    visit new_settings_author_repository_path(full_name: 'user/repo_name')
+    allow(author).to receive(:repositories_available_for_addition)
+                 .and_return([{ full_name: 'repo_owner/repo_name', uid: 123_456_789 }])
+    visit new_settings_author_repository_path(full_name: 'repo_owner/repo_name', uid: 123_456_789)
   end
 end
 
@@ -19,7 +21,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         expect(page).to have_content('New repository')
 
         expect(page).to have_content('Name: repo_name')
-        expect(page).to have_content('Owner: user')
+        expect(page).to have_content('Owner: repo_owner')
       end
 
       context 'when given a valid title but no branch' do
@@ -29,8 +31,11 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
           click_on 'Create Repository'
 
           expect(page).to have_content('Repository creation process was initiated.')
-          expect(Repository.last.title).to eq('Test Repo')
-          expect(Repository.last.branch).to eq('main')
+          repo = Repository.last
+          expect(repo.title).to eq('Test Repo')
+          expect(repo.branch).to eq('main')
+          expect(repo.full_name).to eq('repo_owner/repo_name')
+          expect(repo.uid).to eq(123_456_789)
         end
       end
 
@@ -42,7 +47,11 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
           click_on 'Create Repository'
 
           expect(page).to have_content('Repository creation process was initiated.')
-          expect(Repository.last.branch).to eq('some_branch')
+          repo = Repository.last
+          expect(repo.title).to eq('Test Repo')
+          expect(repo.branch).to eq('some_branch')
+          expect(repo.full_name).to eq('repo_owner/repo_name')
+          expect(repo.uid).to eq(123_456_789)
         end
       end
 
@@ -56,42 +65,37 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       end
     end
 
-    context 'when using the Build process', skip: 'To be finalized' do
+    context 'when using the Build process' do
       before(:all) do
+        # HTTP request required to clone repository using Octokit client
+        VCR.turn_off!
+        WebMock.allow_net_connect!
         author = create(:author, :real)
+        github_installation = create(:github_installation, :real, author:)
         sign_in author.user
 
-        VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'get_repos' }]) do
-          visit new_settings_author_repository_path(full_name: 'jp524/test-repo')
-        end
+        visit new_settings_author_repository_path(full_name: 'jp524/test-repo', uid: 663_068_537)
 
         fill_in('Title', with: 'Test Repo')
-        click_on 'Create Repository'
 
-        @repo = Repository.last
-        @repo.update(uuid: '397df2f0-489b-4d9a-8725-476ebee3b49b')
-        sleep(1)
-        @build = @repo.builds.first
-
-        # The job is called here to allow the `uuid` to be specified
-        # This is to allow the tests to use the same VCR cassettes
         Sidekiq::Testing.inline! do
-          VCR.use_cassettes([{ name: 'get_installation_access_token', options: { allow_playback_repeats: true } },
-                             { name: 'create_github_webhook' },
-                             { name: 'test_github_webhook' }]) do
-            CreateGithubWebhookJob.perform_async(@build.id)
-          end
+          click_on 'Create Repository'
         end
+
+        @repo = github_installation.repositories.last
+        @build = @repo.builds.first
       end
 
       after(:all) do
         @repo.reload
-        directory = Rails.root.join('repos', @repo.full_name)
-        FileUtils.remove_dir(directory)
+        FileUtils.remove_dir(@repo.storage_path)
+        VCR.turn_on!
+        WebMock.disable_net_connect!
+      end
 
-        VCR.use_cassettes([{ name: 'get_installation_access_token' }, { name: 'delete_github_webhook' }]) do
-          @repo.author.github_client.remove_hook(@repo.full_name, 460_475_619)
-        end
+      it 'creates a Repository' do
+        expect(@repo.full_name).to eq('jp524/test-repo')
+        expect(@repo.uid).to eq(663_068_537)
       end
 
       it "creates an associated Build with action 'create'" do
@@ -99,27 +103,19 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
       end
 
       it 'creates the first log' do
-        expect(@build.logs.first.content).to eq('GitHub webhook successfully created. Now testing...')
+        expect(@build.logs.first.content).to eq('Repository successfully cloned.')
       end
 
       it 'creates the second log' do
-        expect(@build.logs.second.content).to eq('GitHub webhook successfully tested.')
+        expect(@build.logs.second.content).to eq('Repository description successfully updated from GitHub.')
       end
 
-      it 'creates the third log' do
-        expect(@build.logs.third.content).to eq('Repository successfully cloned.')
+      it 'with third log' do
+        expect(@build.logs.third.content).to eq('Questions successfully parsed.')
       end
 
       it 'creates the fourth log' do
-        expect(@build.logs.fourth.content).to eq('Repository description successfully updated from GitHub.')
-      end
-
-      it 'with fifth log' do
-        expect(@build.logs.fifth.content).to eq('Questions successfully parsed.')
-      end
-
-      it 'creates the sixth log' do
-        expect(@build.logs[5].content).to eq('index.md file successfully generated.')
+        expect(@build.logs.fourth.content).to eq('index.md file successfully generated.')
       end
 
       it "sets Build status to 'Complete'" do
@@ -134,8 +130,9 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
 
     before do
       sign_in author.user
-      allow(author).to receive(:repositories_available_for_addition).and_return('user/repository')
-      visit new_settings_author_repository_path(full_name: 'user/repo_name')
+      allow(author).to receive(:repositories_available_for_addition)
+                   .and_return([{ full_name: 'author/repository', uid: 987_654_321 }])
+      visit new_settings_author_repository_path(full_name: 'author/repo_name', uid: 123_456_789)
     end
 
     it 'redirects to root path and displays an alert' do

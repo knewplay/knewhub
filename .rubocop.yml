@@ -24,6 +24,7 @@ FactoryBot/AssociationStyle:
   EnforcedStyle: explicit
 
 Metrics/AbcSize:
+  CountRepeatedAttributes: false
   Exclude:
     - app/controllers/webauthn/**
 
@@ -32,6 +33,8 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Max: 130
+  Exclude:
+    - app/controllers/webhooks/github_controller.rb
 
 Metrics/MethodLength:
   Exclude:

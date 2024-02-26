@@ -3,7 +3,7 @@ class GetGithubDescriptionJob
 
   def perform(build_id)
     build = Build.find(build_id)
-    repository = Repository.includes(:author).find(build.repository.id)
+    repository = Repository.includes(:github_installation).find(build.repository.id)
 
     response = get_description(repository)
     repository.update(description: response.description)
@@ -15,7 +15,7 @@ class GetGithubDescriptionJob
   end
 
   def get_description(repository)
-    github_client = repository.author.github_client
+    github_client = repository.github_installation.github_client
     github_client.repository(repository.full_name)
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_12_135529) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_15_180653) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -43,7 +43,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_135529) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.bigint "user_id"
-    t.string "installation_id"
     t.index ["github_uid"], name: "index_authors_on_github_uid", unique: true
     t.index ["github_username"], name: "index_authors_on_github_username", unique: true
     t.index ["user_id"], name: "index_authors_on_user_id", unique: true
@@ -58,6 +57,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_135529) do
     t.string "action"
     t.string "aasm_state"
     t.index ["repository_id"], name: "index_builds_on_repository_id"
+  end
+
+  create_table "github_installations", force: :cascade do |t|
+    t.bigint "author_id"
+    t.string "uid"
+    t.string "username"
+    t.string "installation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_github_installations_on_author_id"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -98,14 +107,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_135529) do
     t.datetime "last_pull_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "uuid"
-    t.bigint "author_id"
     t.string "title"
     t.boolean "banned", default: false
-    t.integer "hook_id"
-    t.string "owner"
-    t.index ["author_id"], name: "index_repositories_on_author_id"
-    t.index ["name", "owner"], name: "index_repositories_on_name_and_owner", unique: true
+    t.bigint "github_installation_id"
+    t.bigint "uid"
+    t.index ["github_installation_id"], name: "index_repositories_on_github_installation_id"
+    t.index ["name", "github_installation_id"], name: "index_repositories_on_name_and_github_installation_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -140,10 +147,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_135529) do
   add_foreign_key "answers", "users"
   add_foreign_key "authors", "users"
   add_foreign_key "builds", "repositories"
+  add_foreign_key "github_installations", "authors"
   add_foreign_key "likes", "answers"
   add_foreign_key "likes", "users"
   add_foreign_key "logs", "builds"
   add_foreign_key "questions", "repositories"
-  add_foreign_key "repositories", "authors"
+  add_foreign_key "repositories", "github_installations"
   add_foreign_key "webauthn_credentials", "administrators"
 end

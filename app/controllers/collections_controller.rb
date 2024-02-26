@@ -3,16 +3,16 @@ class CollectionsController < ApplicationController
   layout 'collections'
 
   def index
-    file_path = "#{params[:owner]}/#{params[:name]}/index"
-    render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
+    file_path = "#{params[:author_username]}/#{params[:owner]}/#{params[:name]}/index"
+    render_not_found and return unless valid_render?(file_path, params[:author_username], params[:owner], params[:name])
 
     extract_markdown_file(file_path)
     render file_path
   end
 
   def show
-    file_path = "#{params[:owner]}/#{params[:name]}/#{params[:path]}"
-    render_not_found and return unless valid_render?(file_path, params[:owner], params[:name])
+    file_path = "#{params[:author_username]}/#{params[:owner]}/#{params[:name]}/#{params[:path]}"
+    render_not_found and return unless valid_render?(file_path, params[:author_username], params[:owner], params[:name])
 
     RequestPath.store(request)
     show_actions(file_path)
@@ -47,15 +47,16 @@ class CollectionsController < ApplicationController
     || File.exist?(Rails.root.join("repos/#{file_path}.#{request.format.to_sym}").to_s)
   end
 
-  def repository_visible?(owner, name)
-    author_id = Author.find_by(github_username: owner).id
-    @repository = Repository.find_by(author_id:, name:)
-
+  def repository_visible?(author_username, owner, name)
+    github_installation_id = GithubInstallation.includes(:author)
+                                               .find_by(username: owner, author: { github_username: author_username })
+                                               .id
+    @repository = Repository.find_by(github_installation_id:, name:)
     @repository.visible?
   end
 
-  def valid_render?(file_path, owner, name)
-    return true if file_exists?(file_path) && repository_visible?(owner, name)
+  def valid_render?(file_path, author_username, owner, name)
+    return true if file_exists?(file_path) && repository_visible?(author_username, owner, name)
 
     false
   end

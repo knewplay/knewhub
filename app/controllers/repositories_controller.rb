@@ -27,7 +27,7 @@ class RepositoriesController < ApplicationController
 
   def require_author_or_admin_authentication
     repository = Repository.find(params[:id])
-    return if administrator_signed_in? || current_author.id == repository.author_id
+    return if administrator_signed_in? || current_author.id == repository.author.id
 
     redirect_to root_path, alert: 'Please log in as an author or administrator.'
   end

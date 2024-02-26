@@ -30,7 +30,7 @@
         
         <div class="index-repositories__card__actions">
           <%= link_to 'View book',
-                      "/collections/#{repository.full_name}/pages/index",
+                      "/collections/#{repository.storage}/pages/index",
                       target: :_blank,
                       class: 'button button-small button-tertiary',
                       disabled: !repository.visible?,
