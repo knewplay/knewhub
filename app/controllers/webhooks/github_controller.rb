@@ -4,6 +4,7 @@ module Webhooks
 
     before_action :verify_event
 
+    # rubocop:disable Metrics/MethodLength
     def create
       head :ok
 
@@ -12,10 +13,13 @@ module Webhooks
         push_event
       when 'installation'
         handle_installation_event
+      when 'installation_target'
+        installation_target_event
       when 'repository'
         repository_event
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
     private
 
@@ -44,7 +48,7 @@ module Webhooks
     end
 
     def repository_name
-      # [:changes] used in 'update repository' event. It is the old name of the repository
+      # [:changes] used in 'rename repository' event. It is the old name of the repository
       github_params[:changes] ? github_params[:changes][:repository][:name][:from] : github_params[:repository][:name]
     end
 
@@ -61,11 +65,19 @@ module Webhooks
     end
 
     def github_installation_account_id
-      github_params[:installation][:account][:id]
+      if github_params[:installation][:account]
+        github_params[:installation][:account][:id]
+      else
+        github_params[:account][:id]
+      end
     end
 
     def github_installation_account_name
-      github_params[:installation][:account][:login]
+      if github_params[:installation][:account]
+        github_params[:installation][:account][:login]
+      else
+        github_params[:account][:login]
+      end
     end
 
     def find_repository
@@ -83,6 +95,18 @@ module Webhooks
         Could not find Repository with uid: #{repository_id} and name: #{repository_name} for Github Installation with installation_id: #{github_installation_id}.
       MSG
       logger.warn content
+    end
+
+    def find_github_installation
+      github_installation = GithubInstallation.find_by(
+        installation_id: github_installation_id,
+        uid: github_installation_account_id
+      )
+      if github_installation.nil?
+        logger.error "Could not find Github Installation with installation_id: #{github_installation_id} " \
+                     "and uid: #{github_installation_account_id}."
+      end
+      github_installation
     end
 
     # 'push' event
@@ -131,17 +155,10 @@ module Webhooks
     end
 
     def delete_installation_event
-      github_installation = GithubInstallation.find_by(
-        installation_id: github_installation_id,
-        uid: github_installation_account_id
-      )
+      github_installation = find_github_installation
+      return if github_installation.nil?
 
-      if github_installation.nil?
-        logger.error "Could not find Github Installation with installation_id: #{github_installation_id}" \
-                     "and uid: #{github_installation_account_id}."
-      else
-        delete_github_installation(github_installation)
-      end
+      delete_github_installation(github_installation)
     end
 
     def delete_github_installation(github_installation)
@@ -149,6 +166,26 @@ module Webhooks
         AuthorMailer.with(github_installation:).github_installation_deleted.deliver_later
       end
       github_installation.destroy
+    end
+
+    # 'installation_target' event
+    def installation_target_event
+      return unless github_params[:action] == 'renamed'
+
+      github_installation = find_github_installation
+      return if github_installation.nil?
+
+      old_github_installation_account_name = github_params[:changes][:login][:from]
+      return if old_github_installation_account_name != github_installation.username
+
+      rename_github_installation(github_installation)
+    end
+
+    def rename_github_installation(github_installation)
+      RenameGithubInstallationUsernameJob.perform_async(
+        github_installation.id,
+        github_installation_account_name
+      )
     end
 
     # 'repository' event
@@ -161,7 +198,7 @@ module Webhooks
 
     def repository_actions(repository)
       if github_params[:action] == 'renamed'
-        RespondWebhookRenameRepoJob.perform_async(repository.id, github_params[:repository][:name])
+        RenameRepoJob.perform_async(repository.id, github_params[:repository][:name])
       elsif github_params[:action] == 'deleted'
         AuthorMailer.with(repository:).repository_deleted.deliver_later
       end

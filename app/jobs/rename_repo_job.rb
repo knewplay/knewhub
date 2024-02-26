@@ -1,4 +1,4 @@
-class RespondWebhookRenameRepoJob
+class RenameRepoJob
   include Sidekiq::Job
 
   def perform(repository_id, new_name)

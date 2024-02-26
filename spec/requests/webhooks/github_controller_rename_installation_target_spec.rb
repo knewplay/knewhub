@@ -1,11 +1,12 @@
 require 'rails_helper'
 
 describe Webhooks::GithubController do
-  describe "POST #create, 'X-GitHub-Event: repository' event & params[:action] = 'renamed'" do
-    context 'when repository with given params exists' do
+  describe "POST #create, 'X-GitHub-Event: installation_target' event & params[:action] = 'renamed'" do
+    context 'when github_installation with given params exists' do
       before(:all) do
+        @github_installation = create(:github_installation)
         # Create repository and its directory in `repos` folder
-        @repo = create(:repository)
+        @repo = create(:repository, github_installation: @github_installation)
         @directory = @repo.storage_path
         FileUtils.mkdir_p(@directory)
         FileUtils.touch(@directory.join('index.md'))
@@ -13,22 +14,16 @@ describe Webhooks::GithubController do
         params = {
           action: 'renamed',
           changes: {
-            repository: {
-              name: {
-                from: 'repo_name'
-              }
+            login: {
+              from: 'repo_owner'
             }
           },
-          repository: {
-            id: 123_456_789,
-            name: 'new_repo_name'
+          account: {
+            login: 'new_repo_owner',
+            id: 44_555_666
           },
           installation: {
             id: 12_345_678
-          },
-          sender: {
-            id: 44_555_666,
-            login: 'repo_owner'
           }
         }
 
@@ -37,7 +32,7 @@ describe Webhooks::GithubController do
 
         Sidekiq::Testing.inline! do
           post '/webhooks/github', as: :json, params:, headers: {
-            'X-GitHub-Event': 'repository',
+            'X-GitHub-Event': 'installation_target',
             'X-Hub-Signature-256': signature
           }
         end
@@ -52,10 +47,9 @@ describe Webhooks::GithubController do
         expect(response).to have_http_status(:ok)
       end
 
-      it "modifies the repository's information" do
-        @repo.reload
-        expect(@repo.name).to eq('new_repo_name')
-        expect(@repo.full_name).to eq('repo_owner/new_repo_name')
+      it "modifies the github installation's information" do
+        @github_installation.reload
+        expect(@github_installation.username).to eq('new_repo_owner')
       end
 
       it 'changes the directory where the repository is stored' do
@@ -66,27 +60,21 @@ describe Webhooks::GithubController do
       end
     end
 
-    context 'when repository with given params does not exist' do
+    context 'when github installation with given params does not exist' do
       before(:all) do
         @params = {
           action: 'renamed',
           changes: {
-            repository: {
-              name: {
-                from: 'repo_name'
-              }
+            login: {
+              from: 'repo_owner'
             }
           },
-          repository: {
-            id: 123_456_789,
-            name: 'new_repo_name'
+          account: {
+            login: 'new_repo_owner',
+            id: 44_555_666
           },
           installation: {
-            id: 12_345_678
-          },
-          sender: {
-            id: 44_555_666,
-            login: 'repo_owner'
+            id: 00_000_000
           }
         }
 
@@ -96,21 +84,20 @@ describe Webhooks::GithubController do
 
       it 'returns status :ok' do
         post '/webhooks/github', as: :json, params: @params, headers: {
-          'X-GitHub-Event': 'repository',
+          'X-GitHub-Event': 'installation_target',
           'X-Hub-Signature-256': @signature
         }
         expect(response).to have_http_status(:ok)
       end
 
-      it 'writes an warn log' do
-        allow(Rails.logger).to receive(:warn)
+      it 'writes an error log' do
+        allow(Rails.logger).to receive(:error)
         post '/webhooks/github', as: :json, params: @params, headers: {
-          'X-GitHub-Event': 'repository',
+          'X-GitHub-Event': 'installation_target',
           'X-Hub-Signature-256': @signature
         }
-        expect(Rails.logger).to have_received(:warn).with(
-          'Could not find Repository with uid: 123456789 and ' \
-          "name: repo_name for Github Installation with installation_id: 12345678.\n"
+        expect(Rails.logger).to have_received(:error).with(
+          'Could not find Github Installation with installation_id: 0 and uid: 44555666.'
         )
       end
     end

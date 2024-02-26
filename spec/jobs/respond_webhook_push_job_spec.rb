@@ -3,16 +3,8 @@ require 'rails_helper'
 RSpec.describe RespondWebhookPushJob do
   before(:all) do
     @repo = create(:repository, :real)
-    clone_build = create(:build, repository: @repo, aasm_state: :cloning_repo)
-    # HTTP request required to clone repository using Octokit client
-    VCR.turn_off!
-    WebMock.allow_net_connect!
-    Sidekiq::Testing.inline! do
-      CloneGithubRepoJob.perform_async(clone_build.id)
-    end
-    VCR.turn_on!
-    WebMock.disable_net_connect!
     @build = create(:build, action: 'webhook_push', repository: @repo, aasm_state: :receiving_webhook)
+    git_clone(@repo)
   end
 
   after(:all) do

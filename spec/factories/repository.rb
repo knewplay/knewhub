@@ -5,6 +5,12 @@ FactoryBot.define do
     uid { 123_456_789 }
     association :github_installation
 
+    trait :second do
+      name { 'another_repo' }
+      title { 'Another Repo' }
+      uid { 111_222_333 }
+    end
+
     trait :real do
       name { 'test-repo' }
       title { 'Test Repo' }

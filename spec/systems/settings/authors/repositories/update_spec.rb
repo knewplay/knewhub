@@ -18,7 +18,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       it 'updates the title' do
         expect(page).to have_content('Edit Repository')
 
-        fill_in('Title', with: 'New Repo Name')
+        fill_in('Title', with: 'New Repo Name', fill_options: { clear: :backspace })
         click_on 'Update Repository'
 
         expect(page).to have_content('Repository update process was initiated.')
@@ -28,7 +28,7 @@ RSpec.describe 'Settings::Authors::Repositories#update', type: :system do
       it 'updates the branch' do
         expect(page).to have_content('Edit Repository')
 
-        fill_in('Branch', with: 'other_branch')
+        fill_in('Branch', with: 'other_branch', fill_options: { clear: :backspace })
         click_on 'Update Repository'
 
         expect(page).to have_content('Repository update process was initiated.')
