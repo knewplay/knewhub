@@ -82,9 +82,10 @@ module Settings
       def set_available_repositories
         @available_repositories = current_author.repositories_available_for_addition
       rescue Octokit::NotFound
+        github_app_name = ENV.fetch('GITHUB_APP_NAME', Rails.application.credentials.dig(:github, :app_name))
         alert = <<-MSG
         It looks like we don't have access to your GitHub account anymore.
-        Visit #{view_context.link_to 'this page', "https://github.com/apps/#{Rails.application.credentials.dig(:github, :app_name)}/installations/new"}
+        Visit #{view_context.link_to 'this page', "https://github.com/apps/#{github_app_name}/installations/new"}
         to link your account.
         MSG
         redirect_to settings_root_path, alert:

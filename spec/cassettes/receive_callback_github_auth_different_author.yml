@@ -168,6 +168,6 @@ http_interactions:
       - C5EE:224F:208CCA6:41EF053:65C501F1
     body:
       encoding: ASCII-8BIT
-      string: '{"login":"user123","id":85654561}'
+      string: '{"login":"new-user","id":12345678}'
   recorded_at: Thu, 08 Feb 2024 16:31:45 GMT
 recorded_with: VCR 6.2.0

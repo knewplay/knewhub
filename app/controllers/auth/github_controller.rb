@@ -1,60 +1,63 @@
 module Auth
   class GithubController < ApplicationController
-    before_action :authenticate_user!, :verify_params
+    before_action :verify_params, :verify_user, :verify_author
 
     def create
-      user_access_token = user_access_token(params[:code])
-      user_info = user_info(user_access_token)
-      installation_id = params[:installation_id]
-      github_uid = user_info['id']
-      github_username = user_info['login']
+      github_uid, github_username = user_info
 
-      author = Author.find_by(github_uid:)
-      update_or_create_author(author, installation_id, github_uid, github_username)
-      redirect_to settings_author_repositories_path
-    end
-
-    private
-
-    def update_or_create_author(author, installation_id, github_uid, github_username)
-      if author
-        author.update(github_username:)
-      else
-        author = Author.create!(user_id: current_user.id, github_uid:, github_username:)
-        GithubInstallation.create!(author:, uid: github_uid, username: github_username, installation_id:)
-      end
+      Author.create!(user_id: current_user.id, github_uid:, github_username:)
+      redirect_to settings_author_repositories_path, notice: 'Author account successfully added.'
     rescue ActiveRecord::RecordInvalid => e
       logger.error "Could not create Author for user ##{current_user.id}: #{e}"
     end
 
-    def user_access_token(code)
-      params = {
-        client_id: Rails.application.credentials.dig(:github, :client_id),
-        client_secret: Rails.application.credentials.dig(:github, :client_secret),
-        code:
-      }
+    private
+
+    def access_token
+      client_id = ENV.fetch('GITHUB_CLIENT_ID', Rails.application.credentials.dig(:github, :client_id))
+      client_secret = ENV.fetch('GITHUB_CLIENT_SECRET', Rails.application.credentials.dig(:github, :client_secret))
+      request_params = { client_id:, client_secret:, code: params[:code] }
 
       conn = Faraday.new(url: 'https://github.com')
-      response = conn.post('/login/oauth/access_token', params, { Accept: 'application/json' })
+      response = conn.post('/login/oauth/access_token', request_params, { Accept: 'application/json' })
 
       token_data = JSON.parse(response.body)
       token_data['access_token']
     end
 
-    def user_info(access_token)
+    def user_info
       client = Octokit::Client.new(access_token:)
-      client.user
+      user = client.user
+      [user['id'].to_s, user['login']]
     rescue Octokit::Unauthorized, Octokit::Forbidden => e
       logger.error "Could not get GitHub user info to create Author: #{e}"
     end
 
-    def verify_params
-      if params[:code].nil?
-        head :bad_request and return
-      elsif params[:installation_id].nil? && params[:setup_action] == 'request'
-        redirect_to settings_author_repositories_path,
-                    notice: 'Access has been requested. Refresh the page once access has been granted on GitHub.'
+    def verify_user
+      return if user_signed_in?
+
+      notice = <<~MSG
+        If you approved a GitHub App installation for another user, thank you. Otherwise please log in to continue.
+      MSG
+      redirect_to root_path, notice:
+    end
+
+    def verify_author
+      return if current_user.author.nil?
+
+      github_uid, _github_username = user_info
+      if current_user.author.github_uid == github_uid
+        redirect_to settings_author_repositories_path, notice: 'This installation will be added to your author account.'
+      else
+        alert = <<~MSG
+          You are already an author on KNEWHUB with the GitHub username #{current_user.author.github_username}. Only one GitHub account can be linked per author account.
+        MSG
+        redirect_to root_path, alert:
       end
+    end
+
+    def verify_params
+      redirect_to root_path, alert: 'Invalid request.' if params[:code].nil?
     end
   end
 end

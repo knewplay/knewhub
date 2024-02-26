@@ -1,6 +1,6 @@
 class GithubInstallation < ApplicationRecord
   belongs_to :author
-  has_many :repositories, dependent: :destroy
+  has_many :repositories, dependent: :nullify
 
   validates :installation_id, presence: true
 
@@ -9,11 +9,12 @@ class GithubInstallation < ApplicationRecord
   end
 
   def github_client
-    Octokit::Client.new(access_token:)
+    Octokit::Client.new(access_token:, per_page: 100)
   end
 
   def list_github_repositories(result = [])
-    repositories = github_client.list_app_installation_repositories['repositories']
+    response = github_client.list_app_installation_repositories({ per_page: 100 })
+    repositories = response[:repositories]
     repositories.each do |repository|
       result << { full_name: repository[:full_name], uid: repository[:id] }
     end
@@ -28,5 +29,12 @@ class GithubInstallation < ApplicationRecord
     list_github_repositories.reject do |repository|
       already_added_repositories.include?(repository[:uid])
     end
+  end
+
+  def list_repository_directories(directories = [])
+    repositories.each do |repository|
+      directories << repository.storage_path
+    end
+    directories
   end
 end
