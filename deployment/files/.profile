@@ -10,5 +10,5 @@ function get_secret() {
 }
 
 for secret in ${SECRETS[@]}; do
-    export $secret=$(get_secret $secret)
+    export $secret="$(get_secret $secret)"
 done
