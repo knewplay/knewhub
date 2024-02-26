@@ -24,6 +24,8 @@ module Webhooks
     private
 
     def verify_event
+      head :bad_request and return if request.headers['X-Hub-Signature-256'].nil?
+
       secret = Rails.application.credentials.webhook_secret
       signature = "sha256=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret, request.raw_post)}"
       return if ActiveSupport::SecurityUtils.secure_compare(signature, request.headers['X-Hub-Signature-256'])
@@ -33,6 +35,7 @@ module Webhooks
 
     def handle_installation_event
       if github_params[:action] == 'created'
+        sleep(2) # Introduce delay to ensure Author is created before installation event is processed
         create_installation_event
       elsif github_params[:action] == 'deleted'
         delete_installation_event
