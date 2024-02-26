@@ -75,8 +75,8 @@ class Build < ApplicationRecord
   end
 
   # AASM: callbacks
-  def schedule_receive_webhook(uid, name, owner_name, description)
-    RespondWebhookPushJob.perform_async(id, uid, name, owner_name, description)
+  def schedule_receive_webhook(uid, description)
+    RespondWebhookPushJob.perform_async(id, uid, description)
   end
 
   def schedule_clone_repo

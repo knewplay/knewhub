@@ -60,4 +60,29 @@ RSpec.describe GithubInstallation do
       end
     end
   end
+
+  describe '#list_repository_directories' do
+    let!(:github_installation) { create(:github_installation) }
+
+    context 'when github installation has no repositories' do
+      it 'returns an empty array' do
+        expect(github_installation.list_repository_directories).to eq([])
+      end
+    end
+
+    context 'when github installation has multiple repositories' do
+      before do
+        create(:repository, github_installation:)
+        create(:repository, :second, github_installation:)
+      end
+
+      it 'returns an array of directories pathnames' do
+        result = [
+          github_installation.repositories.first.storage_path,
+          github_installation.repositories.second.storage_path
+        ]
+        expect(github_installation.list_repository_directories).to eq(result)
+      end
+    end
+  end
 end

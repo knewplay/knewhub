@@ -7,8 +7,8 @@ RSpec.shared_context 'when creating a new repository' do
   before do
     sign_in author.user
     allow(author).to receive(:repositories_available_for_addition)
-                 .and_return([{ full_name: 'user/repo_name', uid: 123_456_789 }])
-    visit new_settings_author_repository_path(full_name: 'user/repo_name', uid: 123_456_789)
+                 .and_return([{ full_name: 'repo_owner/repo_name', uid: 123_456_789 }])
+    visit new_settings_author_repository_path(full_name: 'repo_owner/repo_name', uid: 123_456_789)
   end
 end
 
@@ -21,7 +21,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         expect(page).to have_content('New repository')
 
         expect(page).to have_content('Name: repo_name')
-        expect(page).to have_content('Owner: user')
+        expect(page).to have_content('Owner: repo_owner')
       end
 
       context 'when given a valid title but no branch' do
@@ -34,7 +34,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
           repo = Repository.last
           expect(repo.title).to eq('Test Repo')
           expect(repo.branch).to eq('main')
-          expect(repo.full_name).to eq('user/repo_name')
+          expect(repo.full_name).to eq('repo_owner/repo_name')
           expect(repo.uid).to eq(123_456_789)
         end
       end
@@ -50,7 +50,7 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
           repo = Repository.last
           expect(repo.title).to eq('Test Repo')
           expect(repo.branch).to eq('some_branch')
-          expect(repo.full_name).to eq('user/repo_name')
+          expect(repo.full_name).to eq('repo_owner/repo_name')
           expect(repo.uid).to eq(123_456_789)
         end
       end
@@ -131,8 +131,8 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
     before do
       sign_in author.user
       allow(author).to receive(:repositories_available_for_addition)
-                   .and_return([{ full_name: 'user/repository', uid: 987_654_321 }])
-      visit new_settings_author_repository_path(full_name: 'user/repo_name', uid: 123_456_789)
+                   .and_return([{ full_name: 'author/repository', uid: 987_654_321 }])
+      visit new_settings_author_repository_path(full_name: 'author/repo_name', uid: 123_456_789)
     end
 
     it 'redirects to root path and displays an alert' do

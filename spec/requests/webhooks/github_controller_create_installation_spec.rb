@@ -19,8 +19,8 @@ describe Webhooks::GithubController do
               id: 44_555_666
             },
             requester: {
-              id: 12_345_678,
-              login: 'user'
+              id: 11_222_333,
+              login: 'author'
             }
           }
 
@@ -51,15 +51,15 @@ describe Webhooks::GithubController do
             action: 'created',
             installation: {
               account: {
-                id: 12_345_678,
-                login: 'user'
+                id: 11_222_333,
+                login: 'author'
               },
               id: 77_888_999
             },
             requester: nil,
             sender: {
-              id: 12_345_678,
-              login: 'user'
+              id: 11_222_333,
+              login: 'author'
             }
           }
 
@@ -79,8 +79,8 @@ describe Webhooks::GithubController do
         it 'creates a github installation' do
           gh_installation = @author.github_installations.last
           expect(gh_installation.installation_id).to eq('77888999')
-          expect(gh_installation.uid).to eq('12345678')
-          expect(gh_installation.username).to eq('user')
+          expect(gh_installation.uid).to eq('11222333')
+          expect(gh_installation.username).to eq('author')
         end
       end
     end
