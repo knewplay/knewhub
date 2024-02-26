@@ -1,7 +1,7 @@
 <div class="flash">
   <% flash.each do |flash_type, message| %>
     <div class="flash__message flash--<%= flash_type %>" aria-live="polite">
-      <%= message.html_safe %>
+      <%= message.html_safe if message.is_a?(String) %>
     </div>
   <% end %>
 </div>
