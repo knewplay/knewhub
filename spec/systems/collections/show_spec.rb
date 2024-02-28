@@ -38,8 +38,10 @@ RSpec.describe 'Collections#show', type: :system do
     it 'displays embedded code files' do
       visit '/collections/author/repo_owner/markdown-templates/pages/chapter-2/chapter-2-article-1'
 
-      assert_selector 'p', text: 'File: ./code-files/code-example.c'
-      assert_selector 'code', text: "void main() {\n  hello world\n}"
+      assert_selector 'code'
+      assert_selector 'pre', class: 'c'
+      assert_selector 'span', text: 'void'
+      assert_selector 'span', text: 'main'
     end
 
     it 'displays embedded code gists' do

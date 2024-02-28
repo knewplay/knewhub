@@ -43,13 +43,11 @@ class CustomRender < Redcarpet::Render::HTML
   # Allow code blocks to be created from a separate file in the same repository
   def process_codefile(relative_path)
     absolute_path = Rails.root.to_s + RequestPath.define_base_url + relative_path
-    data = File.read(absolute_path)
-    <<~CODE
-      <pre class='code-block'>
-      <p>File: #{relative_path}</p>
-      <code>#{data}</code>
-      </pre>
-    CODE
+    code = File.read(absolute_path)
+    extension = File.extname(relative_path)
+    language = extension.delete_prefix(".")
+
+    block_code(code, language)
   end
 
   # Allow code from GitHub gists to be displayed
