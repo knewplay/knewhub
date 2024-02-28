@@ -29,6 +29,9 @@ class CustomRender < Redcarpet::Render::HTML
     # [codefile <relative_path>]
     if (t = text.match(/(\[codefile )(.+)(\])/))
       process_codefile(t[2])
+    # [codegist <gist_url>]
+    elsif (t = text.match(/(\[codegist )(.+)(\])/)) 
+      process_codegist(t[2])
     # [details Hint]content[/details]
     elsif (t = text.match(%r{(\[details )(.+)(\])(.+)(\[/details\])}))
       process_details(t[2], t[4])
@@ -47,6 +50,13 @@ class CustomRender < Redcarpet::Render::HTML
       <code>#{data}</code>
       </pre>
     CODE
+  end
+
+  # Allow code from GitHub gists to be displayed
+  def process_codegist(gist_url)
+    <<~SCRIPT
+      <script src="#{gist_url}.js"></script>
+    SCRIPT
   end
 
   def process_details(title, content)
