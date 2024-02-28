@@ -64,7 +64,7 @@
         * Boot disk type: `Balanced persistent disk`
         * Size: `10` GB
     * Service account: `compute-engine` service account created earlier
-    * Firewall: `Allow HTTPS traffic`
+    * Firewall: `Allow HTTP traffic` & `Allow HTTPS traffic`
     * Advanced options -> Networking -> Network interfaces -> Edit network interface: click on `default` network and select option `knewhub-vm` under "External IPv4 address"
 4. Point the domain `knewhub.com` to the static external IP address of the VM
 
