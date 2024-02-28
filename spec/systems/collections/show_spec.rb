@@ -42,6 +42,17 @@ RSpec.describe 'Collections#show', type: :system do
       assert_selector 'code', text: "void main() {\n  hello world\n}"
     end
 
+    it 'displays embedded code gists' do
+      visit '/collections/author/repo_owner/markdown-templates/pages/chapter-2/chapter-2-article-1'
+
+      expect(page).to have_css(
+        "script[src='https://gist.github.com/jp524/2d00cbf0a9976db406e4369b31e25460.js']",
+        visible: :hidden
+      )
+      assert_selector 'div', class: 'gist'
+      assert_selector 'a', text: 'test.rb'
+    end
+
     it 'displays front matter' do
       visit '/collections/author/repo_owner/markdown-templates/pages/chapter-1/chapter-1-article-1'
       expect(page).to have_content('Non anser honore ornique')

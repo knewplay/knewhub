@@ -7,6 +7,8 @@ keywords: [one, two]
 
 [codefile ./code-files/code-example.c]
 
+[codegist https://gist.github.com/jp524/2d00cbf0a9976db406e4369b31e25460]
+
 ## Amplectitur atque mutabile
 
 Lorem markdownum cuspis verbis aut saepe munus, illa poenas vallibus *inque
