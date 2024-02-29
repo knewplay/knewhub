@@ -1,15 +1,29 @@
 require 'rails_helper'
 
 describe Autodesk do
-  let!(:autodesk) { described_class.new }
+  let!(:autodesk) do
+    VCR.use_cassette('get_autodesk_access_token') do
+      described_class.new
+    end
+  end
 
-  describe '#access_token' do
-    it 'returns the access token for the current client' do
-      VCR.use_cassette('get_autodesk_access_token') do
-        @access_token = autodesk.access_token
+  before do
+    @filepath = 'repos/author/repo_owner/repo_name/3d-file/test.step'
+    FileUtils.mkdir_p @filepath
+    File.new(@filepath)
+  end
+
+  after do
+    FileUtils.rm_r('repos/author')
+  end
+
+  describe '#create_storage_bucket' do
+    it 'returns the URN of the uploaded file encoded in Base64' do
+      VCR.use_cassette('upload_3d_file_autodesk') do
+        @value = autodesk.upload_file(@filepath)
       end
-      expect(@access_token).not_to be_nil
-      expect(@access_token).to be_a String
+      expect(@value).not_to be_nil
+      expect(@value).to be_a String
     end
   end
 end

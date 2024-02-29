@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Thu, 29 Feb 2024 15:44:00 GMT
+      - Thu, 29 Feb 2024 18:27:53 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -39,7 +39,7 @@ http_interactions:
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       X-Request-Id:
-      - 7a4622cd-bdb1-4a6b-8d6b-b41348c6c4d5
+      - c40dbcfe-59f9-4a54-b53f-17873ac584f8
       X-Frame-Options:
       - SAMEORIGIN
     body:
@@ -47,5 +47,5 @@ http_interactions:
       string: '{"access_token":"<AUTODESK_ACCESS_TOKEN>","token_type":"Bearer","expires_in":3599}
 
         '
-  recorded_at: Thu, 29 Feb 2024 15:44:00 GMT
+  recorded_at: Thu, 29 Feb 2024 18:27:53 GMT
 recorded_with: VCR 6.2.0

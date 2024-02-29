@@ -6,4 +6,5 @@ VCR.configure do |config|
   config.filter_sensitive_data('<HOST_URL>') { Rails.application.credentials.host_url }
   config.filter_sensitive_data('<GITHUB_CLIENT_ID>') { Rails.application.credentials.dig(:github, :client_id) }
   config.filter_sensitive_data('<GITHUB_CLIENT_SECRET>') { Rails.application.credentials.dig(:github, :client_secret) }
+  config.filter_sensitive_data('<AUTODESK_BUCKET_KEY>') { Rails.application.credentials.dig(:autodesk, :bucket_key) }
 end

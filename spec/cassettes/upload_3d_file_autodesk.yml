@@ -1,0 +1,151 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Ftest.step/signeds3upload?minutesExpiration=10
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <BEARER>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 29 Feb 2024 18:27:53 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2326'
+      Connection:
+      - keep-alive
+      X-Ads-Region:
+      - US
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Authorization, Accept-Encoding, Range, Content-Type
+      Access-Control-Allow-Methods:
+      - GET
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - fb5da9c1-2e15-4af7-87ea-a2cb289fc75e
+    body:
+      encoding: UTF-8
+      string: '{"uploadKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gEvK-yX3IYdxmLAhVKOD8oyAAAB7TCCAekGCSqGSIb3DQEHBqCCAdowggHWAgEAMIIBzwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwCAhC84DFX8Dn--GQCARCAggGg9kXG_UmK5TYysAXF-IhmGBQhGHgKs3GKNRJaMEnBb5FT5g2jbfLz8gYcIiUpydsVDNKTu0-oM3k0ah2M-YsEoYCSglz3gIPFY1QgRC1pK-axuzrLdENc0RUxcfHpsAWXQoi-CHKxraP9TFTg2Q4t27oS81QKqHBxZyjGUArOwATjfruKJJpW9ltpqb_Ow32SbS4R0IywufNZyJ3CSBn5R-uY6pKkJmR_mlhygWFJO3otthiUt0z8n_jhoONdUUA1HOZgxMIwtD68PIYO3Hijam4EBWDreITMgLd9ut0hPbBFZmLW40cP95LXym9Y3Xt9fwhEG2fyfIfVS2QeuJOXHmMz9KBAEpYE0iWMThrZ3FrNULJAZY0aRFCbfDbCxvgVTFsHNZNIFU0lEgPNvJr4SBgFX3xIRj9ydoEKzGenEEK463qWF-igIPJQCzptmVWhgvWj3gzF4VyUaMVK2WkGf7SxuHCusSkvjLKPEPpB2xnU_KUWsv4v00YFOuJOuje4M25QgdBhR_4bSLKScK7w0vskcpnwv8ROgZwUivv0baY=","uploadExpiration":"2024-03-03T00:00:00Z","urlExpiration":"2024-02-29T18:37:53Z","urls":["https://com-autodesk-oss-direct-upload.s3-accelerate.amazonaws.com/c9/75/53/ad/bucket/<AUTODESK_BUCKET_KEY>/signed-url-uploads/c97553ad-7902-41ab-aadc-3afdacebe8e6?partNumber=1&uploadId=YERo4wyCUaBDPOEj2gB6MQDhiZ.GRBeGr06BE5aTlPRrvIFTYCeYKNqiIOqpZHZKmW0xR7pxp.Zh0W2CZonLyhfwVeZycKk04ucvX9ZOihm4oGZOz0pVnlzcgPWA.qk1_o31CeZYIhqejisEFiyVKr.HStlBMIZ.AV4gPmxUVhQHjRZLzxI0X5kSoA9thjHi&X-Amz-Security-Token=IQoJb3JpZ2luX2VjECMaCXVzLWVhc3QtMSJGMEQCIBzvspI%2FkaM0s3TL2lnUfc1gb00aIj%2B%2F%2FV6rCOQS9XjSAiAU8dM%2BMC65WirZ4pUcI65tysl8Y%2BHT2POgs3r7g4fbmCq4AggcEAAaDDYwNDczMzAwOTQwMyIMfr2RSL37T73vs5DzKpUC3jKdBC0M6dtLjGD37UGPVI3ATB7vmd%2F9l0oNKjOPs2e2jr6QYNjmlWTu13P%2FCpU9q%2BF434JKmE9VZF9oTcnDolsKPWY%2FzNWOoVrU9a7H6jsomqpwdT82vVPykKlgsffQG1O3DU3WEqG66UBKWR9pJA1VnJN8h%2FtXOJRqu1ujClQ7UpqLI5Wb5BeToN95e5CLF5bY%2Fzo5AnAGOfCD949W027RLXbOBfI7ZxSRLo9zBFyDEtzPBztnSbJEtGH7r7GlArIsozTz%2F3Qvq8WUpwekD5GRV%2BZi%2BGJeMjL85u5JTFHtfiGb%2FWjkAa8%2BM8W5R89C1T5xB8MKZ0pDEQabKiBJn6d%2F2mgLSAqaFE70zab2o0QRewt8FzCyl4OvBjqeAdWF%2FaVZZs%2Fk5VpJvhPLjY7BHRRfpoM9iXJuqAVQABoqmPEgza78tEADNFqRoRbGTTZ%2BWOgSGrSy4bnHWfp10%2BUFQSJt70Mc9lrWK1AcRHpxOEPUMy8oLq84Hd6%2BAWnE46YxMepXCLvwOpTed2fd0o6LIgTniK%2BCj1QjRs5uRuBptSUgBJKg9SAcSt2LXJcrkak92hvYWFSkl9ZVpZIt&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240229T182753Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Credential=ASIAYZTHFNX5SYFF4RPG%2F20240229%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=e5398166bb5b309df936f5deae41c5a8009c2eca41592538073f045e17748716"]}'
+  recorded_at: Thu, 29 Feb 2024 18:27:53 GMT
+- request:
+    method: put
+    uri: https://com-autodesk-oss-direct-upload.s3-accelerate.amazonaws.com/c9/75/53/ad/bucket/<AUTODESK_BUCKET_KEY>/signed-url-uploads/c97553ad-7902-41ab-aadc-3afdacebe8e6?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAYZTHFNX5SYFF4RPG/20240229/us-east-1/s3/aws4_request&X-Amz-Date=20240229T182753Z&X-Amz-Expires=600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjECMaCXVzLWVhc3QtMSJGMEQCIBzvspI/kaM0s3TL2lnUfc1gb00aIj%2B//V6rCOQS9XjSAiAU8dM%2BMC65WirZ4pUcI65tysl8Y%2BHT2POgs3r7g4fbmCq4AggcEAAaDDYwNDczMzAwOTQwMyIMfr2RSL37T73vs5DzKpUC3jKdBC0M6dtLjGD37UGPVI3ATB7vmd/9l0oNKjOPs2e2jr6QYNjmlWTu13P/CpU9q%2BF434JKmE9VZF9oTcnDolsKPWY/zNWOoVrU9a7H6jsomqpwdT82vVPykKlgsffQG1O3DU3WEqG66UBKWR9pJA1VnJN8h/tXOJRqu1ujClQ7UpqLI5Wb5BeToN95e5CLF5bY/zo5AnAGOfCD949W027RLXbOBfI7ZxSRLo9zBFyDEtzPBztnSbJEtGH7r7GlArIsozTz/3Qvq8WUpwekD5GRV%2BZi%2BGJeMjL85u5JTFHtfiGb/WjkAa8%2BM8W5R89C1T5xB8MKZ0pDEQabKiBJn6d/2mgLSAqaFE70zab2o0QRewt8FzCyl4OvBjqeAdWF/aVZZs/k5VpJvhPLjY7BHRRfpoM9iXJuqAVQABoqmPEgza78tEADNFqRoRbGTTZ%2BWOgSGrSy4bnHWfp10%2BUFQSJt70Mc9lrWK1AcRHpxOEPUMy8oLq84Hd6%2BAWnE46YxMepXCLvwOpTed2fd0o6LIgTniK%2BCj1QjRs5uRuBptSUgBJKg9SAcSt2LXJcrkak92hvYWFSkl9ZVpZIt&X-Amz-Signature=e5398166bb5b309df936f5deae41c5a8009c2eca41592538073f045e17748716&X-Amz-SignedHeaders=host&partNumber=1&uploadId=YERo4wyCUaBDPOEj2gB6MQDhiZ.GRBeGr06BE5aTlPRrvIFTYCeYKNqiIOqpZHZKmW0xR7pxp.Zh0W2CZonLyhfwVeZycKk04ucvX9ZOihm4oGZOz0pVnlzcgPWA.qk1_o31CeZYIhqejisEFiyVKr.HStlBMIZ.AV4gPmxUVhQHjRZLzxI0X5kSoA9thjHi
+    body:
+      encoding: UTF-8
+      string: repos/author/repo_owner/repo_name/3d-file/test.step
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Content-Type:
+      - application/octet-stream
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+      X-Amz-Id-2:
+      - zY1jrAXB4tQKZocnqvI8GICTb+e9iCZ20SDFluAmPQ4FgvhUtlXsFdI23BfF3evsQTS4PZmSB3w=
+      X-Amz-Request-Id:
+      - 8Z82NMPKSZNV3DRB
+      Date:
+      - Thu, 29 Feb 2024 18:27:54 GMT
+      Etag:
+      - '"59bcf3afff51a309e79b8d0f06a60dba"'
+      X-Amz-Server-Side-Encryption:
+      - AES256
+      Server:
+      - AmazonS3
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 8b37208e69f78eef4dd958de00423132.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - YUL62-P2
+      X-Amz-Cf-Id:
+      - iS39igRz4wOr4UTEOhNZRV870eyTaJ3GqcjPj5aCOOnwkDB9V5liAA==
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Thu, 29 Feb 2024 18:27:53 GMT
+- request:
+    method: post
+    uri: https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Ftest.step/signeds3upload
+    body:
+      encoding: UTF-8
+      string: '{"ossbucketKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gEvK-yX3IYdxmLAhVKOD8oyAAAB7TCCAekGCSqGSIb3DQEHBqCCAdowggHWAgEAMIIBzwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwCAhC84DFX8Dn--GQCARCAggGg9kXG_UmK5TYysAXF-IhmGBQhGHgKs3GKNRJaMEnBb5FT5g2jbfLz8gYcIiUpydsVDNKTu0-oM3k0ah2M-YsEoYCSglz3gIPFY1QgRC1pK-axuzrLdENc0RUxcfHpsAWXQoi-CHKxraP9TFTg2Q4t27oS81QKqHBxZyjGUArOwATjfruKJJpW9ltpqb_Ow32SbS4R0IywufNZyJ3CSBn5R-uY6pKkJmR_mlhygWFJO3otthiUt0z8n_jhoONdUUA1HOZgxMIwtD68PIYO3Hijam4EBWDreITMgLd9ut0hPbBFZmLW40cP95LXym9Y3Xt9fwhEG2fyfIfVS2QeuJOXHmMz9KBAEpYE0iWMThrZ3FrNULJAZY0aRFCbfDbCxvgVTFsHNZNIFU0lEgPNvJr4SBgFX3xIRj9ydoEKzGenEEK463qWF-igIPJQCzptmVWhgvWj3gzF4VyUaMVK2WkGf7SxuHCusSkvjLKPEPpB2xnU_KUWsv4v00YFOuJOuje4M25QgdBhR_4bSLKScK7w0vskcpnwv8ROgZwUivv0baY=","ossSourceFileObjectKey":"repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Ftest.step","access":"full","uploadKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gEvK-yX3IYdxmLAhVKOD8oyAAAB7TCCAekGCSqGSIb3DQEHBqCCAdowggHWAgEAMIIBzwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwCAhC84DFX8Dn--GQCARCAggGg9kXG_UmK5TYysAXF-IhmGBQhGHgKs3GKNRJaMEnBb5FT5g2jbfLz8gYcIiUpydsVDNKTu0-oM3k0ah2M-YsEoYCSglz3gIPFY1QgRC1pK-axuzrLdENc0RUxcfHpsAWXQoi-CHKxraP9TFTg2Q4t27oS81QKqHBxZyjGUArOwATjfruKJJpW9ltpqb_Ow32SbS4R0IywufNZyJ3CSBn5R-uY6pKkJmR_mlhygWFJO3otthiUt0z8n_jhoONdUUA1HOZgxMIwtD68PIYO3Hijam4EBWDreITMgLd9ut0hPbBFZmLW40cP95LXym9Y3Xt9fwhEG2fyfIfVS2QeuJOXHmMz9KBAEpYE0iWMThrZ3FrNULJAZY0aRFCbfDbCxvgVTFsHNZNIFU0lEgPNvJr4SBgFX3xIRj9ydoEKzGenEEK463qWF-igIPJQCzptmVWhgvWj3gzF4VyUaMVK2WkGf7SxuHCusSkvjLKPEPpB2xnU_KUWsv4v00YFOuJOuje4M25QgdBhR_4bSLKScK7w0vskcpnwv8ROgZwUivv0baY="}'
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <BEARER>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 29 Feb 2024 18:27:54 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '418'
+      Connection:
+      - keep-alive
+      X-Ads-Region:
+      - US
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Authorization, Accept-Encoding, Range, Content-Type
+      Access-Control-Allow-Methods:
+      - GET
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 4c76ebd5-bbe9-4fa4-b6dc-7b7eed22a389
+    body:
+      encoding: UTF-8
+      string: '{"bucketKey":"<AUTODESK_BUCKET_KEY>","objectId":"urn:adsk.objects:os.object:<AUTODESK_BUCKET_KEY>/repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Ftest.step","objectKey":"repos/author/repo_owner/repo_name/3d-file/test.step","size":51,"contentType":"application/octet-stream","location":"https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Ftest.step"}'
+  recorded_at: Thu, 29 Feb 2024 18:27:54 GMT
+recorded_with: VCR 6.2.0
