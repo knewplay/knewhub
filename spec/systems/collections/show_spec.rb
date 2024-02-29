@@ -38,8 +38,21 @@ RSpec.describe 'Collections#show', type: :system do
     it 'displays embedded code files' do
       visit '/collections/author/repo_owner/markdown-templates/pages/chapter-2/chapter-2-article-1'
 
-      assert_selector 'p', text: 'File: ./code-files/code-example.c'
-      assert_selector 'code', text: "void main() {\n  hello world\n}"
+      assert_selector 'code'
+      assert_selector 'pre', class: 'c'
+      assert_selector 'span', text: 'void'
+      assert_selector 'span', text: 'main'
+    end
+
+    it 'displays embedded code gists' do
+      visit '/collections/author/repo_owner/markdown-templates/pages/chapter-2/chapter-2-article-1'
+
+      expect(page).to have_css(
+        "script[src='https://gist.github.com/jp524/2d00cbf0a9976db406e4369b31e25460.js']",
+        visible: :hidden
+      )
+      assert_selector 'div', class: 'gist'
+      assert_selector 'a', text: 'test.rb'
     end
 
     it 'displays front matter' do

@@ -1,4 +1,4 @@
-# Custom renderer that sets a custom class for code blocks
+# Custom renderer for Markdown files
 require 'rouge/plugins/redcarpet'
 
 class CustomRender < Redcarpet::Render::HTML
@@ -26,24 +26,35 @@ class CustomRender < Redcarpet::Render::HTML
   private
 
   def process_custom_tags(text)
-    if (t = text.match(/(\[codefile )(.+)(\])/)) # [codefile <relative_path>]
+    # [codefile <relative_path>]
+    if (t = text.match(/(\[codefile )(.+)(\])/))
       process_codefile(t[2])
-    elsif (t = text.match(%r{(\[details )(.+)(\])(.+)(\[/details\])})) # [details Hint]content[/details]
+    # [codegist <gist_url>]
+    elsif (t = text.match(/(\[codegist )(.+)(\])/)) 
+      process_codegist(t[2])
+    # [details Hint]content[/details]
+    elsif (t = text.match(%r{(\[details )(.+)(\])(.+)(\[/details\])}))
       process_details(t[2], t[4])
     else
       "<p>#{text}</p>"
     end
   end
 
+  # Allow code blocks to be created from a separate file in the same repository
   def process_codefile(relative_path)
     absolute_path = Rails.root.to_s + RequestPath.define_base_url + relative_path
-    data = File.read(absolute_path)
-    <<~CODE
-      <pre class='code-block'>
-      <p>File: #{relative_path}</p>
-      <code>#{data}</code>
-      </pre>
-    CODE
+    code = File.read(absolute_path)
+    extension = File.extname(relative_path)
+    language = extension.delete_prefix(".")
+
+    block_code(code, language)
+  end
+
+  # Allow code from GitHub gists to be displayed
+  def process_codegist(gist_url)
+    <<~SCRIPT
+      <script src="#{gist_url}.js"></script>
+    SCRIPT
   end
 
   def process_details(title, content)

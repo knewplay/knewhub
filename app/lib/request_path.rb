@@ -8,7 +8,7 @@ class RequestPath
     request_path = Thread.current[:request].fullpath
     match_data = request_path.match(%r{(.+/)(.+)})
     folder_path = match_data[1]
-    # Route GET /collections/:owner/:name/pages/*path uses CollectionsController#show action
+    # Route GET /collections/:author_username/:owner/:name/pages/*path uses CollectionsController#show action
     # The request route is modified to find where the corresponding file is stored
     folder_path.gsub(%r{(/collections/)}, '/repos/').gsub(%r{(/pages/)}, '/')
   end
