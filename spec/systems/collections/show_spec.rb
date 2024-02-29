@@ -55,6 +55,15 @@ RSpec.describe 'Collections#show', type: :system do
       assert_selector 'a', text: 'test.rb'
     end
 
+    it 'displays embedded Autodesk viewer for 3D files' do
+      visit '/collections/author/repo_owner/markdown-templates/pages/chapter-2/chapter-2-article-2'
+
+      expect(page).to have_css(
+        "script[src='https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js']",
+        visible: :hidden
+      )
+    end
+
     it 'displays front matter' do
       visit '/collections/author/repo_owner/markdown-templates/pages/chapter-1/chapter-1-article-1'
       expect(page).to have_content('Non anser honore ornique')

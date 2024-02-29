@@ -35,6 +35,9 @@ class CustomRender < Redcarpet::Render::HTML
     # [details Hint]content[/details]
     elsif (t = text.match(%r{(\[details )(.+)(\])(.+)(\[/details\])}))
       process_details(t[2], t[4])
+    elsif (t = text.match(/(\[3d-viewer )(.+)(\])/))
+      # [3d-viewer <relative_path>]
+      process_3d_file(t[2])
     else
       "<p>#{text}</p>"
     end
@@ -63,5 +66,10 @@ class CustomRender < Redcarpet::Render::HTML
       <summary>#{title}</summary>#{content}
       </details>
     DETAIL
+  end
+
+  # Allow 3D files to be rendered using Autodesk Viewer SDK
+  def process_3d_file(relative_path)
+    "<script src='https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js'></script>"
   end
 end

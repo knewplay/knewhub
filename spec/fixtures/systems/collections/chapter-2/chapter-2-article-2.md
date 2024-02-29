@@ -5,6 +5,8 @@ author: The Author
 keywords: [one, two]
 ---
 
+[3d-viewer ./3d-files/V5 Robot Radio (276-4831).step]
+
 ## Amplectitur atque mutabile
 
 Lorem markdownum cuspis verbis aut saepe munus, illa poenas vallibus *inque
