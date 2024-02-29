@@ -8,9 +8,10 @@ describe Autodesk do
   end
 
   before do
-    @filepath = 'repos/author/repo_owner/repo_name/3d-file/test.step'
-    FileUtils.mkdir_p @filepath
-    File.new(@filepath)
+    directory = 'repos/author/repo_owner/repo_name/3d-file'
+    FileUtils.mkdir_p directory
+    @filepath = "#{directory}/test.step"
+    FileUtils.touch(@filepath)
   end
 
   after do

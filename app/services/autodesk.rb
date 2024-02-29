@@ -22,7 +22,7 @@ class Autodesk
     conn = Faraday.new(url: upload_url)
     conn.put(
       '',
-      filepath,
+      File.binread(filepath),
       { 'Content-Type': 'application/octet-stream' }
     )
 
