@@ -8,12 +8,15 @@ export default class extends Controller {
     env: 'AutodeskProduction2',
     api: 'streamingV2',
     getAccessToken: function(onTokenReady) {
-        var token = 'YOUR_ACCESS_TOKEN'
+        // Change line below to variable later
+        var token = ''
         var timeInSeconds = 3600
         onTokenReady(token, timeInSeconds)
     }
   }
-  
+  // Change line below to variable later
+  documentId = ''
+
   connect() {
     Autodesk.Viewing.Initializer(this.options, () => {
       this.viewer = new Autodesk.Viewing.GuiViewer3D(this.viewerDivTarget)
@@ -25,6 +28,17 @@ export default class extends Controller {
       console.log('Initialization complete, loading a model next...')
       this.displayBtnTarget.classList.add("hide")
     })
+
+    const onDocumentLoadSuccess = (viewerDocument) => {
+      var defaultModel = viewerDocument.getRoot().getDefaultGeometry()
+      this.viewer.loadDocumentNode(viewerDocument, defaultModel)
+    }
+    
+    const onDocumentLoadFailure = (viewerErrorCode) => {
+      console.error('Failed fetching Forge manifest. Error code: ' + viewerErrorCode)
+    }
+
+    Autodesk.Viewing.Document.load(this.documentId, onDocumentLoadSuccess, onDocumentLoadFailure)
   }
 
   display() {
