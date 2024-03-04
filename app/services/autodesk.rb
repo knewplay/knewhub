@@ -3,6 +3,29 @@ class Autodesk
     @conn = Faraday.new(url: 'https://developer.api.autodesk.com')
     @bucket_key = Rails.application.credentials.dig(:autodesk, :bucket_key)
     @access_token = create_access_token
+    @logger = Rails.logger
+  end
+
+  def prepare_file_for_viewer(filepath)
+    base64_urn = upload_file(filepath)
+
+    translate_job_response = translate_to_svf(base64_urn)
+    urn_encoded = JSON.parse(translate_job_response.body)['urn']
+
+    verify_response = verify_job_complete(urn_encoded)
+
+    return unless JSON.parse(verify_response.body)['status'] == 'success'
+
+    @logger.info 'Success. File will be added to viewer'
+  end
+
+  def query_storage_bucket_objects
+    response = @conn.get(
+      "/oss/v2/buckets/#{@bucket_key}/objects",
+      nil,
+      { 'Content-Type': 'application/json', Authorization: "Bearer #{@access_token}" }
+    )
+    JSON.parse(response.body)
   end
 
   def create_storage_bucket
@@ -13,20 +36,6 @@ class Autodesk
       { 'Content-Type': 'application/json', Authorization: "Bearer #{@access_token}" }
     )
     JSON.parse(response.body)
-  end
-
-  def upload_file(filepath)
-    upload_key, urls = bucket_signed_url(filepath).values
-    upload_url = urls.first
-
-    conn = Faraday.new(url: upload_url)
-    conn.put(
-      '',
-      File.binread(filepath),
-      { 'Content-Type': 'application/octet-stream' }
-    )
-
-    finalize_upload(filepath, upload_key)
   end
 
   private
@@ -60,19 +69,56 @@ class Autodesk
   end
 
   def finalize_upload(filepath, upload_key)
-    request_params = { ossbucketKey: upload_key, ossSourceFileObjectKey: CGI.escape(filepath),
-                       access: 'full', uploadKey: upload_key }
+    @logger.info "Finalizing upload of file '#{filepath}' to Autodesk bucket"
+    request_params = { ossbucketKey: upload_key, ossSourceFileObjectKey: CGI.escape(filepath), access: 'full', uploadKey: upload_key }
     response = @conn.post(
       "/oss/v2/buckets/#{@bucket_key}/objects/#{CGI.escape(filepath)}/signeds3upload",
       request_params.to_json,
       { 'Content-Type': 'application/json', Authorization: "Bearer #{@access_token}" }
     )
     response_as_json = JSON.parse(response.body)
-    base64_urn(response_as_json)
-  end
-
-  def base64_urn(response_as_json)
     urn = response_as_json['objectId']
     Base64.urlsafe_encode64(urn)
+  end
+
+  def translate_to_svf(base64_urn)
+    request_params = {
+      input: { urn: base64_urn },
+      output: { formats: [{ type: 'svf', views: %w[2d 3d] }] }
+    }
+    @conn.post(
+      '/modelderivative/v2/designdata/job',
+      request_params.to_json,
+      { 'Content-Type': 'application/json', Authorization: "Bearer #{@access_token}", 'x-ads-force': 'true' }
+    )
+  end
+
+  def verify_job_complete(base_64_urn)
+    is_complete = false
+
+    until is_complete
+      response = @conn.get(
+        "/modelderivative/v2/designdata/#{base_64_urn}/manifest", nil, { Authorization: "Bearer #{@access_token}" }
+      )
+      response_as_json = JSON.parse(response.body)
+      response_as_json['progress'] == 'complete' ? is_complete = true : sleep(1)
+    end
+
+    response
+  end
+
+  def upload_file(filepath)
+    upload_key, urls = bucket_signed_url(filepath).values
+    upload_url = urls.first
+
+    conn = Faraday.new(url: upload_url)
+    @logger.info "Starting upload of file '#{filepath}' to Autodesk bucket"
+    conn.put(
+      '',
+      File.binread(filepath),
+      { 'Content-Type': 'application/octet-stream' }
+    )
+
+    finalize_upload(filepath, upload_key)
   end
 end
