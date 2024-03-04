@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["viewerDiv"]
+  static targets = ["viewerDiv", "displayBtn", "hideBtn"]
 
   viewer
   options = {
@@ -22,8 +22,30 @@ export default class extends Controller {
           console.error('Failed to create a Viewer: WebGL not supported.')
           return
       }
-
       console.log('Initialization complete, loading a model next...')
+      this.displayBtnTarget.classList.add("hide")
     })
+  }
+
+  display() {
+    this.hideBtnTarget.classList.remove("hide")
+    this.displayBtnTarget.classList.add("hide")
+    this.createViewer()
+  }
+
+  hide() {
+    this.displayBtnTarget.classList.remove("hide")
+    this.hideBtnTarget.classList.add("hide")
+    this.destroyViewer()
+  }
+
+  createViewer() {
+    this.viewer = new Autodesk.Viewing.GuiViewer3D(this.viewerDivTarget, {});
+  }
+
+  destroyViewer() {
+    this.viewer.finish()
+    this.viewer = null
+    Autodesk.Viewing.shutdown()
   }
 }
