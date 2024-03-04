@@ -1,16 +1,16 @@
-function setTimeZoneCookie() {
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+function setTimeZoneCookie () {
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-  setCookie('timezone', tz);
+  setCookie('timezone', tz)
 
-  function setCookie(key, value) {
-    let expires = new Date();
-    let currentTime = expires.getTime();
-    let duration = (24 * 60 * 60 * 1000); // 24 hours
-    expires.setTime(currentTime + duration);
+  function setCookie (key, value) {
+    const expires = new Date()
+    const currentTime = expires.getTime()
+    const duration = (24 * 60 * 60 * 1000) // 24 hours
+    expires.setTime(currentTime + duration)
 
-    document.cookie = key + '=' + value + ';Expires=' + expires.toUTCString() + ';SameSite=Strict' + ';Path=/';
+    document.cookie = key + '=' + value + ';Expires=' + expires.toUTCString() + ';SameSite=Strict' + ';Path=/'
   }
 }
 
-setTimeZoneCookie();
+setTimeZoneCookie()
