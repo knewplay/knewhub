@@ -43,3 +43,4 @@ pin "uc.micro/categories/Z/regex", to: "https://ga.jspm.io/npm:uc.micro@1.0.6/ca
 pin "uc.micro/properties/Any/regex", to: "https://ga.jspm.io/npm:uc.micro@1.0.6/properties/Any/regex.js"
 pin "url", to: "https://ga.jspm.io/npm:@jspm/core@2.0.1/nodelibs/browser/url.js"
 pin "swiper/element/bundle", to: "https://ga.jspm.io/npm:swiper@11.0.5/swiper-element-bundle.mjs"
+pin "three" # @0.162.0
