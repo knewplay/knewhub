@@ -18,6 +18,10 @@ export default class extends Controller {
   documentId = ''
 
   connect() {
+    this.createViewer()
+  }
+
+  createViewer() {
     Autodesk.Viewing.Initializer(this.options, () => {
       this.viewer = new Autodesk.Viewing.GuiViewer3D(this.viewerDivTarget)
       var startedCode = this.viewer.start()
@@ -29,6 +33,10 @@ export default class extends Controller {
       this.displayBtnTarget.classList.add("hide")
     })
 
+    this.loadDocument()
+  }
+
+  loadDocument(){
     const onDocumentLoadSuccess = (viewerDocument) => {
       var defaultModel = viewerDocument.getRoot().getDefaultGeometry()
       this.viewer.loadDocumentNode(viewerDocument, defaultModel)
@@ -51,10 +59,6 @@ export default class extends Controller {
     this.displayBtnTarget.classList.remove("hide")
     this.hideBtnTarget.classList.add("hide")
     this.destroyViewer()
-  }
-
-  createViewer() {
-    this.viewer = new Autodesk.Viewing.GuiViewer3D(this.viewerDivTarget, {});
   }
 
   destroyViewer() {
