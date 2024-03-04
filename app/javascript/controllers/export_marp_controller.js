@@ -1,29 +1,28 @@
-import { Controller } from "@hotwired/stimulus"
-import { Marpit, Element } from "@marp-team/marpit"
+import { Controller } from '@hotwired/stimulus'
+import { Marpit, Element } from '@marp-team/marpit'
 
 export default class extends Controller {
-  static targets = ["content"]
+  static targets = ['content']
 
   static values = {
     markdown: String
   }
 
-  connect() {
+  connect () {
     const marpit = new Marpit({
-      container: new Element("swiper-container", {
-      navigation: "true",
-      pagination: "true",
-      "pagination-clickable":"true",
-      keyboard: "true",
-    }),
+      container: new Element('swiper-container', {
+        navigation: 'true',
+        pagination: 'true',
+        'pagination-clickable': 'true',
+        keyboard: 'true'
+      }),
       slideContainer: [
-        new Element("swiper-slide"),
-        new Element("div", {class: "marp-slide"})
+        new Element('swiper-slide'),
+        new Element('div', { class: 'marp-slide' })
       ]
     })
 
-    // `css` value is not used since styles are defined by Swiper and application stylesheets
-    const { html, css } = marpit.render(this.markdownValue)
+    const { html } = marpit.render(this.markdownValue)
 
     this.contentTarget.innerHTML = html
   }
