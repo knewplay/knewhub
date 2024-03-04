@@ -7,7 +7,7 @@ export default class extends Controller {
   static values = { callback: String }
 
   create (event) {
-    const [data, status, xhr] = event.detail
+    const [data, ,] = event.detail
     const _this = this
 
     WebAuthnJSON.create({ publicKey: data }).then(async function (credential) {

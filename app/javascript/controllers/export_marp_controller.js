@@ -22,8 +22,7 @@ export default class extends Controller {
       ]
     })
 
-    // `css` value is not used since styles are defined by Swiper and application stylesheets
-    const { html, css } = marpit.render(this.markdownValue)
+    const { html } = marpit.render(this.markdownValue)
 
     this.contentTarget.innerHTML = html
   }

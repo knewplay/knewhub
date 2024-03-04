@@ -6,7 +6,7 @@ export default class extends Controller {
   static values = { callback: String }
 
   auth (event) {
-    const [data, status, xhr] = event.detail
+    const [data, ,] = event.detail
     const _this = this
 
     WebAuthnJSON.get({ publicKey: data }).then(async function (credential) {
