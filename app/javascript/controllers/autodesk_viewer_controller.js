@@ -1,47 +1,48 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ["viewerDiv", "displayBtn", "hideBtn"]
+  static targets = ['viewerDiv', 'displayBtn', 'hideBtn']
 
   viewer
   options = {
     env: 'AutodeskProduction2',
     api: 'streamingV2',
-    getAccessToken: function(onTokenReady) {
-        // Change line below to variable later
-        var token = ''
-        var timeInSeconds = 3600
-        onTokenReady(token, timeInSeconds)
+    getAccessToken: function (onTokenReady) {
+      // Change line below to variable later
+      const token = ''
+      const timeInSeconds = 3600
+      onTokenReady(token, timeInSeconds)
     }
   }
+
   // Change line below to variable later
   documentId = ''
 
-  connect() {
+  connect () {
     this.createViewer()
   }
 
-  createViewer() {
+  createViewer () {
     Autodesk.Viewing.Initializer(this.options, () => {
       this.viewer = new Autodesk.Viewing.GuiViewer3D(this.viewerDivTarget)
-      var startedCode = this.viewer.start()
+      const startedCode = this.viewer.start()
       if (startedCode > 0) {
-          console.error('Failed to create a Viewer: WebGL not supported.')
-          return
+        console.error('Failed to create a Viewer: WebGL not supported.')
+        return
       }
       console.log('Initialization complete, loading a model next...')
-      this.displayBtnTarget.classList.add("hide")
+      this.displayBtnTarget.classList.add('hide')
     })
 
     this.loadDocument()
   }
 
-  loadDocument(){
+  loadDocument () {
     const onDocumentLoadSuccess = (viewerDocument) => {
-      var defaultModel = viewerDocument.getRoot().getDefaultGeometry()
+      const defaultModel = viewerDocument.getRoot().getDefaultGeometry()
       this.viewer.loadDocumentNode(viewerDocument, defaultModel)
     }
-    
+
     const onDocumentLoadFailure = (viewerErrorCode) => {
       console.error('Failed fetching Forge manifest. Error code: ' + viewerErrorCode)
     }
@@ -49,19 +50,19 @@ export default class extends Controller {
     Autodesk.Viewing.Document.load(this.documentId, onDocumentLoadSuccess, onDocumentLoadFailure)
   }
 
-  display() {
-    this.hideBtnTarget.classList.remove("hide")
-    this.displayBtnTarget.classList.add("hide")
+  display () {
+    this.hideBtnTarget.classList.remove('hide')
+    this.displayBtnTarget.classList.add('hide')
     this.createViewer()
   }
 
-  hide() {
-    this.displayBtnTarget.classList.remove("hide")
-    this.hideBtnTarget.classList.add("hide")
+  hide () {
+    this.displayBtnTarget.classList.remove('hide')
+    this.hideBtnTarget.classList.add('hide')
     this.destroyViewer()
   }
 
-  destroyViewer() {
+  destroyViewer () {
     this.viewer.finish()
     this.viewer = null
     Autodesk.Viewing.shutdown()
