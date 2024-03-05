@@ -6,17 +6,19 @@ class Autodesk
     @logger = Rails.logger
   end
 
-  def prepare_file_for_viewer(filepath)
-    base64_urn = upload_file(filepath)
+  def upload_file_for_viewer(filepath)
+    base64_urn = start_upload(filepath)
 
     translate_job_response = translate_to_svf(base64_urn)
     urn_encoded = JSON.parse(translate_job_response.body)['urn']
 
     verify_response = verify_job_complete(urn_encoded)
+    verify_response_as_json = JSON.parse(verify_response.body)
 
-    return unless JSON.parse(verify_response.body)['status'] == 'success'
+    return unless verify_response_as_json['status'] == 'success'
 
     @logger.info 'Success. File will be added to viewer'
+    verify_response_as_json['urn']
   end
 
   def query_storage_bucket_objects
@@ -107,7 +109,7 @@ class Autodesk
     response
   end
 
-  def upload_file(filepath)
+  def start_upload(filepath)
     upload_key, urls = bucket_signed_url(filepath).values
     upload_url = urls.first
 

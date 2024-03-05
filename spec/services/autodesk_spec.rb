@@ -7,7 +7,7 @@ describe Autodesk do
     end
   end
 
-  before do
+  before(:all) do
     directory = 'repos/author/repo_owner/repo_name/3d-file'
     FileUtils.mkdir_p directory
     source_filepath = Rails.root.join(
@@ -17,19 +17,21 @@ describe Autodesk do
     FileUtils.copy_file(source_filepath, @filepath)
   end
 
-  after do
+  after(:all) do
     FileUtils.rm_r('repos/author')
   end
 
-  describe '#prepare_file_for_viewer' do
+  describe '#upload_file_for_viewer' do
     it 'completes the upload process' do
       allow(Rails.logger).to receive(:info)
       VCR.use_cassette('upload_3d_file_autodesk') do
-        autodesk.prepare_file_for_viewer(@filepath)
+        @value = autodesk.upload_file_for_viewer(@filepath)
       end
       expect(Rails.logger).to have_received(:info).with("Starting upload of file '#{@filepath}' to Autodesk bucket")
       expect(Rails.logger).to have_received(:info).with("Finalizing upload of file '#{@filepath}' to Autodesk bucket")
       expect(Rails.logger).to have_received(:info).with('Success. File will be added to viewer')
+      expect(@value).not_to be_nil
+      expect(@value).to be_a String
     end
   end
 end
