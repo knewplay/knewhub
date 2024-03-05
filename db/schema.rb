@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_15_180653) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_05_175718) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -46,6 +46,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_15_180653) do
     t.index ["github_uid"], name: "index_authors_on_github_uid", unique: true
     t.index ["github_username"], name: "index_authors_on_github_username", unique: true
     t.index ["user_id"], name: "index_authors_on_user_id", unique: true
+  end
+
+  create_table "autodesk_files", force: :cascade do |t|
+    t.bigint "repository_id"
+    t.string "urn"
+    t.string "filepath"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id"], name: "index_autodesk_files_on_repository_id"
   end
 
   create_table "builds", force: :cascade do |t|
@@ -146,6 +155,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_15_180653) do
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
   add_foreign_key "authors", "users"
+  add_foreign_key "autodesk_files", "repositories"
   add_foreign_key "builds", "repositories"
   add_foreign_key "github_installations", "authors"
   add_foreign_key "likes", "answers"

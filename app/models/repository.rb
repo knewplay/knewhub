@@ -2,6 +2,7 @@ class Repository < ApplicationRecord
   belongs_to :github_installation
   has_many :builds, dependent: :destroy
   has_many :questions, dependent: :destroy
+  has_many :autodesk_files, dependent: :destroy
 
   before_save :set_branch
 
