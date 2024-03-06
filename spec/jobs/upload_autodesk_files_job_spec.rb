@@ -42,10 +42,10 @@ RSpec.describe UploadAutodeskFilesJob do
 
     it 'the associated autodesk files contain the filepath' do
       expect(@autodesk_file_one.filepath).to eq(
-        'repos/author/repo_owner/repo_name/chapter-1/3d-files/nist_ctc_02_asme1_rc.stp'
+        'repos/author/repo_owner/repo_name/chapter-1/3d-files/nist-ctc-02-asme1-rc.stp'
       )
       expect(@autodesk_file_two.filepath).to eq(
-        'repos/author/repo_owner/repo_name/chapter-2/3d-files/nist_ctc_01_asme1_rd.stp'
+        'repos/author/repo_owner/repo_name/chapter-2/3d-files/nist-ctc-01-asme1-rd.stp'
       )
     end
 

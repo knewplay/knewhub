@@ -33,15 +33,15 @@ class UploadAutodeskFilesJob
 
     _front_matter, markdown_content = split_markdown(markdown_file_path)
     autodesk_file_relative_paths = markdown_content.scan(/\[3d-viewer (.+)\]/).flatten
-    # ["./3d-files/nist_ctc_01_asme1_rd.stp", "./3d-files/nist_ctc_02_asme1_rc.stp""]
+    # ["./3d-files/nist-ctc-01-asme1-rd.stp", "./3d-files/nist-ctc-02-asme1-rc.stp""]
 
     return if autodesk_file_relative_paths.empty?
 
     autodesk_file_relative_paths.map do |relative_path|
       directory_path_name.join(relative_path).relative_path_from(Rails.root).to_s
     end
-    # ["repos/author/repo_owner/name/chapter-1/3d-files/nist_ctc_01_asme1_rd.stp",
-    #  "repos/author/repo_owner/name/chapter-1/3d-files/nist_ctc_02_asme1_rc.stp"]
+    # ["repos/author/repo_owner/name/chapter-1/3d-files/nist-ctc-01-asme1-rd.stp",
+    #  "repos/author/repo_owner/name/chapter-1/3d-files/nist-ctc-02-asme1-rc.stp"]
   end
 
   def list_autodesk_files_for_directory(directory, autodesk_files = [])

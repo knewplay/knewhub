@@ -5,7 +5,7 @@ author: The Author
 keywords: [one, two]
 ---
 
-[3d-viewer ./3d-files/nist_ctc_01_asme1_rd.stp]
+[3d-viewer ./3d-files/nist-ctc-01-asme1-rd.stp]
 
 ## Amplectitur atque mutabile
 

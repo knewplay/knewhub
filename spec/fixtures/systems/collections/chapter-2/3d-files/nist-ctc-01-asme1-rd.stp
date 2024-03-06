@@ -6,15 +6,15 @@ FILE_SCHEMA (('AP203_CONFIGURATION_CONTROLLED_3D_DESIGN_OF_MECHANICAL_PARTS_AND_
 ENDSEC;
 DATA;
 #10=GEOMETRICALLY_BOUNDED_WIREFRAME_SHAPE_REPRESENTATION(
-'nist_ctc_01_asme1_rd-None',(#95),#5327);
+'nist-ctc-01-asme1-rd-None',(#95),#5327);
 #11=SHAPE_REPRESENTATION_RELATIONSHIP('None',
-'relationship between nist_ctc_01_asme1_rd-None and nist_ctc_01_
+'relationship between nist-ctc-01-asme1-rd-None and nist_ctc_01_
 asme1_rd-None',#94,#13);
 #12=SHAPE_REPRESENTATION_RELATIONSHIP('None',
-'relationship between nist_ctc_01_asme1_rd-None and nist_ctc_01_
+'relationship between nist-ctc-01-asme1-rd-None and nist_ctc_01_
 asme1_rd-None',#94,#10);
 #13=ADVANCED_BREP_SHAPE_REPRESENTATION(
-'nist_ctc_01_asme1_rd-None',(#101),#5327);
+'nist-ctc-01-asme1-rd-None',(#101),#5327);
 #14=CC_DESIGN_APPROVAL(#26,(#84));
 #15=CC_DESIGN_APPROVAL(#27,(#86));
 #16=CC_DESIGN_APPROVAL(#28,(#33));
@@ -90,7 +90,7 @@ asme1_rd-None',#94,#10);
 #86=PRODUCT_DEFINITION_FORMATION_WITH_SPECIFIED_SOURCE(' ',' ',#88,
  .NOT_KNOWN.);
 #87=PRODUCT_RELATED_PRODUCT_CATEGORY('detail','',(#88));
-#88=PRODUCT('nist_ctc_01_asme1_rd','nist_ctc_01_asme1_rd',
+#88=PRODUCT('nist-ctc-01-asme1-rd','nist-ctc-01-asme1-rd',
 ' ',(#91));
 #89=PRODUCT_CATEGORY('part',' ');
 #90=PRODUCT_CATEGORY(' ','');
@@ -100,7 +100,7 @@ asme1_rd-None',#94,#10);
 #93=APPLICATION_CONTEXT(
 'configuration controlled 3D designs of mechanical parts and assemblie
 s');
-#94=SHAPE_REPRESENTATION('nist_ctc_01_asme1_rd-None',(#3322),#5327);
+#94=SHAPE_REPRESENTATION('nist-ctc-01-asme1-rd-None',(#3322),#5327);
 #95=GEOMETRIC_CURVE_SET('None',(#4439,#4440,#4441,#4442,#4443,#4444,#4445,
 #4446,#4447,#4448,#4449,#4450,#4451,#4452,#4453,#4454,#4455,#4456,#4457,
 #4458,#4459,#4460,#2379,#2380,#2381,#2382,#2383,#2384,#2385,#2386,#2387,
@@ -5476,7 +5476,7 @@ PARAMETER_VALUE(360.)),.T.,.PARAMETER.);
 GEOMETRIC_REPRESENTATION_CONTEXT(3)
 GLOBAL_UNCERTAINTY_ASSIGNED_CONTEXT((#5328))
 GLOBAL_UNIT_ASSIGNED_CONTEXT((#5334,#5330,#5329))
-REPRESENTATION_CONTEXT('nist_ctc_01_asme1_rd','TOP_LEVEL_ASSEMBLY_PART')
+REPRESENTATION_CONTEXT('nist-ctc-01-asme1-rd','TOP_LEVEL_ASSEMBLY_PART')
 );
 #5328=UNCERTAINTY_MEASURE_WITH_UNIT(LENGTH_MEASURE(0.0508),#5334,
 'DISTANCE_ACCURACY_VALUE','Maximum Tolerance applied to model');

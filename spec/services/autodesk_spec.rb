@@ -8,8 +8,8 @@ describe Autodesk do
     end
     directory = 'repos/author/repo_owner/repo_name/chapter-2/3d-files'
     FileUtils.mkdir_p directory
-    source_filepath = Rails.root.join('spec/fixtures/systems/collections/chapter-2/3d-files/nist_ctc_01_asme1_rd.stp')
-    @filepath = "#{directory}/nist_ctc_01_asme1_rd.stp"
+    source_filepath = Rails.root.join('spec/fixtures/systems/collections/chapter-2/3d-files/nist-ctc-01-asme1-rd.stp')
+    @filepath = "#{directory}/nist-ctc-01-asme1-rd.stp"
     FileUtils.copy_file(source_filepath, @filepath)
   end
 
