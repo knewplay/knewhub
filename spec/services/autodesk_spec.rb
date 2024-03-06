@@ -8,7 +8,7 @@ describe Autodesk do
   end
 
   before(:all) do
-    directory = 'repos/author/repo_owner/repo_name/3d-file'
+    directory = 'repos/author/repo_owner/repo_name/chapter-2/3d-files'
     FileUtils.mkdir_p directory
     source_filepath = Rails.root.join('spec/fixtures/systems/collections/chapter-2/3d-files/nist_ctc_01_asme1_rd.stp')
     @filepath = "#{directory}/nist_ctc_01_asme1_rd.stp"

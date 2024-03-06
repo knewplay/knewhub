@@ -1,0 +1,292 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-1%2F3d-files%2Fnist_ctc_02_asme1_rc.stp/signeds3upload?minutesExpiration=10
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <BEARER>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 06 Mar 2024 14:12:34 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2392'
+      Connection:
+      - keep-alive
+      X-Ads-Region:
+      - US
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Authorization, Accept-Encoding, Range, Content-Type
+      Access-Control-Allow-Methods:
+      - GET
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - d699ecf5-0e8a-4223-b7bd-99676cbd6390
+    body:
+      encoding: UTF-8
+      string: '{"uploadKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gGNWdmZq4dfMk-JH9pilygrAAAB8zCCAe8GCSqGSIb3DQEHBqCCAeAwggHcAgEAMIIB1QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyjtcvGN3ETT5ngv3UCARCAggGmvbyvu4RO17G5zbCeZQxzDeJa14WMo-ZC19rmuxpNc4mIYCYjoLT5EchXifo0oDdAZgm3hXJyv929M-08GmCw_etfYZXpQISakzkgh10Es5WApf3aagTd0WuehiCbI2ViNQVj_WXYFElJTM7-DM5WP8Z-Sq7CwEf_r3YiFvOcAHpld7ArGj3uegy-GX7EIg0YZdumSFju25AWaoPMvRVIIWMcoGS5foUAyhWgPKVX6JX8LifAl3TlNv7R1sJJ0SJ_ZRGricbJqbrT4jviTBg_bAmKgtH3U5oD35aYuFbb2j0an4WcJMKDmHVcgmi63fYha9bZIdoA10Lhr9PQBnpwyzaLzQW3nelrarZD6vdHNY81tr6iuIib63z_NI7bdSdO_L1jfm1lK1LrTIwkoVV9rRsD9hlvVB3JOorl_cGjYb20LrkviEsEFzyzVxAwdaVTjYt-ASy1CHtV5sIvsJu5oVKAj1Rp7VPjDcRNCTGZMCEdKr_gBSC0BsGAGzqmSDBTLMvJNVIAc4tkeRjN7lUJUBvfFmHtpjOWNyQ-3ndwH_zU3tp63tI=","uploadExpiration":"2024-03-09T00:00:00Z","urlExpiration":"2024-03-06T14:22:34Z","urls":["https://com-autodesk-oss-direct-upload.s3-accelerate.amazonaws.com/f3/df/6b/79/bucket/<AUTODESK_BUCKET_KEY>/signed-url-uploads/f3df6b79-e25d-48c9-8674-a7455731b6f3?partNumber=1&uploadId=_vGxlCngbYmTDJjSNkHFUHjDlURIvZH4gZV97O7gUofXr7J1.M27f3L0_Ze8GLV9t7pZ572PvAPioMv5P4hD_bNbVIyNzfq0qq_YuImnKDI2v4_YsLW6oadf1qH_SxGvI6aD2vZTJ5i9at4bKvApex07TqQzTD3sq9xc5Xay9umYK.7Xr_m7tPMt.z9fas7t&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEK%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIH%2FPFTUMe2nSfjTLXKrio0S%2FijGAibxdXC1%2FuUVTpSTQAiEAok5ldWQhjh5WMwY6JNX56tAUjZ%2FbTlYg0Od%2F72ZYNLIqwAIIp%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2MDQ3MzMwMDk0MDMiDBXRZvGjSW0%2FEyfEpiqUArWG%2BrEjDxAO4k5d5LAoFjBPUiiZ3V4%2Bzd2l3dv4tsgWp4OC05HTh4jnDBuYb1HuPjehVfzOr5i81GtUMCN3Ja3ha9COE8FNC8CTiwrV17gQmwTJvT41NUtrAUcCsC%2BxUkAeju1epfgL09NRd1C7sDHz04TEgXlc5MkqX%2B1zUitSq1VVy6Pf2B%2FzXUas%2FhWE116kh9JoL%2FPucdhgpAsEG2PRmrKYt3e83zsXf3YRCA66vS0zmff6RK7elNvWOLPlTFTK5C285T4yY4FiggzKgb906mzeVmhKqSCsgWNP9Wgi9XdqFp0mdj741py4ZHdeSKRrd5FKxBwhGC0YovWcpDpKfilwss74luWwH22DLjh4Mre8DDDA8qGvBjqdAU3U4yAiA8jr2Y0rNbVGxFaQetqhIulAagjDN6M2XP7a1NFcHDpErBCCDCO3lrDIwrvlxprGK0FZ2VxXp7vV3a3XIIceczyQBn%2BHJ9ZXjUkiEUEb5KAk0Evk%2BLMubz%2FrHys0Br4KxKHkoZNFGVPsasVb%2Bb4Vz%2B10u35fRuTl9fS6zV8csB6YV7cSVVKSBTdAoQFvs6wrvhujUCXgSyA%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240306T141234Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Credential=ASIAYZTHFNX5SNZYBIGD%2F20240306%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=e62a32dbcbe5f72bcca3547f9189b1e113cc729ecaee09de37b05cf53960a8f5"]}'
+  recorded_at: Wed, 06 Mar 2024 14:12:34 GMT
+- request:
+    method: put
+    uri: https://com-autodesk-oss-direct-upload.s3-accelerate.amazonaws.com/f3/df/6b/79/bucket/<AUTODESK_BUCKET_KEY>/signed-url-uploads/f3df6b79-e25d-48c9-8674-a7455731b6f3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAYZTHFNX5SNZYBIGD/20240306/us-east-1/s3/aws4_request&X-Amz-Date=20240306T141234Z&X-Amz-Expires=600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEK///////////wEaCXVzLWVhc3QtMSJHMEUCIH/PFTUMe2nSfjTLXKrio0S/ijGAibxdXC1/uUVTpSTQAiEAok5ldWQhjh5WMwY6JNX56tAUjZ/bTlYg0Od/72ZYNLIqwAIIp///////////ARAAGgw2MDQ3MzMwMDk0MDMiDBXRZvGjSW0/EyfEpiqUArWG%2BrEjDxAO4k5d5LAoFjBPUiiZ3V4%2Bzd2l3dv4tsgWp4OC05HTh4jnDBuYb1HuPjehVfzOr5i81GtUMCN3Ja3ha9COE8FNC8CTiwrV17gQmwTJvT41NUtrAUcCsC%2BxUkAeju1epfgL09NRd1C7sDHz04TEgXlc5MkqX%2B1zUitSq1VVy6Pf2B/zXUas/hWE116kh9JoL/PucdhgpAsEG2PRmrKYt3e83zsXf3YRCA66vS0zmff6RK7elNvWOLPlTFTK5C285T4yY4FiggzKgb906mzeVmhKqSCsgWNP9Wgi9XdqFp0mdj741py4ZHdeSKRrd5FKxBwhGC0YovWcpDpKfilwss74luWwH22DLjh4Mre8DDDA8qGvBjqdAU3U4yAiA8jr2Y0rNbVGxFaQetqhIulAagjDN6M2XP7a1NFcHDpErBCCDCO3lrDIwrvlxprGK0FZ2VxXp7vV3a3XIIceczyQBn%2BHJ9ZXjUkiEUEb5KAk0Evk%2BLMubz/rHys0Br4KxKHkoZNFGVPsasVb%2Bb4Vz%2B10u35fRuTl9fS6zV8csB6YV7cSVVKSBTdAoQFvs6wrvhujUCXgSyA=&X-Amz-Signature=e62a32dbcbe5f72bcca3547f9189b1e113cc729ecaee09de37b05cf53960a8f5&X-Amz-SignedHeaders=host&partNumber=1&uploadId=_vGxlCngbYmTDJjSNkHFUHjDlURIvZH4gZV97O7gUofXr7J1.M27f3L0_Ze8GLV9t7pZ572PvAPioMv5P4hD_bNbVIyNzfq0qq_YuImnKDI2v4_YsLW6oadf1qH_SxGvI6aD2vZTJ5i9at4bKvApex07TqQzTD3sq9xc5Xay9umYK.7Xr_m7tPMt.z9fas7t
+    body:
+      encoding: ASCII-8BIT
+      string: "ISO-10303-21;\r\nHEADER;\r\nFILE_DESCRIPTION(('CTC-02 geometry only..."
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Content-Type:
+      - application/octet-stream
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+      X-Amz-Id-2:
+      - Ix4pshSQVqoHNXS1CQ29nBJcxFBYNxYNpgVqEe5QYvmCEpj8q2rxEjtXJ8DZEvmsyM8S0ENho/w=
+      X-Amz-Request-Id:
+      - DKFT6KQF7CKACKBA
+      Date:
+      - Wed, 06 Mar 2024 14:12:35 GMT
+      Etag:
+      - '"2133dedfea4e536d6d07591376c13c31"'
+      X-Amz-Server-Side-Encryption:
+      - AES256
+      Server:
+      - AmazonS3
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 212f3832d7f59d71fd3926166fcc89ae.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - YUL62-P2
+      X-Amz-Cf-Id:
+      - iGraJXNO-skzuJnA592frdXUeyu2Vg7e5lwx3-Qex6PtGY28q7nHCg==
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 06 Mar 2024 14:12:35 GMT
+- request:
+    method: post
+    uri: https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-1%2F3d-files%2Fnist_ctc_02_asme1_rc.stp/signeds3upload
+    body:
+      encoding: UTF-8
+      string: '{"ossbucketKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gGNWdmZq4dfMk-JH9pilygrAAAB8zCCAe8GCSqGSIb3DQEHBqCCAeAwggHcAgEAMIIB1QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyjtcvGN3ETT5ngv3UCARCAggGmvbyvu4RO17G5zbCeZQxzDeJa14WMo-ZC19rmuxpNc4mIYCYjoLT5EchXifo0oDdAZgm3hXJyv929M-08GmCw_etfYZXpQISakzkgh10Es5WApf3aagTd0WuehiCbI2ViNQVj_WXYFElJTM7-DM5WP8Z-Sq7CwEf_r3YiFvOcAHpld7ArGj3uegy-GX7EIg0YZdumSFju25AWaoPMvRVIIWMcoGS5foUAyhWgPKVX6JX8LifAl3TlNv7R1sJJ0SJ_ZRGricbJqbrT4jviTBg_bAmKgtH3U5oD35aYuFbb2j0an4WcJMKDmHVcgmi63fYha9bZIdoA10Lhr9PQBnpwyzaLzQW3nelrarZD6vdHNY81tr6iuIib63z_NI7bdSdO_L1jfm1lK1LrTIwkoVV9rRsD9hlvVB3JOorl_cGjYb20LrkviEsEFzyzVxAwdaVTjYt-ASy1CHtV5sIvsJu5oVKAj1Rp7VPjDcRNCTGZMCEdKr_gBSC0BsGAGzqmSDBTLMvJNVIAc4tkeRjN7lUJUBvfFmHtpjOWNyQ-3ndwH_zU3tp63tI=","ossSourceFileObjectKey":"repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-1%2F3d-files%2Fnist_ctc_02_asme1_rc.stp","access":"full","uploadKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gGNWdmZq4dfMk-JH9pilygrAAAB8zCCAe8GCSqGSIb3DQEHBqCCAeAwggHcAgEAMIIB1QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyjtcvGN3ETT5ngv3UCARCAggGmvbyvu4RO17G5zbCeZQxzDeJa14WMo-ZC19rmuxpNc4mIYCYjoLT5EchXifo0oDdAZgm3hXJyv929M-08GmCw_etfYZXpQISakzkgh10Es5WApf3aagTd0WuehiCbI2ViNQVj_WXYFElJTM7-DM5WP8Z-Sq7CwEf_r3YiFvOcAHpld7ArGj3uegy-GX7EIg0YZdumSFju25AWaoPMvRVIIWMcoGS5foUAyhWgPKVX6JX8LifAl3TlNv7R1sJJ0SJ_ZRGricbJqbrT4jviTBg_bAmKgtH3U5oD35aYuFbb2j0an4WcJMKDmHVcgmi63fYha9bZIdoA10Lhr9PQBnpwyzaLzQW3nelrarZD6vdHNY81tr6iuIib63z_NI7bdSdO_L1jfm1lK1LrTIwkoVV9rRsD9hlvVB3JOorl_cGjYb20LrkviEsEFzyzVxAwdaVTjYt-ASy1CHtV5sIvsJu5oVKAj1Rp7VPjDcRNCTGZMCEdKr_gBSC0BsGAGzqmSDBTLMvJNVIAc4tkeRjN7lUJUBvfFmHtpjOWNyQ-3ndwH_zU3tp63tI="}'
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <BEARER>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 06 Mar 2024 14:12:35 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '468'
+      Connection:
+      - keep-alive
+      X-Ads-Region:
+      - US
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Authorization, Accept-Encoding, Range, Content-Type
+      Access-Control-Allow-Methods:
+      - GET
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 96623ad5-5abc-4abd-90e5-c22a5ea74935
+    body:
+      encoding: UTF-8
+      string: '{"bucketKey":"<AUTODESK_BUCKET_KEY>","objectId":"urn:adsk.objects:os.object:<AUTODESK_BUCKET_KEY>/repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-1%2F3d-files%2Fnist_ctc_02_asme1_rc.stp","objectKey":"repos/author/repo_owner/repo_name/chapter-1/3d-files/nist_ctc_02_asme1_rc.stp","size":1154618,"contentType":"application/octet-stream","location":"https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-1%2F3d-files%2Fnist_ctc_02_asme1_rc.stp"}'
+  recorded_at: Wed, 06 Mar 2024 14:12:35 GMT
+- request:
+    method: post
+    uri: https://developer.api.autodesk.com/modelderivative/v2/designdata/job
+    body:
+      encoding: UTF-8
+      string: '{"input":{"urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw"},"output":{"formats":[{"type":"svf","views":["2d","3d"]}]}}'
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <BEARER>
+      X-Ads-Force:
+      - 'true'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 06 Mar 2024 14:12:36 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '264'
+      Connection:
+      - keep-alive
+      X-Ads-Duration:
+      - 436 ms
+      X-Ads-Startup-Time:
+      - Tue Mar 05 02:42:46 UTC 2024
+      X-Ads-App-Identifier:
+      - platform-viewing-2024.01.01.536.2e6ea962a-production
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - 3804cbfc-b3c6-466b-9645-546298938234
+    body:
+      encoding: UTF-8
+      string: '{"result":"success","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw","acceptedJobs":{"output":{"formats":[{"type":"svf","views":["2d","3d"]}]}}}'
+  recorded_at: Wed, 06 Mar 2024 14:12:36 GMT
+- request:
+    method: get
+    uri: https://developer.api.autodesk.com/modelderivative/v2/designdata/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw/manifest
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Authorization:
+      - Bearer <BEARER>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 06 Mar 2024 14:12:36 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      X-Ads-Duration:
+      - 98 ms
+      X-Ads-Startup-Time:
+      - Tue Mar 05 02:48:43 UTC 2024
+      X-Ads-App-Identifier:
+      - platform-viewing-2024.01.01.536.2e6ea962a-production
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - 39f0ee3d-d61a-4a3c-b77a-b044e6c9f502
+    body:
+      encoding: ASCII-8BIT
+      string: '{"type":"manifest","hasThumbnail":"false","status":"pending","progress":"0%
+        complete","region":"US","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw","version":"1.0","derivatives":[]}'
+  recorded_at: Wed, 06 Mar 2024 14:12:36 GMT
+- request:
+    method: get
+    uri: https://developer.api.autodesk.com/modelderivative/v2/designdata/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw/manifest
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Authorization:
+      - Bearer <BEARER>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 06 Mar 2024 14:12:45 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      X-Ads-Duration:
+      - 120 ms
+      X-Ads-Startup-Time:
+      - Tue Mar 05 02:52:00 UTC 2024
+      X-Ads-App-Identifier:
+      - platform-viewing-2024.01.01.536.2e6ea962a-production
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - b7bbe312-c93c-4600-8506-4d98624ba6b6
+    body:
+      encoding: ASCII-8BIT
+      string: '{"type":"manifest","hasThumbnail":"true","status":"success","progress":"complete","region":"US","urn":"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw","version":"1.0","derivatives":[{"name":"nist_ctc_02_asme1_rc.stp","hasThumbnail":"true","status":"success","progress":"complete","outputType":"svf","children":[{"guid":"6f4fdee4-4e74-4b1f-9afb-d6c7bdf5bfb1","type":"geometry","role":"3d","name":"Scene","status":"success","progress":"complete","hasThumbnail":"true","children":[{"guid":"a6b0581c-c0ca-4e5d-89a2-4da1caf6ff69","type":"resource","urn":"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw/output/1/nist_ctc_02_asme1_rc.svf","role":"graphics","mime":"application/autodesk-svf"},{"guid":"c120461d-5ec8-47cb-bbdd-e4ed52099fa2","type":"resource","urn":"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw/output/1/nist_ctc_02_asme1_rc.svf.png01_thumb_400x400.png","resolution":[400,400],"mime":"image/png","role":"thumbnail"},{"guid":"33caf5cd-6982-41c2-bb1d-1e7c91655e87","type":"resource","urn":"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw/output/1/nist_ctc_02_asme1_rc.svf.png01_thumb_200x200.png","resolution":[200,200],"mime":"image/png","role":"thumbnail"},{"guid":"b959b03a-1818-4041-a968-33be0465d0f4","type":"resource","urn":"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw/output/1/nist_ctc_02_asme1_rc.svf.png01_thumb_100x100.png","resolution":[100,100],"mime":"image/png","role":"thumbnail"}]},{"guid":"61838789-a3a3-4676-9160-30b27ce302e6","type":"resource","urn":"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw/output/1/properties.db","role":"Autodesk.CloudPlatform.PropertyDatabase","mime":"application/autodesk-db","status":"success"}]}]}'
+  recorded_at: Wed, 06 Mar 2024 14:12:45 GMT
+recorded_with: VCR 6.2.0

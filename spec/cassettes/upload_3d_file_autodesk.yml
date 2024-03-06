@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Fnist_ctc_01_asme1_rd.stp/signeds3upload?minutesExpiration=10
+    uri: https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-2%2F3d-files%2Fnist_ctc_01_asme1_rd.stp/signeds3upload?minutesExpiration=10
     body:
       encoding: US-ASCII
       string: ''
@@ -100,10 +100,10 @@ http_interactions:
   recorded_at: Wed, 06 Mar 2024 13:58:34 GMT
 - request:
     method: post
-    uri: https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Fnist_ctc_01_asme1_rd.stp/signeds3upload
+    uri: https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-2%2F3d-files%2Fnist_ctc_01_asme1_rd.stp/signeds3upload
     body:
       encoding: UTF-8
-      string: '{"ossbucketKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gHZrvSUYmOTIcZXTFgovpEbAAAB9zCCAfMGCSqGSIb3DQEHBqCCAeQwggHgAgEAMIIB2QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyMs9dh7Dw69zMiDKACARCAggGqDmjIM1mRbEoeXGUo3rnz0YEticf7rmk7mKH14_kqZGfiQ7h--RXwPR4blu4OgPZOynIKFXt9Mg6JCKQs7U5NDMRBTC9ujsY0OuHLyUpNIgptfg8CvO3HvKiHt7BnwRNlKVBTAEI2Wv-aosRQ7FECqO3eRQ-HT-XCLwnWuTwlzj8Aarx6LXtX_6oujhX3XKsINXLMIxzGPkpIW2eLeY1hltJMMGyo5lT4UbhRPSZk_cyXhnFzWvuu4CW1ueThy2yCbHt_XHEo_tjs-LlhJhEpuWVIBZLjvfqaR9yqyf14E5qf_cj3MZrCNyzNPHK3JnBLaAsgkMeoGeLTeGhRwLy4AMG9B7bdYT8W82BabH7i0H8OqyAS_8hwO_A0rspO_q6NsF_hpOD3R4nlaLmz74j0ECk67nmK7FEgGwZnRSzlf35BSa02JQFCtP0prOOpGe5cDmpBj4gQbZ4lGB1CZJQSlvZEHcwnw9DqGBfTTN9t1GF2tpET0jBgCsHPVHertp9OFzh_3qXHS-g8Xx1ckqzutaKtfkaq6uIdkow9FW2FwKWRb-8GoPPlfYeH","ossSourceFileObjectKey":"repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Fnist_ctc_01_asme1_rd.stp","access":"full","uploadKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gHZrvSUYmOTIcZXTFgovpEbAAAB9zCCAfMGCSqGSIb3DQEHBqCCAeQwggHgAgEAMIIB2QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyMs9dh7Dw69zMiDKACARCAggGqDmjIM1mRbEoeXGUo3rnz0YEticf7rmk7mKH14_kqZGfiQ7h--RXwPR4blu4OgPZOynIKFXt9Mg6JCKQs7U5NDMRBTC9ujsY0OuHLyUpNIgptfg8CvO3HvKiHt7BnwRNlKVBTAEI2Wv-aosRQ7FECqO3eRQ-HT-XCLwnWuTwlzj8Aarx6LXtX_6oujhX3XKsINXLMIxzGPkpIW2eLeY1hltJMMGyo5lT4UbhRPSZk_cyXhnFzWvuu4CW1ueThy2yCbHt_XHEo_tjs-LlhJhEpuWVIBZLjvfqaR9yqyf14E5qf_cj3MZrCNyzNPHK3JnBLaAsgkMeoGeLTeGhRwLy4AMG9B7bdYT8W82BabH7i0H8OqyAS_8hwO_A0rspO_q6NsF_hpOD3R4nlaLmz74j0ECk67nmK7FEgGwZnRSzlf35BSa02JQFCtP0prOOpGe5cDmpBj4gQbZ4lGB1CZJQSlvZEHcwnw9DqGBfTTN9t1GF2tpET0jBgCsHPVHertp9OFzh_3qXHS-g8Xx1ckqzutaKtfkaq6uIdkow9FW2FwKWRb-8GoPPlfYeH"}'
+      string: '{"ossbucketKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gHZrvSUYmOTIcZXTFgovpEbAAAB9zCCAfMGCSqGSIb3DQEHBqCCAeQwggHgAgEAMIIB2QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyMs9dh7Dw69zMiDKACARCAggGqDmjIM1mRbEoeXGUo3rnz0YEticf7rmk7mKH14_kqZGfiQ7h--RXwPR4blu4OgPZOynIKFXt9Mg6JCKQs7U5NDMRBTC9ujsY0OuHLyUpNIgptfg8CvO3HvKiHt7BnwRNlKVBTAEI2Wv-aosRQ7FECqO3eRQ-HT-XCLwnWuTwlzj8Aarx6LXtX_6oujhX3XKsINXLMIxzGPkpIW2eLeY1hltJMMGyo5lT4UbhRPSZk_cyXhnFzWvuu4CW1ueThy2yCbHt_XHEo_tjs-LlhJhEpuWVIBZLjvfqaR9yqyf14E5qf_cj3MZrCNyzNPHK3JnBLaAsgkMeoGeLTeGhRwLy4AMG9B7bdYT8W82BabH7i0H8OqyAS_8hwO_A0rspO_q6NsF_hpOD3R4nlaLmz74j0ECk67nmK7FEgGwZnRSzlf35BSa02JQFCtP0prOOpGe5cDmpBj4gQbZ4lGB1CZJQSlvZEHcwnw9DqGBfTTN9t1GF2tpET0jBgCsHPVHertp9OFzh_3qXHS-g8Xx1ckqzutaKtfkaq6uIdkow9FW2FwKWRb-8GoPPlfYeH","ossSourceFileObjectKey":"repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-2%2F3d-files%2Fnist_ctc_01_asme1_rd.stp","access":"full","uploadKey":"AQICAHhaqJg3lf3hZQoQ0QcSBRI1_akWcJrBS0jQ9r1HxIXZ1gHZrvSUYmOTIcZXTFgovpEbAAAB9zCCAfMGCSqGSIb3DQEHBqCCAeQwggHgAgEAMIIB2QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyMs9dh7Dw69zMiDKACARCAggGqDmjIM1mRbEoeXGUo3rnz0YEticf7rmk7mKH14_kqZGfiQ7h--RXwPR4blu4OgPZOynIKFXt9Mg6JCKQs7U5NDMRBTC9ujsY0OuHLyUpNIgptfg8CvO3HvKiHt7BnwRNlKVBTAEI2Wv-aosRQ7FECqO3eRQ-HT-XCLwnWuTwlzj8Aarx6LXtX_6oujhX3XKsINXLMIxzGPkpIW2eLeY1hltJMMGyo5lT4UbhRPSZk_cyXhnFzWvuu4CW1ueThy2yCbHt_XHEo_tjs-LlhJhEpuWVIBZLjvfqaR9yqyf14E5qf_cj3MZrCNyzNPHK3JnBLaAsgkMeoGeLTeGhRwLy4AMG9B7bdYT8W82BabH7i0H8OqyAS_8hwO_A0rspO_q6NsF_hpOD3R4nlaLmz74j0ECk67nmK7FEgGwZnRSzlf35BSa02JQFCtP0prOOpGe5cDmpBj4gQbZ4lGB1CZJQSlvZEHcwnw9DqGBfTTN9t1GF2tpET0jBgCsHPVHertp9OFzh_3qXHS-g8Xx1ckqzutaKtfkaq6uIdkow9FW2FwKWRb-8GoPPlfYeH"}'
     headers:
       User-Agent:
       - Faraday v2.9.0
@@ -146,7 +146,7 @@ http_interactions:
       - ec7a64e3-ba13-421f-ac66-a782cbc1cc57
     body:
       encoding: UTF-8
-      string: '{"bucketKey":"<AUTODESK_BUCKET_KEY>","objectId":"urn:adsk.objects:os.object:<AUTODESK_BUCKET_KEY>/repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Fnist_ctc_01_asme1_rd.stp","objectKey":"repos/author/repo_owner/repo_name/3d-file/nist_ctc_01_asme1_rd.stp","size":235156,"contentType":"application/octet-stream","location":"https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2F3d-file%2Fnist_ctc_01_asme1_rd.stp"}'
+      string: '{"bucketKey":"<AUTODESK_BUCKET_KEY>","objectId":"urn:adsk.objects:os.object:<AUTODESK_BUCKET_KEY>/repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-2%2F3d-files%2Fnist_ctc_01_asme1_rd.stp","objectKey":"repos/author/repo_owner/repo_name/3d-files/nist_ctc_01_asme1_rd.stp","size":235156,"contentType":"application/octet-stream","location":"https://developer.api.autodesk.com/oss/v2/buckets/<AUTODESK_BUCKET_KEY>/objects/repos%2Fauthor%2Frepo_owner%2Frepo_name%2Fchapter-2%2F3d-files%2Fnist_ctc_01_asme1_rd.stp"}'
   recorded_at: Wed, 06 Mar 2024 13:58:34 GMT
 - request:
     method: post

@@ -3,55 +3,59 @@ require 'rails_helper'
 RSpec.describe UploadAutodeskFileJob do
   before(:all) do
     @repo = create(:repository)
-    directory = 'repos/author/repo_owner/repo_name/3d-file'
-    FileUtils.mkdir_p directory
-    source_filepath = Rails.root.join(
-      'spec/fixtures/systems/collections/chapter-2/3d-files/V5 Robot Radio (276-4831).step'
-    )
-    @filepath = "#{directory}/V5 Robot Radio (276-4831).step"
-    FileUtils.copy_file(source_filepath, @filepath)
+    destination_directory = @repo.storage_path
+    source_directory = Rails.root.join('spec/fixtures/systems/collections')
+    FileUtils.mkdir_p(destination_directory)
+    FileUtils.copy_entry(source_directory, destination_directory)
   end
 
   after(:all) do
-    FileUtils.rm_r('repos/author')
+    parent_directory = Rails.root.join('repos', @repo.author_username)
+    FileUtils.remove_dir(parent_directory)
   end
 
   it 'queues the job' do
-    described_class.perform_async(
-      @repo.id,
-      @filepath
-    )
-    expect(described_class).to have_enqueued_sidekiq_job(
-      @repo.id,
-      @filepath
-    )
+    described_class.perform_async(@repo.id)
+    expect(described_class).to have_enqueued_sidekiq_job(@repo.id)
   end
 
   context 'when executing perform' do
     before(:all) do
       Sidekiq::Testing.inline! do
-        VCR.use_cassettes([{ name: 'get_autodesk_access_token' }, { name: 'upload_3d_file_autodesk' }]) do
-          described_class.perform_async(
-            @repo.id,
-            @filepath
-          )
+        VCR.use_cassettes(
+          [{ name: 'get_autodesk_access_token', options: { allow_playback_repeats: true } },
+           { name: 'upload_3d_file_autodesk_additional' },
+           { name: 'upload_3d_file_autodesk' }]
+        ) do
+          described_class.perform_async(@repo.id)
         end
       end
-      @autodesk_file = AutodeskFile.last
+      @repo.reload
+      @autodesk_file_one = @repo.autodesk_files.first
+      @autodesk_file_two = @repo.autodesk_files.last
     end
 
-    it 'creates an autodesk_file associated with the repository' do
-      expect(@autodesk_file.repository).to eq(@repo)
+    it 'creates two autodesk files associated with the repository' do
+      expect(@repo.autodesk_files.count).to eq(2)
     end
 
-    it 'creates an autodesk_file containing the filepath' do
-      expect(@autodesk_file.filepath).to eq(@filepath)
+    it 'the associated autodesk files contain the filepath' do
+      expect(@autodesk_file_one.filepath).to eq(
+        'repos/author/repo_owner/repo_name/chapter-1/3d-files/nist_ctc_02_asme1_rc.stp'
+      )
+      expect(@autodesk_file_two.filepath).to eq(
+        'repos/author/repo_owner/repo_name/chapter-2/3d-files/nist_ctc_01_asme1_rd.stp'
+      )
     end
 
-    it 'creates an autodesk_file containing the urn' do
-      expect(@autodesk_file.urn).to eq(
+    it 'the associated autodesk files contain contains the urn' do
+      expect(@autodesk_file_one.urn).to eq(
         'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJl' \
-        'cG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGVjUrUm9ib3QrUmFkaW8rKDI3Ni00ODMxKS5zdGVw'
+        'cG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDJfYXNtZTFfcmMuc3Rw'
+      )
+      expect(@autodesk_file_two.urn).to eq(
+        'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJl' \
+        'cG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDFfYXNtZTFfcmQuc3Rw'
       )
     end
   end
