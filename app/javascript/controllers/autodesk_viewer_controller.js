@@ -2,6 +2,10 @@ import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
   static targets = ['viewerDiv', 'displayBtn', 'hideBtn']
+  
+  static values = {
+    urn: String
+  }
 
   viewer
   options = {
@@ -15,8 +19,7 @@ export default class extends Controller {
     }
   }
 
-  // Change line below to variable later
-  documentId = ''
+  documentId = 'urn:' + this.urnValue
 
   connect () {
     this.createViewer()

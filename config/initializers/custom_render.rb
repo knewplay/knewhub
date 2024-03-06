@@ -70,6 +70,22 @@ class CustomRender < Redcarpet::Render::HTML
 
   # Allow 3D files to be rendered using Autodesk Viewer SDK
   def process_3d_file(relative_path)
-    "<script src='https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js'></script>"
+    filepath = Pathname.new(RequestPath.define_base_url).join(relative_path).to_s
+    filepath = filepath.delete_prefix('/')
+    autodesk_file = AutodeskFile.find_by(filepath:)
+    
+    if autodesk_file&.urn
+      <<~HTML
+        <div data-controller="autodesk-viewer" data-autodesk-viewer-urn-value="#{autodesk_file.urn}">
+        <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/style.min.css" type="text/css">
+        <script src='https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js'></script>
+        <button type="button" data-action="click->autodesk-viewer#display" data-autodesk-viewer-target="displayBtn">Display</button>
+        <button type="button" data-action="click->autodesk-viewer#hide" data-autodesk-viewer-target="hideBtn">Hide</button>
+        <div class="autodesk-viewer" data-autodesk-viewer-target="viewerDiv" ></div>
+        </div>
+      HTML
+    else
+      "<div>Error rendering Autodesk viewer</div>"
+    end
   end
 end
