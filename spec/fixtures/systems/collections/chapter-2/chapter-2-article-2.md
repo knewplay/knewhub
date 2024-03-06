@@ -5,7 +5,7 @@ author: The Author
 keywords: [one, two]
 ---
 
-[3d-viewer ./3d-files/V5 Robot Radio (276-4831).step]
+[3d-viewer ./3d-files/nist_ctc_01_asme1_rd.stp]
 
 ## Amplectitur atque mutabile
 

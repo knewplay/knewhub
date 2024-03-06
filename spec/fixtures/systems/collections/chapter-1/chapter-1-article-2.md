@@ -17,6 +17,8 @@ quo oscula me orbe!
 
 ## Amphitrite fronte verbaque credita
 
+[3d-viewer ./3d-files/nist_ctc_02_asme1_rc.stp]
+
 Pro potuisse oblectamina hoste venerat: sume legi inspirat, aures et saepe
 Herculeamque pedis tergo. Stimulataque viderunt; et tu abit. Miserae loquuntur
 vincere!

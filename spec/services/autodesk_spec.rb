@@ -10,10 +10,8 @@ describe Autodesk do
   before(:all) do
     directory = 'repos/author/repo_owner/repo_name/3d-file'
     FileUtils.mkdir_p directory
-    source_filepath = Rails.root.join(
-      'spec/fixtures/systems/collections/chapter-2/3d-files/V5 Robot Radio (276-4831).step'
-    )
-    @filepath = "#{directory}/V5 Robot Radio (276-4831).step"
+    source_filepath = Rails.root.join('spec/fixtures/systems/collections/chapter-2/3d-files/nist_ctc_01_asme1_rd.stp')
+    @filepath = "#{directory}/nist_ctc_01_asme1_rd.stp"
     FileUtils.copy_file(source_filepath, @filepath)
   end
 
