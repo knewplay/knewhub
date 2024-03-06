@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe UploadAutodeskFilesJob do
   before(:all) do
     @repo = create(:repository)
+    @build = create(:build, repository: @repo, aasm_state: :uploading_autodesk_files)
     destination_directory = @repo.storage_path
     source_directory = Rails.root.join('spec/fixtures/systems/collections')
     FileUtils.mkdir_p(destination_directory)
@@ -15,8 +16,8 @@ RSpec.describe UploadAutodeskFilesJob do
   end
 
   it 'queues the job' do
-    described_class.perform_async(@repo.id)
-    expect(described_class).to have_enqueued_sidekiq_job(@repo.id)
+    described_class.perform_async(@build.id)
+    expect(described_class).to have_enqueued_sidekiq_job(@build.id)
   end
 
   context 'when executing perform' do
@@ -27,7 +28,7 @@ RSpec.describe UploadAutodeskFilesJob do
            { name: 'upload_3d_file_autodesk_additional' },
            { name: 'upload_3d_file_autodesk' }]
         ) do
-          described_class.perform_async(@repo.id)
+          described_class.perform_async(@build.id)
         end
       end
       @repo.reload

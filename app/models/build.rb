@@ -21,6 +21,7 @@ class Build < ApplicationRecord
           :getting_repo_description,
           :parsing_questions,
           :creating_repo_index,
+          :uploading_autodesk_files,
           :completed
 
     event :receive_webhook, after_commit: :schedule_receive_webhook do
@@ -47,8 +48,12 @@ class Build < ApplicationRecord
       transitions from: :parsing_questions, to: :creating_repo_index
     end
 
+    event :upload_autodesk_files, after_commit: :schedule_upload_autodesk_files do
+      transitions from: :creating_repo_index, to: :uploading_autodesk_files
+    end
+
     event :complete, after_commit: :complete_build do
-      transitions from: :creating_repo_index, to: :completed
+      transitions from: :uploading_autodesk_files, to: :completed
     end
   end
 
@@ -99,6 +104,10 @@ class Build < ApplicationRecord
     CreateRepoIndexJob.perform_async(id)
   end
 
+  def schedule_upload_autodesk_files
+    UploadAutodeskFilesJob.perform_async(id)
+  end
+
   def complete_build
     update(status: 'Complete', completed_at: DateTime.current)
   end
@@ -130,6 +139,10 @@ class Build < ApplicationRecord
   end
 
   def finished_creating_repo_index
+    upload_autodesk_files!
+  end
+
+  def finished_uploading_autodesk_files
     complete!
   end
 

@@ -3,16 +3,22 @@ class UploadAutodeskFilesJob
   include SplitMarkdownHelper
 
   # Update this job to use build_id and update build logs
-  def perform(repository_id)
-    _repository, directory = RepositoryDirectory.define(repository_id)
+  def perform(build_id)
+    build = Build.find(build_id)
+    _repository, directory = RepositoryDirectory.define(build.repository.id)
 
     autodesk_files = list_autodesk_files_for_directory(directory)
 
-    return if autodesk_files.empty?
-
-    autodesk_files.each do |filepath|
-      perform_for_each_file(repository_id, filepath)
+    if autodesk_files.empty?
+      build.logs.create(content: 'No Autodesk files were found in this repository.')
+    else
+      build.logs.create(content: 'Autodesk files found in this repository. Uploading...')
+      autodesk_files.each do |filepath|
+        perform_for_each_file(build.repository.id, filepath)
+      end
     end
+
+    build.finished_uploading_autodesk_files
   end
 
   private
