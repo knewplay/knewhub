@@ -59,5 +59,17 @@ RSpec.describe UploadAutodeskFilesJob do
         'cG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDFfYXNtZTFfcmQuc3Rw'
       )
     end
+
+    it 'creates logs for the build' do
+      expect(@build.logs.first.content).to eq('Autodesk files found in this repository. Uploading...')
+      expect(@build.logs.second.content).to eq('Autodesk access token successfully created.')
+      expect(@build.logs.third.content).to eq(
+        "'#{@autodesk_file_one.filepath}' successfully uploaded to Autodesk servers."
+      )
+      expect(@build.logs.fourth.content).to eq('Autodesk access token successfully created.')
+      expect(@build.logs.fifth.content).to eq(
+        "'#{@autodesk_file_two.filepath}' successfully uploaded to Autodesk servers."
+      )
+    end
   end
 end

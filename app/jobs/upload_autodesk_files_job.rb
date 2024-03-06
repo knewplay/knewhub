@@ -14,7 +14,7 @@ class UploadAutodeskFilesJob
     else
       build.logs.create(content: 'Autodesk files found in this repository. Uploading...')
       autodesk_files.each do |filepath|
-        perform_for_each_file(build.repository.id, filepath)
+        perform_for_each_file(build, build.repository.id, filepath)
       end
     end
 
@@ -53,9 +53,10 @@ class UploadAutodeskFilesJob
     autodesk_files = autodesk_files.flatten
   end
 
-  def perform_for_each_file(repository_id, filepath)
+  def perform_for_each_file(build, repository_id, filepath)
     autodesk_file = AutodeskFile.create!(repository_id:, filepath:)
-    urn = Autodesk.new.upload_file_for_viewer(filepath)
+    autodesk_service = Autodesk.new(build)
+    urn = autodesk_service.upload_file_for_viewer(filepath)
 
     return if urn.nil?
 

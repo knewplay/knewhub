@@ -1,13 +1,11 @@
 require 'rails_helper'
 
 describe Autodesk do
-  let!(:autodesk) do
-    VCR.use_cassette('get_autodesk_access_token') do
-      described_class.new
-    end
-  end
-
   before(:all) do
+    @build = create(:build, aasm_state: :uploading_autodesk_files)
+    VCR.use_cassette('get_autodesk_access_token') do
+      @autodesk_service = described_class.new(@build)
+    end
     directory = 'repos/author/repo_owner/repo_name/chapter-2/3d-files'
     FileUtils.mkdir_p directory
     source_filepath = Rails.root.join('spec/fixtures/systems/collections/chapter-2/3d-files/nist_ctc_01_asme1_rd.stp')
@@ -19,17 +17,28 @@ describe Autodesk do
     FileUtils.rm_r('repos/author')
   end
 
+  describe '#initialize' do
+    it 'adds a log to the build' do
+      expect(@build.logs.first.content).to eq('Autodesk access token successfully created.')
+    end
+  end
+
   describe '#upload_file_for_viewer' do
-    it 'completes the upload process' do
-      allow(Rails.logger).to receive(:info)
-      VCR.use_cassette('upload_3d_file_autodesk') do
-        @value = autodesk.upload_file_for_viewer(@filepath)
+    context 'when upload is successful' do
+      before(:all) do
+        VCR.use_cassette('upload_3d_file_autodesk') do
+          @value = @autodesk_service.upload_file_for_viewer(@filepath)
+        end
       end
-      expect(Rails.logger).to have_received(:info).with("Starting upload of file '#{@filepath}' to Autodesk bucket")
-      expect(Rails.logger).to have_received(:info).with("Finalizing upload of file '#{@filepath}' to Autodesk bucket")
-      expect(Rails.logger).to have_received(:info).with('Success. File will be added to viewer')
-      expect(@value).not_to be_nil
-      expect(@value).to be_a String
+
+      it 'returns the urn value' do
+        expect(@value).not_to be_nil
+        expect(@value).to be_a String
+      end
+
+      it 'adds a log to the build' do
+        expect(@build.logs.last.content).to eq("'#{@filepath}' successfully uploaded to Autodesk servers.")
+      end
     end
   end
 end

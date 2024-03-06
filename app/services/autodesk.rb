@@ -1,9 +1,9 @@
 class Autodesk
-  def initialize
+  def initialize(build)
+    @build = build
     @conn = Faraday.new(url: 'https://developer.api.autodesk.com')
     @bucket_key = Rails.application.credentials.dig(:autodesk, :bucket_key)
-    @access_token = create_access_token
-    @logger = Rails.logger
+    create_access_token
   end
 
   def upload_file_for_viewer(filepath)
@@ -15,10 +15,8 @@ class Autodesk
     verify_response = verify_job_complete(urn_encoded)
     verify_response_as_json = JSON.parse(verify_response.body)
 
-    return unless verify_response_as_json['status'] == 'success'
-
-    @logger.info 'Success. File will be added to viewer'
-    verify_response_as_json['urn']
+    update_build(verify_response_as_json, filepath)
+    verify_response_as_json['urn'] if verify_response_as_json['status'] == 'success'
   end
 
   def query_storage_bucket_objects
@@ -51,7 +49,13 @@ class Autodesk
         Authorization: "Basic #{base64_client_info}" }
     )
     response_as_json = JSON.parse(response.body)
-    response_as_json['access_token']
+    @access_token = response_as_json['access_token']
+
+    if @access_token
+      @build.logs.create(content:'Autodesk access token successfully created.')
+    else
+      @build.logs.create(content: 'Failed to create Autodesk access token.', failure: true)
+    end
   end
 
   def base64_client_info
@@ -71,7 +75,6 @@ class Autodesk
   end
 
   def finalize_upload(filepath, upload_key)
-    @logger.info "Finalizing upload of file '#{filepath}' to Autodesk bucket"
     request_params = { ossbucketKey: upload_key, ossSourceFileObjectKey: CGI.escape(filepath), access: 'full', uploadKey: upload_key }
     response = @conn.post(
       "/oss/v2/buckets/#{@bucket_key}/objects/#{CGI.escape(filepath)}/signeds3upload",
@@ -114,7 +117,6 @@ class Autodesk
     upload_url = urls.first
 
     conn = Faraday.new(url: upload_url)
-    @logger.info "Starting upload of file '#{filepath}' to Autodesk bucket"
     conn.put(
       '',
       File.binread(filepath),
@@ -122,5 +124,18 @@ class Autodesk
     )
 
     finalize_upload(filepath, upload_key)
+  end
+
+  def update_build(response_as_json, filepath)
+    if response_as_json['status'] == 'success'
+      @build.logs.create(content: "'#{filepath}' successfully uploaded to Autodesk servers.")
+    else
+      content = <<~MSG
+        Failed to upload '#{filepath}' to Autodesk servers.
+        Status: #{verify_response_as_json['derivatives']['status']}.
+        Message: #{verify_response_as_json['derivatives']['messages']}
+      MSG
+      @build.logs.create(content:, failure: true)
+    end
   end
 end
