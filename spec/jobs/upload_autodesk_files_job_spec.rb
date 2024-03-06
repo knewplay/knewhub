@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe UploadAutodeskFileJob do
+RSpec.describe UploadAutodeskFilesJob do
   before(:all) do
     @repo = create(:repository)
     destination_directory = @repo.storage_path

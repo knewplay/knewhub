@@ -1,4 +1,4 @@
-class UploadAutodeskFileJob
+class UploadAutodeskFilesJob
   include Sidekiq::Job
   include SplitMarkdownHelper
 
