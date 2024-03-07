@@ -8,14 +8,16 @@ describe AutodeskFileUpload do
   context 'when valid client credentials are provided' do
     before(:all) do
       @build_valid = create(:build, repository: @repo, aasm_state: :uploading_autodesk_files)
-      VCR.use_cassette('get_autodesk_access_token') do
-        @autodesk_service = described_class.new(@build_valid)
-      end
+
       directory = 'repos/author/repo_owner/repo_name/chapter-2/3d-files'
       FileUtils.mkdir_p directory
       source_filepath = Rails.root.join('spec/fixtures/systems/collections/chapter-2/3d-files/nist-ctc-01-asme1-rd.stp')
       @filepath = "#{directory}/nist-ctc-01-asme1-rd.stp"
       FileUtils.copy_file(source_filepath, @filepath)
+
+      VCR.use_cassette('get_autodesk_access_token') do
+        @autodesk_service = described_class.new(@filepath, @build_valid)
+      end
     end
 
     after(:all) do
@@ -32,7 +34,7 @@ describe AutodeskFileUpload do
       context 'when upload is successful' do
         before(:all) do
           VCR.use_cassette('upload_3d_file_autodesk') do
-            @value = @autodesk_service.upload_file_for_viewer(@filepath)
+            @value = @autodesk_service.upload_file_for_viewer
           end
         end
 
@@ -52,7 +54,7 @@ describe AutodeskFileUpload do
     before(:all) do
       VCR.use_cassette('get_autodesk_access_token_invalid') do
         @build_invalid = create(:build, repository: @repo, aasm_state: :uploading_autodesk_files)
-        @autodesk_service = described_class.new(@build_invalid)
+        @autodesk_service = described_class.new('somefile.stp', @build_invalid)
       end
     end
 
@@ -64,7 +66,7 @@ describe AutodeskFileUpload do
 
     describe '#upload_file_for_viewer' do
       it 'adds a log to the build' do
-        @autodesk_service.upload_file_for_viewer('somefile.stp')
+        @autodesk_service.upload_file_for_viewer
         expect(@build_invalid.logs.second.content).to match(
           'Unable to upload file to Autodesk server due to invalid access token.'
         )

@@ -1,14 +1,15 @@
 class AutodeskFileUpload < Autodesk
-  def initialize(build)
+  def initialize(filepath, build)
     super()
+    @filepath = filepath
     @build = build
     write_access_token_log
   end
 
-  def upload_file_for_viewer(filepath)
+  def upload_file_for_viewer
     return unless allowed_to_upload_file?
 
-    base64_urn = start_upload(filepath)
+    base64_urn = start_upload
 
     translate_job_response = translate_to_svf(base64_urn)
     urn_encoded = JSON.parse(translate_job_response.body)['urn']
@@ -16,7 +17,7 @@ class AutodeskFileUpload < Autodesk
     verify_response = verify_job_complete(urn_encoded)
     verify_response_as_json = JSON.parse(verify_response.body)
 
-    update_build(verify_response_as_json, filepath)
+    update_build(verify_response_as_json)
     verify_response_as_json['urn'] if verify_response_as_json['status'] == 'success'
   end
 
@@ -43,9 +44,9 @@ class AutodeskFileUpload < Autodesk
     false
   end
 
-  def bucket_signed_url(filepath)
+  def bucket_signed_url
     response = @conn.get(
-      "/oss/v2/buckets/#{@bucket_key}/objects/#{CGI.escape(filepath)}/signeds3upload?minutesExpiration=10",
+      "/oss/v2/buckets/#{@bucket_key}/objects/#{CGI.escape(@filepath)}/signeds3upload?minutesExpiration=10",
       nil,
       { 'Content-Type': 'application/json', Authorization: "Bearer #{@access_token}" }
     )
@@ -53,11 +54,11 @@ class AutodeskFileUpload < Autodesk
     { upload_key: response_as_json['uploadKey'], urls: response_as_json['urls'] }
   end
 
-  def finalize_upload(filepath, upload_key)
-    request_params = { ossbucketKey: upload_key, ossSourceFileObjectKey: CGI.escape(filepath), access: 'full',
+  def finalize_upload(upload_key)
+    request_params = { ossbucketKey: upload_key, ossSourceFileObjectKey: CGI.escape(@filepath), access: 'full',
                         uploadKey: upload_key }
     response = @conn.post(
-      "/oss/v2/buckets/#{@bucket_key}/objects/#{CGI.escape(filepath)}/signeds3upload",
+      "/oss/v2/buckets/#{@bucket_key}/objects/#{CGI.escape(@filepath)}/signeds3upload",
       request_params.to_json,
       { 'Content-Type': 'application/json', Authorization: "Bearer #{@access_token}" }
     )
@@ -92,26 +93,26 @@ class AutodeskFileUpload < Autodesk
     response
   end
 
-  def start_upload(filepath)
-    upload_key, urls = bucket_signed_url(filepath).values
+  def start_upload
+    upload_key, urls = bucket_signed_url.values
     upload_url = urls.first
 
     conn = Faraday.new(url: upload_url)
     conn.put(
       '',
-      File.binread(filepath),
+      File.binread(@filepath),
       { 'Content-Type': 'application/octet-stream' }
     )
 
-    finalize_upload(filepath, upload_key)
+    finalize_upload(upload_key)
   end
 
-  def update_build(response_as_json, filepath)
+  def update_build(response_as_json)
     if response_as_json['status'] == 'success'
-      @build.logs.create(content: "'#{filepath}' successfully uploaded to Autodesk servers.")
+      @build.logs.create(content: "'#{@filepath}' successfully uploaded to Autodesk servers.")
     else
       content = <<~MSG
-        Failed to upload '#{filepath}' to Autodesk servers.
+        Failed to upload '#{@filepath}' to Autodesk servers.
         Status: #{verify_response_as_json['derivatives']['status']}.
         Message: #{verify_response_as_json['derivatives']['messages']}
       MSG

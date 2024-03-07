@@ -55,8 +55,8 @@ class UploadAutodeskFilesJob
 
   def perform_for_each_file(build, repository_id, filepath)
     autodesk_file = AutodeskFile.create!(repository_id:, filepath:)
-    autodesk_service = AutodeskFileUpload.new(build)
-    urn = autodesk_service.upload_file_for_viewer(filepath)
+    autodesk_service = AutodeskFileUpload.new(filepath, build)
+    urn = autodesk_service.upload_file_for_viewer
 
     return if urn.nil?
 
