@@ -47,20 +47,28 @@ class AutodeskFileUpload < Autodesk
 
   def bucket_signed_url
     response = @conn.get(
-      "/oss/v2/buckets/#{@bucket_key}/objects/#{CGI.escape(@filepath)}/signeds3upload?minutesExpiration=10",
-      nil,
+      "/oss/v2/buckets/#{@bucket_key}/objects/#{CGI.escape(@filepath)}/signeds3upload?minutesExpiration=10", nil,
       { 'Content-Type': 'application/json', Authorization: "Bearer #{@access_token}" }
     )
-    response_as_json = JSON.parse(response.body)
-    { upload_key: response_as_json['uploadKey'], upload_url: response_as_json['urls'].first }
+    if response.status == 200
+      response_as_json = JSON.parse(response.body)
+      { upload_key: response_as_json['uploadKey'], upload_url: response_as_json['urls'].first }
+    else
+      @build.logs.create(content: "Cannot create bucket signed url. Status code: #{response.status}", failure: true)
+    end
   end
 
   def start_upload(upload_url)
     conn = Faraday.new(url: upload_url)
-    conn.put(
+    response = conn.put(
       '',
       File.binread(@filepath),
       { 'Content-Type': 'application/octet-stream' }
+    )
+    return if response.status == 200
+
+    @build.logs.create(
+      content: "Error when uploading file '#{filepath}'. Status code: #{response.status}", failure: true
     )
   end
 
@@ -72,9 +80,20 @@ class AutodeskFileUpload < Autodesk
       request_params.to_json,
       { 'Content-Type': 'application/json', Authorization: "Bearer #{@access_token}" }
     )
-    response_as_json = JSON.parse(response.body)
-    object_urn = response_as_json['objectId']
-    Base64.urlsafe_encode64(object_urn)
+    handle_response_finalize_upload(response)
+  end
+
+  def handle_response_finalize_upload(response)
+    if response.status == 200
+      response_as_json = JSON.parse(response.body)
+      object_urn = response_as_json['objectId']
+      Base64.urlsafe_encode64(object_urn)
+    else
+      @build.logs.create(
+        content: "Error when uploading file '#{filepath}'. Status code: #{response.status}", failure: true
+      )
+      nil
+    end
   end
 
   def translate_to_svf(base64_object_urn)
@@ -84,8 +103,20 @@ class AutodeskFileUpload < Autodesk
       request_params.to_json,
       { 'Content-Type': 'application/json', Authorization: "Bearer #{@access_token}", 'x-ads-force': 'true' }
     )
+    handle_response_translate_to_svf(response)
+  end
+
+  def handle_response_translate_to_svf(response)
     response_body = JSON.parse(response.body)
-    response_body['urn']
+    if response.status == 200 || response.status == 201
+      response_body['urn']
+    else
+      content = <<~MSG
+        Error when translating '#{filepath}' to SVF format. Status code: #{response.status}. Error: '#{response_body['diagnostic']}'
+      MSG
+      @build.logs.create(content:, failure: true)
+      nil
+    end
   end
 
   def check_translation_job_complete(base64_file_urn)
