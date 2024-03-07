@@ -1,0 +1,47 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://developer.api.autodesk.com/authentication/v2/token
+    body:
+      encoding: UTF-8
+      string: grant_type=client_credentials&scope=data%3Aread+data%3Awrite+bucket%3Acreate
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept:
+      - application/json
+      Authorization:
+      - Basic <BASIC>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 07 Mar 2024 14:03:09 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '204'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - f98c28c0-3138-4182-a02f-fbef069c7dc2
+    body:
+      encoding: UTF-8
+      string: '{ "developerMessage":"The client_id specified does not have access
+        to the api product", "moreInfo": "https://forge.autodesk.com/en/docs/oauth/v2/developers_guide/error_handling/",
+        "errorCode": "AUTH-001"}'
+  recorded_at: Thu, 07 Mar 2024 14:03:09 GMT
+recorded_with: VCR 6.2.0

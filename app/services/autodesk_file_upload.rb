@@ -6,6 +6,8 @@ class AutodeskFileUpload < Autodesk
   end
 
   def upload_file_for_viewer(filepath)
+    return unless allowed_to_upload_file?
+
     base64_urn = start_upload(filepath)
 
     translate_job_response = translate_to_svf(base64_urn)
@@ -24,8 +26,21 @@ class AutodeskFileUpload < Autodesk
     if @access_token
       @build.logs.create(content: 'Autodesk access token successfully created.')
     else
-      @build.logs.create(content: 'Failed to create Autodesk access token.', failure: true)
+      @build.logs.create(
+        content: "Failed to create Autodesk access token. Error: '#{@access_token_error_msg}'",
+        failure: true
+      )
     end
+  end
+
+  def allowed_to_upload_file?
+    return true if @access_token
+
+    @build.logs.create(
+      content: 'Unable to upload file to Autodesk server due to invalid access token.',
+      failure: true
+    )
+    false
   end
 
   def bucket_signed_url(filepath)

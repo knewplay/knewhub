@@ -1,10 +1,10 @@
 class Autodesk
-  attr_reader :access_token
+  attr_reader :access_token, :access_token_error_msg
 
   def initialize
     @conn = Faraday.new(url: 'https://developer.api.autodesk.com')
     @bucket_key = Rails.application.credentials.dig(:autodesk, :bucket_key)
-    @access_token = create_access_token
+    create_access_token
   end
 
   private
@@ -17,8 +17,16 @@ class Autodesk
         Accept: 'application/json',
         Authorization: "Basic #{base64_client_info}" }
     )
-    response_as_json = JSON.parse(response.body)
-    response_as_json['access_token']
+    handle_response(response)
+  end
+
+  def handle_response(response)
+    response_body = JSON.parse(response.body)
+    if response.status == 200
+      @access_token = response_body['access_token']
+    else
+      @access_token_error_msg = response_body.values.join('. ')
+    end
   end
 
   def base64_client_info
