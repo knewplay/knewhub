@@ -1,4 +1,8 @@
 class AutodeskBucket < Autodesk
+  def initialize
+    super(scope: 'data:read bucket:create')
+  end
+
   def query_storage_bucket_objects
     response = @conn.get(
       "/oss/v2/buckets/#{@bucket_key}/objects",

@@ -1,6 +1,6 @@
 class AutodeskFileUpload < Autodesk
   def initialize(filepath, build)
-    super()
+    super(scope: 'data:read data:write')
     @filepath = filepath
     @build = build
     write_access_token_log

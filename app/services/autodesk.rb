@@ -1,9 +1,10 @@
 class Autodesk
   attr_reader :access_token, :access_token_error_msg
 
-  def initialize
+  def initialize(scope: 'viewables:read')
     @conn = Faraday.new(url: 'https://developer.api.autodesk.com')
     @bucket_key = Rails.application.credentials.dig(:autodesk, :upload, :bucket_key)
+    @scope = scope
     create_access_token
   end
 
@@ -12,7 +13,7 @@ class Autodesk
   def create_access_token
     response = @conn.post(
       '/authentication/v2/token',
-      { grant_type: 'client_credentials', scope: 'data:read data:write bucket:create' },
+      { grant_type: 'client_credentials', scope: @scope },
       { 'Content-Type': 'application/x-www-form-urlencoded',
         Accept: 'application/json',
         Authorization: "Basic #{base64_client_info}" }
