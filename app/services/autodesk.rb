@@ -3,7 +3,7 @@ class Autodesk
 
   def initialize
     @conn = Faraday.new(url: 'https://developer.api.autodesk.com')
-    @bucket_key = Rails.application.credentials.dig(:autodesk, :bucket_key)
+    @bucket_key = Rails.application.credentials.dig(:autodesk, :upload, :bucket_key)
     create_access_token
   end
 
@@ -30,8 +30,8 @@ class Autodesk
   end
 
   def base64_client_info
-    client_id = Rails.application.credentials.dig(:autodesk, :client_id)
-    client_secret = Rails.application.credentials.dig(:autodesk, :client_secret)
+    client_id = Rails.application.credentials.dig(:autodesk, :upload, :client_id)
+    client_secret = Rails.application.credentials.dig(:autodesk, :upload, :client_secret)
     Base64.strict_encode64("#{client_id}:#{client_secret}")
   end
 end
