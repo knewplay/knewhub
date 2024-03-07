@@ -9,7 +9,7 @@ class AutodeskBucket < Autodesk
   end
 
   def create_storage_bucket
-    request_params = { bucketKey: @bucket_key, access: 'full', policyKey: 'transient' }
+    request_params = { bucketKey: @bucket_key, access: 'full', policyKey: 'persistent' }
     response = @conn.post(
       '/oss/v2/buckets',
       request_params.to_json,
