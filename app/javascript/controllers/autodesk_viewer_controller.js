@@ -9,8 +9,8 @@ export default class extends Controller {
 
   viewer
   options = {
-    env: 'AutodeskProduction2',
-    api: 'streamingV2',
+    env: 'AutodeskProduction',
+    api: 'derivativeV2',
     getAccessToken: function (onTokenReady) {
       // Change line below to variable later
       const token = ''
