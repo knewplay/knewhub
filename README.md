@@ -20,7 +20,7 @@ Authors use Markdown to write articles on KnewHub. In addition to regular Markdo
     + Syntax: `[3d-viewer <relative_path>]`
     + Example: `[3d-viewer ./some-model.stp]` 
 
-Note that `relative-paths` cannot use underscores (_). Only alphanumeric characters and hyphens (-) are allowed.
+Note that `relative_path` cannot use underscores (_). Only alphanumeric characters and hyphens (-) are allowed.
 
 ## Development
 
