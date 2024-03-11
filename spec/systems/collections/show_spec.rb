@@ -61,13 +61,23 @@ RSpec.describe 'Collections#show', type: :system do
       assert_selector 'a', text: 'test.rb'
     end
 
-    it 'displays embedded Autodesk viewer for 3D files' do
-      visit '/collections/author/repo_owner/repo_name/pages/chapter-2/chapter-2-article-2'
+    context 'with Autodesk viewer:' do
+      before do
+        VCR.insert_cassette('autodesk_viewer', record: :new_episodes)
+      end
 
-      expect(page).to have_css(
-        "script[src='https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js']",
-        visible: :hidden
-      )
+      after do
+        VCR.eject_cassette
+      end
+
+      it 'displays embedded Autodesk viewer for 3D files' do
+        visit '/collections/author/repo_owner/repo_name/pages/chapter-2/chapter-2-article-2'
+
+        expect(page).to have_css(
+          "script[src='https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js']",
+          visible: :hidden
+        )
+      end
     end
 
     it 'displays front matter' do
@@ -76,9 +86,21 @@ RSpec.describe 'Collections#show', type: :system do
       expect(page).to have_content('Written by The Author on 2023-12-31')
     end
 
-    it 'does not render content from an HTML file with the same name' do
-      visit '/collections/author/repo_owner/repo_name/pages/chapter-2/chapter-2-article-2'
-      expect(page).to have_no_content('Content from HTML file')
+    context 'with Autodesk viewer' do
+      before do
+        VCR.insert_cassette('autodesk_viewer', record: :new_episodes)
+      end
+
+      after do
+        VCR.eject_cassette
+      end
+
+      it 'does not render content from an HTML file with the same name' do
+        VCR.use_cassette('autodesk-viewer') do
+          visit '/collections/author/repo_owner/repo_name/pages/chapter-2/chapter-2-article-2'
+          expect(page).to have_no_content('Content from HTML file')
+        end
+      end
     end
 
     context 'when page has questions in front-matter' do

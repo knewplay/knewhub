@@ -1,0 +1,98 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://developer.api.autodesk.com/authentication/v2/token
+    body:
+      encoding: UTF-8
+      string: grant_type=client_credentials&scope=viewables%3Aread
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept:
+      - application/json
+      Authorization:
+      - Basic <BEARER>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 11 Mar 2024 17:50:56 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '840'
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - no-store
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Request-Id:
+      - a72abbd2-d176-45de-b3d2-a7cd707b9ff8
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"<AUTODESK_ACCESS_TOKEN>","token_type":"Bearer","expires_in":3599}
+
+        '
+  recorded_at: Mon, 11 Mar 2024 17:50:56 GMT
+- request:
+    method: get
+    uri: https://developer.api.autodesk.com/derivativeservice/v2/manifest/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6a25ld2h1Yl8zZF9maWxlcy9yZXBvcyUyRmF1dGhvciUyRnJlcG9fb3duZXIlMkZyZXBvX25hbWUlMkYzZC1maWxlJTJGbmlzdF9jdGNfMDFfYXNtZTFfcmQuc3Rw
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Authorization:
+      - Bearer <AUTODESK_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 11 Mar 2024 17:50:59 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+      X-Ads-Duration:
+      - 3021 ms
+      X-Ads-Exception-Id:
+      - 9714cff1-2b43-42f3-9ec7-1807cce63f86
+      X-Ads-Startup-Time:
+      - Tue Mar 05 02:45:29 UTC 2024
+      X-Ads-App-Identifier:
+      - platform-viewing-2024.01.01.536.2e6ea962a-production
+      X-Ads-Troubleshooting:
+      - The manifest is not found for this urn.
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Request-Id:
+      - ce69e12f-6062-473c-a346-4da2ecb3645e
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Mon, 11 Mar 2024 17:50:59 GMT
