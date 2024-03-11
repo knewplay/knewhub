@@ -70,7 +70,7 @@ class CustomRender < Redcarpet::Render::HTML
 
   # Allow 3D files to be rendered using Autodesk Viewer SDK
   def process_3d_file(relative_path)
-    filepath = Pathname.new(RequestPath.define_base_url).join(relative_path).to_s
+    filepath = Pathname.new(CGI.unescape(RequestPath.define_base_url)).join(relative_path).to_s
     filepath = filepath.delete_prefix('/')
     autodesk_file = AutodeskFile.find_by(filepath:)
     
