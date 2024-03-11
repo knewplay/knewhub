@@ -9,14 +9,10 @@ export default class extends Controller {
 
   viewer
   options = {
+    shouldInitializeAuth: false,
+    endpoint: window.location.origin + "/autodesk/viewer-proxy",
     env: 'AutodeskProduction',
-    api: 'derivativeV2',
-    getAccessToken: function (onTokenReady) {
-      // Change line below to variable later
-      const token = ''
-      const timeInSeconds = 3600
-      onTokenReady(token, timeInSeconds)
-    }
+    api: 'derivativeV2'
   }
 
   documentId = 'urn:' + this.urnValue

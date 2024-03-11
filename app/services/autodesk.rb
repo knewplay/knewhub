@@ -8,6 +8,14 @@ class Autodesk
     create_access_token
   end
 
+  def call_viewer(request_type, path, format)
+    @conn.get(
+      "derivativeservice/v2/#{request_type}/#{request_path(path, format)}",
+      nil,
+      { Authorization: "Bearer #{@access_token}" }
+    )
+  end
+
   private
 
   def create_access_token
@@ -34,5 +42,11 @@ class Autodesk
     client_id = Rails.application.credentials.dig(:autodesk, :upload, :client_id)
     client_secret = Rails.application.credentials.dig(:autodesk, :upload, :client_secret)
     Base64.strict_encode64("#{client_id}:#{client_secret}")
+  end
+
+  def request_path(path, format)
+    result = CGI.escape(path)
+    result.concat(".#{format}") unless format.nil?
+    result
   end
 end
