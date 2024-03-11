@@ -2,22 +2,11 @@ class UploadAutodeskFilesJob
   include Sidekiq::Job
   include SplitMarkdownHelper
 
-  # Update this job to use build_id and update build logs
   def perform(build_id)
     build = Build.find(build_id)
     _repository, directory = RepositoryDirectory.define(build.repository.id)
 
-    autodesk_files = list_autodesk_files_for_directory(directory)
-
-    if autodesk_files.empty?
-      build.logs.create(content: 'No Autodesk files were found in this repository.')
-    else
-      build.logs.create(content: 'Autodesk files found in this repository. Uploading...')
-      autodesk_files.each do |filepath|
-        perform_for_each_file(build, build.repository.id, filepath)
-      end
-    end
-
+    perform_for_each_repository(build, directory)
     build.finished_uploading_autodesk_files
   end
 
@@ -51,6 +40,19 @@ class UploadAutodeskFilesJob
       autodesk_files << autodesk_files_for_markdown_file if autodesk_files_for_markdown_file
     end
     autodesk_files = autodesk_files.flatten
+  end
+
+  def perform_for_each_repository(build, directory)
+    autodesk_files = list_autodesk_files_for_directory(directory)
+
+    if autodesk_files.empty?
+      build.logs.create(content: 'No Autodesk files were found in this repository.')
+    else
+      build.logs.create(content: 'Autodesk files found in this repository. Uploading...')
+      autodesk_files.each do |filepath|
+        perform_for_each_file(build, build.repository.id, filepath)
+      end
+    end
   end
 
   def perform_for_each_file(build, repository_id, filepath)
