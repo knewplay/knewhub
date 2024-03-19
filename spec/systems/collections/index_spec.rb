@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Collections#index', type: :system do
   before(:all) do
-    @repo = create(:repository, name: 'markdown-templates')
+    @repo = create(:repository)
     destination_directory = @repo.storage_path
     source_directory = Rails.root.join('spec/fixtures/systems/collections')
     FileUtils.mkdir_p(destination_directory)
@@ -25,25 +25,25 @@ RSpec.describe 'Collections#index', type: :system do
       end
 
       it 'displays Markdown text in HTML' do
-        visit '/collections/author/repo_owner/markdown-templates/pages/index'
+        visit '/collections/author/repo_owner/repo_name/pages/index'
 
         expect(page).to have_content('Course Name')
       end
 
       it 'displays links to other pages' do
-        visit '/collections/author/repo_owner/markdown-templates/pages/index'
+        visit '/collections/author/repo_owner/repo_name/pages/index'
 
         expect(page).to have_link(href: './chapter-1/chapter-1-article-1')
       end
 
       it 'displays front matter' do
-        visit '/collections/author/repo_owner/markdown-templates/pages/index'
+        visit '/collections/author/repo_owner/repo_name/pages/index'
         expect(page).to have_content('Course Name')
         expect(page).to have_content('Written by The Author on 2023-12-31')
       end
 
       it 'does not render content from an HTML file with the same name' do
-        visit '/collections/author/repo_owner/markdown-templates/pages/index'
+        visit '/collections/author/repo_owner/repo_name/pages/index'
         expect(page).to have_no_content('Content from HTML file')
       end
     end
@@ -55,7 +55,7 @@ RSpec.describe 'Collections#index', type: :system do
       end
 
       it 'displays an error page' do
-        visit '/collections/author/repo_owner/markdown-templates/pages/index'
+        visit '/collections/author/repo_owner/repo_name/pages/index'
 
         expect(page).to have_content('404')
       end
@@ -69,7 +69,7 @@ RSpec.describe 'Collections#index', type: :system do
     end
 
     it 'displays an error page' do
-      visit '/collections/author/repo_owner/markdown-templates/pages/index'
+      visit '/collections/author/repo_owner/repo_name/pages/index'
 
       expect(page).to have_content('404')
     end

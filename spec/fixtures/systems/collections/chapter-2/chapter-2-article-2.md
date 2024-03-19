@@ -5,6 +5,8 @@ author: The Author
 keywords: [one, two]
 ---
 
+[3d-viewer ./3d-files/nist-ctc-01-asme1-rd.stp]
+
 ## Amplectitur atque mutabile
 
 Lorem markdownum cuspis verbis aut saepe munus, illa poenas vallibus *inque

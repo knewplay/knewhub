@@ -118,6 +118,10 @@ RSpec.describe 'Settings::Authors::Repositories#create', type: :system do
         expect(@build.logs.fourth.content).to eq('index.md file successfully generated.')
       end
 
+      it 'creates the fifth log' do
+        expect(@build.logs.fifth.content).to eq('No Autodesk files were found in this repository.')
+      end
+
       it "sets Build status to 'Complete'" do
         @build.reload
         expect(@build.status).to eq('Complete')

@@ -80,6 +80,10 @@ describe Webhooks::GithubController do
           expect(@build.logs.fifth.content).to eq('index.md file exists for this repository.')
         end
 
+        it 'with sixth log' do
+          expect(@build.logs[5].content).to eq('No Autodesk files were found in this repository.')
+        end
+
         it "with status 'Complete'" do
           @build.reload
           expect(@build.status).to eq('Complete')

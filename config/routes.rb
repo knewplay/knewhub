@@ -71,4 +71,7 @@ Rails.application.routes.draw do
 
   # Webhooks
   post '/webhooks/github', to: 'webhooks/github#create'
+
+  # Proxy
+  get '/autodesk/viewer-proxy/derivativeservice/v2/:request_type/*path', to: 'proxy/autodesk#show'
 end

@@ -16,6 +16,11 @@ Authors use Markdown to write articles on KnewHub. In addition to regular Markdo
 - Collapsing elements (HTML details and summary tags)
     + Syntax: `[details Hint]content[/details]`
     + Example: `[details Click Here to Display Content]Content[/details]`
+- Viewing 3D files using Autodesk viewer
+    + Syntax: `[3d-viewer <relative_path>]`
+    + Example: `[3d-viewer ./some-model.stp]` 
+
+Note that `relative_path` cannot use underscores (_). Only alphanumeric characters and hyphens (-) are allowed.
 
 ## Development
 
