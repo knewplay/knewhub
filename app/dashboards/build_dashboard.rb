@@ -3,6 +3,7 @@ require 'administrate/base_dashboard'
 class BuildDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
+    repository_name: Field::String,
     aasm_state: Field::String,
     action: Field::String,
     completed_at: Field::DateTime,
@@ -20,6 +21,7 @@ class BuildDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = %i[
     id
     repository
+    repository_name
     aasm_state
     action
     completed_at
@@ -27,10 +29,10 @@ class BuildDashboard < Administrate::BaseDashboard
 
   # Attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    id
+    repository
+    repository_name
     aasm_state
     action
-    repository
     created_at
     completed_at
     status
