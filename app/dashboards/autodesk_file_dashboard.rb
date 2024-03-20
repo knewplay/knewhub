@@ -3,6 +3,7 @@ require 'administrate/base_dashboard'
 class AutodeskFileDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
+    repository_name: Field::String,
     filepath: Field::String,
     repository: Field::BelongsTo,
     urn: Field::String,
@@ -14,12 +15,14 @@ class AutodeskFileDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = %i[
     id
     repository
+    repository_name
     filepath
   ].freeze
 
   # Attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
     repository
+    repository_name
     filepath
     urn
   ].freeze
