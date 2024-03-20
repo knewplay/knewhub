@@ -9,10 +9,6 @@ class Build < ApplicationRecord
 
   delegate :name, to: :repository, prefix: true
 
-  def repository_author
-    repository.author.name
-  end
-
   aasm do
     state :initiated, initial: true
     state :receiving_webhook,

@@ -1,18 +1,15 @@
 require 'administrate/base_dashboard'
 
-class BuildDashboard < Administrate::BaseDashboard
+class QuestionDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
-    repository_name: Field::String,
-    aasm_state: Field::String,
-    action: Field::String,
-    completed_at: Field::DateTime,
-    logs: Field::HasMany,
-    repository: Field::BelongsTo.with_options(
-      searchable: true,
-      searchable_fields: %w[id name]
-    ),
-    status: Field::String,
+    answers: Field::HasMany,
+    batch_code: Field::String,
+    body: Field::Text,
+    hidden: Field::Boolean,
+    page_path: Field::String,
+    repository: Field::BelongsTo,
+    tag: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime
   }.freeze
@@ -21,22 +18,22 @@ class BuildDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = %i[
     id
     repository
-    repository_name
-    aasm_state
-    action
-    completed_at
+    page_path
+    tag
+    answers
   ].freeze
 
   # Attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
     repository
-    repository_name
-    aasm_state
-    action
+    page_path
+    tag
+    body
+    answers
+    batch_code
+    hidden
     created_at
-    completed_at
-    status
-    logs
+    updated_at
   ].freeze
 
   # Attributes that will be displayed on the model's form (`new` and `edit`) pages.
@@ -45,10 +42,10 @@ class BuildDashboard < Administrate::BaseDashboard
   # Filters that can be used while searching via the search field of the dashboard.
   COLLECTION_FILTERS = {}.freeze
 
-  # Overwrite this method to customize how builds are displayed
+  # Overwrite this method to customize how questions are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(build)
-  #   "Build ##{build.id}"
+  # def display_resource(question)
+  #   "Question ##{question.id}"
   # end
 end

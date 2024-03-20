@@ -1,14 +1,12 @@
 require 'administrate/base_dashboard'
 
-class AuthorDashboard < Administrate::BaseDashboard
+class AutodeskFileDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
-    github_installations: Field::HasMany,
-    github_uid: Field::String,
-    github_username: Field::String,
-    name: Field::String,
-    repositories: Field::HasMany,
-    user: Field::BelongsTo,
+    repository_name: Field::String,
+    filepath: Field::String,
+    repository: Field::BelongsTo,
+    urn: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime
   }.freeze
@@ -16,29 +14,29 @@ class AuthorDashboard < Administrate::BaseDashboard
   # Attributes that will be displayed on the model's index page.
   COLLECTION_ATTRIBUTES = %i[
     id
-    name
-    github_installations
-    github_uid
-    github_username
-    created_at
-    updated_at
+    repository
+    repository_name
+    filepath
   ].freeze
 
   # Attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = %i[].freeze
+  SHOW_PAGE_ATTRIBUTES = %i[
+    repository
+    repository_name
+    filepath
+    urn
+  ].freeze
 
   # Attributes that will be displayed on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = %i[
-    name
-  ].freeze
+  FORM_ATTRIBUTES = %i[].freeze
 
   # Filters that can be used while searching via the search field of the dashboard.
   COLLECTION_FILTERS = {}.freeze
 
-  # Overwrite this method to customize how authors are displayed
+  # Overwrite this method to customize how autodesk files are displayed
   # across all pages of the admin dashboard.
   #
-  def display_resource(author)
-    author.name
-  end
+  # def display_resource(autodesk_file)
+  #   "AutodeskFile ##{autodesk_file.id}"
+  # end
 end
