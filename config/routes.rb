@@ -59,6 +59,7 @@ Rails.application.routes.draw do
     resources :autodesk_files, only: [:index, :show]
     resources :builds, only: %i[index show]
     resources :github_installations, only: [:index]
+    resources :questions, only: [:index, :show]
     resources :repositories, only: [:index]
     resources :users, only: [:index]
     root to: 'authors#index'
