@@ -56,6 +56,7 @@ Rails.application.routes.draw do
   namespace :dashboard do
     resources :administrators, only: [:index]
     resources :authors, only: %i[index edit update]
+    resources :autodesk_files, only: [:index, :show]
     resources :builds, only: %i[index show]
     resources :github_installations, only: [:index]
     resources :repositories, only: [:index]
