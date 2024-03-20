@@ -3,10 +3,12 @@ require 'administrate/base_dashboard'
 class AuthorDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
+    github_installations: Field::HasMany,
     github_uid: Field::String,
     github_username: Field::String,
     name: Field::String,
     repositories: Field::HasMany,
+    user: Field::BelongsTo,
     created_at: Field::DateTime,
     updated_at: Field::DateTime
   }.freeze
@@ -15,6 +17,9 @@ class AuthorDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = %i[
     id
     name
+    github_installations
+    github_uid
+    github_username
     created_at
     updated_at
   ].freeze

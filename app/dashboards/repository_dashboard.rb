@@ -3,14 +3,16 @@ require 'administrate/base_dashboard'
 class RepositoryDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
-    author: Field::BelongsTo,
+    autodesk_files: Field::HasMany,
+    banned: Field::Boolean,
     branch: Field::String,
+    builds: Field::HasMany,
     description: Field::String,
-    git_url: Field::String,
+    github_installation: Field::BelongsTo,
     last_pull_at: Field::DateTime,
     name: Field::String,
+    questions: Field::HasMany,
     title: Field::String,
-    token: Field::Password,
     uid: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -20,13 +22,13 @@ class RepositoryDashboard < Administrate::BaseDashboard
 
   # Attributes that will be displayed on the model's index page.
   COLLECTION_ATTRIBUTES = %i[
-    author
     id
     name
     title
     branch
     last_build_created_at
     last_build_status
+    banned
   ].freeze
 
   # Attributes that will be displayed on the model's show page.
