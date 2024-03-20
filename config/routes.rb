@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     resources :repositories, only: [:index]
     resources :administrators, only: [:index]
     resources :builds, only: %i[index show]
+    resources :users, only: [:index]
     root to: 'authors#index'
   end
 
