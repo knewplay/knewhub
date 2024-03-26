@@ -1,6 +1,7 @@
 module Sidekiq
   class Logger < ::Logger
     module Formatters
+      # Use custom formatter to allow the logs to be processed by Google Cloud Logging
       class CustomFormatter < Base
         def call(severity, time, program_name, message)
           "#{severity}: #{message} | pid=#{::Process.pid} tid=#{tid}#{format_context} \n"
