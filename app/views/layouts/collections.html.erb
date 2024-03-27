@@ -21,6 +21,7 @@
         </div>
       <% else %>
         <%= render_markdown(@markdown_content).html_safe %>
+        
         <% if @questions && @questions.any? %>
           <h2 id="questions" class="collections__anchor-link">
             <a href="#questions" class="collections__anchor-link__text">Questions</a>
