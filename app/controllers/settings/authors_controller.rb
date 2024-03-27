@@ -4,8 +4,10 @@ module Settings
 
     before_action :require_author_authentication, :set_author
 
+    # GET /settings/author/edit
     def edit; end
 
+    # PATCH /settings/author
     def update
       if @author.update(author_params)
         redirect_to edit_settings_author_path, notice: 'Author was successfully updated.'

@@ -4,6 +4,7 @@ module Settings
 
     before_action :authenticate_user!
 
+    # GET  /settings/account
     def show; end
   end
 end

@@ -1,5 +1,6 @@
 module Users
   class SessionsController < Devise::SessionsController
+    # POST /users/sign_in
     def create
       super
       return unless session[:administrator_id]

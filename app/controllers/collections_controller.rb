@@ -2,6 +2,7 @@ class CollectionsController < ApplicationController
   before_action :require_user_or_admin_authentication, :modify_view_path
   layout 'collections'
 
+  # GET /collections/:author_username/:owner/:name/pages/index
   def index
     file_path = "#{params[:author_username]}/#{params[:owner]}/#{params[:name]}/index"
     render_not_found and return unless valid_render?(file_path, params[:author_username], params[:owner], params[:name])
@@ -10,6 +11,7 @@ class CollectionsController < ApplicationController
     render file_path
   end
 
+  # GET /collections/:author_username/:owner/:name/pages/*path
   def show
     file_path = "#{params[:author_username]}/#{params[:owner]}/#{params[:name]}/#{params[:path]}"
     render_not_found and return unless valid_render?(file_path, params[:author_username], params[:owner], params[:name])

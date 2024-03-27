@@ -2,6 +2,7 @@ module Auth
   class GithubController < ApplicationController
     before_action :verify_params, :verify_user, :verify_author
 
+    # GET /github/callback
     def create
       github_uid, github_username = user_info
 

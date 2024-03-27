@@ -10,6 +10,7 @@ RSpec.describe 'Collections#show', type: :system do
 
     parse_questions_build = create(:build, repository: @repo, aasm_state: :parsing_questions)
     Sidekiq::Testing.inline! do
+      # Cassettes required for UploadAutodeskFilesJob taking place after ParseQuestionsJob
       VCR.use_cassettes(
         [{ name: 'get_autodesk_access_token', options: { allow_playback_repeats: true } },
          { name: 'upload_3d_file_autodesk_additional' },

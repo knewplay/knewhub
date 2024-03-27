@@ -3,10 +3,12 @@ module Webauthn
     before_action :ensure_administrator_not_authenticated
     before_action :ensure_login_initiated
 
+    # GET /webauthn/authentication/new
     def new
       @administrator = administrator
     end
 
+    # POST /webauthn/authentication/options
     def options
       get_options = WebAuthn::Credential.options_for_get(allow: administrator.webauthn_credentials.pluck(:external_id))
 
@@ -15,6 +17,7 @@ module Webauthn
       render json: get_options
     end
 
+    # POST /webauthn/authentication
     def create
       webauthn_credential = WebAuthn::Credential.from_get(params)
 

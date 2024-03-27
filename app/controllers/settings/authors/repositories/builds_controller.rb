@@ -4,6 +4,7 @@ module Settings
       class BuildsController < ApplicationController
         before_action :require_author_authentication, :set_repository
 
+        # GET /settings/author/repositories/:repository_id/builds
         def index
           @builds = @repository.builds.order(created_at: :desc)
         end

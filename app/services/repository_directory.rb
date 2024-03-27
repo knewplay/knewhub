@@ -1,4 +1,4 @@
-# Finding or deleting a directory associated to a repository Record
+# Finding the directory associated with a repository
 class RepositoryDirectory
   def self.define(repository_id)
     repository = Repository.find(repository_id)

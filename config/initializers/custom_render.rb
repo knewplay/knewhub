@@ -1,6 +1,7 @@
-# Custom renderer for Markdown files
+# Display code blocks with Rouge theme set in `app/assets/stylesheets/rouge.css.erb`
 require 'rouge/plugins/redcarpet'
 
+# Custom renderer for Markdown files
 class CustomRender < Redcarpet::Render::HTML
   include Rouge::Plugins::Redcarpet
 
@@ -29,15 +30,19 @@ class CustomRender < Redcarpet::Render::HTML
     # [codefile <relative_path>]
     if (t = text.match(/(\[codefile )(.+)(\])/))
       process_codefile(t[2])
+
     # [codegist <gist_url>]
     elsif (t = text.match(/(\[codegist )(.+)(\])/)) 
       process_codegist(t[2])
+
     # [details Hint]content[/details]
     elsif (t = text.match(%r{(\[details )(.+)(\])(.+)(\[/details\])}))
       process_details(t[2], t[4])
+
+    # [3d-viewer <relative_path>]
     elsif (t = text.match(/(\[3d-viewer )(.+)(\])/))
-      # [3d-viewer <relative_path>]
       process_3d_file(t[2])
+
     else
       "<p>#{text}</p>"
     end
@@ -60,6 +65,8 @@ class CustomRender < Redcarpet::Render::HTML
     SCRIPT
   end
 
+  # Allow the HTML details and summary tags to be used
+  # HTML is escaped by default from Markdown files so this workaround must be used
   def process_details(title, content)
     <<~DETAIL
       <details>

@@ -8,6 +8,7 @@ class GithubInstallation < ApplicationRecord
     Github.new.access_token(installation_id)
   end
 
+  # Display up to 100 results for calls to GitHub API using this Octokit client
   def github_client
     Octokit::Client.new(access_token:, per_page: 100)
   end

@@ -3,6 +3,7 @@ class RepositoriesController < ApplicationController
   before_action :require_administrator_authentication, only: [:toggle_banned_status]
   before_action :set_repository
 
+  # PATCH /repositories/:id
   def update
     build = Build.create(repository: @repository, status: 'In progress', action: 'rebuild')
     build.rebuild_repo
@@ -14,6 +15,7 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  # PATCH /repositories/:id/toggle_banned_status
   def toggle_banned_status
     @repository.toggle!(:banned)
     redirect_to dashboard_repositories_path

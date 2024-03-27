@@ -5,6 +5,7 @@ module Webhooks
     before_action :verify_event
 
     # rubocop:disable Metrics/MethodLength
+    # POST /webhooks/github
     def create
       head :ok
 

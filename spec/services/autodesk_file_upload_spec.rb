@@ -9,6 +9,7 @@ describe AutodeskFileUpload do
     before(:all) do
       @build_valid = create(:build, repository: @repo, aasm_state: :uploading_autodesk_files)
 
+      # Create directory in `repos` containing Autodesk file
       directory = 'repos/author/repo_owner/repo_name/chapter-2/3d-files'
       FileUtils.mkdir_p directory
       source_filepath = Rails.root.join('spec/fixtures/systems/collections/chapter-2/3d-files/nist-ctc-01-asme1-rd.stp')

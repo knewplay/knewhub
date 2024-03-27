@@ -2,12 +2,14 @@ module Webauthn
   class CredentialsController < ApplicationController
     before_action :require_administrator_authentication
 
+    # GET /webauthn/credentials
     def index
       credentials = current_administrator.webauthn_credentials.order(created_at: :desc)
 
       render :index, locals: { credentials: }
     end
 
+    # POST /webauthn/credentials/options
     def options
       current_administrator.update!(webauthn_id: WebAuthn.generate_user_id) unless current_administrator.webauthn_id
 
@@ -23,6 +25,7 @@ module Webauthn
       render json: create_options
     end
 
+    # POST /webauthn/credentials
     def create
       webauthn_credential = WebAuthn::Credential.from_create(params[:credential])
 
@@ -39,7 +42,9 @@ module Webauthn
         if credential.save
           render :create, locals: { credential: }, status: :created
         else
-          render turbo_stream: turbo_stream.update('webauthn_credential_error', "<p>Couldn't add your Security Key</p>")
+          render turbo_stream: turbo_stream.update(
+            'webauthn_credential_error', "<p>Couldn't add your credential</p>"
+          )
         end
       rescue WebAuthn::Error => e
         render turbo_stream: turbo_stream.update(
@@ -50,6 +55,7 @@ module Webauthn
       session.delete(:current_challenge)
     end
 
+    # DELETE /webauthn/credentials/:id
     def destroy
       credential = current_administrator.webauthn_credentials.find(params[:id])
       credential.destroy

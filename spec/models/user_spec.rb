@@ -19,6 +19,7 @@ RSpec.describe User do
     end
   end
 
+  # Devise method
   describe '#set_reset_password_token' do
     subject(:user) { create(:user) }
 

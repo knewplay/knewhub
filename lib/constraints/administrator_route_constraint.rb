@@ -1,3 +1,4 @@
+# Used in `config/routes.rb` to ensure only administrators can access a route
 module Constraints
   class AdministratorRouteConstraint
     def matches?(request)
