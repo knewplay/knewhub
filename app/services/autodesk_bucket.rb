@@ -1,3 +1,4 @@
+# Autodesk documentaiton: https://aps.autodesk.com/en/docs/data/v2/reference/http/buckets-POST/
 class AutodeskBucket < Autodesk
   def initialize
     super(scope: 'data:read bucket:create')

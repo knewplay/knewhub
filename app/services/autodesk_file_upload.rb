@@ -1,3 +1,4 @@
+# Autodesk documentation: https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/overview/
 class AutodeskFileUpload < Autodesk
   def initialize(filepath, build)
     super(scope: 'data:read data:write')
