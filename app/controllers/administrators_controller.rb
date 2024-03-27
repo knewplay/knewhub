@@ -1,10 +1,12 @@
 class AdministratorsController < ApplicationController
   before_action :verify_allow_create
 
+  # GET /administrators/new
   def new
     @administrator = Administrator.new
   end
 
+  # POST /administrators
   def create
     @administrator = Administrator.new(administrator_params)
 

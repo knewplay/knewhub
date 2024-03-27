@@ -1,7 +1,9 @@
 module Sessions
   class AdministratorsController < ApplicationController
+    # GET /sessions/administrator/new
     def new; end
 
+    # POST /sessions/administrator
     def create
       if (administrator = Administrator.authenticate_by(name: params[:name], password: params[:password]))
         if administrator.multi_factor_enabled?
@@ -15,6 +17,7 @@ module Sessions
       end
     end
 
+    # DELETE /sessions/administrator
     def destroy
       session[:administrator_id] = nil
       session[:administrator_expires_at] = nil

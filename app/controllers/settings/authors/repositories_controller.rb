@@ -8,20 +8,25 @@ module Settings
       before_action :set_available_repositories, only: %i[available new]
       before_action :verify_if_available_repository, only: [:new]
 
+      # GET /settings/author/repositories
       def index
         @repositories = current_author.repositories.order('id ASC')
       end
 
+      # GET /settings/author/repositories/available
       def available; end
 
+      # GET /settings/author/repositories/new
       def new
         full_name = params[:full_name]
         owner, name = full_name.split('/')
         @repository = github_installation(owner).repositories.build(name:, uid: params[:uid].to_i)
       end
 
+      # GET /settings/author/repositories/:id/edit
       def edit; end
 
+      # POST /settings/author/repositories
       def create
         @repository = github_installation(repository_params[:owner]).repositories
                                                                     .build(repository_params.except(:owner))
@@ -35,6 +40,7 @@ module Settings
         end
       end
 
+      # PATCH /settings/author/repositories/:id
       def update
         former_branch = @repository.branch
 
@@ -49,6 +55,7 @@ module Settings
         end
       end
 
+      # DELETE /settings/author/repositories/:id
       def destroy
         RemoveDirectoryJob.perform_async(@repository.storage_path.to_s)
         @repository.destroy
