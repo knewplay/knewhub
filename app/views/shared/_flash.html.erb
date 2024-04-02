@@ -2,6 +2,8 @@
   <% flash.each do |flash_type, message| %>
     <div class="flash__message flash--<%= flash_type %>" aria-live="polite">
       <%= message.html_safe if message.is_a?(String) %>
+      <%# `html_safe` is required for links to be displayed in flash messages %>
+      <%# Refer to Settings/Authors/RepositoriesController#set_available_repositories %>
     </div>
   <% end %>
 </div>

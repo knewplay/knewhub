@@ -1,3 +1,4 @@
+# GitHub documentation: https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app
 class Github
   def access_token(installation_id)
     access_token = Octokit::Client.new(bearer_token: jwt).create_app_installation_access_token(installation_id)

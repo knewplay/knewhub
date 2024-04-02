@@ -4,6 +4,7 @@ module Settings
 
     before_action :authenticate_user!, :user_is_not_an_author
 
+    # GET /settings/enable_author
     def show; end
 
     private

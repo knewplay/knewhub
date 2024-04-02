@@ -1,4 +1,5 @@
 <%# Date index partial for Administrate dashboard %>
+<%# Override default partial to display date in user's local time %>
 
 <% if field.data %>
   <%= field.data.in_time_zone(cookies[:timezone] || 'UTC').strftime('%b %d, %Y') %>
