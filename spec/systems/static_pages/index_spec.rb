@@ -17,5 +17,9 @@ RSpec.describe 'StaticPages#index', type: :system do
       'OOP Fundamentals',
       href: '/collections/andreigue/andreigue/oop-fundamentals/pages/index'
     )
+    expect(page).to have_link(
+      'Apply to become a creator',
+      href: 'mailto:apply@knewhub.com?subject=KnewHub%20content%20creator%20application'
+    )
   end
 end

@@ -120,6 +120,30 @@
     </div>
   </section>
 
+  <section class="home__section home__section--creator">
+    <div class="home__shell">
+      <div class="home__creator">
+        <div class="home__creator-copy">
+          <p class="home__eyebrow">Create on KnewHub</p>
+          <h2>Turn what you know into something others can learn from.</h2>
+          <p>
+            KnewHub is a platform for thoughtful, practical learning content.
+            If you have knowledge worth sharing, apply to become a content creator
+            and publish your own learning resources.
+          </p>
+        </div>
+        <div class="home__creator-action">
+          <span>Creator applications</span>
+          <%= mail_to 'apply@knewhub.com',
+            'Apply to become a creator',
+            subject: 'KnewHub content creator application',
+            class: 'home__button home__button--primary' %>
+          <a href="mailto:apply@knewhub.com">apply@knewhub.com</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="home__section">
     <div class="home__shell">
       <div class="home__cta">

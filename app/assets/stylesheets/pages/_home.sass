@@ -318,6 +318,68 @@ body.home-page
       font-size: 1.55rem
       line-height: 1.65
 
+  &__section--creator
+    background: #f6f7fb
+
+  &__creator
+    position: relative
+    display: grid
+    grid-template-columns: 1.35fr .65fr
+    gap: 7rem
+    align-items: center
+    overflow: hidden
+    padding: 7rem
+    border-radius: 1.6rem
+    color: #fff
+    background-color: $home-night
+    background-image: linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px)
+    background-size: 4rem 4rem
+
+    &::after
+      content: ""
+      position: absolute
+      width: 28rem
+      height: 28rem
+      right: -12rem
+      bottom: -14rem
+      border: .1rem solid rgba(54, 189, 242, .32)
+      border-radius: 50%
+
+  &__creator-copy
+    position: relative
+    z-index: 1
+
+    h2
+      margin: 0 0 2rem
+      color: #fff
+      font-size: 4.8rem
+      line-height: 1.12
+
+    > p:last-child
+      max-width: 70rem
+      color: #c7cce2
+      font-size: 1.75rem
+      line-height: 1.65
+
+  &__creator-action
+    position: relative
+    z-index: 1
+    display: flex
+    align-items: flex-start
+    flex-direction: column
+    gap: 1.5rem
+
+    > span
+      color: #8e96b5
+      font-size: 1.15rem
+      font-weight: 700
+      letter-spacing: .14em
+      text-transform: uppercase
+
+    > a:last-child
+      color: #dce1f5
+      font-size: 1.45rem
+
   &__cta
     display: flex
     align-items: center
@@ -357,6 +419,10 @@ body.home-page
 
     &__cta h2
       font-size: 4rem
+
+    &__creator
+      grid-template-columns: 1fr
+      gap: 4rem
 
     &__orbit
       opacity: .45
@@ -426,6 +492,12 @@ body.home-page
       flex-direction: column
       padding: 4rem 2.4rem
 
+    &__creator
+      padding: 4rem 2.4rem
+
+    &__creator-copy h2
+      font-size: 4rem
+
     &__footer .home__shell
       flex-direction: column
 
@@ -439,3 +511,6 @@ body.home-page
 
     &__cta h2
       font-size: 3.2rem
+
+    &__creator-copy h2
+      font-size: 3.4rem
