@@ -1,16 +1,31 @@
 // nav
 
 .nav
-  padding: 1.4rem 4rem
-  display: grid
-  grid-template-columns: 1fr auto
-  column-gap: 2rem
   border-bottom: solid .1rem $color-quaternary
+
+  &__inner
+    width: calc(100% - 8rem)
+    max-width: 118rem
+    margin: 0 auto
+    padding: 1.4rem 0
+    display: grid
+    grid-template-columns: 1fr auto
+    column-gap: 2rem
+
+  &__brand
+    position: relative
+    display: inline-flex
+    width: 18rem
 
   &__logo
     width: 18rem
     min-width: 18rem
     height: auto
+
+    &--light
+      display: none
+      position: absolute
+      inset: 0
 
   &__right
     justify-self: end

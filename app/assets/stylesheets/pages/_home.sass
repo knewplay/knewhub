@@ -21,8 +21,10 @@ body.home-page
     a
       color: #fff
 
-    &__logo
+    &__logo--light
+      display: block
       filter: brightness(0) invert(1)
+      clip-path: inset(0 0 0 19%)
 
   main
     min-width: 0
@@ -380,12 +382,16 @@ body.home-page
 @media (max-width: 700px)
   body.home-page .nav
     position: absolute
-    padding: 1.4rem 2rem
-    grid-template-columns: 1fr auto
+
+    &__inner
+      width: calc(100% - 3.2rem)
 
     &__logo
       width: 14rem
       min-width: 14rem
+
+    &__brand
+      width: 14rem
 
   .home
     &__shell
