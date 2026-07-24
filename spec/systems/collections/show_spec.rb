@@ -27,10 +27,6 @@ RSpec.describe 'Collections#show', type: :system do
   end
 
   context 'when repository is set to banned = false' do
-    before do
-      sign_in @repo.author.user
-    end
-
     it 'displays Markdown text in HTML' do
       visit '/collections/author/repo_owner/repo_name/pages/chapter-1/chapter-1-article-1'
 
@@ -156,7 +152,6 @@ RSpec.describe 'Collections#show', type: :system do
   context 'when repository is set to banned = true' do
     before do
       @repo.update(banned: true)
-      sign_in @repo.author.user
     end
 
     it 'displays an error page' do

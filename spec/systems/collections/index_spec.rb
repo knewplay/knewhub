@@ -15,10 +15,6 @@ RSpec.describe 'Collections#index', type: :system do
   end
 
   context 'when repository is set to banned = false' do
-    before do
-      sign_in @repo.author.user
-    end
-
     context 'when repository build state is Complete' do
       before do
         create(:build, repository: @repo, aasm_state: :completed, status: 'Complete')
@@ -50,7 +46,6 @@ RSpec.describe 'Collections#index', type: :system do
 
     context 'when repository build state is not Complete' do
       before do
-        sign_in @repo.author.user
         create(:build, repository: @repo, aasm_state: :cloning_repo, status: 'In progress')
       end
 
@@ -65,7 +60,6 @@ RSpec.describe 'Collections#index', type: :system do
   context 'when repository is set to banned = true' do
     before do
       @repo.update(banned: true)
-      sign_in @repo.author.user
     end
 
     it 'displays an error page' do

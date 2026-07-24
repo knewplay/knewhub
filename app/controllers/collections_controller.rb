@@ -1,5 +1,5 @@
 class CollectionsController < ApplicationController
-  before_action :require_user_or_admin_authentication, :modify_view_path
+  before_action :modify_view_path
   layout 'collections'
 
   # GET /collections/:author_username/:owner/:name/pages/index
@@ -21,12 +21,6 @@ class CollectionsController < ApplicationController
   end
 
   private
-
-  def require_user_or_admin_authentication
-    return if administrator_signed_in? || user_signed_in?
-
-    redirect_to root_path, alert: 'Please log in to continue.'
-  end
 
   def modify_view_path
     prepend_view_path Rails.root.join('repos').to_s
