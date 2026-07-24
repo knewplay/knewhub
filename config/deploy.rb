@@ -5,7 +5,7 @@ require 'mina/git'
 require 'mina/rbenv'  # for rbenv support. (https://rbenv.org)
 
 set :application_name, 'knewhub'
-set :domain, 'knewhub.com'
+set :domain, '34.48.42.243'
 set :deploy_to, '/home/rails/knewhub'
 set :repository, 'git@github.com:knewplay/knewhub.git'
 set :branch, 'main'
