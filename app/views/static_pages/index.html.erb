@@ -1,2 +1,140 @@
+<% content_for :body_class, 'home-page' %>
+
 <div class="home">
+  <section class="home__hero">
+    <div class="home__shell">
+      <div class="home__hero-content">
+        <p class="home__eyebrow">Open learning · Built in Canada</p>
+        <h1>
+          Learn how to
+          <span class="home__gradient-text">think in code.</span>
+        </h1>
+        <p class="home__intro">
+          Clear, practical learning paths for curious minds—from the foundations
+          of programming to robotics and object-oriented thinking.
+        </p>
+        <div class="home__actions">
+          <%= link_to 'Explore learning paths', '#learning-paths', class: 'home__button home__button--primary' %>
+          <%= link_to 'Start with the fundamentals',
+            '/collections/andreigue/andreigue/book-programming-essential/pages/index',
+            class: 'home__button home__button--secondary' %>
+        </div>
+      </div>
+    </div>
+    <div class="home__orbit" aria-hidden="true"></div>
+  </section>
+
+  <section class="home__section home__section--soft" id="learning-paths">
+    <div class="home__shell">
+      <p class="home__eyebrow">Learning paths</p>
+      <div class="home__section-heading">
+        <h2>Start with curiosity.<br>Build real understanding.</h2>
+        <p>
+          Three focused resources connect computing fundamentals, hands-on
+          robotics, and the design ideas behind maintainable software.
+        </p>
+      </div>
+
+      <div class="home__courses">
+        <%= link_to '/collections/andreigue/andreigue/book-programming-essential/pages/index',
+          class: 'home__course' do %>
+          <div class="home__course-meta">
+            <span class="home__course-number">01</span>
+            <span>Foundations</span>
+          </div>
+          <h3>Programming Essentials</h3>
+          <p class="home__course-description">
+            Build a durable foundation in computers, algorithms, logic, loops,
+            data, functions, debugging, and the tools programmers use every day.
+          </p>
+          <div class="home__course-link">
+            <span>Read the course</span>
+            <span aria-hidden="true">↗</span>
+          </div>
+        <% end %>
+
+        <%= link_to '/collections/andreigue/andreigue/vex-123-for-parents/pages/index',
+          class: 'home__course' do %>
+          <div class="home__course-meta">
+            <span class="home__course-number">02</span>
+            <span>Robotics</span>
+          </div>
+          <h3>VEX 123 for Parents</h3>
+          <p class="home__course-description">
+            Help young learners explore coding through play, progressing from
+            touch controls and Coder Cards to conditions, loops, and VEXcode 123.
+          </p>
+          <div class="home__course-link">
+            <span>Open the guide</span>
+            <span aria-hidden="true">↗</span>
+          </div>
+        <% end %>
+
+        <%= link_to '/collections/andreigue/andreigue/oop-fundamentals/pages/index',
+          class: 'home__course' do %>
+          <div class="home__course-meta">
+            <span class="home__course-number">03</span>
+            <span>Next step</span>
+          </div>
+          <h3>OOP Fundamentals</h3>
+          <p class="home__course-description">
+            Understand classes and objects through concrete examples, then
+            connect inheritance, polymorphism, and encapsulation in a small game.
+          </p>
+          <div class="home__course-link">
+            <span>Explore OOP</span>
+            <span aria-hidden="true">↗</span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <section class="home__section home__section--dark">
+    <div class="home__shell">
+      <p class="home__eyebrow">How KnewHub teaches</p>
+      <div class="home__section-heading">
+        <h2>Ideas you can use,<br>not just memorize.</h2>
+        <p>
+          Each guide moves from a clear mental model to an activity you can
+          test, adapt, and make your own.
+        </p>
+      </div>
+      <div class="home__principles">
+        <article class="home__principle">
+          <strong>01 · Understand</strong>
+          <h3>See the whole idea</h3>
+          <p>Plain-language explanations connect new concepts to familiar experiences.</p>
+        </article>
+        <article class="home__principle">
+          <strong>02 · Practise</strong>
+          <h3>Learn by doing</h3>
+          <p>Exercises turn abstract concepts into visible, testable outcomes.</p>
+        </article>
+        <article class="home__principle">
+          <strong>03 · Build</strong>
+          <h3>Connect the pieces</h3>
+          <p>Progressive examples show how individual skills combine into complete systems.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="home__section">
+    <div class="home__shell">
+      <div class="home__cta">
+        <h2>Your next idea starts with one clear first step.</h2>
+        <%= link_to 'Begin learning',
+          '/collections/andreigue/andreigue/book-programming-essential/pages/index',
+          class: 'home__button home__button--dark' %>
+      </div>
+    </div>
+  </section>
+
+  <footer class="home__footer">
+    <div class="home__shell">
+      <p>© <%= Time.current.year %> KnewHub. Learning for curious minds.</p>
+      <%= link_to 'A KNEWPLAY initiative', 'https://www.knewplay.ca/innovation/' %>
+    </div>
+  </footer>
 </div>

@@ -1,0 +1,411 @@
+$home-ink: #171b35
+$home-night: #181d4d
+$home-blue: #36bdf2
+$home-violet: #7057ff
+$home-muted: #626b85
+$home-line: #dfe3ef
+
+body.home-page
+  background: #fff
+  color: $home-ink
+  font-family: "Figtree", sans-serif
+
+  .nav
+    position: absolute
+    z-index: 10
+    top: 0
+    left: 0
+    right: 0
+    border-bottom-color: rgba(255, 255, 255, .12)
+
+    a
+      color: #fff
+
+  main
+    min-width: 0
+    margin: 0
+
+  main > .container
+    max-width: none
+    padding: 0
+
+.home
+  overflow: hidden
+
+  h1, h2, h3
+    font-family: "Istok Web", sans-serif
+    font-weight: 700
+    letter-spacing: -.03em
+
+  p
+    margin-bottom: 0
+
+  &__shell
+    width: min(118rem, calc(100% - 4.8rem))
+    margin: 0 auto
+
+  &__eyebrow
+    display: flex
+    align-items: center
+    gap: 1rem
+    margin-bottom: 1.8rem
+    color: $home-blue
+    font-size: 1.2rem
+    font-weight: 700
+    letter-spacing: .18em
+    text-transform: uppercase
+
+    &::before
+      content: ""
+      width: .8rem
+      height: .8rem
+      border-radius: 50%
+      background: $home-blue
+      box-shadow: 0 0 1.6rem rgba(54, 189, 242, .8)
+
+  &__hero
+    position: relative
+    min-height: 68rem
+    display: flex
+    align-items: center
+    padding: 15rem 0 10rem
+    color: #fff
+    background-color: $home-night
+    background-image: linear-gradient(rgba(255, 255, 255, .055) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px)
+    background-size: 5.2rem 5.2rem
+
+    &::after
+      content: ""
+      position: absolute
+      width: 48rem
+      height: 48rem
+      top: 10rem
+      right: -10rem
+      border: 1px solid rgba(54, 189, 242, .25)
+      border-radius: 50%
+
+  &__hero-content
+    position: relative
+    z-index: 2
+    max-width: 74rem
+
+    h1
+      margin: 0 0 2.6rem
+      color: #fff
+      font-size: clamp(5.2rem, 7vw, 8.8rem)
+      line-height: .96
+
+  &__gradient-text
+    display: block
+    color: $home-blue
+    background: linear-gradient(90deg, $home-blue, #5f8cff 55%, #9b6cff)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+
+  &__intro
+    max-width: 68rem
+    color: #c7cce2
+    font-size: 2rem
+    line-height: 1.65
+
+  &__actions
+    display: flex
+    flex-wrap: wrap
+    gap: 1.4rem
+    margin-top: 3.6rem
+
+  &__button
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    min-height: 5.2rem
+    padding: 0 2.6rem
+    border: .1rem solid transparent
+    border-radius: .8rem
+    font-size: 1.5rem
+    font-weight: 700
+    letter-spacing: 0
+    text-transform: none
+    transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease
+
+    &:hover, &:focus
+      transform: translateY(-2px)
+
+    &--primary
+      color: #fff
+      background: linear-gradient(120deg, $home-violet, #5b4de8)
+      box-shadow: 0 1.2rem 3rem rgba(91, 77, 232, .32)
+
+      &:hover, &:focus
+        color: #fff
+        box-shadow: 0 1.6rem 3.4rem rgba(91, 77, 232, .45)
+
+    &--secondary
+      color: #fff
+      border-color: rgba(255, 255, 255, .3)
+      background: rgba(255, 255, 255, .04)
+
+      &:hover, &:focus
+        color: #fff
+        border-color: rgba(255, 255, 255, .55)
+        background: rgba(255, 255, 255, .08)
+
+    &--dark
+      color: #fff
+      background: $home-night
+
+      &:hover, &:focus
+        color: #fff
+        box-shadow: 0 1rem 2.4rem rgba(23, 27, 53, .2)
+
+  &__orbit
+    position: absolute
+    z-index: 1
+    width: 28rem
+    height: 28rem
+    right: 12%
+    top: 25%
+    border: .2rem solid rgba(112, 87, 255, .34)
+    border-radius: 34% 66% 62% 38% / 46% 38% 62% 54%
+    transform: rotate(20deg)
+
+    &::before
+      content: ""
+      position: absolute
+      width: 12rem
+      height: 12rem
+      left: 8rem
+      top: 8rem
+      border-radius: 50%
+      background: rgba(44, 128, 220, .45)
+      box-shadow: 0 0 6rem rgba(54, 189, 242, .25)
+
+    &::after
+      content: ""
+      position: absolute
+      width: 1.1rem
+      height: 1.1rem
+      right: -1rem
+      top: 5rem
+      border-radius: 50%
+      background: $home-blue
+      box-shadow: 0 0 1.8rem $home-blue
+
+  &__section
+    padding: 10rem 0
+
+    &--soft
+      background: #f6f7fb
+
+    &--dark
+      color: #fff
+      background: $home-night
+
+  &__section-heading
+    display: grid
+    grid-template-columns: 1.1fr .9fr
+    gap: 6rem
+    align-items: end
+    margin-bottom: 5rem
+
+    h2
+      margin: 0
+      color: inherit
+      font-size: clamp(3.6rem, 5vw, 5.6rem)
+      line-height: 1.08
+
+    p
+      color: $home-muted
+      font-size: 1.8rem
+      line-height: 1.65
+
+  &__courses
+    display: grid
+    grid-template-columns: repeat(3, minmax(0, 1fr))
+    border-top: .1rem solid $home-line
+    border-bottom: .1rem solid $home-line
+
+  &__course
+    display: flex
+    min-height: 42rem
+    flex-direction: column
+    padding: 3.8rem 3rem
+    color: $home-ink
+    border-right: .1rem solid $home-line
+    transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease
+
+    &:last-child
+      border-right: 0
+
+    &:hover, &:focus
+      z-index: 1
+      color: $home-ink
+      background: #fff
+      box-shadow: 0 2rem 5rem rgba(23, 27, 53, .1)
+      transform: translateY(-.8rem)
+
+  &__course-meta
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 5rem
+    color: $home-muted
+    font-size: 1.15rem
+    font-weight: 700
+    letter-spacing: .12em
+    text-transform: uppercase
+
+  &__course-number
+    color: $home-violet
+
+  &__course h3
+    margin: 0 0 2rem
+    color: $home-ink
+    font-size: 3rem
+    line-height: 1.15
+
+  &__course-description
+    color: $home-muted
+    font-size: 1.6rem
+    line-height: 1.65
+
+  &__course-link
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-top: auto
+    padding-top: 3rem
+    color: $home-ink
+    font-size: 1.5rem
+    font-weight: 700
+
+    span
+      color: $home-violet
+      font-size: 2.4rem
+
+  &__principles
+    display: grid
+    grid-template-columns: repeat(3, minmax(0, 1fr))
+    gap: 2.4rem
+
+  &__principle
+    padding: 3.2rem
+    border: .1rem solid rgba(255, 255, 255, .14)
+    border-radius: 1.2rem
+    background: rgba(255, 255, 255, .035)
+
+    strong
+      display: block
+      margin-bottom: 1.4rem
+      color: $home-blue
+      font-size: 1.2rem
+      letter-spacing: .14em
+      text-transform: uppercase
+
+    h3
+      margin: 0 0 1.4rem
+      color: #fff
+      font-size: 2.4rem
+
+    p
+      color: #bec5df
+      font-size: 1.55rem
+      line-height: 1.65
+
+  &__cta
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 5rem
+    padding: 7rem
+    border-radius: 1.6rem
+    background: linear-gradient(135deg, #effbff, #f1efff)
+
+    h2
+      max-width: 70rem
+      margin: 0
+      color: $home-ink
+      font-size: clamp(3.2rem, 4vw, 4.8rem)
+      line-height: 1.12
+
+  &__footer
+    padding: 3rem 0
+    color: #8e96b5
+    background: #111534
+
+    .home__shell
+      display: flex
+      justify-content: space-between
+      gap: 2rem
+
+    a
+      color: #dce1f5
+
+@media (max-width: 960px)
+  .home
+    &__orbit
+      opacity: .45
+      right: -8rem
+
+    &__hero-content
+      max-width: 66rem
+
+    &__courses, &__principles
+      grid-template-columns: 1fr
+
+    &__course
+      min-height: 0
+      border-right: 0
+      border-bottom: .1rem solid $home-line
+
+      &:last-child
+        border-bottom: 0
+
+    &__course-link
+      margin-top: 4rem
+
+@media (max-width: 700px)
+  body.home-page .nav
+    position: absolute
+    padding: 1.4rem 2rem
+    grid-template-columns: 1fr auto
+
+    &__logo
+      width: 14rem
+      min-width: 14rem
+
+  .home
+    &__shell
+      width: min(100% - 3.2rem, 118rem)
+
+    &__hero
+      min-height: 62rem
+      padding: 13rem 0 7rem
+
+    &__hero-content h1
+      font-size: clamp(4.4rem, 15vw, 6.2rem)
+
+    &__intro
+      font-size: 1.7rem
+
+    &__orbit
+      display: none
+
+    &__section
+      padding: 7rem 0
+
+    &__section-heading
+      grid-template-columns: 1fr
+      gap: 2rem
+      margin-bottom: 3.5rem
+
+    &__course
+      padding: 3rem 2rem
+
+    &__cta
+      align-items: flex-start
+      flex-direction: column
+      padding: 4rem 2.4rem
+
+    &__footer .home__shell
+      flex-direction: column
